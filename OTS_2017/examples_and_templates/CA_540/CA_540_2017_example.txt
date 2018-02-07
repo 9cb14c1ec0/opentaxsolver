@@ -1,0 +1,61 @@
+Title:  CA State Tax Form 540 - 2017 -- Example
+
+{ --- Example --- }
+
+FileName   examples_and_templates/US_1040/US_1040_example_out.txt  { File-name of Federal Return output file. }
+        { Data is collected by scanning Federal return to avoid re-entering it. }
+
+{--Exemptions--}
+L6              no      { Are you a dependent? (answer: Yes, No) }
+L8              0       { Blind? (answer: 0, 1, 2) - Enter 0 if not blind, 1 if you or spouse, 2 if both. }
+L9              0       { Over 65? (answer: 0, 1, 2) - Enter 1 if you or spouse over 65, 2 if both over 65, 
+						0 if neither}
+L10             0       { Number or dependents - (answer: 0, 1, 2, 3, 4, ...). 
+				(Do not include yourself or spouse)}
+
+{--Taxable Income--}
+L12      29,812.34      {State Wages (List all W2's box 16).}
+         21,609.09 ;
+ Adj		   ;	{ Adjustments including California lottery losses. Sched540, line 41 (pg 32). }
+ L14               ;    { CA Adjustments, Schedule CA 540 line 37 column B.}           
+ L16               ;    { CA Adjustments, Schedule CA 540 line 37 column C.}
+
+{--Tax Section--}
+ L34               ;     { Taxes on distributions (sched G-1 or form FTB 5870A), else 0. }
+
+{--Special Credits--}
+ L40		   ;	 { Nonrefundable Child + Dependent Care Expenses Credit (pg 11). }
+ L41               ;     { New jobs credit, amount generated, else enter 0 }
+ L42               ;     { New jobs credit, amount claimed, else enter 0 }
+ L43               ;     { Special credit, else enter 0 }
+ L44               ;     { Special credit, else enter 0 }
+ L45               ;     { More then two credits (pg 12), else enter 0 }
+ L46               ;     { Nonrefundable renter's credit (pg 12), else 0 }
+
+{--Other Taxes--}
+ L61               ;    { Alternative minimum tax Sched P (540), else 0 }
+ L62               ;    { Mental Health Services Tax. (Instructions pg 13) }
+ L63               ;    { Other taxes/credit recapture (pg 13), else 0 }
+
+{--Payments--}
+ L71      1,119.20 ;     { CA state income tax withheld. }
+ L72         67.21 ;     { Estimated tax paid (pg 13). }
+ L73               ;     { Realestate withholing (forms 592-B, 594, 597) (see pg 13). }
+ L74               ;     { Excess SDI (pg 13). }
+ L75               ;     { Earned Income Tax Credit (EITC). }
+
+ L91               ;     { Use Tax. }
+
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+ Your1stName:	Fred, A		{ First name, Middle Initial }
+ YourLastName:	Symthe
+ YourSocSec#:	123-48-9012	
+ Spouse1stName:	Saley, G	
+ SpouseLastName: de Trubo	{ First name, Middle Initial }
+ SpouseSocSec#:	113-48-9012	
+ Number&Street:	777 Xyz St.	
+ Apt#:		10B	
+ Town:		East Mulbor	
+ Zipcode:	12345678	

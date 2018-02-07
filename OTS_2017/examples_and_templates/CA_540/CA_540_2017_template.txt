@@ -1,0 +1,64 @@
+Title:  CA State Tax Form 540 - 2017
+
+  { Data is collected by scanning Federal Return results to avoid re-entering data. }
+
+FileName   examples_and_templates/US_1040/fed_out.txt { File-name of Federal Return output file. }
+
+{--Exemptions--}
+L6              no      { Are you a dependent? (answer: Yes, No) }
+L8               0      { Blind? (answer: 0, 1, 2) - Enter 0 if not blind, 1 if you or spouse, 2 if both. }
+L9               0      { Over 65? (answer: 0, 1, 2) - Enter 1 if you or spouse over 65, 2 if both over 65, 
+						0 if neither}
+L10              0      { Number or dependents - (answer: 0, 1, 2, 3, 4, ...). 
+				(Do not include yourself or spouse)}
+
+{--Taxable Income--}
+L12                    {State Wages (List all W2's box 16).}
+                   ;
+ Adj		   ;	{ Adjustments including California lottery losses. Sched540, line 41 (pg 32). }
+ L14               ;    { CA Adjustments, Schedule CA 540 line 37 column B.}           
+ L16               ;    { CA Adjustments, Schedule CA 540 line 37 column C.}
+
+{--Tax Section--}
+ L34               ;     { Taxes on distributions (sched G-1 or form FTB 5870A), else 0. }
+
+{--Special Credits--}
+ L40		   ;	 { Nonrefundable Child + Dependent Care Expenses Credit (pg 11). }
+ L41               ;     { New jobs credit, amount generated, else enter 0 }
+ L42               ;     { New jobs credit, amount claimed, else enter 0 }
+ L43               ;     { Special credit, else enter 0 }
+ L44               ;     { Special credit, else enter 0 }
+ L45               ;     { More then two credits (pg 12), else enter 0 }
+ L46               ;     { Nonrefundable renter's credit (pg 12), else 0 }
+
+{--Other Taxes--}
+ L61               ;    { Alternative minimum tax Sched P (540), else 0 }
+ L62               ;    { Mental Health Services Tax. (Instructions pg 13) }
+ L63               ;    { Other taxes/credit recapture (pg 13), else 0 }
+
+{--Payments--}
+ L71               ;     { CA state income tax withheld. }
+ L72               ;     { Estimated tax paid (pg 13). }
+ L73               ;     { Realestate withholing (forms 592-B, 594, 597) (see pg 13). }
+ L74               ;     { Excess SDI (pg 13). }
+ L75               ;     { Earned Income Tax Credit (EITC). }
+
+ L91		   ;	 { Use Tax. }
+
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+ Your1stName:			{ First name, Middle Initial }
+ YourLastName:	
+ YourSocSec#:	
+ Spouse1stName:                 { First name, Middle Initial (Leave blank if Single, ....) }
+ SpouseLastName: 	
+ SpouseSocSec#:	
+ Number&Street:	
+ Apt#: 		
+ Town:		
+ Zipcode:   	
+
+{ 
+ ---------------------------------------------
+} 

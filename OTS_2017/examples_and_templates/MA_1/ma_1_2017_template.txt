@@ -1,0 +1,101 @@
+Title:  Massachusetts Form 1 Tax Form - 2017
+
+{---- Filing Status ----}
+
+Status         Single	{Single, Married/Joint, Married/Sep, Head_of_House.}
+
+L1a             ;       { Total federal income from US 1040 line 22. }
+L1b             ;       { Total federal adjusted gross income from US 1040 line 37. }
+
+{---- Exemptions ----}
+
+Dependents      0       {Number of Dependents -- DO NOT include yourself or your spouse!}
+
+{---- Age 65 or over ----}
+Age65You     FALSE 	{ Are you 65 or older? (answer: True, False) }
+Age65Spouse  n/a 	{ Spouse 65 or older? (answer: True, False, n/a) }
+
+{---- Blindness ----}
+BlindYou    FALSE 	{ You blind? (answer: True, False) }
+BlindSpouse n/a		{ Spouse blind? (answer: True, False, n/a) }
+
+{---- Other Exemptions ----}
+Med/Dental	; 	{Medical/Dental}
+Adoption 	;	{Adoption}
+
+{---- Income ----}
+
+L3			{Wages, salaries, tips (W-2). }
+		;
+L4		;	{Taxable pensions.}
+L5a		;	{Mass Bank Interest}
+L6		;	{ Business income/loss. (Sched C) }
+L7		;	{ Rental, royality, REMIC., etc. }
+L8a		;	{ Unemployment }
+L8b		;	{ Lottery }
+L9		;       { Other income, Alimony received. }
+
+{---- Deductions ----}
+
+L11a  		;	{ Amount you paid to SS, Medicare, RR, US, or Mass retirement }
+L11b		;	{ Amount spouse paid to SS, Medicare, RR, US, or Mass retirement }
+L12		;	{ Child under 13, or disabled dependent/spouse }
+L13		0	{ Number of dependents < 12, or deps >= 65, or disabled deps, not more than 2 }
+L14a		;	{ Rental Paid }
+L15		;	{ Other - Sched Y, L17 }
+  
+L20             0       {Interest and Dividends -- Sched B}
+                ;
+
+L23a		;	{ 12% income, from sched B Line 39 }
+L24		;	{ Tax on long-term capital gains, Sched D Line 22 }
+L25		;	{ Credit Recapture amount Sch. H-2 }
+L26		;	{ Additional tax on installment sale }
+
+ {---- Credits ----}
+L29		0	{ Limited Income Credit }
+L30		0	{ Income tax paid to another state or jurisdiction (from Schedule OJC). }
+L31		0	{ Other credits from Sch Z, line 14 }
+
+L33a		0 	{ Endangered Wildlife }
+L33b		0 	{ Organ Transplant }
+L33c		0 	{ Mass AIDS }
+L33d		0 	{ Mass US Olympic }
+L33e		0 	{ Mass Miltiary Family Relief Fund }
+L33f		0 	{ Homeless Animal Prevention And Care }
+
+L34		0	{ Use tax due on out-of-state purchases }
+L35a		0	{ Health Care Penalty (you) }
+L35b		0	{ Health Care Penalty (spouse) }
+L35c		0	{ Health Care Penalty (federal) }
+
+{---- Taxes Paid ----}
+
+L37		;	{ Mass Income Tax withheld (from W-2's, ...) }
+L38		;	{ 2016 overpayment applied to 2017 estimated tax }
+L39		;	{ 2017 estimated tax payments }
+L40		;	{ Payments made with extension }
+L41 		; 	{ Payments with original return. Only if amending return.}
+L42a		;	{ EIC: amount from US Return }
+L43		;	{ Senior Circuit Breaker Credit, sched CB }
+L44		;	{ Other refundable credits, Sched RF, line 4. }
+L47		;	{Overpayment you want applied to next year's estimated tax}
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout. --- }
+ Your1stName:	
+ YourInitial:	
+ YourLastName:	
+ YourSocSec#:	
+ Spouse1stName:                 { Leave blank if Single, etc. }
+ SpouseInitial:	
+ SpouseLastName:    
+ SpouseSocSec#:	
+ Number&Street:	
+ Town:		
+ State:		MA
+ Zipcode:   	
+
+{
+ ------------------------------------------
+}

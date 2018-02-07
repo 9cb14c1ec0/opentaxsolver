@@ -1,0 +1,82 @@
+Page 1
+
+CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+TxtColor: 0 0 0.6
+FontSz 10
+no_zero_entries
+round_to_whole_numbers
+
+YourSocSec#:	100 226 0 14.5
+SpouseSocSec#: 	575 228 0 14.5
+Your1stName:	115 280 0 11.7
+YourInitial:	427 280 0
+YourLastName:	496 280 0 11.7
+Spouse1stName:	115 324 0 11.7
+SpouseInitial:	427 324 
+SpouseLastName:	496 324 0 11.7
+SepFullName:	445 689
+SepSocSec:	445 714
+Number&Street: 	115 367 0 11.7
+Apt#:		763 367 0 11.7
+Town:		115 415 0 11.7
+State:		468 415 0 11.7
+Zipcode:	522 415 0 11.7
+Check_single	125 666
+Check_mfj       125 684
+Check_sep       125 701
+Check_hh        125 718
+Check_widow	125 737
+
+L6	592 768 8 11.7
+L7 	590 805 8 11.7
+L8 	590 841 8 11.7
+L9 	590 877 8 11.7
+L10	590 912 8 11.7
+L11	590 947 8 11.7
+Check_UsedStdDed:	556 609
+Check_ItemizedDed: 	599 608
+L12	590 985 8 11.7
+show_cents
+L13	630 1020 8 5
+round_to_whole_numbers
+L14	590 1061 8 11.7
+L15	590 1114 8 11.7
+
+Page 2
+CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourLastName:	162 90 0 11.7
+YourSocSec#: 	627 89 0 14.5
+L16	689 131 8 11.7
+L17 	689 166 8 11.7
+L18 	689 202 8 11.7
+L19	689 238 8 11.7
+L20	252 276 8 11.7
+L20b	492 276 8 11.7
+
+L21a	252 324 8 11.7
+L21b	492 324 8 11.7
+L21c	252 372 8 11.7
+L21d	492 372 8 11.7
+
+L22	689 408 8 11.7
+L23 	689 442 8 11.7
+L24 	689 479 8 11.7
+L25 	689 514 8 11.7
+L26a 	689 550 8 11.7
+L26b	118 595 6 11.7
+L26c	291 595 6 11.7
+L26d 	689 594 8 11.7
+L26e	689 632 8 11.7
+FontSz 14
+L27 	689 668 8 11.7
+FontSz 10
+L28 	689 702 8 11.7
+L29 	689 738 8 11.7
+L30 	689 773 8 11.7
+L31 	689 808 8 11.7
+L32 	689 844 8 11.7
+L33	689 916 8 11.7
