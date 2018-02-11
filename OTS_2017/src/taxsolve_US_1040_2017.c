@@ -29,7 +29,7 @@
 /* Aston Roberts 12-28-2017	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=15.01;
+float thisversion=15.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -1148,8 +1148,8 @@ void pull_comment( char *line, char *word )
 
 
 void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
-{
- int state=0, cnt=0, pg=0, ncnt=15;
+{ /* Copy Schedule-B Line entries from input file, to output file -- only. Does not process data read. */
+ int state=0, cnt=0, pg=0, ncnt=15, newentry=0;
  float value;
  double total=0.0;
  char line[2048], word1[1024], word2[1024], pgstr[10]="";
@@ -1172,7 +1172,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 	if (strcmp( word1, "L8a" ) == 0) 
 	 { 
 	  state = 8;  ncnt = 15; 
-	  pg = 0;  cnt = 0;  
+	  pg = 0;  cnt = 0;  newentry = 1;
 	  strcpy( pgstr, "B1_" );
 	 }
 	else
@@ -1183,7 +1183,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 	    fprintf(outfile,"EndPDFpage.\n");
 	   }
 	  state = 9;  ncnt = 17;  total = 0.0;
-	  pg = 0;  cnt = 0;
+	  pg = 0;  cnt = 0;  newentry = 1;
 	  strcpy( pgstr, "B5_" );
 	 }
 	break;
@@ -1199,7 +1199,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
            }
 	 }
 	else
-	if (word1[0] != '\0')
+	if ((word1[0] != '\0') && (word1[0] != '{'))
 	 {
 	  pull_comment( line, word2 );
 	  cnt++;
@@ -1227,7 +1227,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
      	 }
 	break;
      case 9:
-	if (word1[0] == ';')
+	if (word1[0] == ';') 
 	 {
 	  state = 0;
 	  if (pg > 0) 
@@ -1238,7 +1238,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
            }
 	 }
 	else
-	if (word1[0] != '\0')
+	if ((word1[0] != '\0') && (word1[0] != '{'))
 	 {
 	  pull_comment( line, word2 );
 	  cnt++;
@@ -1266,7 +1266,10 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
      	 }
 	break;
     }
-   fgets( line, 200, infile );
+   if (!newentry)
+    fgets( line, 200, infile );
+   else
+    newentry = 0;
   }
  if (pg > 0) 
   {
@@ -1404,6 +1407,8 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
  GetLineF( "L10", &L[10] );	/* Taxable refunds. */
  GetLineF( "L11", &L[11] );	/* Alimony received. */
  GetLineF( "L12", &L[12] );	/* Business income/loss. */
+ GetLine( "Collectibles", &collectibles_gains );	/* Gains or Losses from Collectibles. (Usually zero.) */
+ if (collectibles_gains != 0.0) fprintf(outfile, "Collectibles_Gains = %6.2f\n", collectibles_gains );
 
  get_cap_gains( "L13" );	 /* Capital gains. (Schedule-D) */
  showline(13);
@@ -1453,7 +1458,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
  GetLine( "L35", &L[35] );	/* Domestic production activities deduction, Form 8903 */
 
  SocSec_Worksheet();		/* This calc. depends on lines 23-32. */
- ShowLineNonZero_wMsg( 20, "L20b" );
+ showline_wlabel( "L20b", L[20] );
  ShowLineNonZero(21);
 
  for (j=7; j<=21; j++) L[22] = L[22] + L[j];
@@ -1535,9 +1540,6 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
 
  GetLine( "L39a", &L[39] );	/* Number of boxes checked (0-4), line-39:  You, Spouse : >65, blind.  */
  fprintf(outfile, "L39a = %d\n", (int)L[39] ); 
-
- GetLine( "Collectibles", &collectibles_gains );	/* Gains or Losses from Collectibles. (Usually zero.) */
- if (collectibles_gains != 0.0) fprintf(outfile, "Collectibles_Gains = %6.2f\n", collectibles_gains );
 
  /* Schedule A */
  GetLine( "A1", &SchedA[1] );	/* Unreimbursed medical expenses. */

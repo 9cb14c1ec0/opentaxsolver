@@ -10,19 +10,26 @@ Dependents              { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8,
 				self=1, spouse, etc. }
 
 { ---- Income ---- }
-L7                      { Wages, salaries, tips (W-2's Box-1). }
-                ;
-L8a                     { Interest 1099-INT.  Will put these numbers on Schedule-B, Part I. }
-                ;
-L8b                     { Tax-Exempt interest. (Only used for SocialSecurity calculations). }
-                ;
-L9                      { Ordinary Dividends 1099-DIV (1a).  Will put these numbers on Schedule-B, Part II.}
-                ;
-L9b                     { Qualified Dividends 1099-DIV (1b)}
-                ;
+
+{ -- Wages, salaries, tips (W-2's Box-1). -- }
+L7              ;
+
+ { -- Interest 1099-INT.  Will place following numbers on Schedule-B, Part I. -- }
+L8a      	;
+
+ { -- Tax-Exempt interest. (Only used for SocialSecurity calculations). -- }
+L8b      	;
+
+ { -- Ordinary Dividends 1099-DIV (1a).  Will put following numbers on Schedule-B, Part II. -- }
+L9         	;
+
+ { -- Qualified Dividends 1099-DIV (1b) -- }
+L9b       	;
+
 L10             ;       { Taxable refunds. }
 L11             ;       { Alimony received. }
 L12             ;       { Business income/loss. (Sched C) }
+Collectibles 	;	{ Gains or Losses from Collectibles. (Usually zero.) }
 
 CapGains-A/D	        { Capital Gains/Losses, 1099-B. For Basis Reported to IRS (Form 8949 check A or D) }
 			{  Enter for each:  $BuyAmnt Date, $SellAmnt Date }
@@ -66,8 +73,6 @@ L32             ;       { IRA deduction }
 L33             ;       { Student loan interest deduction }
 L35             ;       { Domestic production activities deduction, Form 8903}
 L39a            ;       { Number of boxes checked (0-4), line-39:  You, Spouse : >65, blind.}
-
-Collectibles 	;	{ Gains or Losses from Collectibles. (Usually zero.) }
 
 { ---- Tax and Credits ---- }
  { -- Itemized deductions from Schedule A -- }

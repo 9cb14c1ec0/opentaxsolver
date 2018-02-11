@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.23;
-char package_date[]="Feb. 5, 2018";
-char ots_release_package[]="15.02";
+float version=2.24;
+char package_date[]="Feb. 9, 2018";
+char ots_release_package[]="15.03";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -902,6 +902,20 @@ void check_comments()	/* Make sure every line has a comment field. */
 }
 
 
+int startswith( char *line, char *phrase )
+{ /* Return true if first non-whitespace characters of line begin with pharse. */
+  int j=0, k=0;
+  while ((line[j] != '\0') && (isspace(line[j])))
+   j++;
+  while ((line[j] != '\0') && (line[j] == phrase[k]) && (phrase[k] != '\0'))
+   { j++; k++; }
+  if (phrase[k] == '\0')
+   return 1;
+  else
+   return 0;
+}
+
+
 struct choice_rec
  {
   char *word;
@@ -993,7 +1007,7 @@ void DisplayTaxInfo()
  int linenum, iscapgains, noplus=0;
  int offset=0, capgtoggle=0, firstbox_on_line_x=0;
  int y1, y1a, yoffset=4, y2, y3, dy;
- int entry_box_height=1, extra_dy;
+ int entry_box_height=1, extra_dy, sectionheader=1;
 
  int label_x0=2, label_width, label_x1, box_x0, box_width, box_x1=100, comment_x0;
  int norm_label_x1=100, min_box_x0 = 110, min_comment_x0 = 100;
@@ -1155,6 +1169,12 @@ void DisplayTaxInfo()
        case VKIND_COMMENT: 
 		if (debug) printf("\tComment {%s} at (%d, %d)\n", entry->comment, comment_x0, y1a );
 
+		if (startswith( entry->comment, "--" ))
+		 { /*Section_header*/
+		     sectionheader = 1;
+		     y1 = y1 + 10;
+		     y1a = y1a + 10;
+		 }
 		if ((lastbox != 0) && (strstr( entry->comment, "(answer: " ) != 0))
 		 { char tmpline[1024], tmpword[512];		/* Add choices-spinner. */
 		  struct choice_rec *choice_item;
@@ -1186,7 +1206,7 @@ void DisplayTaxInfo()
 		entry->comment_label = label;
 
 		/* Add edit_line_comment button */
-		if (entry_box_height != 0)
+		if ((!sectionheader) && (entry_box_height != 0))
 		 { GtkRequisition sz;
 		   gtk_widget_size_request( entry->comment_label, &sz );
 		   y3 = y1 + entry_box_height - 1;
@@ -1209,6 +1229,7 @@ void DisplayTaxInfo()
 		 { int j=0;
 		   while ( entry->comment[j] != 0) { if (entry->comment[j] == '\n') y1 = y1 + 0.2 * dy;  j++; }
 		 }
+		sectionheader = 0;
 		break;
       }
      noplus = 0;
@@ -1291,14 +1312,17 @@ void Save_Tax_File( char *fname )
  /* Prevent weird characters in the save-name. */
  if (1)	  /* 1 = Protect users from creating bad filenames.  0 = Let them do whatever. */
   {
-   j = 0;
+   j = strlen( current_working_filename ) - 1;	/* Find leaf-name, to skip over path name. */
+   while ((j >= 0) && (current_working_filename[j] != '/') && (current_working_filename[j] != '\\'))
+    j--;
+   j++;	 /* Will be at last slash or first character in file name. */
    while (current_working_filename[j] != '\0')
     {
-  #ifdef __MINGW32__
-     if ((current_working_filename[j] == ':') && (j == 1))
+     #ifdef __MINGW32__
+      if ((current_working_filename[j] == ':') && (j == 1))
   	;	/* Allow ':' as second character - only. */
-     else
-  #endif
+      else
+     #endif
      if ((current_working_filename[j] < '+') || (current_working_filename[j] > 'z') ||
          (current_working_filename[j] == ','))
       {

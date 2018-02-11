@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2018	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=15.01;
+float thisversion=15.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -170,7 +170,7 @@ void test_tax_function()
 
 struct FedReturnData
  {
-  double fedline[MAX_LINES], schedA[MAX_LINES];
+  double fedline[MAX_LINES], schedA[MAX_LINES], fedl20a;
   int Exception, Itemized;
  } PrelimFedReturn;
 
@@ -203,6 +203,7 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    fed_data->fedline[linenum] = 0.0;
    fed_data->schedA[linenum] = 0.0;
   }
+ fed_data->fedl20a = 0.0;
  convert_slashes( fedlogfile );
  infile = fopen(fedlogfile, "r");
  if (infile==0)
@@ -219,7 +220,17 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    next_word(fline, word, " \t=");
    if ((strstr(word,"L")==word) && (strstr(fline," = ")!=0))
     {
-     if (strcmp(word,"L9b") != 0)
+     if (strcmp(word,"L20a") == 0)
+      {
+	next_word(fline, word, " \t=");
+	if ((word[0] != '\0') && (sscanf(word,"%lf", &(fed_data->fedl20a)) != 1))
+	 {
+	  printf("Error: Reading Fed L20a '%s%s'\n", word, fline);
+	  fprintf(outfile,"Error: Reading Fed L20a '%s%s'\n", word, fline);
+	 }
+      }
+     else
+     if ((strcmp(word,"L9b") != 0) || (strcmp(word,"L20b") != 0))
       {
        if (sscanf(&word[1],"%d",&linenum)!=1)
 	{
@@ -300,7 +311,7 @@ char *pull_initial( char *name )
 int main( int argc, char *argv[] )
 {
  int argk, j, k, iline7, iline8, iline9, iline10;
- double min2file=0.0, sched540[MAX_LINES], threshA=0, std_ded=0;
+ double min2file=0.0, sched540[MAX_LINES], sched540b[MAX_LINES], threshA=0, std_ded=0;
  char word[4000], outfname[4000], prelim_1040_outfilename[5000];
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
@@ -337,7 +348,11 @@ int main( int argc, char *argv[] )
 
  /* Pre-initialize all lines to zeros. */
  for (j=0; j<MAX_LINES; j++) 
-  { L[j] = 0.0;  sched540[j] = 0.0; }
+  { 
+    L[j] = 0.0;  
+    sched540[j] = 0.0; 
+    sched540b[j] = 0.0; 
+  }
 
  /* Accept parameters from input file. */
  /* Expect  CA-540 lines, something like:
@@ -411,9 +426,10 @@ int main( int argc, char *argv[] )
 
  /* -- Sched540 Part II -- */
 
+ sched540b[20] = PrelimFedReturn.fedline[20];
  sched540[38] = PrelimFedReturn.schedA[4] + PrelimFedReturn.schedA[9] + PrelimFedReturn.schedA[15] + 
-		PrelimFedReturn.schedA[19] + PrelimFedReturn.schedA[20] + PrelimFedReturn.schedA[27] + 
-		PrelimFedReturn.schedA[28];
+		PrelimFedReturn.schedA[19] + PrelimFedReturn.schedA[27] + PrelimFedReturn.schedA[28];
+ sched540b[22] = sched540b[20];
  sched540[39] = PrelimFedReturn.schedA[5] + PrelimFedReturn.schedA[8];
  sched540[40] = sched540[38] - sched540[39];
  GetLine( "Adj", &sched540[41] ); 
@@ -459,8 +475,20 @@ int main( int argc, char *argv[] )
  sched540[44] = largerof( sched540[43], std_ded );
 
  for (j=7; j <= 37; j++)
-  if (PrelimFedReturn.fedline[j] != 0.0)
-   fprintf(outfile," SchedCA540_%d = %6.2f\n", j, PrelimFedReturn.fedline[j] );
+  if (j != 20)
+   sched540[j] = PrelimFedReturn.fedline[j];
+ sched540[22]= sched540[22] - PrelimFedReturn.fedline[20];
+
+ for (j=7; j <= 37; j++)
+  if (sched540[j] != 0.0)
+   fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
+
+ if (PrelimFedReturn.fedl20a != 0.0)
+  fprintf(outfile," SchedCA540_20aa = %6.2f\n", PrelimFedReturn.fedl20a );
+
+ for (j=7; j <= 38; j++)
+  if (sched540b[j] != 0.0)
+   fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
 
  for (j=38; j <= 44; j++)	/* Display the worksheet calculations. */
   fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );

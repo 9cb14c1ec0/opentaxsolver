@@ -26,22 +26,21 @@ Also contains a new Automatic PDF Form-Fillout function:
 	  Tested to work properly with many viewers.
 
 -----------------------------------------------------------
---- This package contains executables for 64-bit Linux. ---
+--- This package contains executables for RPLCSTRNG_01 ---
 -----------------------------------------------------------
-  (Compiled on glibc 2.12)  (Check yours by 'ldd --version')
-  ( GNU/Linux 2.6.18 -- You should be OK on same or newer systems. )
+  RPLCSTRNG_02
 
 History:
-    * v15.02 (2/6/2018) - Added NY and MA State Tax forms.
+    * v15.02 (2/6/2018) - Added NY, and MA State Tax forms.
 	Several fixes & improvements.  Added page-overflow 
 	capability for Fed-1040 Schedules B+D. 
     * v15.01 (2/2/2018) - Added VA, and PA State Tax forms.
     * v15.00 (1/15/2018) - Initial Release for Tax Year 2017.
 
 Usage:
- Invoke by running:   ./Run_taxsolve_GUI
+ RPLCSTRNG_03
   (Located in the top directory.)
- 
+ RPLCSTRNG_04
  For Auto-Fillout of PDF Forms, click the "Print" button, and select
   "Automatically Fill-out PDF Tax-Form", then click "Print".
  You can set your preferred PDF viewer by the (Set PDF Viewer) button,

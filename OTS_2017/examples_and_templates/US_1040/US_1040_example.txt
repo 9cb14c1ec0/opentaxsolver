@@ -15,6 +15,7 @@ Dependents     2         { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8
 L7      20267.70        { Wages, salaries, tips (W-2's Box-1). }
         28188.53         { Spouse's}
                 ;
+{ -- Interest 1099-INT.  Will place the following on Schedule-B, Part I. -- }
 L8a                     { Interest 1099-INT.  Place these numbers on Schedule-B, Part I. }
           37.71           { Bank Savings}
           12.65           { Credit Union}
@@ -22,13 +23,15 @@ L8a                     { Interest 1099-INT.  Place these numbers on Schedule-B,
                 ;
 L8b                     { Tax-Exempt interest. (Only used for SocialSecurity calculations). }
                 ;
-L9                      { Ordinary Dividends 1099-DIV}
+{ -- Ordinary Dividends 1099-DIV -- }
+L9                      
          70.90            {USX Dividends}
          44.36            {Fidelity Mutual Funds}
          64.13            {  Growth Fund}
          74.52            {Company Stock Div}
                 ;
-L9b                     { Qualified Dividends 1099-DIV}
+ { -- Qualified Dividends 1099-DIV -- }
+L9b                     
          70.90            {USX Dividends}
          14.36            {Fidelity Mutual Funds}
           0.0             {  Growth Fund}
@@ -37,6 +40,7 @@ L9b                     { Qualified Dividends 1099-DIV}
 L10     625.83  ;       { Taxable refunds. }
 L11             ;       { Alimony received. }
 L12             ;       { Business income/loss. (Sched C) }
+Collectibles 	;	{ Gains or Losses from Collectibles. (Usually zero.) }
 CapGains-A/D	        { Capital Gains/Losses, 1099-B. For Basis Reported to IRS (Form 8949 check A or D) }
 			{  Enter for each:  BuyAmnt Date, SellAmnt Date }
 	 -800.99	6-20-17		{ 40 Shares WMT }
@@ -103,8 +107,6 @@ L32             ;       { IRA deduction }
 L33             ;       { Student loan interest deduction }
 L35             ;       { Domestic production activities deduction, Form 8903}
 L39a            ;       { Number of boxes checked (0-4), line-39:  You, Spouse : >65, blind.}
-
-Collectibles 	;	{ Gains or Losses from Collectibles. (Usually zero.) }
 
 { ---- Tax and Credits ---- }
  { -- Itemized deductions from Schedule A -- }
