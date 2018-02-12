@@ -501,7 +501,7 @@ void ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    if ((strstr(word,"L")==word) && (strstr(fline," = ")!=0))
     {
      if (sscanf(&word[1],"%d",&linenum)!=1) printf("Error: Reading fed line number '%s%s'\n",word,fline);
-     next_word(fline, word, " \t=");
+     next_word(fline, word, " \t=");	remove_certain_chars( word, "," );
      if (sscanf(word,"%lf", &fed_data->fedline[linenum])!=1)
 	printf("Error: Reading fed line %d '%s%s'\n",linenum,word,fline);
      if (verbose) printf("FedLin[%d] = %2.2f\n", linenum, fed_data->fedline[linenum]);
@@ -509,7 +509,7 @@ void ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    if ((strstr(word,"D") == word) && (strstr(fline," = ") != 0)) 
     {
      if (sscanf(&word[1],"%d",&linenum)!=1) printf("Error: Reading fed line number '%s%s'\n",word,fline);
-     next_word(fline, word, " \t=");
+     next_word(fline, word, " \t=");	remove_certain_chars( word, "," );
      if (sscanf(word,"%lf", &fed_data->schedD[linenum]) != 1) 
       {
        if (strcasecmp(word,"yes") == 0) fed_data->schedD[linenum] = 1;
@@ -1150,7 +1150,7 @@ void pull_comment( char *line, char *word )
 void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 { /* Copy Schedule-B Line entries from input file, to output file -- only. Does not process data read. */
  int state=0, cnt=0, pg=0, ncnt=15, newentry=0;
- float value;
+ double value;
  double total=0.0;
  char line[2048], word1[1024], word2[1024], pgstr[10]="";
  FILE *infile;
@@ -1217,7 +1217,8 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 	    pg++;
 	   }
 	  fprintf(outfile," %s%d_Text: %s\n", pgstr, cnt, word2 );
-	  if (sscanf( word1, "%f", &value ) != 1)
+	  remove_certain_chars( word1, "," );
+	  if (sscanf( word1, "%lf", &value ) != 1)
 	   printf(" Error reading L8 value '%s'\n", word1 );
 	  else
 	   {
@@ -1256,7 +1257,8 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 	    pg++;
 	   }
 	  fprintf(outfile," %s%d_Text: %s\n", pgstr, cnt, word2 );
-	  if (sscanf( word1, "%f", &value ) != 1)
+	  remove_certain_chars( word1, "," );
+	  if (sscanf( word1, "%lf", &value ) != 1)
 	   printf(" Error reading L9 value '%s'\n", word1 );
 	  else
 	   {

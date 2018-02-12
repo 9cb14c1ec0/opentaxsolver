@@ -211,7 +211,7 @@ void queue_optional_page( int form_page, int page_order )
   new->form_page = form_page;
   new->priority = page_order;
   optional_print_page = new;
-printf("Queuing Optional Page %d\n", form_page );
+  if (verbose) printf("Queuing Optional Page %d\n", form_page );
 
   ptr = optional_print_list;
   while ((ptr != 0) && (ptr->priority <= page_order))
@@ -234,7 +234,7 @@ void append_global_results_to_optional_pages()
  optlist = optional_print_list;
  while (optlist != 0)
   { /*optlist*/
-printf("Adding list ..\n");
+    if (verbose) printf("Adding list ..\n");
     item = optlist->results;
     while (item != 0)	/* Find last item in list. */
      {
@@ -398,6 +398,11 @@ void transform_coords( int xpix, int ypix, int *xpt, int *ypt )
 }
 
 
+/* -----------------
+    Metadata entry tags will be of the form:
+	xPos  yPos  RightPaddingSpaces  CharSpacing
+
+  ------------------ */
 void read_metadata( char *fname )
 {
  int pg=-1, k, nparamsrd;
