@@ -387,7 +387,7 @@ struct metapage_rec
  } *metadata[MaxPages];
 
 
-int pixCoords=0;
+int pixCoords=0, custom_mediabox=0, mediabox_x=612, mediabox_y=792;
 float refptX0, refptY0, refpixX0, refpixY0;
 float refptX1, refptY1, refpixX1, refpixY1;
 
@@ -533,6 +533,19 @@ void read_metadata( char *fname )
      if (strcmp( wrd, "PtCoords") == 0)
       {
 	pixCoords = 0;
+      }
+     else
+     if (strcmp( wrd, "MediaBox") == 0)
+      { float fval;
+       next_word( line, wrd, " \t,\n\r" );
+       if (sscanf( wrd, "%f", &fval ) != 1)
+	printf("Error reading MediaBox x '%s'\n", wrd );
+       mediabox_x = (int)(fval + 0.5);
+       next_word( line, wrd, " \t,\n\r" );
+       if (sscanf( wrd, "%f", &fval ) != 1)
+	printf("Error reading MediaBox y '%s'\n", wrd );
+       mediabox_y = (int)(fval + 0.5);
+       custom_mediabox = 1;
       }
      else
      if (strcmp( wrd, "END_OF_INPUT") == 0)
@@ -907,8 +920,11 @@ void page_collector( char *rawpdfname, char *outfname )
     spew_sumline( outfile, line, &cnt );
    sprintf(line,"<< /Type /Page\n/Parent 2 0 R\n");
     spew_sumline( outfile, line, &cnt );
-   sprintf(line,"/MediaBox [0 0 612 792]\n");
-    spew_sumline( outfile, line, &cnt );
+   if (!custom_mediabox)
+    sprintf(line,"/MediaBox [0 0 612 792]\n");
+   else
+    sprintf(line,"/MediaBox [0 0 %3d %3d]\n", mediabox_x, mediabox_y );
+   spew_sumline( outfile, line, &cnt );
    sprintf(line,"/Contents [ %d 0 R %d 0 R ]\n", nobjs + 2, nobjs + 1 );
     spew_sumline( outfile, line, &cnt );
    sprintf(line,"/Resources << /ProcSet [/PDF /Text] /Font << /F1 << /Type /Font /Subtype /Type1 /Name ");

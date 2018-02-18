@@ -29,7 +29,7 @@
 /* Aston Roberts 12-28-2017	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=15.02;
+float thisversion=15.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -1548,10 +1548,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
   showschedA(1);
  SchedA[2] = L[38];
   showschedA(2);
- if (over65) 
-  { SchedA[3] = 0.075 * SchedA[2]; }
- else
-  { SchedA[3] = 0.10 * SchedA[2]; }
+ SchedA[3] = 0.075 * SchedA[2];
   showschedA(3);
  SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
   showschedA(4);
@@ -1611,12 +1608,13 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
   {
    fprintf(outfile," Your deduction is not limited.\nCkDedNotLim X\n");
    SchedA[29] = SchedA[4] + SchedA[9] + SchedA[15] + SchedA[19] + SchedA[20] + SchedA[27] + SchedA[28];
+   fprintf(outfile," CkDedNotLim X\n");
   }
  else
   { /* Itemized Deductions WorkSheet i1040sca.pdf page A-13. */
     idws[1] = SchedA[4] + SchedA[9] + SchedA[15] + SchedA[19] + SchedA[20] + SchedA[27] + SchedA[28];
     fprintf(outfile," Your deduction may be limited (from %8.2f).\n", idws[1] );
-    fprintf(outfile," CkDedNotLim X\n");
+    fprintf(outfile," CkDedMayLim X\n");
     idws[2] = SchedA[4] + SchedA[14] + SchedA[20];
     if (idws[2] >= idws[1])
      {

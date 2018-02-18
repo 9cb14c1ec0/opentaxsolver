@@ -40,7 +40,8 @@ L9b
 L10     625.83  ;       { Taxable refunds. }
 L11             ;       { Alimony received. }
 L12             ;       { Business income/loss. (Sched C) }
-Collectibles 	;	{ Gains or Losses from Collectibles. (Usually zero.) }
+Collectibles 		{ Long Term Gain or Loss from Collectibles, Form 8949 Part II. (Usually zero.) }
+		;
 CapGains-A/D	        { Capital Gains/Losses, 1099-B. For Basis Reported to IRS (Form 8949 check A or D) }
 			{  Enter for each:  BuyAmnt Date, SellAmnt Date }
 	 -800.99	6-20-17		{ 40 Shares WMT }

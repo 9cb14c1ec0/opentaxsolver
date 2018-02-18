@@ -2,7 +2,7 @@ Page 1
 
 CoordReference:  40, 750  61, 64
                 550, 50  841, 1134    110-dpi
-
+MediaBox 594 770
 FontSz 11
 no_zero_entries
 round_to_whole_numbers

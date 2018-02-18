@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 6, 2018 v15.02 - For 2017 tax-year.
+February 14, 2018 v15.03 - For 2017 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -31,6 +31,11 @@ Also contains a new Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v15.03 (2/14/2018) - Fixed fed1040 collectible gains used before input,
+	missing fill-in of 1st SchedB Int+Divs, comma issue in Sched-B PDF,
+	proper medical percentage in Sched-A line 3. Began addressing OH form
+	size issues.  More line-label improvements.  Apt + Middle initials in
+	PDF forms.
     * v15.02 (2/6/2018) - Added NY, and MA State Tax forms.
 	Several fixes & improvements.  Added page-overflow 
 	capability for Fed-1040 Schedules B+D. 
