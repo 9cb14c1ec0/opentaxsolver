@@ -347,10 +347,10 @@ char *pull_initial( char *name )
 /*----------------------------------------------------------------------------*/
 int main( int argc, char *argv[] )
 {
- int argk, j, k, iline7, iline8, iline9, iline10;
+ int argk, j, k, iline7, iline8, iline9, iline10, gotAdj=0, got_explicit_adjustment=0;
  double min2file=0.0, sched540[MAX_LINES], sched540b[MAX_LINES], sched540c[MAX_LINES], threshA=0, std_ded=0;
- double nolongerused;	/* Used for obsoleted/deprecated line value being replaced with alternate method. */
- char word[4000], outfname[4000], prelim_1040_outfilename[5000];
+ double tmpval;
+ char word[4000], outfname[4000], prelim_1040_outfilename[5000], labelx[4000];
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
 	*Spouse1stName="", *SpouseLastName="", *socsec;
@@ -466,17 +466,15 @@ int main( int argc, char *argv[] )
 
  /* -- Sched540 Part I -- */
 
- /*** --- Note for next year's version (2018) ---
-    Add entry lines for CA540 Subtractions + Additions.
-
+/* To be made permanent for 2018:
   GetLine("CA540_Subtr_7", &(sched540b[7]) );
-  GetLine("CA540_Add_7", &(sched540c[7]) );
+  GetLine("CA540_Addit_7", &(sched540c[7]) );
   GetLine("CA540_Subtr_8", &(sched540b[8]) );
-  GetLine("CA540_Add_8", &(sched540c[8]) );
+  GetLine("CA540_Addit_8", &(sched540c[8]) );
   GetLine("CA540_Subtr_9", &(sched540b[9]) );
-  GetLine("CA540_Add_9", &(sched540c[9]) );
+  GetLine("CA540_Addit_9", &(sched540c[9]) );
   GetLine("CA540_Subtr_10", &(sched540b[10]) );
-  GetLine("CA540_Add_11", &(sched540c[11]) );
+  GetLine("CA540_Addit_11", &(sched540c[11]) );
   GetLine("CA540_Subtr_12", &(sched540b[12]) );
   GetLine("CA540_Addit_12", &(sched540c[12]) );
   GetLine("CA540_Subtr_13", &(sched540b[13]) );
@@ -500,9 +498,47 @@ int main( int argc, char *argv[] )
   GetLine("CA540_Addit_31", &(sched540c[31]) );
   GetLine("CA540_Addit_33", &(sched540c[33]) );
   GetLine("CA540_Subtr_35", &(sched540b[35]) );
+*/
 
-  --- Everything is ready to handle tho above entries, except for template file(s). ---
- ***/
+ while (!gotAdj)
+  { /*notgotAdj*/
+    GetOptionalLine( "CA540_Subtr_, CA540_Add_, or Adj", labelx, &tmpval );
+    if (strcmp( labelx, "Adj" ) == 0)
+     {
+      sched540[41] = tmpval;
+      gotAdj = 1;
+     }
+    else
+    if (strstr( labelx, "CA540_Subtr_" ) != 0)
+     {
+      if ((sscanf( &(labelx[12]), "%d", &j) == 1) && (j >= 7) && (j <= 35))
+       sched540b[j] = tmpval;
+      else
+       {
+        printf("ERROR reading '%s'.\n", labelx ); 
+        fprintf(outfile,"ERROR reading '%s'.\n", labelx ); 
+       }
+      got_explicit_adjustment = 1;
+     }
+    else
+    if (strstr( labelx, "CA540_Addit_" ) != 0)
+     {
+      if ((sscanf( &(labelx[12]), "%d", &j) == 1) && (j >= 7) && (j <= 35))
+       sched540c[j] = tmpval;
+      else
+       {
+        printf("ERROR reading '%s'.\n", labelx ); 
+        fprintf(outfile,"ERROR reading '%s'.\n", labelx ); 
+       }
+      got_explicit_adjustment = 1;
+     }
+    else
+     {
+      printf("ERROR1: Found '%s' when expecting 'CA540_Subtr_, CA540_Add_, or Adj'\n", labelx ); 
+      fprintf(outfile,"ERROR1: Found '%s' when expecting 'CA540_Subtr_, CA540_Add_, or Adj'\n", labelx );
+      exit(1);
+     }
+  } /*notgotAdj*/
 
  fprintf(outfile," SchedCA540_8aa = %6.2f\n", PrelimFedReturn.fedl8b );
  fprintf(outfile," SchedCA540_9aa = %6.2f\n", PrelimFedReturn.fedl9b );
@@ -571,7 +607,7 @@ int main( int argc, char *argv[] )
 		PrelimFedReturn.schedA[28];
  sched540[39] = PrelimFedReturn.schedA[5] + PrelimFedReturn.schedA[8];
  sched540[40] = sched540[38] - sched540[39];
- GetLine( "Adj", &sched540[41] ); 
+ // GetLine( "Adj", &sched540[41] ); 	/* Now read above. */
  sched540[42] = sched540[40] + sched540[41];
  switch (status)
   {
@@ -625,16 +661,20 @@ int main( int argc, char *argv[] )
  /* -- End Sched540 Part II -- */
 
 
-  GetLine( "L14", &nolongerused );	/* CA Adjustments, Schedule CA 540 line 37 column B. */
- L[14] = sched540b[37];
+ if (got_explicit_adjustment)
+  L[14] = sched540b[37];
+ else
+  GetLine( "L14", &L[14] );	/* CA Adjustments, Schedule CA 540 line 37 column B. */
  showline(14);
 
  L[15] = L[13] - L[14];
  if (L[15] < 0.0) fprintf(outfile,"L15 = (%f6.2)\n", -L[15] );
  else showline(15);
 
-  GetLine( "L16", &nolongerused );	/* CA Adjustments, Schedule CA 540 line 37 column C. */
- L[16] = sched540c[37];
+ if (got_explicit_adjustment)
+  L[16] = sched540c[37];
+ else
+  GetLine( "L16", &L[16] );	/* CA Adjustments, Schedule CA 540 line 37 column C. */
  showline(16);
 
  L[17] = L[15] + L[16];		/* CA Adjusted Gross Income (AGI). */

@@ -1809,7 +1809,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
    else
    if (strstr( labelx, "AMTws" ) != 0)
     { 
-     if (sscanf( &(labelx[5]), "%d", &j) == 1)
+     if ((sscanf( &(labelx[5]), "%d", &j) == 1) && (j >= 8) && (j < 27))
       amtws[j] = tmpval;
      else
       {
@@ -1820,7 +1820,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
    else
     {
      printf("ERROR1: Found '%s' when expecting 'L49 or AMTwsXX'\n", labelx ); 
-     fprintf(outfile,"ERROR1: Found '%s' when expecting 'L49 or AMTwsXX'\n", word);
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'L49 or AMTwsXX'\n", labelx );
      exit(1);
     }
   }

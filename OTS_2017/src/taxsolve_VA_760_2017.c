@@ -29,7 +29,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=15.00;
+float thisversion=15.01;
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -200,7 +200,7 @@ int main( int argc, char *argv[] )
 
  GetTextLineF( "Number&Street:" );
  GetTextLineF( "Town:" );
- fprintf(outfile,"State: PA\n");
+ fprintf(outfile,"State: VA\n");
  GetTextLineF( "Zipcode:" );
  fprintf(outfile,"\n{ --------- }\n");
 
