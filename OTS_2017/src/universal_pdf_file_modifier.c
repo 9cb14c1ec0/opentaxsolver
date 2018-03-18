@@ -454,6 +454,7 @@ void read_metadata( char *fname )
       {
        no_zero_entries = 1;
       }
+     else
      if (strcmp( wrd, "allow_zero_entries") == 0)
       {
        no_zero_entries = 0;

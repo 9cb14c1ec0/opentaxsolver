@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 14, 2018 v15.03 - For 2017 tax-year.
+March 16, 2018 v15.04 - For 2017 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -31,6 +31,11 @@ Also contains a new Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v15.04 (3/16/2018) - Further automated California CA540 Adjustments form.
+	Provides more complete form fill-out.
+	In US-1040, now blanks unneeded zero entries, and properly resets "various"
+	date in Cap-Gains form.  Added optional ability to accept AMT Form 6251
+	entries for lines 8-27.
     * v15.03 (2/14/2018) - Fixed fed1040 collectible gains used before input,
 	missing fill-in of 1st SchedB Int+Divs, comma issue in Sched-B PDF,
 	proper medical percentage in Sched-A line 3. Began addressing OH form

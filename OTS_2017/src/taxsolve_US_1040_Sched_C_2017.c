@@ -29,7 +29,7 @@
 /* Earlier Updates	Robert Heller  heller@deepsoft.com		*/
 /************************************************************************/
 
-float thisversion=15.00;
+float thisversion=15.01;
 
 #include <stdio.h>
 #include <time.h>

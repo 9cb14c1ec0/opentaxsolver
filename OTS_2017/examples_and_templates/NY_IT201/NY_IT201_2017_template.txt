@@ -1,16 +1,16 @@
 Title:  NY State 2017 Tax Form IT-201
 
-FileName   examples_and_templates/US_1040/your_fed_out.txt 	{ File-name of Federal Return output file. }
 	{ Data is collected by scanning your Federal return to avoid re-entering it. }
+FileName   examples_and_templates/US_1040/your_fed_out.txt 	{ File-name of Federal Return output file. }
 
 { --- Your Info --- (fieldsz=12) }
 
-YourDOB   		{ Your Date of Birth (mm/dd/yyy) }
-SpouseDOB  		{ Spouse Date of Birth (mm/dd/yyy) or leave blank. }
+YourDOB   		{ Your Date of Birth (mm/dd/yyyy) }
+SpouseDOB  		{ Spouse Date of Birth (mm/dd/yyyy) or leave blank. }
 
-County		
- SchooldDist		{ School Disrtict (for PDF form). }
- SchoolCode		  { School Code (for PDF form). }
+County			{ County (for PDF form). }		
+SchooldDist		{ School Disrtict (for PDF form). }
+SchoolCode		  { School Code (for PDF form). }
 
 D1_ForeignAcct	   n	{ Did you have a foriegn account? (answer: y, n) }
 D2_1-YonkRelCred  n/a  { Yonker resident recv. Prop. relief credit? (answer: y, n, n/a)) }

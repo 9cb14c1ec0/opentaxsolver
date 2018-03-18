@@ -46,7 +46,7 @@ float thisversion=15.03;
 #define Yes 1
 #define No  0
 
-double SchedA[MAX_LINES], SchedD[MAX_LINES];
+double SchedA[MAX_LINES], SchedD[MAX_LINES], amtws[MAX_LINES];
 double L8b=0.0;			 /* Tax-exempt interest (only for SocSec calculations). */
 double L9b=0.0;			 /* Qualified dividends. */
 double qcgws6=0.0, qcgws7=0.0;	 /* Support for AMT calculation. (qual.div+cap.gain wrksht vals.)*/
@@ -205,13 +205,13 @@ void capgains_qualdividends_worksheets( int status, double L9b )		/* Updated for
 /*----------------------------------------------------------------------------------------------*/
 double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2017. */
 {
- double amtws[100], ws[100], thresholdA=0, thresholdB=0, thresholdC=187800.0, amtexmption;
+ double ws[100], thresholdA=0, thresholdB=0, thresholdC=187800.0, amtexmption;
  double offsetA=3756.0, sum8_27=0.0;
  int j, file_amt=1;
 
  printf("Review AMT form6251 routine for your situation.\n");
  fprintf(outfile,"Review AMT form6251 routine for your situation.\n");
- for (j=0; j<100; j++) { amtws[j] = 0.0;  ws[j] = 0.0; }
+ for (j=0; j<100; j++) { ws[j] = 0.0; }
  /* Part I - Alternative Minimum Taxable Income (AMTI) */
  if (itemized)  
   { 
@@ -229,27 +229,27 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2017. 
  else
   amtws[1] = L[38];
  amtws[7] = -(L[10] + L[21]);		/* (As negaitive amount.) */
- amtws[8] = 0.0;	/* Investment interest expense. (Diff between regular tax and AMT). */
- amtws[9] = 0.0;	/* Depletion (Diff between regular tax and AMT). */
+ // amtws[8] = 0.0;	/* Investment interest expense. (Diff between regular tax and AMT). */
+ // amtws[9] = 0.0;	/* Depletion (Diff between regular tax and AMT). */
  amtws[10] = absolutev( L[21] );
 	/* Following amounts assumed normally zero, but review and adjust if needed. */
- amtws[11] = -0.0; 	/* Alternative tax net operating loss deduction, as negative amount. */
- amtws[12] = 0.0;	/* Interest from specified private activity bonds exempt from the regular tax */
- amtws[13] = 0.0;	/* Qualified small business stock (7% of gain excluded under section 1202) */
- amtws[14] = 0.0;	/* Exercise incentive stock options (excess of AMT income over reg tax income) */
- amtws[15] = 0.0;	/* Estates and trusts (amount from Schedule K-1 (Form 1041), box 12, code A) */
- amtws[16] = 0.0;	/* Electing large partnerships (amount from Schedule K-1 (Form 1065-B), box 6) */
- amtws[17] = 0.0;	/* Disposition of property (difference between AMT and regular tax gain or loss) */
- amtws[18] = 0.0;	/* Deprec assets placed in service after 1986 (diff between regular tax and AMT) */
- amtws[19] = 0.0;	/* Passive activities (difference between AMT and regular tax income or loss) */
- amtws[20] = 0.0;	/* Loss limitations (difference between AMT and regular tax income or loss) */
- amtws[21] = 0.0;	/* Circulation costs (difference between regular tax and AMT) */
- amtws[22] = 0.0;	/* Long-term contracts (difference between AMT and regular tax income) */
- amtws[23] = 0.0;	/* Mining costs (difference between regular tax and AMT) */
- amtws[24] = 0.0;	/* Research and experimental costs (difference between regular tax and AMT) */
- amtws[25] = -0.0;	/* Income from certain installment sales before 1/1/87 (As negaitive amount.) */
- amtws[26] = 0.0;	/* Intangible drilling costs preference */
- amtws[27] = 0.0;	/* Other adjustments, including income-based related adjustments */
+ // amtws[11] = -0.0; 	/* Alternative tax net operating loss deduction, as negative amount. */
+ // amtws[12] = 0.0;	/* Interest from specified private activity bonds exempt from the regular tax */
+ // amtws[13] = 0.0;	/* Qualified small business stock (7% of gain excluded under section 1202) */
+ // amtws[14] = 0.0;	/* Exercise incentive stock options (excess of AMT income over reg tax income) */
+ // amtws[15] = 0.0;	/* Estates and trusts (amount from Schedule K-1 (Form 1041), box 12, code A) */
+ // amtws[16] = 0.0;	/* Electing large partnerships (amount from Schedule K-1 (Form 1065-B), box 6) */
+ // amtws[17] = 0.0;	/* Disposition of property (difference between AMT and regular tax gain or loss) */
+ // amtws[18] = 0.0;	/* Deprec assets placed in service after 1986 (diff between regular tax and AMT) */
+ // amtws[19] = 0.0;	/* Passive activities (difference between AMT and regular tax income or loss) */
+ // amtws[20] = 0.0;	/* Loss limitations (difference between AMT and regular tax income or loss) */
+ // amtws[21] = 0.0;	/* Circulation costs (difference between regular tax and AMT) */
+ // amtws[22] = 0.0;	/* Long-term contracts (difference between AMT and regular tax income) */
+ // amtws[23] = 0.0;	/* Mining costs (difference between regular tax and AMT) */
+ // amtws[24] = 0.0;	/* Research and experimental costs (difference between regular tax and AMT) */
+ // amtws[25] = -0.0;	/* Income from certain installment sales before 1/1/87 (As negaitive amount.) */
+ // amtws[26] = 0.0;	/* Intangible drilling costs preference */
+ // amtws[27] = 0.0;	/* Other adjustments, including income-based related adjustments */
  for (j = 1; j <= 27; j++)
   amtws[28] = amtws[28] + amtws[j];
  if (status == MARRIED_FILLING_SEPARAT)
@@ -354,7 +354,13 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2017. 
            case HEAD_OF_HOUSEHOLD:
    	     amtws[43] = 50800.0;
         }
-       amtws[44] = largerof( qcgws7, ws_sched_D[14] );;
+       if (Do_QDCGTW)
+        amtws[44] = NotLessThanZero( qcgws7 );
+       else
+       if (Do_SDTW)
+	amtws[44] = NotLessThanZero( ws_sched_D[14] );
+       else
+	amtws[44] = NotLessThanZero( L[43] );
        amtws[45] = NotLessThanZero( amtws[43] - amtws[44] );
        amtws[46] = smallerof( amtws[36], amtws[37] );
        amtws[47] = smallerof( amtws[45], amtws[46] );
@@ -368,8 +374,11 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2017. 
 	   default:  printf("Status %d not handled.\n", status);  exit(1); 
 	}
        amtws[50] = amtws[45];
-       if ((qcgws7 != 0.0) || (ws_sched_D[19] != 0.0))
-	amtws[51] = NotLessThanZero( largerof( qcgws7, ws_sched_D[19] ) );
+       if (Do_QDCGTW)
+	amtws[51] = NotLessThanZero( qcgws7 );
+       else
+       if (Do_SDTW)
+	amtws[51] = NotLessThanZero( ws_sched_D[19] );
        else
 	amtws[51] = NotLessThanZero( L[43] );
        amtws[52] = amtws[50] + amtws[51];
@@ -722,7 +731,10 @@ void get_gain_and_losses( char *label )
 	if (mystrcasestr( date_str1, "various-long" ) != 0)
 	 variousdates = 2;
 	else
-	 date1 = get_date( word, label );
+	 {
+	  date1 = get_date( word, label );
+	  variousdates = 0;
+	 }
 	/* Expect stock name in comment after first date (buy-date). */
 	get_comment( infile, comment );
 	break;
@@ -1289,8 +1301,8 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 /*----------------------------------------------------------------------*/
 int main( int argc, char *argv[] )						/* Updated for 2017. */
 {
- int argk, j, k, itemize=0;
- char word[2000], outfname[2000], *infname="";
+ int argk, j, k, itemize=0, gotL49=0;
+ char word[2000], outfname[2000], *infname="", labelx[1024];
  time_t now;
  double exemption_threshold=0.0, dedexws[20], tmpval;
  double S_STD_DEDUC, MFS_STD_DEDUC, MFJ_STD_DEDUC, HH_STD_DEDUC, std_deduc;
@@ -1333,6 +1345,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
    SchedD[j] = 0.0;
    idws[j] = 0.0;
    ws_sched_D[j] = 0.0;
+   amtws[j] = 0.0; 
   }
 
  /* Accept parameters from input file. */
@@ -1785,6 +1798,33 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
  GetLine( "L46", &L[46] );	/* Excess advance premium tax credit repayment. Form 8962. */
  GetLine( "L48", &L[48] );	/* Foreign tax credit. */
 
+ while (!gotL49)
+  {
+   GetOptionalLine( "L49 or AMTws28", labelx, &tmpval );
+   if (strcmp( labelx, "L49" ) == 0)
+    {
+     L[49] = tmpval;
+     gotL49 = 1;
+    }
+   else
+   if (strstr( labelx, "AMTws" ) != 0)
+    { 
+     if (sscanf( &(labelx[5]), "%d", &j) == 1)
+      amtws[j] = tmpval;
+     else
+      {
+	printf("ERROR reading '%s'.\n", labelx ); 
+	fprintf(outfile,"ERROR reading '%s'.\n", labelx ); 
+      }
+    }
+   else
+    {
+     printf("ERROR1: Found '%s' when expecting 'L49 or AMTwsXX'\n", labelx ); 
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'L49 or AMTwsXX'\n", word);
+     exit(1);
+    }
+  }
+
  L[45] = form6251_AlternativeMinimumTax( itemize );	/* (Depends on L[48].) */
  if (L[45] == 0.0) fprintf(outfile," (Not subject to Alternative Minimum Tax.)\n");
  else fprintf(outfile," (You must pay Alternative Minimum Tax.)\n");
@@ -1799,7 +1839,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
 
  ShowLineNonZero(48);		/*  Foreign tax credit. Form 1116. */
 
- GetLine( "L49", &L[49] );	/* Child / dependent care expense credits. Form 2441. */
+ // GetLine( "L49", &L[49] );	/* Child / dependent care expense credits. Form 2441. */
  ShowLineNonZero(49);
 
  GetLine( "L50", &L[50] );	/*  Education credits. Form 8863. */

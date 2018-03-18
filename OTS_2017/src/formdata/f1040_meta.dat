@@ -4,6 +4,7 @@ Page 1
 
  CoordReference:  40, 750  61, 64
                   550, 50  841, 1134	110-dpi
+ no_zero_entries
 
  Your1stName: 	 99 135
  YourLastName: 	350 135
@@ -66,6 +67,7 @@ Page 1
 Page 2
 
  L38	754  74 12
+ showevenifzero L39a
  L39a	674 102
  L40	754 143 12
  L41	754 160 12
@@ -269,7 +271,6 @@ Optional_Page 5
  D13	761 1028 12 
  D14	761 1064 12 
  D15	761 1101 12 
- allow_zero_entries
 
 Optional_Page 6
  no_zero_entries
@@ -283,7 +284,6 @@ Optional_Page 6
  D21	751 670 12
  CkD22y 114 795
  CkD22n 114 849
- allow_zero_entries
 
 Optional_Page 7
  YourNames: 	 92 160
@@ -323,7 +323,6 @@ Optional_Page 7
  AMT_Form_6251_L33	755 1017 12
  AMT_Form_6251_L34	755 1070 12
  AMT_Form_6251_L35	755 1088 12
- allow_zero_entries
 
 
 Optional_Page 8
@@ -357,7 +356,6 @@ Optional_Page 8
  AMT_Form_6251_L62 758 1037 12
  AMT_Form_6251_L63 758 1073 12
  AMT_Form_6251_L64 758 1107 12
- allow_zero_entries
 
 
 Optional_Page 9

@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2018	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=15.02;
+float thisversion=15.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -170,7 +170,8 @@ void test_tax_function()
 
 struct FedReturnData
  {
-  double fedline[MAX_LINES], schedA[MAX_LINES], fedl20a;
+  double fedline[MAX_LINES], schedA[MAX_LINES], 
+	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
   int Exception, Itemized;
  } PrelimFedReturn;
 
@@ -192,6 +193,19 @@ void convert_slashes( char *fname )
 }
 
 
+void grab_line_value( char *label, char *fline, double *value )
+{
+ char twrd[1024];
+ next_word(fline, twrd, " \t=");
+ if ((twrd[0] != '\0') && (sscanf(twrd,"%lf", value) != 1))
+  {
+   printf("Error: Reading Fed %s '%s%s'\n", label, twrd, fline);
+   fprintf(outfile,"Error: Reading Fed %s '%s%s'\n", label, twrd, fline);
+  }
+}
+
+
+
 int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 {
  FILE *infile;
@@ -203,6 +217,10 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    fed_data->fedline[linenum] = 0.0;
    fed_data->schedA[linenum] = 0.0;
   }
+ fed_data->fedl8b = 0.0;
+ fed_data->fedl9b = 0.0;
+ fed_data->fedl15a = 0.0;
+ fed_data->fedl16a = 0.0;
  fed_data->fedl20a = 0.0;
  convert_slashes( fedlogfile );
  infile = fopen(fedlogfile, "r");
@@ -218,19 +236,38 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
   {
    if (strstr(fline,"Use standard deduction.")!=0) fed_data->Itemized = 0;
    next_word(fline, word, " \t=");
-   if ((strstr(word,"L")==word) && (strstr(fline," = ")!=0))
+   if ((word[0] == 'L') && (strstr(fline," = ")!=0))
     {
-     if (strcmp(word,"L20a") == 0)
-      {
-	next_word(fline, word, " \t=");
-	if ((word[0] != '\0') && (sscanf(word,"%lf", &(fed_data->fedl20a)) != 1))
-	 {
-	  printf("Error: Reading Fed L20a '%s%s'\n", word, fline);
-	  fprintf(outfile,"Error: Reading Fed L20a '%s%s'\n", word, fline);
-	 }
-      }
+     if (strcmp(word,"L8a") == 0)
+      grab_line_value( word, fline, &(fed_data->fedline[8]) );
      else
-     if ((strcmp(word,"L9b") != 0) || (strcmp(word,"L20b") != 0))
+     if (strcmp(word,"L8b") == 0)
+      grab_line_value( word, fline, &(fed_data->fedl8b) );
+     else
+     if (strcmp(word,"L9a") == 0)
+      grab_line_value( word, fline, &(fed_data->fedline[9]) );
+     else
+     if (strcmp(word,"L9b") == 0)
+      grab_line_value( word, fline, &(fed_data->fedl9b) );
+     else
+     if (strcmp(word,"L15a") == 0)
+      grab_line_value( word, fline, &(fed_data->fedl15a) );
+     else
+     if (strcmp(word,"L15b") == 0)
+      grab_line_value( word, fline, &(fed_data->fedline[15]) );
+     else
+     if (strcmp(word,"L16a") == 0)
+      grab_line_value( word, fline, &(fed_data->fedl16a) );
+     else
+     if (strcmp(word,"L16b") == 0)
+      grab_line_value( word, fline, &(fed_data->fedline[16]) );
+     else
+     if (strcmp(word,"L20a") == 0)
+      grab_line_value( word, fline, &(fed_data->fedl20a) );
+     else
+     if (strcmp(word,"L20b") == 0)
+      grab_line_value( word, fline, &(fed_data->fedline[20]) );
+     else
       {
        if (sscanf(&word[1],"%d",&linenum)!=1)
 	{
@@ -311,7 +348,8 @@ char *pull_initial( char *name )
 int main( int argc, char *argv[] )
 {
  int argk, j, k, iline7, iline8, iline9, iline10;
- double min2file=0.0, sched540[MAX_LINES], sched540b[MAX_LINES], threshA=0, std_ded=0;
+ double min2file=0.0, sched540[MAX_LINES], sched540b[MAX_LINES], sched540c[MAX_LINES], threshA=0, std_ded=0;
+ double nolongerused;	/* Used for obsoleted/deprecated line value being replaced with alternate method. */
  char word[4000], outfname[4000], prelim_1040_outfilename[5000];
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
@@ -352,6 +390,7 @@ int main( int argc, char *argv[] )
     L[j] = 0.0;  
     sched540[j] = 0.0; 
     sched540b[j] = 0.0; 
+    sched540c[j] = 0.0; 
   }
 
  /* Accept parameters from input file. */
@@ -424,12 +463,112 @@ int main( int argc, char *argv[] )
  L[13] = PrelimFedReturn.fedline[37];	/* Fed Wages (Fed 1040 line 37). */
  showline(13);
 
+
+ /* -- Sched540 Part I -- */
+
+ /*** --- Note for next year's version (2018) ---
+    Add entry lines for CA540 Subtractions + Additions.
+
+  GetLine("CA540_Subtr_7", &(sched540b[7]) );
+  GetLine("CA540_Add_7", &(sched540c[7]) );
+  GetLine("CA540_Subtr_8", &(sched540b[8]) );
+  GetLine("CA540_Add_8", &(sched540c[8]) );
+  GetLine("CA540_Subtr_9", &(sched540b[9]) );
+  GetLine("CA540_Add_9", &(sched540c[9]) );
+  GetLine("CA540_Subtr_10", &(sched540b[10]) );
+  GetLine("CA540_Add_11", &(sched540c[11]) );
+  GetLine("CA540_Subtr_12", &(sched540b[12]) );
+  GetLine("CA540_Addit_12", &(sched540c[12]) );
+  GetLine("CA540_Subtr_13", &(sched540b[13]) );
+  GetLine("CA540_Addit_13", &(sched540c[13]) );
+  GetLine("CA540_Subtr_14", &(sched540b[14]) );
+  GetLine("CA540_Addit_14", &(sched540c[14]) );
+  GetLine("CA540_Subtr_15", &(sched540b[15]) );
+  GetLine("CA540_Addit_15", &(sched540c[15]) );
+  GetLine("CA540_Subtr_16", &(sched540b[16]) );
+  GetLine("CA540_Addit_16", &(sched540c[16]) );
+  GetLine("CA540_Subtr_17", &(sched540b[17]) );
+  GetLine("CA540_Addit_17", &(sched540c[17]) );
+  GetLine("CA540_Subtr_18", &(sched540b[18]) );
+  GetLine("CA540_Addit_18", &(sched540c[18]) );
+  GetLine("CA540_Subtr_19", &(sched540b[19]) );
+  GetLine("CA540_Addit_21", &(sched540c[21]) );
+  GetLine("CA540_Subtr_23", &(sched540b[23]) );
+  GetLine("CA540_Subtr_24", &(sched540b[24]) );
+  GetLine("CA540_Addit_24", &(sched540c[24]) );
+  GetLine("CA540_Subtr_25", &(sched540b[25]) );
+  GetLine("CA540_Addit_31", &(sched540c[31]) );
+  GetLine("CA540_Addit_33", &(sched540c[33]) );
+  GetLine("CA540_Subtr_35", &(sched540b[35]) );
+
+  --- Everything is ready to handle tho above entries, except for template file(s). ---
+ ***/
+
+ fprintf(outfile," SchedCA540_8aa = %6.2f\n", PrelimFedReturn.fedl8b );
+ fprintf(outfile," SchedCA540_9aa = %6.2f\n", PrelimFedReturn.fedl9b );
+ fprintf(outfile," SchedCA540_15aa = %6.2f\n", PrelimFedReturn.fedl15a );
+ fprintf(outfile," SchedCA540_16aa = %6.2f\n", PrelimFedReturn.fedl16a );
+ fprintf(outfile," SchedCA540_20aa = %6.2f\n", PrelimFedReturn.fedl20a );
+ 
+ for (j=7; j <= 21; j++)
+  {
+   sched540[j] = PrelimFedReturn.fedline[j];
+   sched540[22] = sched540[22] + sched540[j];
+   if (sched540[j] != 0.0)
+    fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
+
+   if (j == 20)
+    sched540b[j] = sched540[j];
+
+   sched540b[22] = sched540b[22] + sched540b[j];
+   if (sched540b[j] != 0.0)
+    fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
+
+   sched540c[22] = sched540c[22] + sched540c[j];
+   if (sched540c[j] != 0.0)
+    fprintf(outfile," SchedCA540_%dc = %6.2f\n", j, sched540c[j] );
+  }
+ fprintf(outfile," SchedCA540_%d = %6.2f\n", 22, sched540[22] );
+ fprintf(outfile," SchedCA540_%db = %6.2f\n", 22, sched540b[22] );
+ fprintf(outfile," SchedCA540_%dc = %6.2f\n", 22, sched540c[22] );
+
+ for (j=23; j <= 35; j++)
+  {
+   sched540[j] = PrelimFedReturn.fedline[j];
+   sched540[36] = sched540[36] + sched540[j];
+   if (sched540[j] != 0.0)
+    fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
+
+   sched540b[36] = sched540b[36] + sched540b[j];
+   if (sched540b[j] != 0.0)
+    fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
+
+   sched540c[36] = sched540c[36] + sched540c[j];
+   if (sched540c[j] != 0.0)
+    fprintf(outfile," SchedCA540_%dc = %6.2f\n", j, sched540c[j] );
+  }
+ fprintf(outfile," SchedCA540_%d = %6.2f\n", 36, sched540[36] );
+ sched540[37] = sched540[22] - sched540[36];
+ fprintf(outfile," SchedCA540_%d = %6.2f\n", 37, sched540[37] );
+
+ fprintf(outfile," SchedCA540_%db = %6.2f\n", 36, sched540b[36] );
+ sched540b[37] = sched540b[22] - sched540b[36];
+ fprintf(outfile," SchedCA540_%db = %6.2f\n", 37, sched540b[37] );
+
+ fprintf(outfile," SchedCA540_%dc = %6.2f\n", 36, sched540c[36] );
+ sched540c[37] = sched540c[22] - sched540c[36];
+ fprintf(outfile," SchedCA540_%dc = %6.2f\n", 37, sched540c[37] );
+
+ for (j=7; j <= 37; j++)
+  if (sched540b[j] != 0.0)
+   fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
+
+
  /* -- Sched540 Part II -- */
 
- sched540b[20] = PrelimFedReturn.fedline[20];
  sched540[38] = PrelimFedReturn.schedA[4] + PrelimFedReturn.schedA[9] + PrelimFedReturn.schedA[15] + 
-		PrelimFedReturn.schedA[19] + PrelimFedReturn.schedA[27] + PrelimFedReturn.schedA[28];
- sched540b[22] = sched540b[20];
+		PrelimFedReturn.schedA[19] + PrelimFedReturn.schedA[20] + PrelimFedReturn.schedA[27] + 
+		PrelimFedReturn.schedA[28];
  sched540[39] = PrelimFedReturn.schedA[5] + PrelimFedReturn.schedA[8];
  sched540[40] = sched540[38] - sched540[39];
  GetLine( "Adj", &sched540[41] ); 
@@ -445,6 +584,7 @@ int main( int argc, char *argv[] )
  if (L[13] > threshA)
   { /*Itemized Deductions Worksheet*/
     double ws[40];
+    // printf("Yes, Fed AGI (%6.2f) is more than threshold (%6.2f).\n", L[13], threshA );
     for (j=1; j <= 10; j++) ws[j] = 0.0;    
     ws[1] = sched540[42];
     ws[2] = PrelimFedReturn.schedA[4] + PrelimFedReturn.schedA[14] + PrelimFedReturn.schedA[20] + PrelimFedReturn.schedA[28];
@@ -471,24 +611,11 @@ int main( int argc, char *argv[] )
      if (ws[j] != 0.0) fprintf(outfile,"  ItemizedDedWS%d = %6.2f\n", j, ws[j] );
   } /*Itemized Deductions Worksheet*/
  else
-  sched540[43] = sched540[42];
+  {
+   // printf("No, Fed AGI (%6.2f) is less than threshold (%6.2f).\n", L[13], threshA );
+   sched540[43] = sched540[42];
+  }
  sched540[44] = largerof( sched540[43], std_ded );
-
- for (j=7; j <= 37; j++)
-  if (j != 20)
-   sched540[j] = PrelimFedReturn.fedline[j];
- sched540[22]= sched540[22] - PrelimFedReturn.fedline[20];
-
- for (j=7; j <= 37; j++)
-  if (sched540[j] != 0.0)
-   fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
-
- if (PrelimFedReturn.fedl20a != 0.0)
-  fprintf(outfile," SchedCA540_20aa = %6.2f\n", PrelimFedReturn.fedl20a );
-
- for (j=7; j <= 38; j++)
-  if (sched540b[j] != 0.0)
-   fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
 
  for (j=38; j <= 44; j++)	/* Display the worksheet calculations. */
   fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
@@ -498,13 +625,17 @@ int main( int argc, char *argv[] )
  /* -- End Sched540 Part II -- */
 
 
- GetLineF( "L14", &L[14] );	/* CA Adjustments, Schedule CA 540 line 37 column B. */
+  GetLine( "L14", &nolongerused );	/* CA Adjustments, Schedule CA 540 line 37 column B. */
+ L[14] = sched540b[37];
+ showline(14);
 
  L[15] = L[13] - L[14];
  if (L[15] < 0.0) fprintf(outfile,"L15 = (%f6.2)\n", -L[15] );
  else showline(15);
 
- GetLineF( "L16", &L[16] );	/* CA Adjustments, Schedule CA 540 line 37 column C. */
+  GetLine( "L16", &nolongerused );	/* CA Adjustments, Schedule CA 540 line 37 column C. */
+ L[16] = sched540c[37];
+ showline(16);
 
  L[17] = L[15] + L[16];		/* CA Adjusted Gross Income (AGI). */
  showline(17);

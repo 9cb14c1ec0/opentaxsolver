@@ -17,8 +17,8 @@ L10             0       { Number or dependents - (answer: 0, 1, 2, 3, 4, ...).
 L12      29,812.34      {State Wages (List all W2's box 16).}
          21,609.09 ;
  Adj		   ;	{ Adjustments including California lottery losses. Sched540, line 41 (pg 32). }
- L14               ;    { CA Adjustments, Schedule CA 540 line 37 column B.}           
- L16               ;    { CA Adjustments, Schedule CA 540 line 37 column C.}
+ L14               ;    { Value no longer used, now calculated. }           
+ L16               ;    { Value no longer used, now calculated. }
 
 {--Tax Section--}
  L34               ;     { Taxes on distributions (sched G-1 or form FTB 5870A), else 0. }

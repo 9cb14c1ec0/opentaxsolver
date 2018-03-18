@@ -486,7 +486,7 @@ int Round( double x )
 /* Get a line value. */
 void GetLine( char *linename, double *value )
 {
- char word[500];
+ char word[1024];
  get_parameter( infile, 's', word, linename);
  get_parameters( infile, 'f', value, linename);
 }
@@ -494,7 +494,7 @@ void GetLine( char *linename, double *value )
 /* Get a single line value. */
 void GetLine1( char *linename, double *value )
 {
- char word[500];
+ char word[1024];
  get_parameter( infile, 's', word, linename);
  get_parameter( infile, 'f', value, linename);
 }
@@ -512,6 +512,14 @@ void GetLineFnz( char *linename, double *value )
  GetLine( linename, value );
  if (*value != 0.0) fprintf(outfile, "%s = %6.2f\n", linename, *value );
 }
+
+/* Get optional line with label. */
+void GetOptionalLine( char *linename, char *label, double *value )
+{
+ get_parameter( infile, 'l', label, linename);
+ get_parameters( infile, 'f', value, linename);
+}
+
 
 
 
