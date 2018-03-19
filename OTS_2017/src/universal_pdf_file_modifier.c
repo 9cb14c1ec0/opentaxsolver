@@ -19,7 +19,7 @@
 #define MaxPages 100
 #define MAXLINE 2048
 
-float version=1.04;
+float version=1.05;
 int verbose=0;
 int testmode=0;
 int no_zero_entries=0;
@@ -705,6 +705,18 @@ int adjust_xpos_for_commas( char *txt )
 }
 
 
+float leading_sign( char *value )
+{ /* Adjusts for slight contraction in pdf display of string, due to '-' being smaller than digits. */
+ int j=0;
+ while (isspace(value[j]))
+   j++;
+ if (value[j] == '-')
+  return -2.0;
+ else
+  return 0.0;
+}
+
+
 void place_overlay_text( char *streambuf, int page )
 {
  int j, nspc;
@@ -739,10 +751,11 @@ printf("WRITING from metadata[ Pg %d ]\n", page - 1 );
 	     (strstr( item->label, "Street" ) == 0) && (strstr( item->label, "Birth" ) == 0) &&
 	     (strstr( item->label, "Check_") == 0))
 	  { /*number*/
+	    xadj = leading_sign( value );
 	   comma_format( value );
 	   if (rjustify)
 	    right_justify( value, rjustify );
-	   xadj = adjust_xpos_for_commas( value );
+	   xadj = xadj + adjust_xpos_for_commas( value );
 	  } /*number*/
 	 if (verbose) printf("Placing '%s' to '%s'\n", item->label, value );
 	 if ((ck_sz_w == 0) || (strstr( item->label, "Check_") == 0))

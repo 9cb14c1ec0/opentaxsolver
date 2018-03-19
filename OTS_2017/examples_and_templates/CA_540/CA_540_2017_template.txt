@@ -10,10 +10,10 @@ L8               0      { Blind? (answer: 0, 1, 2) - Enter 0 if not blind, 1 if 
 L9               0      { Over 65? (answer: 0, 1, 2) - Enter 1 if you or spouse over 65, 2 if both over 65, 
 						0 if neither}
 L10              0      { Number or dependents - (answer: 0, 1, 2, 3, 4, ...). 
-				(Do not include yourself or spouse)}
+				(Do not include yourself or spouse) }
 
 {--Taxable Income--}
-L12                    {State Wages (List all W2's box 16).}
+L12                    { State Wages (List all W2's box 16). }
                    ;
 {--California Adjustments--} 
 CA540_Subtr_7		; { Subtractions for Wages, salaries, tips, etc.  }

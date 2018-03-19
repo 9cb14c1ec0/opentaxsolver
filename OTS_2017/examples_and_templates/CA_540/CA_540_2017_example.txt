@@ -14,7 +14,7 @@ L10             0       { Number or dependents - (answer: 0, 1, 2, 3, 4, ...).
 				(Do not include yourself or spouse)}
 
 {--Taxable Income--}
-L12      29,812.34      {State Wages (List all W2's box 16).}
+L12      29,812.34      { State Wages (List all W2's box 16). }
          21,609.09 ;
 
 {--California Adjustments--}

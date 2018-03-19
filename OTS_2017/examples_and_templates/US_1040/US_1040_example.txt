@@ -3,7 +3,7 @@ Title:  US Federal 1040 Tax Form - 2017 - EXAMPLE
 { ------------ Example ------------- }
 { --- Filing Status & Exemptions --- }
 
-Status     Married/Joint {Single, Married/Joint, Head_of_House, Married/Sep, Widow(er)}
+Status     Married/Joint { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
 
 Under65?      Yes       { Age at end of 2017. (answer: Yes, No, 1)
 			   If Married, Yes=both-under, No=both-over, 1=One-over. }
