@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 16, 2018 v15.04 - For 2017 tax-year.
+March 23, 2018 v15.05 - For 2017 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -31,6 +31,7 @@ Also contains a new Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v15.05 (3/23/2018) - Minor improvements to PDF printouts US-1040 + NJ State.
     * v15.04 (3/16/2018) - Further automated California CA540 Adjustments form.
 	Provides more complete form fill-out.
 	In US-1040, now blanks unneeded zero entries, and properly resets "various"
