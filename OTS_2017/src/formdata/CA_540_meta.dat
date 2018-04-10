@@ -63,9 +63,8 @@ L16     720 295		14
 L17	720 324		14
 L18	720 424		14
 
- allow_zero_entries
+showevenifzero L19
 L19	720 454		14
- no_zero_entries
 
 FontSz 18
  CkTxTable:    280 495
@@ -75,9 +74,8 @@ FontSz 10
 L31	720 519		14
 L32     720 563		14
 
- allow_zero_entries
+showevenifzero L33
 L33    720 593		14
- no_zero_entries
 
 L34     720 623		14
 L35	720 654		14
@@ -88,9 +86,8 @@ L45     720 788		14
 L46     720 820		14
 L47     720 850		14
 
- allow_zero_entries
+showevenifzero L48
 L48	720 882		14
- no_zero_entries
 
 L61	720 927		14
 L62	720 958		14
@@ -111,7 +108,10 @@ L73     720 233		14
 L74     720 262		14
 L75     720 292		14
 L76	720 321		14
-L91	563 370		14
+showevenifzero L91
+L91	562 370		14
+CkNoUseTaxOwed 	   286 400  
+CkPayedUseTaxCDTFA 286 433  
 L92	720 476		14
 L93     720 505		14
 L94     720 534		14

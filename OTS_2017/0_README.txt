@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 23, 2018 v15.05 - For 2017 tax-year.
+April 2, 2018 v15.06 - For 2017 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -31,6 +31,9 @@ Also contains a new Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v15.06 (4/2/2018) - Adjusted Virginia program for Line-12 to force itemized
+	deductions if itemized on Federal, even if VA. Std. Deduction would have 
+	been greater.
     * v15.05 (3/23/2018) - Minor improvements to PDF printouts US-1040 + NJ State.
     * v15.04 (3/16/2018) - Further automated California CA540 Adjustments form.
 	Provides more complete form fill-out.

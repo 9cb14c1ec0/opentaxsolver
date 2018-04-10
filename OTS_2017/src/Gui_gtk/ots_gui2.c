@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.24;
-char package_date[]="Feb. 9, 2018";
-char ots_release_package[]="15.03";
+float version=2.25;
+char package_date[]="Apr. 9, 2018";
+char ots_release_package[]="15.07";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -104,8 +104,8 @@ char *title_line="Tax File", *current_working_filename=0, *invocation_path, *inc
 char wildcards_out[MaxFname]="*_out.txt";
 int fronty1, fronty2, computed=0, ok_slcttxprog=1;
 char *yourfilename=0;
-char toolpath[MaxFname]="";
-int pending_compute=0;
+char toolpath[MaxFname]="", *start_cmd;
+int pending_compute=0, supported_pdf_form=1;
 
 void pick_file( GtkWidget *wdg, void *data );	/* Prototype */
 void consume_leading_trailing_whitespace( char *line );
@@ -114,7 +114,6 @@ void helpabout2( GtkWidget *wdg, void *data );
 void dump_taxinfo();
 int warn_release=0;
 
-int selected_form=11;
 int selected_other=0;
 void save_taxfile( GtkWidget *wdg, void *data );
 void printout( GtkWidget *wdg, void *data );
@@ -150,13 +149,23 @@ char program_names[30][100] =
 	 "taxsolve_VA_760_2017",		/* 8 */
 	 "taxsolve_NY_IT201_2017",		/* 9 */
 	 "taxsolve_MA_1_2017",			/* 10 */
-	 "Other",				/* 11 */
+	 "taxsolve_GA_500",			/* 11 */
+	 "Other",				/* 12 */
 	};
 
 enum form_names { form_US_1040, form_US_1040_Sched_C, form_US_8829, form_CA_540, 
 		  form_NC_D400, form_NJ_1040, form_OH_IT1040, form_PA_40,
-		  form_VA_760, form_NY_IT201, form_MA_1, form_other
+		  form_VA_760, form_NY_IT201, form_MA_1, form_GA_500, form_other
 		};
+int selected_form=form_other;
+
+
+char *setform( int formnum )
+{
+ char twrd[100];
+ sprintf( twrd, "%d", formnum );
+ return strdup( twrd );
+}
 
 
 void dismiss_general_warning( GtkWidget *wdg, void *data )
@@ -405,6 +414,7 @@ void get_line_entry( char *word, int maxn, FILE *infile )
 
 
 void DisplayTaxInfo();		/* This is a prototype statement only. */
+void warn_about_save_needed_switch();
 int save_needed=0;
 int compute_needed=0;
 
@@ -586,6 +596,67 @@ void edit_line_comment( GtkWidget *wdg, void *data )	/* Edit_comment. */
 }
 
 
+#ifndef PLATFORM_KIND
+ #define Posix_Platform  0 
+ #define Mingw_Platform  1
+ #define MsVisC_Platform 2
+ #ifdef __CYGWIN32__
+  #ifndef __CYGWIN__
+   #define __CYGWIN__ __CYGWIN32__
+  #endif
+ #endif
+ #if defined(__CYGWIN__) || defined(__MINGW32__) || defined(__MSYS__)
+  #define PLATFORM_KIND Mingw_Platform /* MinGW or like platform */
+ #elif defined(__WIN32) || defined(WIN32)
+  #define PLATFORM_KIND MsVisC_Platform /* microsoft visual C */
+ #else
+  #define PLATFORM_KIND Posix_Platform    /* Posix/Linux/Unix */
+ #endif
+#endif
+
+
+void switch_form( GtkWidget *wdg, void *data )
+{ char *cmd;
+ Update_box_info();
+ if (save_needed)
+  {
+   warn_about_save_needed_switch();
+   return;
+  }
+ cmd = (char *)malloc( strlen(start_cmd) + 100 );
+ #if (PLATFORM_KIND==Posix_Platform)
+   strcpy( cmd, start_cmd );
+   strcat( cmd, " &" );
+ #else
+   strcpy( cmd, "start " );
+   strcat( cmd, start_cmd  );
+ #endif
+  printf("Issuing: '%s'\n", cmd );
+  system( cmd );
+  exit(0);
+ }
+
+
+void switch_anyway( GtkWidget *wdg, void *data )
+{
+ save_needed = 0;
+ switch_form( 0, 0 );
+}
+
+void warn_about_save_needed_switch()
+{
+ int xpos=20, ypos=20, winwdth, winhght=100;
+ GtkWidget *winframe, *label;
+ winwdth = 300;
+ winframe = new_window( winwdth, winhght, "Warning Message", &warnwin );
+ label = make_sized_label( winframe, xpos, ypos, "<b>Change(s) not saved !!</b>", 12 );
+ set_widget_color( label, "#ff0000" );
+ make_button( winframe, 10, winhght - 40, "Switch anyway, without saving", switch_anyway, &warnwin );
+ make_button( winframe, winwdth - 60, winhght - 40, "Cancel", dismiss_general_warning, &warnwin );
+ gtk_window_set_keep_above( (GtkWindow *)warnwin, 1 );
+ show_wind( warnwin );
+}
+
 
 void quit_wcheck( GtkWidget *wdg, void *x );		/* Protoyypes */
 void print_outfile_directly( GtkWidget *wdg, void *data );
@@ -608,25 +679,6 @@ int datecheck( char *word )
   }
  if (k==2) return 1; else return 0;
 }
-
-
-#ifndef PLATFORM_KIND
- #define Posix_Platform  0 
- #define Mingw_Platform  1
- #define MsVisC_Platform 2
- #ifdef __CYGWIN32__
-  #ifndef __CYGWIN__
-   #define __CYGWIN__ __CYGWIN32__
-  #endif
- #endif
- #if defined(__CYGWIN__) || defined(__MINGW32__) || defined(__MSYS__)
-  #define PLATFORM_KIND Mingw_Platform /* MinGW or like platform */
- #elif defined(__WIN32) || defined(WIN32)
-  #define PLATFORM_KIND MsVisC_Platform /* microsoft visual C */
- #else
-  #define PLATFORM_KIND Posix_Platform    /* Posix/Linux/Unix */
- #endif
-#endif
 
 
 #if (PLATFORM_KIND != Posix_Platform) 
@@ -802,20 +854,22 @@ void Setup_Tax_Form_Page()	/* This is called whenever the form window needs to b
  button = make_button( mpanel, xpos, winht - 35, "  Save  ", save_taxfile, "0" );	/* The "Save" button. */
  add_tool_tip( button, "Save your changes." );
 
- xpos = (int)(0.2 * (float)winwidth + 0.5);
- // printf("Compute = %1.3g, ", (float)xpos / (float)winwidth );
+ xpos = (int)(0.19 * (float)winwidth + 0.5);
  button = make_button( mpanel, xpos, winht - 35, "Compute Tax", Run_TaxSolver, 0 );
  add_tool_tip( button, "Run TaxSolver." );
 
- xpos = (int)(0.46 * (float)winwidth + 0.5);
+ xpos = (int)(0.41 * (float)winwidth + 0.5);
  // printf("Print = %1.2g, ", (float)xpos / (float)winwidth );
  button = make_button( mpanel, xpos, winht - 35, "  Print  ", printout, 0 );
  add_tool_tip( button, "Print results." );
 
- xpos = (int)(0.72 * (float)winwidth + 0.5);
- // printf("Help = %1.2g, ", (float)xpos / (float)winwidth );
+ xpos = (int)(0.63 * (float)winwidth + 0.5);
  button = make_button( mpanel, xpos, winht - 35, "Help", helpabout2, 0 );
  add_tool_tip( button, "Get information about this program,\n Help, and Updates." );
+
+ xpos = (int)(0.74 * (float)winwidth + 0.5);
+ button = make_button( mpanel, xpos, winht - 35, "Switch Form", switch_form, 0 );
+ add_tool_tip( button, "Switch to-, or Open-, another form." );
 
  xpos = (int)(0.94 * (float)winwidth + 0.5) - 20;
  // printf("Exit = %1.2g\n", (float)xpos / (float)winwidth );
@@ -1650,7 +1704,7 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
     }
    fclose(viewfile);
   }
- if ((valid_results) && (linesread > 10))
+ if ((valid_results) && (linesread > 10) && (supported_pdf_form))
   make_button( panel, wd/2 - 80, ht - 35, "Fill-out PDF Forms", create_pdf_file_directly, 0 ); 
  show_wind( resultswindow );
  computed = 1;
@@ -2540,11 +2594,7 @@ void printout( GtkWidget *wdg, void *data )
  make_sized_label( panel, 1, 1, "Print Return Data:", 12 );
  rad = make_radio_button( panel, 0, x1, y1, "Print Input Data", togprntcmd_in, 0 );
 
- if ((selected_form == form_US_1040) || (selected_form == form_US_1040_Sched_C) || (selected_form == form_PA_40)
-	|| (selected_form == form_CA_540) || (selected_form == form_OH_IT1040) || (selected_form == form_VA_760)
-	|| (selected_form == form_NJ_1040) || (selected_form == form_NY_IT201)
-	|| (selected_form == form_MA_1) || (selected_form == form_NC_D400)
-	|| (selected_form == 12) || (selected_form == 13) || (selected_form == 14))
+ if (supported_pdf_form)
   {
     make_radio_button( panel, rad, x1 + 170, y1, "Automatically Fill-out PDF Tax-Form", togprntcmd_pdf, 0 );
     x2 = x1 + 460;
@@ -2596,6 +2646,7 @@ void slcttxprog( GtkWidget *wdg, void *data )
  if (strcmp(strg,"Other")==0)
   {
    selected_other = 1;
+   supported_pdf_form = 0;
    if (verbose) printf("invocation_path = '%s'\n", invocation_path );
    set_invocation_path( toolpath );
    fb_clear_banned_files();
@@ -2620,6 +2671,7 @@ void slcttxprog( GtkWidget *wdg, void *data )
  else
   {
    selected_other = 0;
+   supported_pdf_form = 1;
    sprintf(tmpstr,"%s%s", invocation_path, strg);
    printf("Setting Tax Program to be: '%s'\n", tmpstr);
    taxsolvecmd = strdup(tmpstr);
@@ -2924,12 +2976,13 @@ void helpabout2( GtkWidget *wdg, void *data )
 int main(int argc, char *argv[] )
 {
  int argn, k, grayed_out=0;
- char vrsnmssg[256], ots_pkg_mssg[256], tmpstr[MaxFname];
+ char vrsnmssg[256], ots_pkg_mssg[256], tmpstr[MaxFname], *formid;
  float x, y, dy, y1, y2;
  GtkWidget *txprogstog, *button, *tmpwdg;
 
  sprintf(ots_pkg_mssg, "OTS Release %s", ots_release_package );  printf("%s\n\n", ots_pkg_mssg );
  sprintf(vrsnmssg, "GUI v%1.2f", version );  printf("%s\n", vrsnmssg );
+ start_cmd = strdup(argv[0]);
  invocation_path = strdup(argv[0]);
  k = strlen(invocation_path)-1;
  while ((k>0) && (invocation_path[k]!=slashchr)) k--;
@@ -2974,7 +3027,7 @@ int main(int argc, char *argv[] )
     if (tmpstr[kx] == slashchr)  tmpstr[kx+1] = '\0';
     else  {sprintf(tmpstr,".%c", slashchr);}
     sprintf(directory_dat, "%sexamples_and_templates%c", tmpstr, slashchr);
-    selected_form = 11;
+    selected_form = form_other;
     ok_slcttxprog = 0;
    }
   else
@@ -3022,39 +3075,50 @@ int main(int argc, char *argv[] )
  y = y + 25;
  y1 = y;
  dy = ((winht - 120) - y) / 6;
- txprogstog = make_radio_button( mpanel, 0, x, y, "US 1040 (w/Scheds A,B,D)", slcttxprog, "0" );
+ formid = setform( form_US_1040 );
+ txprogstog = make_radio_button( mpanel, 0, x, y, "US 1040 (w/Scheds A,B,D)", slcttxprog, formid );
  add_tool_tip( txprogstog, "Also does the 8949 forms." );
  y = y + dy;
- make_radio_button( mpanel, txprogstog, x, y, "US 1040 Sched C", slcttxprog, "1" );
+ formid = setform( form_US_1040_Sched_C );
+ make_radio_button( mpanel, txprogstog, x, y, "US 1040 Sched C", slcttxprog, formid );
  y = y + dy;
- make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, "3" );
+ formid = setform( form_CA_540 );
+ make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, formid );
  y = y + dy;
- make_radio_button( mpanel, txprogstog, x, y, "NC State DC400", slcttxprog, "4" );
+ formid = setform( form_NC_D400 );
+ make_radio_button( mpanel, txprogstog, x, y, "NC State DC400", slcttxprog, formid );
  y = y + dy;
- make_radio_button( mpanel, txprogstog, x, y, "NJ State 1040", slcttxprog, "5" );
+ formid = setform( form_NJ_1040 );
+ make_radio_button( mpanel, txprogstog, x, y, "NJ State 1040", slcttxprog, formid );
  y = y + dy;
- tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "GA State 500", slcttxprog, "500" );
+ formid = setform( form_GA_500 );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "GA State 500", slcttxprog, formid );
  gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
 
  y = y1;
  x = winwidth/2 + 40;
- make_radio_button( mpanel, txprogstog, x, y, "OH State IT1040", slcttxprog, "6" );
+ formid = setform( form_OH_IT1040 );
+ make_radio_button( mpanel, txprogstog, x, y, "OH State IT1040", slcttxprog, formid );
  y = y + dy;
- tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "PA State 40", slcttxprog, "7" );
+ formid = setform( form_PA_40 );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "PA State 40", slcttxprog, formid );
  // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
- tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "VA State 760", slcttxprog, "8" );
+ formid = setform( form_VA_760 );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "VA State 760", slcttxprog, formid );
  // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
- tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NY State IT201", slcttxprog, "9" );
+ formid = setform( form_NY_IT201 );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NY State IT201", slcttxprog, formid );
  // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
- tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "MA State 1", slcttxprog, "10" );
+ formid = setform( form_MA_1 );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "MA State 1", slcttxprog, formid );
  // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
- txprogstog = make_radio_button( mpanel, txprogstog, x, y, "Other", slcttxprog, "11" );
+ formid = setform( form_other );
+ txprogstog = make_radio_button( mpanel, txprogstog, x, y, "Other", slcttxprog, formid );
  y2 = y + dy;
-
  if (selected_other) set_radio_button( txprogstog );
 
  fronty1 = y1;
