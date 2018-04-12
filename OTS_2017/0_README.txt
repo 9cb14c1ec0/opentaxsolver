@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-April 2, 2018 v15.06 - For 2017 tax-year.
+April 12, 2018 v15.07 - For 2017 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -31,6 +31,9 @@ Also contains a new Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v15.07 (4/12/2018) - Code clean-ups in GUI.  Re-activated Line-34, Tuition
+	and Fees Deduction, which was originally denied for 2017, and then
+	recently re-allowed in the midst of the this filing season.
     * v15.06 (4/2/2018) - Adjusted Virginia program for Line-12 to force itemized
 	deductions if itemized on Federal, even if VA. Std. Deduction would have 
 	been greater.

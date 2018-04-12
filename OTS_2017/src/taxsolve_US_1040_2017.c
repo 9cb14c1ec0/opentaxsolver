@@ -29,7 +29,7 @@
 /* Aston Roberts 12-28-2017	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=15.03;
+float thisversion=15.04;
 
 #include <stdio.h>
 #include <time.h>
@@ -1469,8 +1469,23 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
  GetLine( "L31a", &L[31] );	/* Alimony paid*/
  GetLine( "L32", &L[32] );	/* IRA deduction */
  GetLine( "L33", &L[33] );	/* Student loan interest deduction */
- // GetLine( "L34", &L[34] );	/* Tuition and fees. Form 8917. */
- GetLine( "L35", &L[35] );	/* Domestic production activities deduction, Form 8903 */
+
+ GetOptionalLine( "L34 or L35", labelx, &tmpval );
+ if (strcmp( labelx, "L34" ) == 0)	/* Expired then re-allowed Feb 9. */
+  {
+   L[34] = tmpval;
+   // GetLine( "L34", &L[34] );	/* Tuition and fees. Form 8917. */
+   GetLine( "L35", &L[35] );	/* Domestic production activities deduction, Form 8903 */
+  }
+ else
+ if (strcmp( labelx, "L35" ) == 0)
+  L[35] = tmpval;
+ else
+  {
+   printf("ERROR1: Found '%s' when expecting 'L34 or L35'\n", labelx );
+   fprintf(outfile,"ERROR1: Found '%s' when expecting 'L34 or L35'\n", labelx );
+   exit(1);
+  }
 
  SocSec_Worksheet();		/* This calc. depends on lines 23-32. */
  showline_wlabel( "L20b", L[20] );
@@ -1539,7 +1554,7 @@ int main( int argc, char *argv[] )						/* Updated for 2017. */
  ShowLineNonZero(31);
  ShowLineNonZero(32);
  ShowLineNonZero(33);
- // ShowLineNonZero(34);
+ ShowLineNonZero(34);
  ShowLineNonZero(35);
 
  for (j=23; j<=35; j++)

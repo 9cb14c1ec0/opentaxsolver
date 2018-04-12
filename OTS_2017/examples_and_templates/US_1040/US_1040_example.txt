@@ -106,7 +106,8 @@ L30             ;       { Penalty on early withdrawal of savings }
 L31a            ;       { Alimony paid }
 L32             ;       { IRA deduction }
 L33             ;       { Student loan interest deduction }
-L35             ;       { Domestic production activities deduction, Form 8903}
+L34             ;       { Tuition and fees. Form 8917. }
+L35             ;       { Domestic production activities deduction, Form 8903 }
 L39a            ;       { Number of boxes checked (0-4), line-39:  You, Spouse : >65, blind.}
 
 { ---- Tax and Credits ---- }
