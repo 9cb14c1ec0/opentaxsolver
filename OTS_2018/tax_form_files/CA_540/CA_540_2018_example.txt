@@ -1,0 +1,93 @@
+Title:  CA State Tax Form 540 - 2018 -- Example
+
+{ --- Example --- }
+
+FileName   examples_and_templates/US_1040/US_1040_example_out.txt  { File-name of Federal Return output file. }
+        { Data is collected by scanning Federal return to avoid re-entering it. }
+
+{--Exemptions--}
+L6              no      { Are you a dependent? (answer: Yes, No) }
+L8              0       { Blind? (answer: 0, 1, 2) - Enter 0 if not blind, 1 if you or spouse, 2 if both. }
+L9              0       { Over 65? (answer: 0, 1, 2) - Enter 1 if you or spouse over 65, 2 if both over 65, 
+						0 if neither}
+L10             0       { Number or dependents - (answer: 0, 1, 2, 3, 4, ...). 
+				(Do not include yourself or spouse)}
+
+{--Taxable Income--}
+L12      29,812.34      { State Wages (List all W2's box 16). }
+         21,609.09 ;
+
+{--California Adjustments--}
+CA540_Subtr_7		; { Subtractions for Wages, salaries, tips, etc.  }
+CA540_Addit_7		; { Additions for Wages, salaries, tips, etc. }
+CA540_Subtr_8		; { Subtractions for Taxable interest }
+CA540_Addit_8		; { Additions for Taxable interest }
+CA540_Subtr_9		; { Subtractions for Ordinary dividends. }
+CA540_Addit_9		; { Additions for Ordinary dividends. }
+CA540_Subtr_10		; { Subtractions for Taxable refunds, credits, ... }
+CA540_Addit_11		; { Additions for Alimony received }
+CA540_Subtr_12	2300	; { Subtractions for Business income or loss }
+CA540_Addit_12		; { Additions for Business income or loss }
+CA540_Subtr_13		; { Subtractions for Capital gain or loss }
+CA540_Addit_13		; { Additions for Capital gain or loss }
+CA540_Subtr_14		; { Subtractions for Other gains or losses }
+CA540_Addit_14		; { Additions for Other gains }
+CA540_Subtr_15		; { Subtractions for IRA distributions. }
+CA540_Addit_15		; { Additions for IRA distributions. }
+CA540_Subtr_16		; { Subtractions for Pensions and annuities }
+CA540_Addit_16		; { Additions for Pensions and annuities }
+CA540_Subtr_17		; { Subtractions for Rental real estate, royalties, partnerships}
+CA540_Addit_17		; { Additions for Rental real estate, royalties, partnerships }
+CA540_Subtr_18		; { Subtractions for Farm income }
+CA540_Addit_18		; { Additions for Farm income }
+CA540_Subtr_19		; { Subtractions for Unemployment compensation }
+CA540_Addit_21		; { Additions for Other income }
+CA540_Subtr_23		; { Subtractions for Educator expenses }
+CA540_Subtr_24		; { Subtractions for Certain business expenses }
+CA540_Addit_24		; { Additions for Certain business expenses }
+CA540_Subtr_25		; { Subtractions for Health savings account }
+CA540_Addit_31		; { Additions for Alimony paid }
+CA540_Addit_33		; { Additions for Student loan interest }
+CA540_Subtr_35		; { Subtractions for Domestic production activities }
+
+ Adj		   ;	{ Adjustments including California lottery losses. Sched540, line 41 (pg 32). }
+
+{--Tax Section--}
+ L34               ;     { Taxes on distributions (sched G-1 or form FTB 5870A), else 0. }
+
+{--Special Credits--}
+ L40		   ;	 { Nonrefundable Child + Dependent Care Expenses Credit (pg 11). }
+ L41               ;     { New jobs credit, amount generated, else enter 0 }
+ L42               ;     { New jobs credit, amount claimed, else enter 0 }
+ L43               ;     { Special credit, else enter 0 }
+ L44               ;     { Special credit, else enter 0 }
+ L45               ;     { More then two credits (pg 12), else enter 0 }
+ L46               ;     { Nonrefundable renter's credit (pg 12), else 0 }
+
+{--Other Taxes--}
+ L61               ;    { Alternative minimum tax Sched P (540), else 0 }
+ L62               ;    { Mental Health Services Tax. (Instructions pg 13) }
+ L63               ;    { Other taxes/credit recapture (pg 13), else 0 }
+
+{--Payments--}
+ L71      1,119.20 ;     { CA state income tax withheld. }
+ L72         67.21 ;     { Estimated tax paid (pg 13). }
+ L73               ;     { Realestate withholing (forms 592-B, 594, 597) (see pg 13). }
+ L74               ;     { Excess SDI (pg 13). }
+ L75               ;     { Earned Income Tax Credit (EITC). }
+
+ L91               ;     { Use Tax. }
+
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+ Your1stName:	Fred, A		{ First name, Middle Initial }
+ YourLastName:	Symthe
+ YourSocSec#:	123-48-9012	
+ Spouse1stName:	Saley, G	
+ SpouseLastName: de Trubo	{ First name, Middle Initial }
+ SpouseSocSec#:	113-48-9012	
+ Number&Street:	777 Xyz St.	
+ Apt#:		10B	
+ Town:		East Mulbor	
+ Zipcode:	12345678	

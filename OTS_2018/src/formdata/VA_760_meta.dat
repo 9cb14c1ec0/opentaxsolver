@@ -1,0 +1,93 @@
+Page 1
+
+CoordReference:  40, 750  61, 64
+		550, 50  841, 1134    110-dpi
+
+FontSz 10
+no_zero_entries
+no_commas
+round_to_whole_numbers
+
+ Your1stName:	102 173 0
+ YourMI:	286 173 0
+ YourLastName:	322 172 0
+ YourSocSec#: 	553 178 0 13.5
+ Y1st4:		765 178 0 13.5
+ YourDOB:	554 262 0 13.5
+ YourDrivLic:	490 355 0 13.5
+ YourDLdate: 	687 355 0 13.5
+
+ Spouse1stName: 102 219 0
+ SpouseMI:	286 219 0
+ SpouseLastName: 322 219 0
+ SpouseSocSec#: 553 211 0 13.5
+ S1st4:		765 211 0 13.5
+ SpouseDOB:	554 291 0 13.5
+ SpouseDrivLic: 490 386 0 13.5
+ SpouseDLdate: 	687 386 0 13.5
+
+ Number&Street:	102 256 0
+ Town:		102 297 0
+ State:		319 297 0
+ Zipcode: 	420 297 0 10
+
+ FilingStatus: 103 486 0
+ ExmpSpouse:	584 446
+ ExmpDeps:	658 446
+ NExemptionsA	712 446
+ ExemptionsA	794 446
+ YouOver65	535 499
+ SpouseOver65	584 499
+ YouBlind	630 499
+ SpouseBlind	672 499
+ NExemptionsB	712 499
+ ExemptionsB	794 499
+
+ L1	642 540 9 13.8
+ L2	642 576 9 13.8
+ L3	642 610 9 13.8
+ L4	642 650 9 13.8
+ L5	642 683 9 13.8
+ L6     642 717 9 13.8
+ L7     642 752 9 13.8
+ L8     642 786 9 13.8
+ L9     642 821 9 13.8
+ L10    642 855 9 13.8
+ L11    642 889 9 13.8
+ L12    642 928 9 13.8
+ L13    642 958 9 13.8
+ L14    642 992 9 13.8
+ L15    642 1028 9 13.8
+ L16	642 1061 9 13.8
+
+
+Page 2
+CoordReference:  40, 750  61, 64
+		550, 50  841, 1134    110-dpi
+
+ YourSocSec#:	628 101 0 13.5
+ L17	631 138	9 13.8
+ L18    631 171	9 13.8
+ L19    631 203	9 13.8
+ L20a   631 236 9 13.8
+ L20b   631 269	9 13.8
+ L21    631 301	9 13.8
+ L22    631 334	9 13.8
+ L23    631 367	9 13.8
+ L24    631 399	9 13.8
+ L25	631 432	9 13.8
+ 
+ L27	631 498	9 13.8
+ L27    631 498	9 13.8
+ L28    631 532	9 13.8
+ L29    631 565	9 13.8
+ L30    631 599	9 13.8
+ L31    631 633	9 13.8
+ L32    631 667	9 13.8
+ L33    631 700	9 13.8
+ L34    631 734	9 13.8
+ L35    631 768	9 13.8
+ L36    631 802	9 13.8
+ L37    631 835	9 13.8
+ L38	631 869	9 13.8
+

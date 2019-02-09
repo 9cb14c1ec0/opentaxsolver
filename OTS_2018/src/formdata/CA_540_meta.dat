@@ -1,0 +1,235 @@
+Page 1
+
+ TxtColor: 0 0 0.6
+
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+ round_to_whole_numbers
+ no_zero_entries
+
+Your1stName:	 73 181		0 12
+YourMidInit:	287 181		0 1
+YourLastName:	318 181		0 12
+YourSocSec#: 	657 181		0 11
+
+Spouse1stName:	 73 226		0 12
+SpouseMidInit:	287 226		0 1
+SpouseLastName:	318 226		0 12
+SpouseSocSec#:	657 226		0 11
+
+Number&Street:	73  313		0 12
+Apt#: 		596 313		0 13.6
+Town:     	 73 358		0 12
+State:		607 358		0 12
+Zipcode: 	652 358		0 12
+
+YourDOB:	130 460		0 12
+SpouseDOB:	484 460		0 12
+
+FontSz 18
+ CkSingle: 129 566 
+ CkMFJ:    129 597 
+ CkMFS:    129 626 
+ CkHH:     382 568 
+ CkQW:     382 595 
+ CkDep:	   704 688
+FontSz 10
+
+L7a 	618 757
+L7 	762 758
+L8a 	618  792
+L8 	762 792
+L9a 	618 829
+L9 	762 829
+L10a	618 1021	
+L10	762 1021	
+L11	762 1053
+
+
+Page 2
+
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:	140 126	0 12
+YourSocSec#:	540 126 0 11
+
+L12	560 181		14
+L13	720 209		14
+L14     720 237		14
+L15     720 266		14
+L16     720 295		14
+L17	720 324		14
+L18	720 424		14
+
+showevenifzero L19
+L19	720 454		14
+
+FontSz 18
+ CkTxTable:    280 495
+ CkTxRateSchd: 404 495
+FontSz 10
+
+L31	720 519		14
+L32     720 563		14
+
+showevenifzero L33
+L33    720 593		14
+
+L34     720 623		14
+L35	720 654		14
+L40	720 698		14
+L43     720 727		14
+L44     720 755		14
+L45     720 788		14
+L46     720 820		14
+L47     720 850		14
+
+showevenifzero L48
+L48	720 882		14
+
+L61	720 927		14
+L62	720 958		14
+L63	720 985		14
+L64	720 1014	14
+
+
+Page 3
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:	140 120	0 12
+YourSocSec#:	540 120 0 11
+
+L71	720 174		14
+L72     720 203		14
+L73     720 233		14
+L74     720 262		14
+L75     720 292		14
+L76	720 321		14
+showevenifzero L91
+L91	562 370		14
+CkNoUseTaxOwed 	   286 400  
+CkPayedUseTaxCDTFA 286 433  
+L92	720 476		14
+L93     720 505		14
+L94     720 534		14
+L95     720 564		14
+L96     720 593		14
+L97     720 622		14
+L97	720 622		14
+
+
+Page 4
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:	140 126 0 12
+YourSocSec#:	540 126 0 11
+
+L111	721 217	14
+L112	721 276	14
+L113	721 307	14
+L114	721 340	14
+L115	721 424	14
+
+Page 5
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourNames:       78 154 0 12
+YourSocSec#:    638 154 0 17
+
+SchedCA540_7 	 564 208 	9
+SchedCA540_8aa   194 227	9
+SchedCA540_8     564 227	9
+SchedCA540_9aa   303 247	9
+SchedCA540_9     564 247	9
+SchedCA540_10    564 266	9
+SchedCA540_11    564 285	9
+SchedCA540_12    564 305	9
+SchedCA540_13    564 324	9
+SchedCA540_14    564 343	9
+SchedCA540_15aa  287 362	9
+SchedCA540_15    564 362	9
+SchedCA540_16aa  322 382	9
+SchedCA540_16    564 382	9
+SchedCA540_17    564 401	9
+SchedCA540_18    564 420	9
+SchedCA540_19    564 440	9
+SchedCA540_20aa	 254 459	9
+SchedCA540_20	 564 459	9
+SchedCA540_21	 564 519	9
+SchedCA540_22	 564 613	9
+SchedCA540_23	 564 669	9
+SchedCA540_24	 564 702	9
+SchedCA540_25    564 722	9
+SchedCA540_26    564 741	9
+SchedCA540_27    564 761	9
+SchedCA540_28    564 780	9
+SchedCA540_29    564 800	9
+SchedCA540_30	 564 819	9
+SchedCA540_31    564 876	9
+SchedCA540_32    564 895	9
+SchedCA540_33    564 912	9
+SchedCA540_35    564 954	9
+SchedCA540_36    564 1006	9
+SchedCA540_37    564 1045	9
+
+SchedCA540_7b 	 678 208 	9
+SchedCA540_8b    678 227	9
+SchedCA540_9b    678 247	9
+SchedCA540_10b   678 266	9
+SchedCA540_12b   678 305	9
+SchedCA540_13b   678 324	9
+SchedCA540_14b   678 343	9
+SchedCA540_15b   678 362	9
+SchedCA540_16b   678 382	9
+SchedCA540_17b   678 401	9
+SchedCA540_18b   678 420	9
+SchedCA540_19b   678 440	9
+SchedCA540_20b	 678 459	9
+SchedCA540_21b	 678 519	9
+SchedCA540_22b	 678 613	9
+SchedCA540_23b	 678 669	9
+SchedCA540_24b	 678 702	9
+SchedCA540_25b   678 722	9
+SchedCA540_26b   678 741	9
+SchedCA540_35b   678 954	9
+SchedCA540_36b   678 1006	9
+SchedCA540_37b   678 1045	9
+
+SchedCA540_7c 	  784 208 	9
+SchedCA540_8c     784 227	9
+SchedCA540_9c     784 247	9
+SchedCA540_10c    784 266	9
+SchedCA540_11c    784 285	9
+SchedCA540_12c    784 305	9
+SchedCA540_13c    784 324	9
+SchedCA540_14c    784 343	9
+SchedCA540_15c    784 362	9
+SchedCA540_16c    784 382	9
+SchedCA540_17c    784 401	9
+SchedCA540_18c    784 420	9
+SchedCA540_22c	  784 613	9
+SchedCA540_24c	  784 702	9
+SchedCA540_31c    784 876	9
+SchedCA540_33c    784 912	9
+SchedCA540_36c    784 1006	9
+SchedCA540_37c    784 1045	9
+
+
+
+Page 6
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+SchedCA540_38    761 149	10
+SchedCA540_39    761 195	10
+SchedCA540_40    761 227	10
+SchedCA540_41    761 258	10
+SchedCA540_42    761 288	10
+SchedCA540_43    761 429	10
+SchedCA540_44    761 531	10
+

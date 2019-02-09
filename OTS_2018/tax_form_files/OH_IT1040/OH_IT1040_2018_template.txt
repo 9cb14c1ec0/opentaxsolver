@@ -1,0 +1,116 @@
+Title:  Ohio IT1040 State 2018 Tax Form
+
+  { --- Your Filing Status & Exemptions --- }
+
+Status      Single      { Single, Married/joint, Married/separate, Head_of_household }
+
+Exemptions  	;       { Exemptions, self=1/depend=2,3,... (answer: 1, 2, 3, 4, 5, ...) }
+
+JointCredit    No	{ Yes if Married-Filing-Jointly & both have AGI >= $500. (answer: Yes, No)}
+
+L1	    	;	{ Federal Adjusted Gross Income (IRS form 1040, line 37) }
+L4	    	;	{ Personal and dependent exemption deduction, Sched-J }
+L6		;	{ Taxable business income (Ohio Schedule IT BUS, line 13) }
+L8b		;	{ Business income tax liability (Schedule IT BUS, line 14) }
+L11		;	{ Interest penalty on underpayment of estimated tax (Ohio IT/SD 2210) }
+L12		;	{ Sales and use tax due }
+L14		;	{ Ohio Tax Withheld (box 17 on your W-2) }
+L15		;	{ Estimated & extension payments made, & credit carryforward from last year }
+L17		;	{ Amended return only - amount previously paid with original }
+L19		;	{ Amended return only - overpayment previously received on original }
+
+{ --- Additions --- (Items not included in line L1 above.) }
+SchedA_1	;	{ Non-Ohio state or local government interest and dividends }
+SchedA_2	;	{ Ohio pass-through entity and financial institutions taxes paid }
+SchedA_3	;	{ Reimbursed college tuit. fees deducted prev yrs. }
+SchedA_4	;	{ Losses from sale or disposition of Ohio public obligations }
+SchedA_5	;	{ Nonmedical withdrawals from medical savings account }
+SchedA_6	;	{ Reimbursement of expenses previously deducted for Ohio income tax ... }
+SchedA_7	;	{ Adjustment for Internal Revenue Code sections 168(k) and 179 }
+SchedA_8	;	{ Federal interest and dividends subject to state taxation }
+SchedA_9	;	{ Miscellaneous federal income tax additions }
+
+{ --- Deductions --- }
+SchedA_11	;	{ Business income deduction (Ohio Schedule IT BUS, line 11) }
+SchedA_12	;	{ Compensation earned in Ohio by residents of neighboring states }
+SchedA_13	;	{ State/municipal tax overpayments (IRS form 1040, line 10) }
+SchedA_14	;	{ Qualifying Social Security benefits }
+SchedA_15	;	{ Interest income from Ohio public obligations ... }
+SchedA_16	;	{ Amounts contributed to an individual development account }
+SchedA_17	;	{ Amounts contributed to a STABLE account }
+
+{ - Federal - } 
+SchedA_18	;	{ Federal interest and dividends exempt from state taxation }
+SchedA_19	;	{ Adjustment for Internal Revenue Code 168(k), 179 depreciation }
+SchedA_20	;	{ Refund or reimbursements shown on IRS form 1040, line 21 }
+SchedA_21	;	{ Repayment of income reported in a prior year }
+SchedA_22	;	{ Wage expense not deducted ... }
+SchedA_23	;	{ Miscellaneous federal income tax deductions }
+
+{ - Uniformed Services - } 
+SchedA_24	;	{ Military pay for Ohio residents received while stationed outside Ohio }
+SchedA_25	;	{ Income earned by military nonresidents ... }
+SchedA_26	;	{ Uniformed services retirement income }
+SchedA_27	;	{ Military injury relief fund }
+SchedA_28	;	{ Certain Ohio National Guard reimbursements and benefits }
+
+{ - Education - } 
+SchedA_29	;	{ Ohio 529 contributions, tuition credit purchases }
+SchedA_30	;	{ Pell College Opportunity taxable grant amounts used for room and board }
+
+{ Medical } 
+SchedA_31	;	{ Disability and survivorship benefits }
+SchedA_32	;	{ Unreimbursed long-term care insurance premiums ...  }
+SchedA_33	;	{ Funds deposited into, and earnings of, a medical savings account }
+SchedA_34	;	{ Qualified organ donor expenses }
+
+{ --- Schedule of Credits --- }
+Credits_2	;	{ Retirement income credit.  See instructions page 27. }
+Credits_3	;	{ Lump sum retirement credit (Ohio LS WKS, line 6) }
+Credits_4	;	{ Senior citizen credit }
+Credits_5	;	{ Lump sum distribution credit }
+Credits_6	;	{ Child care and dependent care credit }
+Credits_7	;	{ Displaced worker training credit }
+Credits_8	;	{ Ohio political contributions credit }
+
+Credits_13	;	{ Earned income credit }
+Credits_14	;	{ Ohio adoption credit  }
+Credits_15	;	{ Job retention credit, nonrefundable portion }
+Credits_16	;	{ Credit for eligible new employees in enterprise zones }
+Credits_17	;	{ Credit for purchases of grape production property }
+Credits_18	;	{ Invest Ohio }
+Credits_19	;	{ Tech investment credit }
+Credits_20	;	{ Enterprise zone day care and training credits }
+Credits_21	;	{ Research and development credit }
+Credits_22	;	{ Ohio historic preservation credit, nonrefundable carryforward portion }
+
+{ - Nonresident Credit - }
+Credits_25	;	{  Portion L3 was not earned in Ohio }
+
+{ - Resident Credit - }
+Credits_28	;	{  Portion of Line-3 (L3) taxed by other states }
+Credits_31	;	{  Income Tax paid to Other States }
+
+{ - Refundable Credits - }
+Credits_34	;	{ Historic preservation credit }
+Credits_35	;	{ Business jobs credit }
+Credits_36	;	{ Pass-through entity credit }
+Credits_37	;	{ Motion picture production credit }
+Credits_38	;	{ Financial Institutions Tax (FIT) credit }
+Credits_39	;	{ Venture capital credit }
+
+{ ------------------------------------------- } 
+{ --- Optional info for Auto-PDF-Fillout. --- }
+ Your1stName:			{ First name, Middle Initial }
+ YourLastName:	
+ YourSocSec#:	
+ Spouse1stName:                 { First name, Middle Initial (Leave blank if Single, etc.) }
+ SpouseLastName:  
+ SpouseSocSec#:	
+ Number&Street:	
+ Town:		
+ Zipcode:   	
+
+{ 
+ ------------------------------------------- 
+}
