@@ -116,7 +116,7 @@ L25	787.44	 { Utilities }
 L26	11,978.03	 { Wages (less employment credits) }
 		;
 
-L27	0	 { List other expenses here from line 48 pg 2 }
+L27a	0	 { List other expenses here from line 48 pg 2 }
 		;
 
 L30	450.00	 { Expenses for business use of home (form 8829) }

@@ -1186,7 +1186,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 	  strcpy( pgstr, "B1_" );
 	 }
 	else
-	if (strcmp( word1, "3b" ) == 0)
+	if (strcmp( word1, "L3b" ) == 0)
 	 { 
 	  if (pg > 0)
 	   {

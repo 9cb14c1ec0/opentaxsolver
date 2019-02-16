@@ -164,7 +164,7 @@ int main ( int argc, char *argv[] )
  GetLine( "L9", &L[9] );	/* Car & truck expenses */
 
  GetLine( "Miles", &Mileage );	/* Miles for Line 9, not already included in Line 9. */
- L[9] = L[9] + 0.535 * Mileage;				/* Not Updated for 2018. */
+ L[9] = L[9] + 0.545 * Mileage;					/* Updated for 2018. */
 
  GetLine( "L10", &L[10] );	/* Commissions & fees */
 
@@ -206,15 +206,174 @@ int main ( int argc, char *argv[] )
 
  GetLine( "L26", &L[26] );	/* Wages (less employment credits) */
 
- GetLine( "L27", &L[27] );	/* Other expenses here from line 48 pg 2 */
+ GetLine( "L27a", &L[27] );	/* Other expenses here from line 48 pg 2 */
 
  GetLine( "L30", &L[30] );	/* Expenses for business use of home (form 8829) */
 
  get_parameter( infile, 's', word, "L32a" );  /* Yes or No, All investment is at risk */
  get_parameter( infile, 'b', &L32, "L32a");
 
-printf("Under development .... exiting.\n");
-fprintf(outfile,"Under development .... exiting.\n");
+ /* Part III */
+
+ writeout_line = 0;	/* Suppress GetLineF's from immediately writing to outfile. */
+ answ = GetTextLineF( "L33:" );
+ next_word( answ, word, " \t;" );
+ if (strcasecmp( word, "Cost" ) == 0)
+  fprintf(outfile,"Ck33aCost: X\n");
+ else
+ if (strcasecmp( word, "Market" ) == 0)
+  fprintf(outfile,"Ck33bMarket: X\n");
+ else
+ if (strcasecmp( word, "Other" ) == 0)
+  fprintf(outfile,"Ck33cOther: X\n");
+ else
+ if (word[0] != '\0')
+  printf("Warning: Unexpted answer for L33: '%s'\n", word ); 
+
+ answ = GetTextLineF( "L34:" );
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+  fprintf(outfile,"Ck34Yes: X\n");
+ else
+ if (toupper( word[0] ) == 'N')
+  fprintf(outfile,"Ck34No: X\n");
+ writeout_line = 1;
+ 
+ GetLine( "L35", &L[35] );	/* Inventory at beginning of year */
+
+ GetLine( "L36", &L[36] );	/* Purchases minus cost of personel items */
+
+ GetLine( "L37", &L[37] );	/* Cost of labor (not paid to yourself) */
+
+ GetLine( "L38", &L[38] );	/* Materials & supplies */
+
+ GetLine( "L39", &L[39] );	/* Other costs */
+
+ L[40] = L[35] + L[36] + L[37] + L[38] + L[39];
+
+ GetLine( "L41", &L[41] );	/* Inventory at year end */
+
+ L[42] = L[40] - L[41];
+
+
+ /* -- Compute the tax form -- */
+
+ showline(1);
+ showline(2);
+ L[3] = L[1] - L[2];
+ showline(3);
+ L[4] = L[42];
+ showline(4);
+ L[5] = L[3] - L[4];
+ showline_wmsg(5, "Gross profit");
+ showline(6);
+ L[7] = L[5] + L[6];
+ showline_wmsg(7, "Gross income");
+ showline(8);
+ showline(9);
+ showline(10);
+ showline(11);
+ showline(12);
+ showline(13);
+ showline(14);
+ showline(15);
+ fprintf(outfile,"L16a = %6.2f\n", L[16]);
+ fprintf(outfile,"L16b = %6.2f\n", L16b);
+ showline(17);
+ showline(18);
+ showline(19);
+ fprintf(outfile,"L20a = %6.2f\n", L[20]);
+ fprintf(outfile,"L20b = %6.2f\n", L20b);
+ showline(21);
+ showline(22);
+ showline(23);
+ fprintf(outfile,"L24a = %6.2f\n", L[24]);
+ fprintf(outfile,"L24b = %6.2f\n", L24b);
+ showline(25);
+ showline(26);
+ showline_wlabel( "L27a", L[27] );
+ L[28] = L[8] + L[9] + L[10] + L[11] + L[12] + L[13] + L[14] + L[15] + L[16] + L16b + L[17] + L[18] 
+ 	 + L[19] + L[20] + L20b + L[21] + L[22] + L[23] + L[24] + L24b + L[25] + L[26] + L[27];
+ showline_wmsg(28,"Total expenses");
+ L[29] = L[7] - L[28];
+ showline(29);
+ showline(30);
+ L[31] = L[29] - L[30];
+ showline_wmsg(31,"Net Profit (loss)");
+ if (L[31] > 0.0)
+  fprintf(outfile,"Enter %2.2f on Form 1040 line 12. Sched-SE line 2. Estates/trusts on 1040 line 3.\n", L[31]);
+ else
+ if (L[31] < 0.0)
+  {
+   // fprintf(outfile,"Mark box 32a accordingly\n");
+   if (L32 == Yes)
+    {
+     fprintf(outfile,"If you checked 32a, enter %2.2f on Form 1040 line 12.\n", L[31]);
+     fprintf(outfile,"        Estates and trusts, enter on Form 1041, line 3.\n");
+     fprintf(outfile,"Ck32a: x\n");
+    }
+   else
+    {
+     fprintf(outfile,"If you checked 32b, you must attach Form 6198. Your loss may be limited.\n");
+     fprintf(outfile,"Ck32b: x\n");
+    }
+  }
+
+ showline(35);
+ showline(36);
+ showline(37);
+ showline(38);
+ showline(39);
+ showline(40);
+ showline(41);
+ showline_wmsg(42,"Cost of goods sold");
+
+ writeout_line = 0;
+ answ = GetTextLineF( "L43:" );
+ next_word( answ, word, " \t-/.,;" );
+ fprintf(outfile,"L43mm: %s\n", word);
+ next_word( answ, word, " \t-/.,;" );
+ fprintf(outfile,"L43dd: %s\n", word);
+ next_word( answ, word, " \t-/.,;" );
+ fprintf(outfile,"L43yy: %s\n", word);
+ writeout_line = 1;
+ GetTextLineF( "L44a" );
+ GetTextLineF( "L44b" );
+ GetTextLineF( "L44c" );
+
+ writeout_line = 0;     /* Suppress GetLineF's from immediately writing to outfile. */
+
+ answ = GetTextLineF( "L45:" );
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+  fprintf(outfile,"Ck45Yes: X\n");
+ else
+ if (strcasecmp( word, "No") == 0)
+  fprintf(outfile,"Ck45No: X\n");
+
+ answ = GetTextLineF( "L46:" );
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+  fprintf(outfile,"Ck46Yes: X\n");
+ else
+ if (strcasecmp( word, "No") == 0)
+  fprintf(outfile,"Ck46No: X\n");
+
+ answ = GetTextLineF( "L47a:" );
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+  fprintf(outfile,"Ck47aYes: X\n");
+ else
+ if (strcasecmp( word, "No") == 0)
+  fprintf(outfile,"Ck47aNo: X\n");
+
+ answ = GetTextLineF( "L47b:" );
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+  fprintf(outfile,"Ck47bYes: X\n");
+ else
+ if (strcasecmp( word, "No") == 0)
+  fprintf(outfile,"Ck47bNo: X\n");
 
  fclose(infile);
 

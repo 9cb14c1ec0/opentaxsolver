@@ -85,7 +85,7 @@ L25		 { Utilities }
 		;
 L26		 { Wages (less employment credits) }
 		;
-L27		 { List other expenses here from line 48 pg 2 }
+L27a		 { List other expenses here from line 48 pg 2 }
 		;
 L30		 { Expenses for business use of home (form 8829) }
 		;

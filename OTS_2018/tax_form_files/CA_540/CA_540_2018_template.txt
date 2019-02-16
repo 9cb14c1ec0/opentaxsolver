@@ -2,7 +2,7 @@ Title:  CA State Tax Form 540 - 2018
 
   { Data is collected by scanning Federal Return results to avoid re-entering data. }
 
-FileName   examples_and_templates/US_1040/fed_out.txt { File-name of Federal Return output file. }
+FileName   tax_form_files/US_1040/fed_out.txt { File-name of Federal Return output file. }
 
 {--Exemptions--}
 L6              no      { Are you a dependent? (answer: Yes, No) }
@@ -16,12 +16,15 @@ L10              0      { Number or dependents - (answer: 0, 1, 2, 3, 4, ...).
 L12                    { State Wages (List all W2's box 16). }
                    ;
 {--California Adjustments--} 
-CA540_Subtr_7		; { Subtractions for Wages, salaries, tips, etc.  }
-CA540_Addit_7		; { Additions for Wages, salaries, tips, etc. }
-CA540_Subtr_8		; { Subtractions for Taxable interest }
-CA540_Addit_8		; { Additions for Taxable interest }
-CA540_Subtr_9		; { Subtractions for Ordinary dividends. }
-CA540_Addit_9		; { Additions for Ordinary dividends. }
+CA540_Subtr_1		; { Subtractions for Wages, salaries, tips, etc.  }
+CA540_Addit_1		; { Additions for Wages, salaries, tips, etc. }
+CA540_Subtr_2		; { Subtractions for Taxable interest }
+CA540_Addit_2		; { Additions for Taxable interest }
+CA540_Subtr_3		; { Subtractions for Ordinary dividends. }
+CA540_Addit_3		; { Additions for Ordinary dividends. }
+CA540_Subtr_4		; { Subtractions for IRAs, pensions, and annuities. }
+CA540_Addit_4		; { Additions for IRAs, pensions, and annuities. }
+CA540_Subtr_5		; { Subtractions for Social security benefits. }
 CA540_Subtr_10		; { Subtractions for Taxable refunds, credits, ... }
 CA540_Addit_11		; { Additions for Alimony received }
 CA540_Subtr_12		; { Subtractions for Business income or loss }
@@ -30,10 +33,6 @@ CA540_Subtr_13		; { Subtractions for Capital gain or loss }
 CA540_Addit_13		; { Additions for Capital gain or loss }
 CA540_Subtr_14		; { Subtractions for Other gains or losses }
 CA540_Addit_14		; { Additions for Other gains }
-CA540_Subtr_15		; { Subtractions for IRA distributions. }
-CA540_Addit_15		; { Additions for IRA distributions. }
-CA540_Subtr_16		; { Subtractions for Pensions and annuities }
-CA540_Addit_16		; { Additions for Pensions and annuities }
 CA540_Subtr_17		; { Subtractions for Rental real estate, royalties, partnerships}
 CA540_Addit_17		; { Additions for Rental real estate, royalties, partnerships }
 CA540_Subtr_18		; { Subtractions for Farm income }
@@ -46,17 +45,36 @@ CA540_Addit_24		; { Additions for Certain business expenses }
 CA540_Subtr_25		; { Subtractions for Health savings account }
 CA540_Addit_31		; { Additions for Alimony paid }
 CA540_Addit_33		; { Additions for Student loan interest }
-CA540_Subtr_35		; { Subtractions for Domestic production activities }
 
- Adj		   ;	{ Other Adjustments including California lottery losses. Sched540, line 41 (pg 32). }
+
+{--Part-II of California Adjustments--}
+CA540_P2_1		; { Medical and dental expenses }
+CA540_P2_Sub_5a		; { Subtractions for State and local income tax or general sales taxes }
+CA540_P2_Sub_6		; { Subtractions for Other taxes }
+CA540_P2_Add_8a		; { Additions for home mortgage interest & points reported on Form 1098 }
+CA540_P2_Add_8b		; { Additions for home mortgage interest not reported on Form 1098 }
+CA540_P2_Add_8c		; { Additions for points not reported on Form 1098 }
+CA540_P2_Sub_9		; { Subtractions for inveestment interest }
+CA540_P2_Add_9		; { Additions for inveestment interest }
+CA540_P2_Sub_11		; { Subtractions for Gifts by cash or check }
+CA540_P2_Add_11		; { Additions for Gifts by cash or check }
+CA540_P2_Sub_12		; { Subtractions for Gifts other than by cash or check }
+CA540_P2_Add_12		; { Additions for Gifts other than by cash or check }
+CA540_P2_Sub_13		; { Subtractions for Carryover from prior year }
+CA540_P2_Add_13		; { Additions for Carryover from prior year }
+CA540_P2_Sub_15		; { Subtractions for Casualty or theft loss(es) }
+CA540_P2_Add_15		; { Additions for Casualty or theft loss(es) }
+CA540_P2_Sub_16 	; { Subtractions for Other-from list in federal instructions }
+CA540_P2_Add_16 	; { Additions for Other-from list in federal instructions }
+CA540_P2_19		; { Unreimbursed employee expenses }
+CA540_P2_20		; { Tax preparation fees }
+CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
 
 {--Tax Section--}
  L34               ;     { Taxes on distributions (sched G-1 or form FTB 5870A), else 0. }
 
 {--Special Credits--}
  L40		   ;	 { Nonrefundable Child + Dependent Care Expenses Credit (pg 11). }
- L41               ;     { New jobs credit, amount generated, else enter 0 }
- L42               ;     { New jobs credit, amount claimed, else enter 0 }
  L43               ;     { Special credit, else enter 0 }
  L44               ;     { Special credit, else enter 0 }
  L45               ;     { More then two credits (pg 12), else enter 0 }

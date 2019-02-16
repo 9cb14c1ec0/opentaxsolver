@@ -54,8 +54,8 @@ L5a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
 L9		;	{ Qualified business income deduction. }
 L12a		; 	{ Child tax credit/credit for other dependents. }
 
-L16	1165.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, etc..  }
-	2988.09         { Spouse's}
+L16	 965.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, etc..  }
+	1688.09         { Spouse's}
                 ;
 
 { -- Refundable Credits -- }
@@ -68,14 +68,14 @@ L17c		;	{ Education Credits, Form 8863 }
 { --- Schedule D: Capital Gains/Loses --- }
 CapGains-A/D            { Capital Gains/Losses, 1099-B. For Basis Reported to IRS (Form 8949 check A or D) }
                         {  Enter for each:  BuyAmnt Date, SellAmnt Date }
-         -800.99        6-20-17         { 40 Shares WMT }
-          950.99        10-12-17
+         -800.99        6-20-18         { 40 Shares WMT }
+          950.99        10-12-18
 
-         -800.99        6-20-2018       { 40 Shares AAP }
-          950.99        10-12-17
+         -800.99        6-20-2017       { 40 Shares AAP }
+          950.99        10-12-18
 
         -3658.22        1-15-17        { 100 Shares XOM }
-         4209.95        12-25-17
+         4209.95        12-25-18
 
         -4949.98        3-26-17        { 500 Shares NAB }
          6009.01        12-27-2018
@@ -143,7 +143,7 @@ S1_33             ;       { Student loan interest deduction }
         1928.35          { Spouse's local tax (paid) }
 		;
  A5b                    { Real estate taxes.}
-	1771.05          {Prop-tax}
+	1771.05 ;        {Prop-tax}
  A5c            ;       { Personal property (eg. automobile) taxes. }
  A6             ;       { Other taxes.}
  A8a            ;       { Home mortgage interest and points reported to you on Form 1098.}
