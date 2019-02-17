@@ -70,19 +70,20 @@ L34		0	{ Use tax due on out-of-state purchases }
 L35a		0	{ Health Care Penalty (you) }
 L35b		0	{ Health Care Penalty (spouse) }
 L35c            0       { Health Care Penalty (federal) }
+L36             0       { AMENDED RETURN ONLY. Overpayment from original return. }
 
 {---- Taxes Paid ----}
 
-L37	 6,000.00;	{ Mass Income Tax withheld (from W-2's, ...) }
-L38		;	{ 2017 overpayment applied to 2018 estimated tax }
-L39		;	{ 2018 estimated tax payments }
-L40		;	{ Payments made with extension }
-L41             ;       { Payments with original return. Only if amending return.}
-L42a		;	{ EIC: amount from US Return }
-L43		;	{ Senior Circuit Breaker Credit, sched CB }
-L44		;	{ Other refundable credits, Sched RF, line 4. }
+L38	 6,000.00;	{ Mass Income Tax withheld (from W-2's, ...) }
+L39		;	{ 2017 overpayment applied to 2018 estimated tax }
+L40		;	{ 2018 estimated tax payments }
+L41		;	{ Payments made with extension }
+L42             ;       { Payments with original return. Only if amending return.}
+L43a		;	{ EIC: amount from US Return }
+L44		;	{ Senior Circuit Breaker Credit, sched CB }
+L45		;	{ Other refundable credits, Sched RF, line 4. }
 
-L47	   1,000 ;	{Overpayment you want applied to next year's estimated tax}
+L48	   1,000 ;	{Overpayment you want applied to next year's estimated tax}
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }

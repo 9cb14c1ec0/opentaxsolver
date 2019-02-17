@@ -8,7 +8,7 @@ Exemptions  1	;       { Exemptions, self=1/depend=2,3,... (answer: 1, 2, 3, 4, 5
 
 JointCredit  No		{ Yes if Married-Filing-Jointly & both have AGI >= $500. (answer: Yes, No)}
 
-L1    33,456.00	;	{ Federal Adjusted Gross Income (IRS form 1040, line 37) }
+L1    33,456.00	;	{ Federal Adjusted Gross Income (IRS form 1040, line 7) }
 L4	 823.45	;	{ Personal and dependent exemption deduction, Sched-J }
 L6     3,456	;	{ Taxable business income (Ohio Schedule IT BUS, line 13) }
 L8b	 500	;	{ Business income tax liability (Schedule IT BUS, line 14) }
@@ -33,36 +33,38 @@ SchedA_9	;	{ Miscellaneous federal income tax additions }
 { --- Deductions --- }
 SchedA_11   99.0 ;	{ Business income deduction (Ohio Schedule IT BUS, line 11) }
 SchedA_12 3,333	 ;	{ Compensation earned in Ohio by residents of neighboring states }
-SchedA_13	 ;	{ State/municipal tax overpayments (IRS form 1040, line 10) }
-SchedA_14	 ;	{ Qualifying Social Security benefits }
-SchedA_15  78.11 ;	{ Interest income from Ohio public obligations ... }
-SchedA_16	 ;	{ Amounts contributed to an individual development account }
-SchedA_17	 ;	{ Amounts contributed to a STABLE account }
+SchedA_13	 ;	{ State/municipal tax overpayments (IRS 1040, Sched 1, line 10) }
+SchedA_14	 ;	{ Taxable Social Security benefits }
+SchedA_15	 ;	{ Certain railroad retirement benefits }
+SchedA_16  78.11 ;	{ Interest income from Ohio public obligations ... }
+SchedA_17	 ;	{ Amounts contributed to an individual development account }
+SchedA_18	 ;	{ Amounts contributed to a STABLE account }
+SchedA_19	 ;	{ Income from out-of-state business }
 
 { - Federal - } 
-SchedA_18   22.10 ;	{ Federal interest and dividends exempt from state taxation }
-SchedA_19	  ;	{ Adjustment for Internal Revenue Code 168(k), 179 depreciation }
-SchedA_20	  ;	{ Refund or reimbursements shown on IRS form 1040, line 21 }
-SchedA_21	  ;	{ Repayment of income reported in a prior year }
-SchedA_22   88.02 ;	{ Wage expense not deducted ... }
-SchedA_23	  ;	{ Miscellaneous federal income tax deductions }
+SchedA_20   22.10 ;	{ Federal interest and dividends exempt from state taxation }
+SchedA_21	  ;	{ Deduction of prior year 168(k) and 179 depreciation addbacks }
+SchedA_22	  ;	{ Refund or reimbursements shown on IRS 1040, Sched 1, line 21 }
+SchedA_23	  ;	{ Repayment of income reported in a prior year }
+SchedA_24   88.02 ;	{ Wage expense not deducted ... }
+SchedA_25	  ;	{ Federal conformity deductions }
 
 { - Uniformed Services - } 
-SchedA_24  6,000.0 ;	{ Military pay for Ohio residents received while stationed outside Ohio }
-SchedA_25	   ;	{ Income earned by military nonresidents ... }
-SchedA_26	   ;	{ Uniformed services retirement income }
-SchedA_27	   ;	{ Military injury relief fund }
-SchedA_28	   ;	{ Certain Ohio National Guard reimbursements and benefits }
+SchedA_26  6,000.0 ;	{ Military pay for Ohio residents received while stationed outside Ohio }
+SchedA_27	   ;	{ Income earned by military nonresidents ... }
+SchedA_28	   ;	{ Uniformed services retirement income }
+SchedA_29	   ;	{ Military injury relief fund }
+SchedA_30	   ;	{ Certain Ohio National Guard reimbursements and benefits }
 
 { - Education - } 
-SchedA_29  500.00 ;	{ Ohio 529 contributions, tuition credit purchases }
-SchedA_30	  ;	{ Pell College Opportunity taxable grant amounts used for room and board }
+SchedA_31  500.00 ;	{ Ohio 529 contributions, tuition credit purchases }
+SchedA_32	  ;	{ Pell College Opportunity taxable grant amounts used for room and board }
 
 { Medical } 
-SchedA_31	  ;	{ Disability and survivorship benefits }
-SchedA_32	  ;	{ Unreimbursed long-term care insurance premiums ...  }
-SchedA_33	  ;	{ Funds deposited into, and earnings of, a medical savings account }
-SchedA_34  230.00 ;	{ Qualified organ donor expenses }
+SchedA_33	  ;	{ Disability and survivorship benefits }
+SchedA_34	  ;	{ Unreimbursed long-term care insurance premiums ...  }
+SchedA_35	  ;	{ Funds deposited into, and earnings of, a medical savings account }
+SchedA_36  230.00 ;	{ Qualified organ donor expenses }
 
 { --- Schedule of Credits --- }
 Credits_2	   ;	{ Retirement income credit.  See instructions page 27. }

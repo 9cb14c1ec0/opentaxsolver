@@ -35,7 +35,7 @@
 #define Yes 1
 #define No  0
 
-double Tax_Rate = 0.0307;		/* Not Verified for 2018 tax-year. */
+double Tax_Rate = 0.0307;		/* Verified for 2018 tax-year. */
 
 
 double pos( double x )
@@ -140,8 +140,69 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L7", &L[7] );	/* Estate or Trust Income. */
 
-printf("Under development .... exiting.\n");
-fprintf(outfile,"Under development .... exiting.\n");
+ GetLineF( "L8", &L[8] );	/* Gambling or lottery winnings. */
+
+ for (j=1; j<=8; j++) if (L[j] < 0.0) L[j] = 0.0;
+
+ L[9] = pos(L[1]) + pos(L[2]) + pos(L[3]) + pos(L[4]) + pos(L[5]) + pos(L[6]) + pos(L[7]) + pos(L[8]);
+ showline_wmsg(9,"Total PA Taxable Income");
+
+ GetLineF( "L10", &L[10] );	/* Other Deductions. */
+
+ L[11] = L[9] - L[10];
+ showline_wmsg(11,"Adjusted PA Taxable Income"); /* Adjusted PA income. */
+
+ L[12] = Tax_Rate * L[11];
+ showline_wmsg(12,"PA Tax Liability");		/* PA Tax liability. */
+
+ GetLine( "L13", &L[13] );	/* Total PA Tax withheld. */
+ showline_wmsg(13,"Total PA tax withheld");
+
+ GetLineF( "L14", &L[14] );	/* Credit from last year's PA income tax return. */
+
+ GetLineF( "L15", &L[15] );	/* 2018 Estimated Installment payments. */
+
+ GetLineF( "L16", &L[16] );	/* 2018 Extension payment. */
+
+ GetLineF( "L17", &L[17] );	/* Non-resident tax withheld. */
+
+ L[18] = L[14] + L[15] + L[16] + L[17];
+ showline_wmsg(18,"Total Estimated Payments and Credits");
+
+ GetLine( "L21", &L[21] );	/* Tax Forgiveness Credit from Part D, Line 16, PA Schedule SP. */
+ showline_wmsg(21,"Tax Back/Tax Foregiveness Credit");
+
+ GetLineF( "L22", &L[22] );	/* Resident credit (Scheds G/RK-1). */
+
+ GetLineF( "L23", &L[23] );	/* Other credits (Sched OC). */
+
+ L[24] = L[13] + L[18] + L[21] + L[22] + L[23];
+ showline_wmsg(24,"Total Payments and Credits");
+
+ GetLineF( "L25", &L[25] );	/* Use Tax. */
+ GetLine( "L27", &L[27] );	/* Penalties and interest. */
+
+ if (L[12] + L[25] > L[24])
+  {
+   L[26] = L[12] + L[25] - L[24];
+   showline_wmsg(26,"TAX DUE");
+   showline(27);
+   L[28] = L[26] + L[27];
+   if (L[28] > 0.0)
+    {
+     showline_wmsg( 28, "Total Payment Due" );
+     fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[28] / (L[12] + L[25] + 1e-9) );
+    }
+  }
+ else
+ if (L[24] > L[12] + L[25] + L[27])
+  {
+   showline(27);
+   L[29] = L[24] - (L[12] + L[25] + L[27]);
+   showline_wmsg(29,"OVERPAYMENT");
+   L[30] = L[29];
+   showline_wmsg(30,"REFUND");
+  }
  
  fprintf(outfile,"\n{ --------- }\n");
  Your1stName = GetTextLineF( "Your1stName:" );

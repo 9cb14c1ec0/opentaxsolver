@@ -27,7 +27,7 @@
 /* Robert Heller 2-10-2004	heller@deepsoft.com			*/
 /* Updated 1-26-05	Aston Roberts & Robert Heller			*/
 /*  ...									*/
-/* Updated 1-25-2019	Aston Roberts 					*/
+/* Updated 2-16-2019	Aston Roberts 					*/
 /************************************************************************/
 
 #include <stdio.h>
@@ -56,7 +56,7 @@ double Sum( double *v, int start_slot, int end_slot )
 
 
 double ComputeTax(double taxableIncome)
-{ double taxrate=0.051;					/* NOT Updated for 2018. */
+{ double taxrate=0.051;					/* Updated for 2018. */
  if (taxableIncome < 24000.0)
   return (int)(taxrate * (taxableIncome + 25.0) + 0.5);
  else
@@ -72,14 +72,14 @@ int main( int argc, char *argv[] )
 {
  int i, j, k, status=0, i65, iblind, ndep, dep_deduct;
  int flag, notaxstatus=0;
- char word[2000], outfname[2000], *answ;
+ char word[4000], outfname[4000], *answ;
  time_t now;
  double Exemptions[10];
  double MassBankInterest, Iexempt, AGI;
  double Unemployment, Lottery;
  double MassRetirement[2];
  double L23a=0.0, L33[6], L35a=0.0, L35b=0.0, L35c=0.0;
- double L42a=0.0;
+ double L43a=0.0;
  
  printf("Massachusetts Form-1 2018 - v%3.2f\n", thisversion);
  
@@ -356,26 +356,152 @@ int main( int argc, char *argv[] )
 
  L[28] = Sum( L, 22, 26 );
 
-printf("Under development .... exiting.\n");
-fprintf(outfile,"Under development .... exiting.\n");
+ if ((status == SINGLE) || (status == HEAD_OF_HOUSEHOLD) || (status == MARRIED_FILLING_JOINTLY))
+ { /* AGI Worksheet pg 12+13. */
+   double ws[20], threshA, threshB;
+   for (j=0; j<20; j++) ws[j] = 0.0;
+   ws[1] = NotLessThanZero( L[10] );
+   ws[2] = 0.0;		/* Sched Y lines 1-10.  Assumed zero, adjust otherwise. */
+   ws[3] = NotLessThanZero( ws[1] - ws[2] );
+   ws[4] = smallerof( MassBankInterest, Iexempt );
+   if (L[10] < 0.0)
+    ws[4] = NotLessThanZero( ws[4] + L[10] );
+   ws[5] = L[20];
+   ws[6] = 0.0;   /* Assumed zero. */
+   ws[7] = ws[3] + ws[4] + ws[5] + ws[6];
+   AGI = ws[7];
+   for (j=1; j<=7; j++)
+    fprintf(outfile,"     AGI_Worksheet[%d] = %6.2f\n", j, ws[j] );
+   fprintf(outfile,"   AGI = %6.2f\n", AGI );
+   if (status != MARRIED_FILLING_SEPARAT)
+    { /*not_sep*/
+     switch (status)
+      {
+       case SINGLE:  
+		threshA = 8000.0;
+		threshB = 14000.0;
+		break;
+       case HEAD_OF_HOUSEHOLD:
+		threshA = 14400.0 + 1000.0 * ndep;
+		threshB = 25200.0 + 1750.0 * ndep;
+		break;
+       case MARRIED_FILLING_JOINTLY: 
+		threshA = 16400.0 + 1000.0 * ndep;
+		threshB = 28700.0 + 1750.0 * ndep;
+		break;
+	default: fprintf(outfile,"Bad filing status.\n"); 
+		printf("Bad filing status.\n");  exit(1); break;
+      }
+     if (AGI <= threshA)
+      {
+	notaxstatus = 1;
+	fprintf(outfile,"    (%6.2f <= %6.2f)\n", AGI, threshA );
+	fprintf(outfile,"You qualify for No Tax Status.\n");
+      } else
+     if (AGI <= threshB)
+      fprintf(outfile,"See Form 1 Line 29 special instructions for Limited Income.\n");
+    } /*not_sep*/
+}
+
+ if (notaxstatus) L[28] = 0.0;
+ showline_wmsg(28, "Total Tax");
+
+ GetLine1( "L29", &L[29] ); 	/* Limited Income Credit */
+ GetLine1( "L30", &L[30] ); 	/* Income tax paid to another state or jurisdiction (from Schedule OJC). */
+ GetLine1( "L31", &L[31] ); 	/* Other credits from Sch Z, line 14 */
+ if (notaxstatus) { L[29] = 0.0;  L[3] = 0.0; }
+ ShowLineNonZero(29);
+ ShowLineNonZero(30);
+ ShowLineNonZero(31);
+
+ L[32] = NotLessThanZero( L[28] - (L[29] + L[30] + L[31]) );
+ showline_wmsg(32,"Income Tax After Credits");
+
+ GetLine1( "L33a", &L33[0] ); /* Endangered Wildlife */
+ if (L33[0] != 0) showline_wlabel( "L33a", L33[0] );
+ GetLine1( "L33b", &L33[1] ); /* Organ Transplant */
+ if (L33[1] != 0) showline_wlabel( "L33b", L33[1] );
+ GetLine1( "L33c", &L33[2] ); /* Mass AIDS */
+ if (L33[2] != 0) showline_wlabel( "L33c", L33[2] );
+ GetLine1( "L33d", &L33[3] ); /* Mass US Olympic */
+ if (L33[3] != 0) showline_wlabel( "L33d", L33[3] );
+ GetLine1( "L33e", &L33[4] ); /* Mass Military Family Relief */
+ if (L33[4] != 0) showline_wlabel( "L33e", L33[4] );
+ GetLine1( "L33f", &L33[5] ); /* Homeless Animal Prevention And Care */
+ if (L33[5] != 0) showline_wlabel( "L33f", L33[5] );
+ L[33] = Sum( L33, 0, 5 );
+ ShowLineNonZero( 33 );
+
+ GetLine1( "L34", &L[34] ); 	/* Use tax due on out-of-state purchases */
+ showline(34);
+
+ GetLine1( "L35a", &L35a ); 	/* Health Care Penalty (you) */
+ showline_wlabel( "L35a", L35a );
+ GetLine1( "L35b", &L35b ); 	/* Health Care Penalty (spouse) */
+ showline_wlabel( "L35b", L35b );
+ GetLine1( "L35c", &L35c ); 	/* Health Care Penalty (federal) */
+ showline_wlabel( "L35c", L35c );
+ L[35] = L35a + L35b + L35c;
+ if (L[35] != 0)
+  showline_wmsg( 35, "Health Care penalty" );
+
+ GetLine( "L36", &L[36] );	/* AMENDED RETURN ONLY. Overpayment from original return. */
+ L[36] = NotLessThanZero( L[36] );
+ ShowLineNonZero( 36 );	 
+
+ L[37] = Sum( L, 32, 36 );
+ showline_wmsg(37,"Income Tax After Credits Contributions, Use Tax + HC Penalty");
+ 
+ /* Payments section. */
+
+ GetLine( "L38", &L[38] );	/* Mass income tax withheld, Forms W-2, 1099 */
+ ShowLineNonZero(38);
+
+ GetLine( "L39", &L[39] );	/* Last year's overpayment you want applied to 2018 estimated tax */
+ ShowLineNonZero(39);
+
+ GetLine( "L40", &L[40] );	/* 2018 estimated tax payments */
+ ShowLineNonZero(40);
+
+ GetLine( "L41", &L[41] );	/* Payments made with extension */
+ ShowLineNonZero(41);
+
+ GetLine( "L42", &L[42] );	/* Payments w/original return. Use only if amending return. */
+ ShowLineNonZero(42);
+
+ GetLine( "L43a", &L43a );	/* Earned income credit (EIC) */
+ if (L43a != 0.0) fprintf(outfile, " L43a = %6.2f  x 0.23 = .....  ", L43a );
+ L[43] = L43a * 0.23;
+ ShowLineNonZero(43);
+
+ GetLine( "L44", &L[44] );	/* Senior Circuit Breaker Credit, sched CB */
+ ShowLineNonZero(44);
+
+ GetLine( "L45", &L[45] );	/* Refundable credits, Sched RF, line 4. */
+ ShowLineNonZero(45);
+
+ L[46] = Sum( L, 38, 45 );
+ showline_wmsg(45,"total payments");
+
+ GetLine( "L48", &L[48] );	/* Overpayment to be applied to next year's estimated tax */
 
  /* Refund or Owe section. */
- if (L[36] < L[45]) 
+ if (L[37] < L[46]) 
   {
-   L[46] = L[45] - L[36];
-   fprintf(outfile,"L46 = %6.2f  Overpayment!\n", L[46] );
-   if (L[47] > L[46])
-    L[47] = L[46];
-   showline_wmsg(47,"Overpayment to be applied to next year's estimated tax");
-   L[48] = L[46] - L[47];
-   fprintf(outfile,"L48 = %6.2f  THIS IS YOUR REFUND\n", L[48] );
+   L[47] = L[46] - L[37];
+   fprintf(outfile,"L47 = %6.2f  Overpayment!\n", L[47] );
+   if (L[48] > L[47])
+    L[48] = L[47];
+   showline_wmsg(48,"Overpayment to be applied to next year's estimated tax");
+   L[49] = L[47] - L[48];
+   fprintf(outfile,"L49 = %6.2f  THIS IS YOUR REFUND\n", L[49] );
   }
  else 
   {
-   L[49] = L[36] - L[45];
-   fprintf(outfile,"L49 = %6.2f  TAX DUE !!!\n", L[49] );
-   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[49] / (L[36] + 1e-9) );
-   if ((L[49] > 400.0) && (L[45] < 0.80 * L[36]))
+   L[50] = L[37] - L[46];
+   fprintf(outfile,"L50 = %6.2f  TAX DUE !!!\n", L[50] );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[50] / (L[37] + 1e-9) );
+   if ((L[50] > 400.0) && (L[46] < 0.80 * L[37]))
     fprintf(outfile," You may owe Underpayment of Estimated Tax penalty.\n");
   }
 

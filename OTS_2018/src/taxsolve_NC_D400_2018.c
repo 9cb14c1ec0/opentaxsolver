@@ -145,7 +145,7 @@ int main( int argc, char *argv[] )
  time_t now;
  struct FedReturnData fed_data;
  double stdded, min_payment=0.0, min2file;
- double L21a=0.0, L21b=0.0, L21c=0.0, L21d=0.0;
+ double L20a=0.0, L20b=0.0, L21a=0.0, L21b=0.0, L21c=0.0, L21d=0.0;
 
  /*-----------------------------------------*/
  /* --- Decode any command line options. -- */
@@ -244,7 +244,9 @@ int main( int argc, char *argv[] )
  GetLine( "L13", &L[13] );	/* Enter 1.0 for full-year residents. Otherwise amount from Sched-S part D, Line 26. */  
  GetLine( "L16", &L[16] );	/* Tax credits. (D-400TC part 3 line 20) */  
  GetLine( "L18", &L[18] );	/* Consumer Use Tax. (pgs 9+10) */
- GetLine( "L20", &L[20] );	/* North Carolina Income Tax Withheld */
+ GetLine( "L20a", &L20a );	/* North Carolina Income Tax Withheld (yours) */
+ GetLine( "L20b", &L20b );	/* North Carolina Income Tax Withheld (spouses) */
+ L[20] = L20a + L20b;
  GetLine( "L21a", &L21a );	/* Other tax payments. 2018 Estimated Tax. */
  GetLine( "L21b", &L21b );	/* Other tax payments. Paid with Extension. */
  GetLine( "L21c", &L21c );	/* Other tax payments. Partnership. */
@@ -256,7 +258,7 @@ int main( int argc, char *argv[] )
  /* ---- Do Tax Calculations ---- */
  /*-------------------------------*/
 
- L[6] = fed_data.fedline[37];		/* Taxable income from Fed1040 Line 37. */
+ L[6] = fed_data.fedline[7];		/* Taxable income from Fed1040 Line 7. */
 
  switch (status)
   {
@@ -298,9 +300,6 @@ int main( int argc, char *argv[] )
 
  L[17] = L[15] - L[16];
 
-printf("Under development .... exiting.\n");
-fprintf(outfile,"Under development .... exiting.\n");
-
  /* Calculate USE tax, if not entered on L18
   * based on Use Tax Worksheet on page 9.
   *  Estimate as:   0.000675 * L[14]
@@ -341,6 +340,7 @@ fprintf(outfile,"Under development .... exiting.\n");
    L[33] = L[28] - L[32];	/* REFUND */
   }
 
+
  /*-------------------------*/
  /* ---- Print Results ---- */
  /*-------------------------*/
@@ -363,6 +363,8 @@ fprintf(outfile,"Under development .... exiting.\n");
  showline(17);
  showline(18);
  showline(19);
+ showline_wlabel( "L20a", L20a );
+ showline_wlabel( "L20b", L20b );
  showline_wlabelmsg( "L20", L[20], "North Carolina Tax Withheld");
  showline_wlabel( "L21a", L21a );
  showline_wlabel( "L21b", L21b );

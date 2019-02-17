@@ -21,7 +21,7 @@
 /* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA		*/
 /* 02111-1307 USA							*/
 /* 									*/
-/* Aston Roberts 1-2-2019	aston_roberts@yahoo.com			*/
+/* Aston Roberts 2-4-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
 #include <stdio.h>
@@ -37,6 +37,26 @@ float thisversion=16.00;
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 
+double TaxRateFunction( double income, int status )
+{
+ if (income < 3000.0) return income * 0.02; else
+ if (income < 5000.0) return  60.0 + (income - 3000.0) * 0.03; else
+ if (income < 17000.0) return 120.0 + (income - 5000.0) * 0.05; else
+ return 720.0 + (income - 17000.0) * 0.0575; 
+}
+
+
+void Report_bracket_info( double income, double tx, int status )
+{
+ double rate;
+ if (income < 3000.0) rate = 0.02;  else
+ if (income < 5000.0) rate = 0.03;  else
+ if (income < 17000.0) rate = 0.05; else  rate = 0.0575;
+ printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
+	  100.0 * rate, 100.0 * tx / income );
+ fprintf(outfile," You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
+	  100.0 * rate, 100.0 * tx / income );
+}
 
 
 struct date_record yourDOB, spouseDOB, DL;
@@ -195,7 +215,7 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"NExemptionsA = %d\n", exemptionsA );
  fprintf(outfile,"ExemptionsA = %d\n", 930 * exemptionsA );
 
- if (yourDOB.year < 1953)
+ if (yourDOB.year < 1954)
   {
    fprintf(outfile,"YouOver65 = 1\n" );
    exemptionsB = 1;
@@ -217,7 +237,7 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 'b', &spouseBlind, "SpouseBlind"); 
  if (status == MARRIED_FILLING_JOINTLY)
   {
-   if (spouseDOB.year < 1953)
+   if (spouseDOB.year < 1954)
     {
      fprintf(outfile,"SpouseOver65 = 1\n" );
      exemptionsB++;
@@ -267,8 +287,120 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L11", &L[11] );	/* State and Local Income Taxes claimed on federal Schedule A. */
 
-printf("Under development .... exiting.\n");
-fprintf(outfile,"Under development .... exiting.\n");
+ switch (status)
+  {
+   case SINGLE:  		  std_ded = 3000.0;  min2file = 11950.0;  break;
+   case MARRIED_FILLING_JOINTLY:  std_ded = 6000.0;  min2file = 23900.0;  break;
+   case MARRIED_FILLING_SEPARAT:  std_ded = 3000.0;  min2file = 11950.0;  break;
+   default:  printf("Unexpected status.\n");
+	     fprintf(outfile,"Unexpected status.\n");
+	     exit(1);  
+	break;
+  }
+
+ if (L[10] != 0.0)
+  L[12] = L[10] - L[11];
+ else
+  L[12] = std_ded;
+ showline(12);
+
+ L[13] = 930.0 * exemptionsA + 800.0 * exemptionsB;
+ showline(13);
+  
+ GetLineF( "L14", &L[14] );	/* Deductions from Virginia Adjusted Gross Income Schedule ADJ, Line 9. */
+
+ L[15] = L[12] + L[13] + L[14];
+ showline(15);
+
+ L[16] = L[9] - L[15];
+ showline(16);
+
+ L[17] = TaxRateFunction( L[16], status );
+ showline(17);
+ Report_bracket_info( L[16], L[17], status );
+
+ GetLine( "L18", &L[18] );	/* Spouse Tax Adjustment. */
+ showline(18);
+
+ L[19] = L[17] - L[18];
+ showline_wmsg( 19, "Net Amount of Tax" );	
+
+ GetLineF( "L20a", &L[20] );	/* Virginia tax withheld for 2018. */
+ GetLineF( "L20b", &L20b );	/* Spouse's Virginia tax withheld. */
+
+ GetLineF( "L21", &L[21] );	/* Estimated tax paid for 2018. (form 760ES) */
+
+ GetLineF( "L22", &L[22] );	/* Amount of last year's overpayment applied toward 2018 estimated tax. */
+
+ GetLineF( "L23", &L[23] );	/* Extension payments (form 760E). */
+
+ GetLine( "L24", &L[24] );	/* Tax Credit, Low Income Individuals (Sch. ADJ, line 17) */
+
+ if (L[24] > L[19]) L[24] = L[19];	/* Low-Income Credit cannot exceed tax liability. */
+
+ if ((L[24] > 0.0) && (exemptionsB > 0.0))
+  {
+   fprintf(outfile," Cannot claim both Low-Income Credit and Age or Blind Exemptions.\n");
+   L[24] = 0.0;	/* Cannot claim both low-income credit and exemptions. */
+  }
+ showline(24);
+
+ GetLineF( "L25", &L[25] );	/* Credit, Tax Paid to other State (Sched OSC, line 21 ...) */
+ GetLineF( "L26", &L[26] );	/* Credit for Political Contributions */
+ GetLineF( "L27", &L[27] );	/* Credits from enclosed Schedule CR, Section 5, Part 1, Line 1A */
+
+ L[28] = L[20] + L20b + L[21] + L[22] + L[23] + L[24] + L[25] + L[26] + L[27];
+ showline(28);
+
+ if (L[28] < L[19])
+  {
+   L[29] = L[19] - L[28];
+   showline_wmsg( 29, "Tax You Owe" );
+  }
+ else
+  {
+   L[30] = L[28] - L[19];
+   showline_wmsg( 30, "Your Tax OverPayment" );
+  }
+
+ GetLineF( "L31", &L[31] );	/* Amount of overpayment you want credited to next year's estimated tax. */
+ GetLineF( "L32", &L[32] );	/* Virginia College Savings Plan Contributions from Schedule VAC, Section I, Line 6. */
+ GetLineF( "L33", &L[33] );	/* Other voluntary contribitions. */
+ GetLineF( "L34", &L[34] );	/* Addition to Tax, Penalty and Interest from attached Schedule ADJ, Line 21 */
+ GetLineF( "L35", &L[35] );	/* Consumer's Use Tax. */
+
+ for (j=31; j < 35; j++)
+   L[36] = L[36] + L[j];
+ showline(36);
+
+ if (L[29] > 0.0)
+  {
+   L[37] = L[29] + L[36];
+   showline_wmsg( 37, "AMOUNT DUE" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[37] / (L[19] + 1e-9) );
+  }
+ else
+ if (L[30] < L[36])
+  {
+   L[37] = L[36] - L[30];
+   showline_wmsg( 37, "AMOUNT DUE" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[37] / (L[19] + 1e-9) );
+  }
+ else
+ if (L[30] > L[36])
+  {
+   L[38] = L[30] - L[36];
+   showline_wmsg( 38, "YOUR REFUND" );
+  }
+
+ if (L[9] < min2file)
+  {
+   fprintf(outfile,"\nYour VAGI is less than the minimum required to file a return.\n");
+   if (L[20] + L20b + L[21] > 0.0)
+    fprintf(outfile," But you need to file return to receive refund of withheld taxes.\n");
+   else
+    fprintf(outfile,"You do not need to file return.  Your VA Tax is zero.\n");
+  }
 
  fclose(infile);
  fclose(outfile);
