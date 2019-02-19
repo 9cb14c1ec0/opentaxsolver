@@ -276,15 +276,15 @@ int main( int argc, char *argv[] )
 
  L2a = SchedA[10];
  L2b = SchedA[37];
- L[3] = L[1] + L2a + L2b;
+ L[3] = L[1] + L2a - L2b;
 
- if (L[3] <= 40000.0)
-  exemption_amnt = 2300.0;
+ if (L[3] <= 40000.0)			/* Updated for 2018. */
+  exemption_amnt = 2350.0;
  else
  if (L[3] <= 80000.0)
-  exemption_amnt = 2050.0;
+  exemption_amnt = 2100.0;
  else
-  exemption_amnt = 1800.0;
+  exemption_amnt = 1850.0;
  L[4] = exemption_amnt * exemptions;
 
  L[5] = NotLessThanZero( L[3] - L[4] );
@@ -421,7 +421,7 @@ printf("factorA = %g, word = '%s'\n", factorA, word );
 printf("factorB = %g, word = '%s'\n", factorB, word );
  fprintf(outfile,"   Credits30_Factor %s\n", &(word[2]) );
 
- for (j = 31; j <= 41; j++)
+ for (j = 31; j <= 40; j++)
   {
    sprintf( label, "Credits%d", j );
    showline_wlabel( label, SchedC[j] );
