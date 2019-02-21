@@ -210,7 +210,6 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "BlindSpouse");
  get_parameter( infile, 'b', &flag, "Spouse Blindness?");
  if (flag) 
- if (flag) 
   {
    iblind++;
    fprintf(outfile,"Check_2dsp X\n");
@@ -445,7 +444,7 @@ int main( int argc, char *argv[] )
  if (L[35] != 0)
   showline_wmsg( 35, "Health Care penalty" );
 
- GetLine( "L36", &L[36] );	/* AMENDED RETURN ONLY. Overpayment from original return. */
+ GetLine1( "L36", &L[36] );	/* AMENDED RETURN ONLY. Overpayment from original return. */
  L[36] = NotLessThanZero( L[36] );
  ShowLineNonZero( 36 );	 
 

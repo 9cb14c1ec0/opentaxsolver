@@ -8,77 +8,76 @@ no_zero_entries
 round_to_whole_numbers
 solid_status_check 11 4 20 .
 
- YourSocSec#: 	122 190 0 12
- SpouseSocSec#: 360 190 0 12
- YourLastName:	116 250
- Your1stName:	116 299
- MidInitial:	479 299
- Spouse1stName: 116 345
- SpouseMidInit: 479 345
- SpouseLastName: 116 392
+ YourSocSec#: 	122 194 0 12
+ SpouseSocSec#: 360 194 0 12
+ YourLastName:	116 259
+ Your1stName:	116 305
+ MidInitial:	484 305
+ Spouse1stName: 116 354
+ SpouseMidInit: 484 354
+ SpouseLastName: 116 401
 
- Number&Street:	116 441 0
- Town:		116 536 0
- State:		435 536 0
- Zipcode: 	502 536 0 13
+ Number&Street:	116 451 0
+ Town:		116 550 0
+ State:		440 550 0
+ Zipcode: 	510 550 0 13
 
- Check_single   643 306 0
- Check_mfj      643 323 0
- Check_sep      643 339 0
+ Check_single   652 315 0
+ Check_mfj      652 333 0
+ Check_sep      652 349 0
 
- Phone:		116 583 0 11
- SchoolCode:    502 583 0 11
- SchooldDist:   721 563
- YourOccupation: 638 600
- SpouseOccupat:  739 600
+ Phone:		116 598 0 11
+ SchoolCode:    510 598 0 11
+ SchooldDist:   735 579
+ YourOccupation: 650 617
+ SpouseOccupat:  752 617
 
- L1a	655 634 12
- L1b    655 666 12
- L1c    655 698 12
- L2     655 730 12
- L3     655 762 12
- L4     655 794 12
- Check_4Loss  566 797
- Check_5Loss  566 831
- Check_6Loss  566 864
- L5     655 826 12
- L6     655 858 12
- L7     655 890 12
- L8     655 922 12
- L9     655 954 12
- L10    655 986 12
- L11	655 1018 12
+ L1a	655 654 12
+ L1b    655 686 12
+ L1c    655 718 12
+ L2     655 750 12
+ L3     655 782 12
+ L4     655 816 12
+ Check_4Loss  573 820
+ Check_5Loss  573 853
+ Check_6Loss  573 887
+ L5     655 852 12
+ L6     655 886 12
+ L7     655 919 12
+ L8     655 951 12
+ L9     655 983 12
+ L10    655 1016 12
+ L11	655 1048 12
 
 
 Page 2
 CoordReference:  40, 750  61, 64
 		550, 50  841, 1134    110-dpi
 
- YourSocSec#:	206 130 0 12
- YourNames:	462 132 0
+ YourSocSec#:	196 120 0 12
+ YourNames:	465 120 0
  
- L12 642 164 12
-
- L13    642 196 12
- L14    642 228 12
- L15    642 259 12
- L16    642 291 12
- L17    642 323 12
- L18    642 355 12
- L20    642 418 12
- L21    642 450 12
- L22    642 482 12
- L23    642 513 12
- L24    642 545 12
- L25    642 577 12
- L26    642 607 12
- L27    642 640 12
- L28    642 670 12
- L29    642 704 12
- L30    642 736 12
- L31    642 767 12
- L32    642 799 12
- L33    642 831 12
- L34    642 863 12
- L35    642 894 12
- L36    642 926 12
+ L12	662 154 12
+ L13    662 188 12
+ L14    662 222 12
+ L15    662 254 12
+ L16    662 285 12
+ L17    662 318 12
+ L18    662 350 12
+ L20    455 418 12
+ L21    662 452 12
+ L22    662 486 12
+ L23    662 517 12
+ L24    662 551 12
+ L25    662 583 12
+ L26    662 614 12
+ L27    662 647 12
+ L28    662 680 12
+ L29    662 714 12
+ L30    662 747 12
+ L31    662 781 12
+ L32    662 814 12
+ L33    662 846 12
+ L34    662 879 12
+ L35    662 913 12
+ L36    662 946 12
