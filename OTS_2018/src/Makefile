@@ -1,7 +1,7 @@
 
 CC      =  cc
 CFLAGS  =
-COPTIM  = -O 
+COPTIM  = -O -Wall
 
 
 SRC     = taxsolve_routines.c

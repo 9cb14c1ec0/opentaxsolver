@@ -29,6 +29,8 @@ float txtred=0.0, txtgrn=0.0, txtblu=0.0;
 int num_defined_pages=0, num_pages_to_print=0, num_main_pages=0;
 int ck_sz_w=0, ck_sz_h=0, ckfntsz=16;
 char cksymb[99]="*";
+int showdpt=1;	/* Controls whether to show decimals in space-stretched numbers. */
+int enter00afterdecimals=0;	/* Controls whether to force ".00" after rounded values. */
 
 
 void next_word( char *line, char *word, char *delim )
@@ -199,7 +201,7 @@ struct optional_print_rec
    int form_page, priority;	/* Priority value is really an "order".  So 2 will print before 5. */
    struct nvpair *results;
    struct optional_print_rec *nxt;
- } *optional_print_list=0, *optional_print_page;
+ } *optional_print_list=0, *optional_print_page=0;
 
 
 void queue_optional_page( int form_page, int page_order )
@@ -294,8 +296,18 @@ void read_replacement_text( char *fname )
    if (strcmp( word1, "EndPDFpage." ) == 0)
     {
       current_page = -1;	/* Set back to global. */
+      if (optional_print_page == 0)
+       {
+	printf("Error: Missing optional_print_page at 'EndPDFpage'\n");
+	exit(1);
+       }
       optional_print_page->results = results_list;
       results_list = orig_results_list;
+    }
+   else
+   if (strcmp( word1, "FillOutForm_wRoundedNumbers_wZerosAfterDecPt" ) == 0)
+    {
+       enter00afterdecimals = 1;
     }
    else
    if (strstr( word1, ":" ) != 0)
@@ -340,6 +352,8 @@ void read_replacement_text( char *fname )
 	   sprintf( word2, "%d", (int)(x + 0.5) );
 	  else
 	   sprintf( word2, "%d", (int)(x - 0.5) );
+	  if (enter00afterdecimals)
+	   strcat( word2, ".00" );
 	 }
 	add_entry( word1, word2 );
       }
@@ -374,7 +388,7 @@ void lookup_label( char *label, char *rplcstr, int len, int nspc )
 struct metadata_rec
  {
    char *label;
-   int x, y, fsz, padlen, txtcolor;
+   int x, y, fsz, padlen, txtcolor, add_commas;
    float txtred, txtgrn, txtblu;
    float dx;
    struct metadata_rec *nxt;
@@ -415,7 +429,7 @@ void read_metadata( char *fname )
  while (!feof(infile))
   {
    next_word( line, wrd, " \t\n\r" );
-   if (wrd[0] != '\0')
+   if ((wrd[0] != '\0') && (wrd[0] != '!'))
     {
      if (strcmp( wrd, "Page" ) == 0)
       {
@@ -479,6 +493,31 @@ void read_metadata( char *fname )
      if (strcmp( wrd, "no_commas") == 0)
       {
        add_commas = 0;
+      }
+     else
+     if (strcmp( wrd, "use_commas") == 0)
+      {
+       add_commas = 1;
+      }
+     else
+     if (strcmp( wrd, "no_show_decimal_pt") == 0)
+      {
+       showdpt = 0;
+      }
+     else
+     if (strcmp( wrd, "show_decimal_pt") == 0)
+      {
+       showdpt = 1;
+      }
+     else
+     if (strcmp( wrd, "DoNotEnter00afterDecimals") == 0)
+      {
+       enter00afterdecimals = 0;
+      }
+     else
+     if (strcmp( wrd, "Enter00afterDecimals") == 0)
+      {
+       enter00afterdecimals = 1;
       }
      else
      if (strcmp( wrd, "right_justify") == 0)
@@ -566,6 +605,7 @@ void read_metadata( char *fname )
 	newitem->txtred = txtred;
 	newitem->txtgrn = txtgrn;
 	newitem->txtblu = txtblu;
+	newitem->add_commas = add_commas;
 	next_word( line, wrd, " \t\n\r," );
 	sscanf( wrd, "%d", &(newitem->x) );
 	next_word( line, wrd, " \t\n\r," );
@@ -724,12 +764,13 @@ void place_overlay_text( char *streambuf, int page )
  char wrd[100], value[MAXLINE];
  struct metadata_rec *item;
  streambuf[0] = '\0';
-printf("WRITING from metadata[ Pg %d ]\n", page - 1 );
+ printf("WRITING from metadata[ Pg %d ]\n", page - 1 );
  item = metadata[ page - 1 ]->fields;
  while (item)
   {
    check_color( item );
    if (item->dx > 0.0)  nspc = 1;  else  nspc = 2;
+   add_commas = item->add_commas;
    lookup_label( item->label, value, item->padlen, nspc );
    if (value[0] != '\0')
     { /*valid*/
@@ -739,9 +780,13 @@ printf("WRITING from metadata[ Pg %d ]\n", page - 1 );
            x = item->x;
            while (value[j] != '\0')
             {
-             sprintf( wrd, "%c", value[j++] );
-             append_buf( streambuf, item->fsz, (int)(x + 0.5), item->y, wrd );
-             x = x + item->dx;
+	     if ((showdpt) || (value[j] != '.'))
+	      {
+	       sprintf( wrd, "%c", value[j] );
+               append_buf( streambuf, item->fsz, (int)(x + 0.5), item->y, wrd );
+               x = x + item->dx;
+	      }
+	     j++;
             }
        }
       else
@@ -879,13 +924,13 @@ void page_collector( char *rawpdfname, char *outfname )
  sprintf(line,"endobj\n");
   spew_sumline( outfile, line, &cnt );
 
- // printf("num_defined_pages = %d\n", num_defined_pages );
- // printf("num_pages_to_print = %d\n", num_pages_to_print );
- // printf("num_main_pages = %d\n", num_main_pages );
+ if (verbose) printf("num_defined_pages = %d\n", num_defined_pages );
+ if (verbose) printf("num_pages_to_print = %d\n", num_pages_to_print );
+ if (verbose) printf("num_main_pages = %d\n", num_main_pages );
 
  for (page=1; page <= num_pages_to_print; page++)
   { /*PageOut*/
-    // printf("Printing Page %d\n", page );
+   if (verbose) printf("Printing Page %d\n", page );
 
    if (page <= num_main_pages)
     {
@@ -926,8 +971,7 @@ void page_collector( char *rawpdfname, char *outfname )
 	while (k < form_page - 1);
       }
     }
-   // printf("  ... from Form %d\n", form_page );
-
+   if (verbose) printf("  ... from Form %d\n", form_page );
 
    address[nobjs++] = cnt;
    sprintf(line,"%d 0 obj\n", nobjs );
