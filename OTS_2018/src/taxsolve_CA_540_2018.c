@@ -24,7 +24,7 @@
 /* Aston Roberts 2-6-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -177,6 +177,7 @@ struct FedReturnData
   double fedline[MAX_LINES], schedA[MAX_LINES], 
 	schedA5a, schedA5b, schedA5c,
 	schedA8a, schedA8b, schedA8c,
+	sched1[MAX_LINES],
 	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
   int Exception, Itemized;
  } PrelimFedReturn;
@@ -215,13 +216,14 @@ void grab_line_value( char *label, char *fline, double *value )
 int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 {
  FILE *infile;
- char fline[2000], word[2000];
+ char fline[2000], word[2000], tword[2000];
  int linenum;
 
  for (linenum=0; linenum<MAX_LINES; linenum++) 
   { 
    fed_data->fedline[linenum] = 0.0;
    fed_data->schedA[linenum] = 0.0;
+   fed_data->sched1[linenum] = 0.0;
   }
  fed_data->schedA5a = 0.0;
  fed_data->schedA5b = 0.0;
@@ -329,8 +331,25 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
  	 printf("Error: Reading Fed schedA %d '%s%s'\n",linenum,word,fline);
 	 fprintf(outfile, "Error: Reading Fed schedA %d '%s%s'\n",linenum,word,fline);
         }
-       if (verbose) printf("FedLin[%d] = %2.2f\n", linenum, fed_data->schedA[linenum]);
+       if (verbose) printf("FedLin.A[%d] = %2.2f\n", linenum, fed_data->schedA[linenum]);
       }
+    }
+   else
+   if ((strncmp( word, "S1_", 3 ) == 0) && (strstr(fline," = ")!=0))
+    {
+       next_word( &(word[3]), tword, " \t: =" );
+       if (sscanf( tword, "%d", &linenum ) != 1)
+        {
+	 printf("Error: Reading Fed line number 'S1_%s %s'\n", tword, fline);
+	 fprintf(outfile,"Error: Reading Fed line number 'S1_%s %s'\n", tword, fline);
+        }
+       next_word(fline, word, " \t=");
+       if (sscanf(word,"%lf", &fed_data->sched1[linenum])!=1) 
+        {
+ 	 printf("Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
+	 fprintf(outfile, "Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
+        }
+       if (verbose) printf("FedLin.S1[%d] = %2.2f\n", linenum, fed_data->sched1[linenum]);
     }
    else
    if (strcmp(word,"Status") == 0)
@@ -564,13 +583,14 @@ int main( int argc, char *argv[] )
 
  for (j=1; j <= 21; j++)
   {
-   sched540[j] = PrelimFedReturn.fedline[j];
+   if (j <= 5)
+    sched540[j] = PrelimFedReturn.fedline[j];
+   else
+    sched540[j] = PrelimFedReturn.sched1[j];
    sched540[22] = sched540[22] + sched540[j];
    if (sched540[j] != 0.0)
     fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
 
-   if (j == 20)
-    sched540b[j] = sched540[j];
 
    sched540b[22] = sched540b[22] + sched540b[j];
    if (sched540b[j] != 0.0)
@@ -648,7 +668,6 @@ int main( int argc, char *argv[] )
  sched540part2[9] = PrelimFedReturn.schedA[9];
  GetLine("CA540_P2_Sub_9", &(sched540part2_sub[9]) );
  GetLine("CA540_P2_Add_9", &(sched540part2_add[9]) );
- sched540part2[9] = sched540part2[8] + sched540part2[9];
  sched540part2_sub[10] = sched540part2_sub[9];
  sched540part2_add[10] = sched540part2_add[8] + sched540part2_add[9];
  sched540part2[11] = PrelimFedReturn.schedA[11];

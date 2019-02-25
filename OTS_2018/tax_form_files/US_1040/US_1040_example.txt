@@ -10,6 +10,8 @@ You_Blind?	N	{ Are you blind ? (answer: Yes, No) }
 Spouse_65+Over?	 Y	{ Was Spouse born before January 2, 1954 ? (answer: Yes, No) }
 Spouse_Blind?	 N	{ Is Spouse blind ? (answer: Yes, No) }
 
+HealthCoverage?	 Y	{ Covered by Health care insurance or exempt ? (answer: Yes, No) }
+
 Dependents       2      { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)
 				self=1, spouse, etc. }
 

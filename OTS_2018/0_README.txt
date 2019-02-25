@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-January 2, 2019 v16.00 - For 2018 tax-year.
+February 25, 2019 v16.01 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -18,12 +18,13 @@ This package contains programs and templates for:
 	- State Income Taxes for California, Ohio, New Jersey, 
 	  Virginia, Pennsylvania, New York, Massachusetts, and North Carolina.
 	  All updated for 2018 Tax-Year.
-Also contains a new Automatic PDF Form-Fillout function:
+Also contains an Automatic PDF Form-Fillout function:
 	- Supports all Federal Forms and State Forms.
 	  Saves time by filling out many of the numbers.  
 	  You may still need to enter some information or check boxes
 	  that are not handled by OTS.
 	  Tested to work properly with many viewers.
+	- You can edit your forms with Libre-Office.
 
 -----------------------------------------------------------
 --- This package contains executables for RPLCSTRNG_01 ---
@@ -47,7 +48,8 @@ Usage:
   or by setting the environment variable:  PDF_VIEWER
  The Auto-Fillout feature is tested to work properly with the PDF
  viewers "Google-Chrome", "Firefox", "LibreOffice", "Atril", "Xpdf", 
- "Safari", and "IE".
+ "Safari", "IE", "Edge", and "Acrobat Reader".
+ You can edit your filled-out PDF forms with LibreOffice.
 
 General:
 Example tax-data files and blank starting templates are included under
@@ -86,7 +88,7 @@ OpenTaxSolver2018       ......................................       25.246-KB
    |-- src   .................................................      217.555-KB
    |   |-- Gui_gtk   .........................................      141.807-KB
    |
-   |-- tax_form_files   ..............................       49.152-KB
+   |-- tax_form_files   ......................................       49.152-KB
    |   |-- VA_760   ..........................................       11.038-KB
    |   |-- US_1040_Sched_C   .................................       12.803-KB
    |   |-- US_1040   .........................................       21.351-KB

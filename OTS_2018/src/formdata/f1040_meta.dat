@@ -12,6 +12,7 @@ Page 1
  Spouse1stName:  89 193
  SpouseLastName: 370 193
  SpouseSocSec#: 730 193 0 6.5
+ CkHealthCoverage 721 217
  Number&Street:  89 270
  Apt#: 		642 270
  TownStateZip: 	 89 304
@@ -24,7 +25,7 @@ Page 1
 
  CkYouOver65	432 160
  CkYouBlind	660 160
- CkSpouseOver65	465 216
+ CkSpouseOver65	465 215
  CkSpouseBlind	 58 234
 
 Page 2
@@ -39,13 +40,15 @@ Page 2
  L4b	767 125 12
  L5a	406 142	12
  L5b	767 142 12
- S1_22  509 161
+ S1_22  533 161
  L6	767 161 12
  L7	767 188 12
  L8	767 205 12
  L9	767 224 12
  L10	767 243 12
- L11a	254 263
+ FontSz 8
+ L11a	264 260
+ FontSz 10
  L11	767 280 12
  L12	767 297 12
  showevenifzero L13

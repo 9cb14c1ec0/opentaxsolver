@@ -26,7 +26,7 @@
 /*      2-24-06 Further updates BWB					*/
 /************************************************************************/
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -296,7 +296,7 @@ int main( int argc, char *argv[] )
 
  fprintf(outfile," FillOutForm_wRoundedNumbers_wZerosAfterDecPt\n" );
 
- L[13] = L[6] + L[7] + L[8] + L[11] + L[12];
+ L[13] = L[6] + L[7] + L[8] + L[9] + L[10] + L[11] + L[12];
  showline(13); 
 
  GetLineF( "L15", &L[15] );	/* Wages. */
@@ -387,7 +387,7 @@ int main( int argc, char *argv[] )
  showline_wmsg(36,"Total Exemptions and Deductions");
 
  /* Taxable income. */
- L[37] = L[29] - L[35];
+ L[37] = L[29] - L[36];
  if (L[37] > 0.0)
   showline_wmsg(37, "(Taxable Income)");
 

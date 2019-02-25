@@ -29,7 +29,7 @@
 /* Aston Roberts 1-26-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -253,7 +253,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2018. 
 
  amtws[2] = amtws2a + amtws2b + amtws2e;
 
- amtws[3] = 0.0;	/* Other adjustments, including income-based related adjustments */
+ // amtws[3] = 0.0;	/* Other adjustments, including income-based related adjustments */
 
  for (j = 1; j <= 3; j++)
   amtws[4] = amtws[4] + amtws[j];
@@ -1300,14 +1300,14 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 {
  int argk, j, k, itemize=0;
- char word[2000], outfname[2000], *infname="";
+ char word[2000], outfname[2000], *infname="", labelx[1024]="";
  time_t now;
- double exemption_threshold=0.0;
+ double exemption_threshold=0.0, tmpval=0.0;
  double S_STD_DEDUC, MFS_STD_DEDUC, MFJ_STD_DEDUC, HH_STD_DEDUC, std_deduc;
  char *Your1stName, *YourLastName, *Spouse1stName, *SpouseLastName, *socsec, socsectmp[100];
  double NumDependents=0.0;
  double localtax[10], loctaxlimit, homemort[10];
- int StdDedChart_NumBoxesChecked=0;
+ int StdDedChart_NumBoxesChecked=0, HealthCoverageChecked=0, gotS2_46=0;
 
  /* Decode any command-line arguments. */
  printf("US 1040 2018 - v%3.2f\n", thisversion);
@@ -1411,6 +1411,11 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  StdDedChart_NumBoxesChecked = StdDedChart_NumBoxesChecked + j;
  if (j)
   fprintf(outfile,"CkSpouseBlind X\n");
+
+ get_parameter( infile, 's', word, "HealthCoverage?" );	/* Full-year Heath care coverage ? (Y/N) */
+ get_parameter( infile, 'b', &HealthCoverageChecked, "HealthCoverage?" );
+ if (HealthCoverageChecked)
+  fprintf(outfile,"CkHealthCoverage X\n");
 
  switch (status)
   {
@@ -1722,7 +1727,34 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
 
  /* -- Schedule 2 -- Tax */
- GetLine( "S2_46", &Sched2[46] );	/* Excess advance premium tax credit repayment. Form 8962. */
+ while (!gotS2_46)	/* Get any optional AMTws lines, or the next normal line S2_46. */
+  {
+   GetOptionalLine( "S2_46 or AMTwsXX", labelx, &tmpval );
+   if (strcmp( labelx, "S2_46" ) == 0)
+    {
+     Sched2[46] = tmpval;
+     gotS2_46 = 1;
+    }
+   else
+   if (strstr( labelx, "AMTws" ) != 0)
+    { 
+     if ((sscanf( &(labelx[5]), "%d", &j) == 1) && (j >= 3) && (j < 3))
+      amtws[j] = tmpval;
+     else
+      {
+        printf("ERROR reading '%s'.\n", labelx ); 
+        fprintf(outfile,"ERROR reading '%s'.\n", labelx ); 
+      }
+    }
+   else
+    {
+     printf("ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX'\n", labelx ); 
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX'\n", labelx );
+     exit(1);
+    }
+  }
+
+ // GetLine( "S2_46", &Sched2[46] );	/* Excess advance premium tax credit repayment. Form 8962. */
 					/* (Needed by AMT form6251.) */
  GetLine( "S3_48", &Sched3[48] ); /*  Foreign tax credit. Form 1116. */
 					/* (Needed by AMT form6251.) */
@@ -1765,7 +1797,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
  for (j = 48; j <= 54; j++)
   Sched3[55] = Sched3[55] + Sched3[j];
- showline_wlabel( "S3_51", Sched3[55] );
+ showline_wlabel( "S3_55", Sched3[55] );
  /* -- End of Schedule 3 -- */
 
  L[12] = L[12] + Sched3[55];
