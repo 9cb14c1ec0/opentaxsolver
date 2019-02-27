@@ -70,7 +70,7 @@ int main( int argc, char *argv[] )
 {
  char *substr;
 
- strcpy( path, argv[0] );
+ strncpy( path, argv[0], MaxStr );
  //printf("Path: '%s'\n", path );
 
  #if (PLATFORM_KIND != Posix_Platform)

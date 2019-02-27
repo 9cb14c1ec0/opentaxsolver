@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 25, 2019 v16.01 - For 2018 tax-year.
+February 26, 2019 v16.01 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,7 +32,13 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v16.00 (1/2/2018) - Initial Release for Tax-Year 2018.
+    * v16.01 (2/27/2019) - A fix to Fed 1040 line 55, as well
+	as fixes for NJ and CA state programs.
+	Added Health-Coverage field to federal template.
+	Improved and added more active fields on several PDF forms.
+	No longer requires spouse inputs when not filing jointly.
+	Added alimony recipient fields for those who need it.
+    * v16.00 (2/2/2019) - Initial Release for Tax-Year 2018.
 	New this year, the "examples_and_templates" directory
 	has been renamed "tax_form_files".  It still contains
 	templates and example form-files, but the new name

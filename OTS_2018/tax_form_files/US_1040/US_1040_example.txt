@@ -133,6 +133,8 @@ S1_28             ;       { Self-employed SEP, SIMPS1_E, and qualified plans }
 S1_29             ;       { Self-employed health insurance deduction }
 S1_30             ;       { Penalty on early withdrawal of savings }
 S1_31a            ;       { Alimony paid }
+ AlimRecipSSN           ;  { Alimony recipient's SocSec Number. }
+ AlimRecipName          ;  { Alimony recipient's Name. }
 S1_32             ;       { IRA deduction }
 S1_33             ;       { Student loan interest deduction }
 

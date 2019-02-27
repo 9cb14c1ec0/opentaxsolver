@@ -234,7 +234,7 @@ int main( int argc, char *argv[] )
  if (j) fprintf(outfile," Check_Over65 = X\n");
 
  get_parameter( infile, 's', word, "SpouseOver65" );	/* Exemptions, Spouse Over 65. */
- get_parameter( infile, 'b', &j, "SpouseOver65"); 
+ get_param_single_line( infile, 'b', &j, "SpouseOver65"); 
  if (status == MARRIED_FILLING_JOINTLY)
   {
    L[7] = L[7] + j;
@@ -250,7 +250,7 @@ int main( int argc, char *argv[] )
  if (j) fprintf(outfile," Check_Blind = X\n");
 
  get_parameter( infile, 's', word, "SpouseBlindDisa" );    /* Exemptions, Spouse Blind/disabled. */
- get_parameter( infile, 'b', &j, "SpouseBlindDisa"); 
+ get_param_single_line( infile, 'b', &j, "SpouseBlindDisa"); 
  if (status == MARRIED_FILLING_JOINTLY)
   {
    L[8] = L[8] + j;
@@ -266,7 +266,7 @@ int main( int argc, char *argv[] )
  if (j) fprintf(outfile," Check_Vet = X\n");
 
  get_parameter( infile, 's', word, "SpouseVeteran" );    /* Exemptions, Spouse Veteran */
- get_parameter( infile, 'b', &j, "SpouseVeteran"); 
+ get_param_single_line( infile, 'b', &j, "SpouseVeteran"); 
  if (status == MARRIED_FILLING_JOINTLY)
   {
    L[8] = L[8] + j;

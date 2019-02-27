@@ -234,7 +234,7 @@ int main( int argc, char *argv[] )
   }
 
  get_parameter( infile, 's', word, "SpouseBlind" );
- get_parameter( infile, 'b', &spouseBlind, "SpouseBlind"); 
+ get_param_single_line( infile, 'b', &spouseBlind, "SpouseBlind"); 
  if (status == MARRIED_FILLING_JOINTLY)
   {
    if (spouseDOB.year < 1954)

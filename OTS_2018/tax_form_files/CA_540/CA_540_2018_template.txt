@@ -94,6 +94,8 @@ CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
 
  L91		   ;	 { Use Tax. }
 
+ L112		   ;	 { Interest, late penalties. }
+ L113		   ;	 { Underpayment of estimated tax penalty. (FTB 5805) }
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }

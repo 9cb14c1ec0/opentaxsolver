@@ -1307,7 +1307,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  char *Your1stName, *YourLastName, *Spouse1stName, *SpouseLastName, *socsec, socsectmp[100];
  double NumDependents=0.0;
  double localtax[10], loctaxlimit, homemort[10];
- int StdDedChart_NumBoxesChecked=0, HealthCoverageChecked=0, gotS2_46=0;
+ int StdDedChart_NumBoxesChecked=0, HealthCoverageChecked=0, gotS1_32=0, gotS2_46=0;
 
  /* Decode any command-line arguments. */
  printf("US 1040 2018 - v%3.2f\n", thisversion);
@@ -1399,7 +1399,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
   fprintf(outfile,"CkYouBlind X\n");
 
  get_parameter( infile, 's', word, "Spouse_65+Over?" );	/* Was Spouse born before January 2, 1954 ? (Y/N) */
- get_parameter( infile, 'b', &j, "Spouse_65+Over?" );
+ get_param_single_line( infile, 'b', &j, "Spouse_65+Over?" );
  StdDedChart_NumBoxesChecked = StdDedChart_NumBoxesChecked + j;
  if (j == 0)
   under65++;
@@ -1407,7 +1407,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
   fprintf(outfile,"CkSpouseOver65 X\n");
 
  get_parameter( infile, 's', word, "Spouse_Blind?" );	/* Is Spouse blind ? (Y/N) */
- get_parameter( infile, 'b', &j, "Spouse_Blind?" );
+ get_param_single_line( infile, 'b', &j, "Spouse_Blind?" );
  StdDedChart_NumBoxesChecked = StdDedChart_NumBoxesChecked + j;
  if (j)
   fprintf(outfile,"CkSpouseBlind X\n");
@@ -1487,7 +1487,41 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  GetLineFnz( "S1_29", &Sched1[29] );	/* Self-employed health insurance deduction */
  GetLineFnz( "S1_30", &Sched1[30] );	/* Penalty on early withdrawal of savings*/
  GetLineFnz( "S1_31a", &Sched1[31] );	/* Alimony paid*/
- GetLineFnz( "S1_32", &Sched1[32] );	/* IRA deduction */
+
+ while (!gotS1_32)	/* Get optional alimony recipient SSN, or next normal line (S1_32). */
+  { /* Expect: S1_32 or AlimRecipSSN or AlimRecipName. */
+   get_parameter( infile, 'l', labelx, "S1_32 or AlimRecipSSN or AlimRecipName" );
+   if (strcmp( labelx, "S1_32" ) == 0)
+    {
+     get_parameters( infile, 'f', &tmpval, "S1_32" );
+     Sched1[32] = tmpval;	/* IRA deduction */
+     showline_wlabelnz( "S1_32", Sched1[32] );
+     gotS1_32 = 1;
+    }
+   else
+   if (strcmp( labelx, "AlimRecipSSN" ) == 0)
+    {
+     get_parameters( infile, 'w', word, "AlimRecipSSN" );
+     if (strlen( word ) > 0)
+      fprintf(outfile," AlimRecipSSN = %s\n", word );
+    }
+   else
+   if (strcmp( labelx, "AlimRecipName" ) == 0)
+    { 
+     get_parameters( infile, 'w', word, "AlimRecipName" );
+     if (strlen( word ) > 0)
+      fprintf(outfile," AlimRecipName = %s\n", word );
+    }
+   else
+    {
+     printf("ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN or AlimRecipName'\n", labelx ); 
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN or AlimRecipName'\n", labelx );
+     exit(1);
+    }
+  }
+
+ // GetLineFnz( "S1_32", &Sched1[32] );	/* IRA deduction (Done above) */
+
  GetLine( "S1_33", &Sched1[33] );	/* Student loan interest deduction */
  if (Sched1[33] != 0.0)
   { /* Student loan interest calculation pg 96. */

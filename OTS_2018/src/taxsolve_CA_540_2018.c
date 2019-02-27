@@ -180,6 +180,7 @@ struct FedReturnData
 	sched1[MAX_LINES],
 	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
   int Exception, Itemized;
+  char AlimRecipSSN[256], AlimRecipName[1024];
  } PrelimFedReturn;
 
 
@@ -202,8 +203,8 @@ void convert_slashes( char *fname )
 
 void grab_line_value( char *label, char *fline, double *value )
 {
- char twrd[1024];
- next_word(fline, twrd, " \t=");
+ char twrd[2048];
+ next_word(fline, twrd, " \t=;");
  if ((twrd[0] != '\0') && (sscanf(twrd,"%lf", value) != 1))
   {
    printf("Error: Reading Fed %s '%s%s'\n", label, twrd, fline);
@@ -211,6 +212,18 @@ void grab_line_value( char *label, char *fline, double *value )
   }
 }
 
+void grab_line_string( char *fline, char *strng )
+{
+ char twrd[2048];
+ strng[0] = '\0';
+ do
+  {
+   next_word(fline, twrd, " \t=" );
+   if (twrd[0] != ';')
+    { strcat( strng, twrd );  strcat( strng, " " ); }
+  }
+ while ((fline[0] != '\0') && (strstr( twrd, ";" ) == 0));
+}
 
 
 int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
@@ -237,6 +250,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
  fed_data->fedl15a = 0.0;
  fed_data->fedl16a = 0.0;
  fed_data->fedl20a = 0.0;
+ strcpy( fed_data->AlimRecipSSN, "" );
+ strcpy( fed_data->AlimRecipName, "" );
  convert_slashes( fedlogfile );
  infile = fopen(fedlogfile, "r");
  if (infile==0)
@@ -299,6 +314,15 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
       }
     } /*L*/
    else
+   if ((word[0] == 'A') && (strstr(word,"Alim") == word) && (strstr(fline," = ") != 0))
+    {
+     if (strcmp(word,"AlimRecipSSN") == 0)
+      grab_line_string( fline, fed_data->AlimRecipSSN );
+     else
+     if (strcmp(word,"AlimRecipName") == 0)
+      grab_line_string( fline, fed_data->AlimRecipName );
+    }
+   else
    if ((word[0] == 'A') && (strstr(word,"AMT")!=word) && (strstr(fline," = ")!=0))
     {
      if (strcmp(word,"A5a") == 0)
@@ -349,6 +373,7 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
  	 printf("Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
 	 fprintf(outfile, "Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
         }
+
        if (verbose) printf("FedLin.S1[%d] = %2.2f\n", linenum, fed_data->sched1[linenum]);
     }
    else
@@ -606,7 +631,7 @@ int main( int argc, char *argv[] )
 
  for (j=23; j <= 35; j++)
   {
-   sched540[j] = PrelimFedReturn.fedline[j];
+   sched540[j] = PrelimFedReturn.sched1[j];
    sched540[36] = sched540[36] + sched540[j];
    if (sched540[j] != 0.0)
     fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
@@ -618,6 +643,14 @@ int main( int argc, char *argv[] )
    sched540c[36] = sched540c[36] + sched540c[j];
    if (sched540c[j] != 0.0)
     fprintf(outfile," SchedCA540_%dc = %6.2f\n", j, sched540c[j] );
+
+   if (j==31)
+    {
+     if (PrelimFedReturn.AlimRecipSSN[0] != '\0')
+	fprintf(outfile," AlimRecipSSN: %s\n", PrelimFedReturn.AlimRecipSSN );
+     if (PrelimFedReturn.AlimRecipName[0] != '\0')
+	fprintf(outfile," AlimRecipName: %s\n", PrelimFedReturn.AlimRecipName );
+    }
   }
  fprintf(outfile," SchedCA540_%d = %6.2f\n", 36, sched540[36] );
  sched540[37] = sched540[22] - sched540[36];
@@ -1000,6 +1033,9 @@ int main( int argc, char *argv[] )
    showline(93);
   }
  
+ GetLine( "L112", &L[112] );	/* Interest, late penalties. */
+ GetLine( "L113", &L[113] );	/* Underpayment of estimated tax penalty. (FTB 5805) */
+
  /* Refund / Tax-Due. */
  if (L[92] > L[64])
   {
@@ -1008,7 +1044,10 @@ int main( int argc, char *argv[] )
    showline(95);
    L[96] = L[94]  - L[95];
    showline(96);
+   showline(112);
+   showline(113);
    L[115] = L[96] - (L[110] + L[112] + L[113]);
+   showline(115);
   }
  else
   {
@@ -1017,6 +1056,10 @@ int main( int argc, char *argv[] )
    fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[97] / (L[64] + 1e-9) );
    L[111] = L[93] + L[97] + L[110];
    showline(111);
+   showline(112);
+   showline(113);
+   L[114] = L[111] + L[112] + L[113];
+   showline(114);
   }
  
  fprintf(outfile,"\nSelect any charity contributions and complete\n form accordingly.\n");

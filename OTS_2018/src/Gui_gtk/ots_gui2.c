@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.25;
-char package_date[]="Apr. 9, 2018";
-char ots_release_package[]="15.07";
+float version=2.26;
+char package_date[]="Feb. 25, 2019";
+char ots_release_package[]="16.01";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -106,6 +106,7 @@ int fronty1, fronty2, computed=0, ok_slcttxprog=1;
 char *yourfilename=0;
 char toolpath[MaxFname]="", *start_cmd;
 int pending_compute=0, supported_pdf_form=1;
+int filingstatus_mfj=1;
 
 void pick_file( GtkWidget *wdg, void *data );	/* Prototype */
 void consume_leading_trailing_whitespace( char *line );
@@ -245,7 +246,7 @@ struct value_list
 struct taxline_record
  {
   char *linename;
-  int linenum, format_offset;
+  int linenum;
   struct value_list *values_hd, *values_tl;	/* Head and tail list pointers for a tax-line-entry. */
   struct taxline_record *nxt;
  } *taxlines_hd=0, *taxlines_tl=0;		/* Head and tail list pointers for tax-form. */
@@ -460,6 +461,26 @@ void refresh()
  gtk_widget_set_size_request( scrolledpane, winwidth, winht - 80 );
  DisplayTaxInfo();
  gtk_widget_show_all( outer_window );
+}
+
+
+
+void re_display_form()
+{
+ double vpos;
+ GtkAdjustment *adj;
+
+ Update_box_info();	/* Grab any new entries. */
+
+ /* Prestore the scrolling position. */
+ adj = gtk_scrolled_window_get_vadjustment( (GtkScrolledWindow *)scrolledpane );
+ vpos = gtk_adjustment_get_value( adj );
+
+ refresh();
+
+ /* Restore the scrolling position. */
+ adj = gtk_scrolled_window_get_vadjustment( (GtkScrolledWindow *)scrolledpane );
+ adj->value = vpos;
 }
 
 
@@ -980,26 +1001,36 @@ struct choice_rec
 void status_choice_S( GtkWidget *wdg, void *x )
 { struct value_list *tmppt=(struct value_list *)x;
   modify_formbox( tmppt->box, "Single" );
+  if (filingstatus_mfj != 0)
+   re_display_form();
 }
 
 void status_choice_MJ( GtkWidget *wdg, void *x )
 { struct value_list *tmppt=(struct value_list *)x;
   modify_formbox( tmppt->box, "Married/Joint" );
+  if (filingstatus_mfj != 1)
+   re_display_form();
 }
 
 void status_choice_MS( GtkWidget *wdg, void *x )
 { struct value_list *tmppt=(struct value_list *)x;
   modify_formbox( tmppt->box, "Married/Sep" );
+  if (filingstatus_mfj != 0)
+   re_display_form();
 }
 
 void status_choice_HH( GtkWidget *wdg, void *x )
 { struct value_list *tmppt=(struct value_list *)x;
   modify_formbox( tmppt->box, "Head_of_Household" );
+  if (filingstatus_mfj != 0)
+   re_display_form();
 }
 
 void status_choice_W( GtkWidget *wdg, void *x )
 { struct value_list *tmppt=(struct value_list *)x;
   modify_formbox( tmppt->box, "Widow(er)" );
+  if (filingstatus_mfj != 0)
+   re_display_form();
 }
 
 void spinner_choice( GtkWidget *wdg, void *x )
@@ -1057,9 +1088,9 @@ void DisplayTaxInfo()
  GtkWidget *label, *button, *cbutton, *menu;
  GtkRequisition req;
  GtkEntry *lastbox=0;
- char messg[2048];
+ char messg[4096];
  int linenum, iscapgains, noplus=0;
- int offset=0, capgtoggle=0, firstbox_on_line_x=0;
+ int capgtoggle=0, firstbox_on_line_x=0;
  int y1, y1a, yoffset=4, y2, y3, dy;
  int entry_box_height=1, extra_dy, sectionheader=1;
 
@@ -1076,49 +1107,49 @@ void DisplayTaxInfo()
  txline = taxlines_hd;
  while (txline != 0)
   {
-   offset = offset + txline->format_offset;
+   if ((filingstatus_mfj == 1) || (strstr( txline->linename, "Spouse" ) == 0))
+    { /*DisplayLine*/
+     /* Place the line label. */
+     // printf("\nAdding LineLabel %d (%3d, %d): '%s'\n", txline->linenum, 2, y1a, txline->linename );
+     label = make_label( mpanel2, 2, y1a, txline->linename );
+     gtk_widget_size_request( label, &req );	/* First find the label's size. */
+     gtk_widget_destroy( label );			/* Remove it, then re-place it at best position. */
+     label_width = req.width;
+     label_x0 = norm_label_x1 - label_width - 4;
+     if (label_x0 < 0) label_x0 = 0;
+     if (debug) printf("%d: LineLabel '%s' at (%d, %d)\n",txline->linenum, txline->linename, label_x0, y1a );
+     label = make_label( mpanel2, label_x0, y1a, txline->linename );
+     label_x1 = label_x0 + label_width;
+     box_x0 = label_x1 + horzpad;
+     if (box_x0 < min_box_x0) box_x0 = min_box_x0;
+     comment_x0 = label_x1 + horzpad + 10;
+     button = 0;
+     lastbox = 0;
 
-   /* Place the line label. */
-   // printf("\nAdding LineLabel %d (%3d, %d): '%s'\n", txline->linenum, 2, y1a, txline->linename );
-   label = make_label( mpanel2, 2, y1a, txline->linename );
-   gtk_widget_size_request( label, &req );	/* First find the label's size. */
-   gtk_widget_destroy( label );			/* Remove it, then re-place it at best position. */
-   label_width = req.width;
-   label_x0 = norm_label_x1 - label_width - 4;
-   if (label_x0 < 0) label_x0 = 0;
-   if (debug) printf("%d: LineLabel '%s' at (%d, %d)\n",txline->linenum, txline->linename, label_x0, y1a );
-   label = make_label( mpanel2, label_x0, y1a, txline->linename );
-   label_x1 = label_x0 + label_width;
-   box_x0 = label_x1 + horzpad;
-   if (box_x0 < min_box_x0) box_x0 = min_box_x0;
-   comment_x0 = label_x1 + horzpad + 10;
-   button = 0;
-   lastbox = 0;
+     if ((strncmp(txline->linename,"Cap-Gains",9) == 0) || (strncmp(txline->linename,"CapGains",8) == 0))
+      iscapgains = 1;
+     else
+      iscapgains = 0;
 
-   if ((strncmp(txline->linename,"Cap-Gains",9) == 0) || (strncmp(txline->linename,"CapGains",8) == 0))
-    iscapgains = 1;
-   else
-    iscapgains = 0;
-
-   linenum = txline->linenum;
-   entry = txline->values_hd;
-   button = 0;  capgtoggle = 0;  extra_dy = 0;
-   while (entry != 0)
-    { /*entry*/
-     if (linenum != entry->linenum)
-      {
-	y1 = y1 + dy + extra_dy;
-	y1a = y1 + yoffset;
-	linenum = entry->linenum;
-	extra_dy = 0;
-	comment_x0 = min_comment_x0;
-	if (debug) printf("\tLineNum now = %d\n", linenum );
-	button = 0;
-      }
-     if (strstr( txline->linename, ":" ) != 0) noplus = 1;
-     switch (entry->kind)
-      {
-       case VKIND_FLOAT:	/* This kind is presently not used at all. (or anymore?) */
+     linenum = txline->linenum;
+     entry = txline->values_hd;
+     button = 0;  capgtoggle = 0;  extra_dy = 0;
+     while (entry != 0)
+      { /*entry*/
+       if (linenum != entry->linenum)
+        {
+	  y1 = y1 + dy + extra_dy;
+	  y1a = y1 + yoffset;
+	  linenum = entry->linenum;
+	  extra_dy = 0;
+	  comment_x0 = min_comment_x0;
+	  if (debug) printf("\tLineNum now = %d\n", linenum );
+	  button = 0;
+        }
+       if (strstr( txline->linename, ":" ) != 0) noplus = 1;
+       switch (entry->kind)
+        {
+         case VKIND_FLOAT:	/* This kind is presently not used at all. (or anymore?) */
 		sprintf(messg, "%12.2f", entry->value ); 
 		entry->box = new_formbox( mpanel2, box_x0, y1, 12, messg, 500, 0, 0 );
 		lastbox = entry->box;
@@ -1133,11 +1164,11 @@ void DisplayTaxInfo()
 		add_tool_tip( button, "Add another entry box\nfor this line." );
 		break;
 
-       case VKIND_INT:  
+         case VKIND_INT:  
 		if (debug) printf("\tUnhandled VKIND_INT happened (%d) ??\n", (int)(entry->value));
 		break;
 
-       case VKIND_TEXT:  
+         case VKIND_TEXT:  
 		if (debug) printf("\tText-FormBox: '%s' formtype = %d\n", entry->text, entry->formtype );
 
 		if (entry->formtype == 0)
@@ -1177,6 +1208,10 @@ void DisplayTaxInfo()
 		  add_menu_item( menu, "Head_of_Household", status_choice_HH, entry );
 		  add_menu_item( menu, "Widow(er)", status_choice_W, entry );
 		  comment_x0 = comment_x0 + 20;
+		  if (strstr( entry->text, "Married/Joint" ) != 0)
+		   filingstatus_mfj = 1;
+		  else
+		   filingstatus_mfj = 0;
 		 }
 		else
 		if (iscapgains)
@@ -1220,7 +1255,7 @@ void DisplayTaxInfo()
 		 }
 		break;
 
-       case VKIND_COMMENT: 
+         case VKIND_COMMENT: 
 		if (debug) printf("\tComment {%s} at (%d, %d)\n", entry->comment, comment_x0, y1a );
 
 		if (startswith( entry->comment, "--" ))
@@ -1285,13 +1320,17 @@ void DisplayTaxInfo()
 		 }
 		sectionheader = 0;
 		break;
-      }
-     noplus = 0;
-     entry = entry->nxt;
-    } /*entry*/
+        }
+       noplus = 0;
+       entry = entry->nxt;
+      } /*entry*/
 
-   y1 = y1 + dy;
-   y1a = y1 + yoffset;
+     y1 = y1 + dy;
+     y1a = y1 + yoffset;
+    } /*DisplayLine*/
+   else
+    txline->values_hd->box = 0;
+
    txline = txline->nxt;
   }
  if (debug) printf("\n--------- Done rendering interactive form-page ------------\n");
@@ -1443,7 +1482,12 @@ void Save_Tax_File( char *fname )
       {
        case VKIND_FLOAT:   fprintf(outfile,"	%6.2f	", tmppt->value ); break;
        case VKIND_INT:     fprintf(outfile,"	%d	", (int)(tmppt->value) ); break;
-       case VKIND_TEXT:    fprintf(outfile,"	%s	", tmppt->text ); break;
+       case VKIND_TEXT:    
+		if ((filingstatus_mfj) || (strstr( txline->linename, "Spouse" ) == 0))
+		 fprintf(outfile,"	%s	", tmppt->text );
+		else
+		 fprintf(outfile,"\t\t" );
+	break;		 
        case VKIND_COMMENT: if (strlen(tmppt->comment)>0) fprintf(outfile," {%s}", tmppt->comment ); break;
        case VKIND_COLON:   semicolon = 1; break;
       }
@@ -3004,7 +3048,7 @@ int main(int argc, char *argv[] )
    { 
     printf("OTS GUI v%1.2f, %s:\n", version, package_date );
     printf(" Command-line Options:\n");
-    printf("  -verbose          - Show status messages.\n");
+    printf("  -verbose          - Show debugging messages.\n");
     printf("  -taxsolver xx     - Set path and name of the tax-solver executable.\n");
     printf("  {file-name}.txt   - Set path and name of the tax data input file.\n\n");
     exit(0);

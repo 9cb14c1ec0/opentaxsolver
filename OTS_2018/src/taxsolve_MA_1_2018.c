@@ -187,7 +187,7 @@ int main( int argc, char *argv[] )
    fprintf(outfile,"Check_2cyou X\n");
   }
  get_parameter( infile, 's', word, "Age65Spouse");
- get_parameter( infile, 'b', &flag, "Spouse age over 65?");
+ get_param_single_line( infile, 'b', &flag, "Spouse age over 65?");
  if (flag) 
   {
    i65++;
@@ -208,7 +208,7 @@ int main( int argc, char *argv[] )
    fprintf(outfile,"Check_2dyou X\n");
   }
  get_parameter( infile, 's', word, "BlindSpouse");
- get_parameter( infile, 'b', &flag, "Spouse Blindness?");
+ get_param_single_line( infile, 'b', &flag, "Spouse Blindness?");
  if (flag) 
   {
    iblind++;

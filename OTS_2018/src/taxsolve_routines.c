@@ -41,6 +41,7 @@ FILE *infile=0,	 /* Main input file to be used for reading tax input data. */
      *outfile=0; /* Main output file. */
 int verbose=0;	 /* Declare and set the "verbosity" flag. */
 int notappvalue=0;
+int single_line_entry=0;
 
 
 /********************************************************************************/
@@ -60,7 +61,10 @@ void show_errmsg( char *emsg )
 void get_word( FILE *infile, char *word )	/* Absorb comments. */
 {
  int j=0;
+ char ltc='\n';	 /* Line termination character. */
 
+ if (single_line_entry)
+  ltc = ' ';
  do
   {  /*Absorb any leading white-space.*/
      word[j]=getc(infile); 
@@ -70,9 +74,14 @@ void get_word( FILE *infile, char *word )	/* Absorb comments. */
        word[j]=getc(infile);
       }
   } 
- while ((!feof(infile)) && ((word[j]==' ') || (word[j]=='\t') || (word[j]=='\n') || (word[j]=='\r')));
- if (word[j]=='$') word[j]=getc(infile);
- if (word[j]==';') j++;
+ while ((!feof(infile)) && ((word[j]==' ') || (word[j]=='\t') || (word[j]==ltc) || (word[j]=='\r')));
+ if (word[j]=='$')
+  word[j]=getc(infile);
+ if (word[j]==';') 
+  j++;
+ else
+ if (word[j]=='\n')
+  word[j] = '\0';	/* Terminate empty single-line entries. */
  else
  if (word[j]=='"')
   { /* Get quoted string. */
@@ -152,7 +161,7 @@ char *mystrcasestr( char *haystack, char *needle )
 /*------------------------------------------------------------------------------*/
 void get_parameter( FILE *infile, char kind, void *x, char *emssg )
 {
- char word[1024], *owrd;
+ char word[2048], *owrd;
  int i, *ii;
  double y, *yy;
 
@@ -202,6 +211,7 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
    else if ((strcasecmp(word,"TRUE")==0) || (strcasecmp(word,"YES")==0) || (strcmp(word,"1")==0)) i = 1;
    else if ((strcasecmp(word,"FALSE")==0) || (strcasecmp(word,"NO")==0) || (strcmp(word,"0")==0)) i = 0;
    else if (strcasecmp(word,"N/A")==0) i = notappvalue;
+   else if ((single_line_entry) && (strlen( word ) == 0)) i = notappvalue;
    else {printf("ERROR1: Bad boolean '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad boolean '%s', reading %s.\n", word, emssg); exit(1);}
    ii = (int *)x;
    *ii = i;
@@ -211,6 +221,13 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
 }
 
 
+void get_param_single_line( FILE *infile, char kind, void *x, char *emssg )
+{
+ single_line_entry = 1;
+ get_parameter( infile, kind, x, emssg );
+ single_line_entry = 0;
+}
+
 
 
 /*------------------------------------------------------------------------------*/
@@ -219,11 +236,13 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
 /*------------------------------------------------------------------------------*/
 void get_parameters( FILE *infile, char kind, void *x, char *emssg )
 {
- char word[1024], *owrd;
+ char word[2048], *owrd=0;
  int j, *ii;
  double y, *yy;
 
- if (kind=='f') { yy = (double *)x;  *yy = 0.0; }
+ if (kind == 'f') { yy = (double *)x;  *yy = 0.0; }
+ else
+ if (kind == 'w') { owrd = (char *)x;  owrd[0] = '\0'; }
 
  get_word(infile,word);
  while (word[0]!=';')
@@ -255,6 +274,12 @@ void get_parameters( FILE *infile, char kind, void *x, char *emssg )
     { if (strcmp(word,emssg)!=0)
        {printf("ERROR2: Found '%s' when expecting '%s'\n", word, emssg); fprintf(outfile,"ERROR2: Found '%s' when expecting '%s'\n", word, emssg); exit(1); }
     }
+  }
+ else
+ if (kind=='w')
+  {
+   strcat( owrd, word );
+   strcat( owrd, " " );
   }
  else
  if (kind=='b')
@@ -526,7 +551,6 @@ void GetOptionalLine( char *linename, char *label, double *value )
  get_parameter( infile, 'l', label, linename);
  get_parameters( infile, 'f', value, linename);
 }
-
 
 
 
