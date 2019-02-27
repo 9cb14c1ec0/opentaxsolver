@@ -29,7 +29,7 @@
 /* Aston Roberts 1-26-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.01;
+float thisversion=16.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -1315,6 +1315,8 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  while (argk < argc)
  {
   if (strcmp(argv[argk],"-verbose")==0)  { verbose = Yes; }
+  else
+  if (strcmp(argv[argk],"-allforms")==0)  { force_print_all_pdf_forms = 1; }
   else
   if (k==1)
    {

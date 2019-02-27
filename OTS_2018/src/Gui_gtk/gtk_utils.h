@@ -22,7 +22,7 @@ GtkWidget *make_button_wicon( GtkWidget *panel, int xpos, int ypos, const char *
 
 /* ------------- Radio Button Routines ----------------- */
 GtkWidget *make_radio_button( GtkWidget *panel, GtkWidget *group, int xpos, int ypos, const char *label, 
-			      void callback(GtkWidget *, void *), void *data );
+			      void callback(GtkWidget *, void *), const void *data );
 
 void set_radio_button( GtkWidget *radio_button );
 

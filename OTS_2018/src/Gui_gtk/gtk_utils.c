@@ -104,22 +104,141 @@ GtkWidget *make_button( GtkWidget *panel, int xpos, int ypos, const char *label,
  return button;
 }
 
+
+void cxpm_next_word( char *line, char *word, char *delim )
+{
+ int i=0, j=0, m=0, nodelim=1;
+ while ((line[i]!='\0') && (nodelim))  /* Consume any preceding white-space. */
+  {
+   j = 0;
+   while ((delim[j]!='\0') && (line[i]!=delim[j])) j = j + 1;
+   if (line[i]==delim[j]) { i = i + 1; } else  nodelim = 0;
+  }
+ while ((line[i]!='\0') && (!nodelim)) /* Copy the word until the next delimiter. */
+  {
+   word[m++] = line[i++];
+   if (line[i]!='\0')
+    {
+     j = 0;
+     while ((delim[j]!='\0') && (line[i]!=delim[j])) j = j + 1;
+     if (line[i]==delim[j]) nodelim = 1;
+    }
+  }
+ j = 0;  /* Shorten line. */
+ while (line[i]!='\0') { line[j++] = line[i++]; }
+ /* Terminate the char-strings. */
+ line[j] = '\0';
+ word[m] = '\0';
+}
+
+
+unsigned char cxhexpair( char *x )
+{
+ unsigned char val;
+ if (x[0] <= '9')  val = x[0] - 48;
+ else
+ if (x[0] <= 'F')  val = x[0] - 55;
+ else	val = x[0] - 87;
+ if (x[1] <= '9')  val = (val << 4) + x[1] - 48;
+ else
+ if (x[1] <= 'F')  val = (val << 4) + x[1] - 55;
+ else	val = (val << 4) + x[1] - 87;
+ return val;
+}
+
+unsigned char *decode_xpm( const char **xpm_icon, int *wd, int *ht )
+{
+ int j, k, mm=0, ncolors, cppx, tabsz=256, pp;
+ char line[100], word[100];
+ unsigned char *rtab, *gtab, *btab, *img;
+ strcpy( line, xpm_icon[0] );
+ cxpm_next_word( line, word, " \t" );
+ if (sscanf( word, "%d", wd ) != 1) { printf("Error reading wd '%s'\n", word ); exit(1); }
+ cxpm_next_word( line, word, " \t" );
+ if (sscanf( word, "%d", ht ) != 1) { printf("Error reading ht '%s'\n", word );  exit(1); }
+ cxpm_next_word( line, word, " \t" );
+ if (sscanf( word, "%d", &ncolors ) != 1) { printf("Error reading ncolors '%s'\n", word );  exit(1); }
+ cxpm_next_word( line, word, " \t" );
+ if (sscanf( word, "%d", &cppx ) != 1) { printf("Error reading cppx '%s'\n", word );  exit(1); }
+ if (cppx > 1) { tabsz = 256 * tabsz;  if (cppx > 2) { printf("Error cppx of '%d' not supported.\n", cppx );  exit(1); }}
+ rtab = (unsigned char *)malloc( tabsz );
+ gtab = (unsigned char *)malloc( tabsz );
+ btab = (unsigned char *)malloc( tabsz );
+ for (j=1; j <= ncolors; j++)
+  {
+   strcpy( line, xpm_icon[j] );
+   k = line[0];
+   if (cppx > 1) { k = (k << 8) + line[1];  pp = 2; }
+   else pp = 1;
+   cxpm_next_word( &(line[pp]), word, " \t" );	/* Should have "c". */
+   cxpm_next_word( &(line[pp]), word, " \t" );
+   if (word[0] == '#')
+    {
+     rtab[k] = cxhexpair( &(word[1]) );
+     gtab[k] = cxhexpair( &(word[3]) );
+     btab[k] = cxhexpair( &(word[5]) );
+    }
+   else
+    {
+     rtab[k] = 250;  gtab[k] = 0;  btab[k] = 0;
+    }
+  }
+ img = (unsigned char *)malloc( 3 * *wd * *ht );
+ for (j=0; j < *ht; j++)
+  {
+   for (k=0; k < *wd * cppx; k = k + cppx)
+    {
+     pp = xpm_icon[ncolors+1+j][k];
+     if (cppx > 1) pp = (pp << 8) + xpm_icon[ncolors+1+j][k+1];
+     img[mm++] = rtab[pp];
+     img[mm++] = gtab[pp];
+     img[mm++] = btab[pp];
+    }
+  }
+ free( rtab );	free( gtab );	free( btab );
+ return img;
+}
+
+
 GtkWidget *make_button_wicon( GtkWidget *panel, int xpos, int ypos, const char **icon, void callback(GtkWidget *, void *), void *data )
 {  /* Be sure to somewhere set:  g_object_set( gtk_settings_get_default(), "gtk-button-images", TRUE, NULL); */
  GtkWidget *bpanel, *button, *image;	/* To use, "#include" an xpm image file of icon. */ 
  GdkPixbuf *pixbuf;			/*  Make sure variable-name at top of data declaration matches "icon" name */
 					/*  called in this function.  (You call it with that variable name.) */
+ int wd, ht;
+ unsigned char *imgdata;
+
  bpanel = gtk_fixed_new();
  gtk_fixed_put( GTK_FIXED( panel ), bpanel, xpos, ypos );
  button = gtk_button_new();
  if (callback != 0)
   gtk_signal_connect( GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC( callback ), data );
  gtk_container_add( GTK_CONTAINER( bpanel ), button );
- pixbuf = gdk_pixbuf_new_from_xpm_data( (const char **)icon );
+ imgdata = decode_xpm( icon, &wd, &ht );
+ pixbuf = gdk_pixbuf_new_from_data( imgdata, GDK_COLORSPACE_RGB, 0, 8, wd, ht, 3 * wd, 0, 0 );
  image = gtk_image_new_from_pixbuf( pixbuf );
  gtk_button_set_image( (GtkButton *)button, image );
  return button;
 }
+
+#if (0)
+	GtkWidget *make_button_wicon_old( GtkWidget *panel, int xpos, int ypos, const char **icon, void callback(GtkWidget *, void *), void *data )
+	{  /* Be sure to somewhere set:  g_object_set( gtk_settings_get_default(), "gtk-button-images", TRUE, NULL); */
+	 GtkWidget *bpanel, *button, *image;	/* To use, "#include" an xpm image file of icon. */ 
+	 GdkPixbuf *pixbuf;			/*  Make sure variable-name at top of data declaration matches "icon" name */
+						/*  called in this function.  (You call it with that variable name.) */
+	 bpanel = gtk_fixed_new();
+	 gtk_fixed_put( GTK_FIXED( panel ), bpanel, xpos, ypos );
+	 button = gtk_button_new();
+	 if (callback != 0)
+	  gtk_signal_connect( GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC( callback ), data );
+	 gtk_container_add( GTK_CONTAINER( bpanel ), button );
+	 pixbuf = gdk_pixbuf_new_from_xpm_data( (const char **)icon );
+	 image = gtk_image_new_from_pixbuf( pixbuf );
+	 gtk_button_set_image( (GtkButton *)button, image );
+	 return button;
+	}
+#endif
 
 GtkWidget *make_button_wsizedcolor_text( GtkWidget *panel, int xpos, int ypos, const char *text, float fontsize, 
 					 const char *color_value, void callback(GtkWidget *, void *), void *data )
@@ -157,7 +276,7 @@ GtkWidget *make_button_wsizedcolor_text( GtkWidget *panel, int xpos, int ypos, c
 
 /* ------------- GTK Radio Button Routines ----------------- */
 
-GtkWidget *make_radio_button( GtkWidget *panel, GtkWidget *group, int xpos, int ypos, const char *label, void callback(GtkWidget *, void *), void *data )
+GtkWidget *make_radio_button( GtkWidget *panel, GtkWidget *group, int xpos, int ypos, const char *label, void callback(GtkWidget *, void *), const void *data )
 {
  GtkWidget *bpanel, *button;
 
@@ -165,7 +284,7 @@ GtkWidget *make_radio_button( GtkWidget *panel, GtkWidget *group, int xpos, int 
  gtk_fixed_put( GTK_FIXED( panel ), bpanel, xpos, ypos );
  button = gtk_radio_button_new_with_label_from_widget( GTK_RADIO_BUTTON( group ), label );
  if (callback != 0)
-  gtk_signal_connect( GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC( callback ), data );
+  gtk_signal_connect( GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC( callback ), (gpointer)data );
  gtk_container_add( GTK_CONTAINER( bpanel ), button );
  return button;
 }
@@ -539,7 +658,7 @@ GtkWidget *add_menu_item( GtkWidget *menu, const char *label, void callback(GtkW
  GtkWidget *menuitem;
  menuitem = gtk_menu_item_new_with_label( label );
  if (callback != 0)
-  gtk_signal_connect( GTK_OBJECT(menuitem), "activate", GTK_SIGNAL_FUNC( callback ), data );
+  gtk_signal_connect( GTK_OBJECT(menuitem), "activate", G_CALLBACK( callback ), data );
  gtk_menu_append( GTK_MENU(menu), menuitem );
  return menuitem;
 }
@@ -803,12 +922,12 @@ GtkWidget *make_framed_panel( GtkWidget *panel, int xpos, int ypos, int width, i
 
 /* ------------- Sub-Window or (Detachable) Pop-up Window Making Routines ----------------- */
 
-int  window_position_policy=GTK_WIN_POS_CENTER_ON_PARENT,
-     top_window_position_policy=GTK_WIN_POS_CENTER;
+GtkWindowPosition window_position_policy=GTK_WIN_POS_CENTER_ON_PARENT,
+		  top_window_position_policy=GTK_WIN_POS_CENTER;
 
 void close_any_window( GtkWidget *widget, gpointer data )
 {
- GtkWidget *(*win0) = data;
+ GtkWidget *(*win0) = (GtkWidget **)data;
  if (data == 0) { printf("Close_Any_Window: Zero data\n"); return; }
  if (*win0 != 0) gtk_widget_destroy( *win0 );
  *win0 = 0;
@@ -817,7 +936,7 @@ void close_any_window( GtkWidget *widget, gpointer data )
 
 int killed_any_window( GtkWidget *widget, GdkEvent *event, gpointer data )
 {
- GtkWidget *(*win0) = data;
+ GtkWidget *(*win0) = (GtkWidget **)data;
  *win0 = 0;
  return 0;      /* Returning "0" causes window to be destroyed. */
 }
@@ -881,7 +1000,7 @@ GtkWidget *make_scrolled_window_wkill( int width, int height, const char *title,
  swin = gtk_scrolled_window_new( 0, 0 );
  if (horzscroll) horzscroll = GTK_POLICY_ALWAYS; else horzscroll = GTK_POLICY_NEVER;
  if (vertscroll) vertscroll = GTK_POLICY_ALWAYS; else vertscroll = GTK_POLICY_NEVER;
- gtk_scrolled_window_set_policy( (GtkScrolledWindow *)swin, horzscroll, vertscroll );
+ gtk_scrolled_window_set_policy( (GtkScrolledWindow *)swin, (GtkPolicyType)horzscroll, (GtkPolicyType)vertscroll );
  gtk_scrolled_window_add_with_viewport( (GtkScrolledWindow *)swin, winframe );
  gtk_container_add( GTK_CONTAINER( *winptr ), swin );
  return winframe;
@@ -904,7 +1023,7 @@ GtkWidget *init_top_outer_window( int *argc, char ***argv, int winwidth, int win
    if (horzscroll) horzscroll = GTK_POLICY_ALWAYS; else horzscroll = GTK_POLICY_NEVER;
    if (vertscroll) vertscroll = GTK_POLICY_ALWAYS; else vertscroll = GTK_POLICY_NEVER;
    swin = gtk_scrolled_window_new( 0, 0 );
-   gtk_scrolled_window_set_policy( (GtkScrolledWindow *)swin, horzscroll, vertscroll );
+   gtk_scrolled_window_set_policy( (GtkScrolledWindow *)swin, (GtkPolicyType)horzscroll, (GtkPolicyType)vertscroll );
    gtk_scrolled_window_add_with_viewport( (GtkScrolledWindow *)swin, outer_frame );
    gtk_container_add( GTK_CONTAINER( outer_window ), swin );
   }
@@ -1101,7 +1220,7 @@ GtkTooltips *add_tool_tip( GtkWidget *wdg, const char *text )		/* Adds tool-tip 
 
 /* ------------- File Browser ----------------- */
 
-void canceled_file_browser( GtkWidget *wdg, void *fb ) { gtk_widget_destroy( fb ); }
+void canceled_file_browser( GtkWidget *wdg, void *fb ) { gtk_widget_destroy( (GtkWidget *)fb ); }
 
 char *file_browser_filter=0;
 
