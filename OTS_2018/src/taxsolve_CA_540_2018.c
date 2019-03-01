@@ -729,6 +729,7 @@ int main( int argc, char *argv[] )
  sched540part2[9] = PrelimFedReturn.schedA[9];
  GetLine("CA540_P2_Sub_9", &(sched540part2_sub[9]) );
  GetLine("CA540_P2_Add_9", &(sched540part2_add[9]) );
+ sched540part2[10] = sched540part2[8] + sched540part2[9];
  sched540part2_sub[10] = sched540part2_sub[9];
  sched540part2_add[10] = sched540part2_add[8] + sched540part2_add[9];
  sched540part2[11] = PrelimFedReturn.schedA[11];
