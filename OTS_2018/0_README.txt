@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 26, 2019 v16.01 - For 2018 tax-year.
+February 28, 2019 v16.02 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,15 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v16.02 (2/28/2019) - To the Federal form, added Alimony
+	recipient info, which is then also imported by some state
+	forms.   Fixed some PDF positioning on federal form,
+        including fields on the AMT form's second page.
+	Added option to print all federal forms, even when not
+	required, the "-allforms" option.
+	From California template, removed CA540 line 5 which is
+	imported from federal form, and broke out line 21 a-f.
+	Fixed CA540 handling of SocSec payments, and CA540 line 10.
     * v16.01 (2/27/2019) - A fix to Fed 1040 line 55, as well
 	as fixes for NJ and CA state programs.
 	Added Health-Coverage field to federal template.

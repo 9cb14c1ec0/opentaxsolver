@@ -822,7 +822,7 @@ int main( int argc, char *argv[] )
  if (sched540part2_5a != 0.0)
   fprintf(outfile," SchedCA540_Part2_5aa = %6.2f\n", sched540part2_5a );
  if (sched540part2_sub[5] != 0.0)
-  fprintf(outfile," SchedCA540_Part2_5bb = %6.2f\n", sched540part2_sub[5] );
+  fprintf(outfile," SchedCA540_Part2_5ab = %6.2f\n", sched540part2_sub[5] );
  if (sched540part2_5b != 0.0)
   fprintf(outfile," SchedCA540_Part2_5ba = %6.2f\n", sched540part2_5b );
  if (sched540part2_5c != 0.0)
