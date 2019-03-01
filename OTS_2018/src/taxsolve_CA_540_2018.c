@@ -24,7 +24,7 @@
 /* Aston Roberts 2-6-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.01;
+float thisversion=16.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -314,14 +314,11 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
       }
     } /*L*/
    else
-   if ((word[0] == 'A') && (strstr(word,"Alim") == word) && (strstr(fline," = ") != 0))
-    {
-     if (strcmp(word,"AlimRecipSSN") == 0)
-      grab_line_string( fline, fed_data->AlimRecipSSN );
-     else
-     if (strcmp(word,"AlimRecipName") == 0)
-      grab_line_string( fline, fed_data->AlimRecipName );
-    }
+   if (strncmp(word, "AlimRecipSSN", 12) == 0)
+    grab_line_string( fline, fed_data->AlimRecipSSN );
+   else
+   if (strncmp(word, "AlimRecipName", 13) == 0)
+    grab_line_string( fline, fed_data->AlimRecipName );
    else
    if ((word[0] == 'A') && (strstr(word,"AMT")!=word) && (strstr(fline," = ")!=0))
     {
@@ -461,6 +458,8 @@ int main( int argc, char *argv[] )
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
 	*Spouse1stName="", *SpouseLastName="", *socsec;
+ double  sched540b21a=0.0, sched540b21b=0.0, sched540c21c=0.0, sched540b21d=0.0,
+	 sched540b21e=0.0, sched540b21f=0.0, sched540c21f=0.0;
  time_t now;
 
  /* Decode any command-line arguments. */
@@ -584,7 +583,7 @@ int main( int argc, char *argv[] )
   GetLine("CA540_Addit_3", &(sched540c[3]) );
   GetLine("CA540_Subtr_4", &(sched540b[4]) );
   GetLine("CA540_Addit_4", &(sched540c[4]) );
-  GetLine("CA540_Subtr_5", &(sched540b[5]) );
+  // GetLine("CA540_Subtr_5", &(sched540b[5]) );
   GetLine("CA540_Subtr_10", &(sched540b[10]) );
   GetLine("CA540_Addit_11", &(sched540c[11]) );
   GetLine("CA540_Subtr_12", &(sched540b[12]) );
@@ -598,7 +597,15 @@ int main( int argc, char *argv[] )
   GetLine("CA540_Subtr_18", &(sched540b[18]) );
   GetLine("CA540_Addit_18", &(sched540c[18]) );
   GetLine("CA540_Subtr_19", &(sched540b[19]) );
-  GetLine("CA540_Addit_21", &(sched540c[21]) );
+
+  GetLine("CA540_Subtr_21a", &sched540b21a );
+  GetLine("CA540_Subtr_21b", &sched540b21b );
+  GetLine("CA540_Addit_21c", &sched540c21c );
+  GetLine("CA540_Subtr_21d", &sched540b21d );
+  GetLine("CA540_Subtr_21e", &sched540b21e );
+  GetLine("CA540_Subtr_21f", &sched540b21f );
+  GetLine("CA540_Addit_21f", &sched540c21f );
+
   GetLine("CA540_Subtr_23", &(sched540b[23]) );
   GetLine("CA540_Subtr_24", &(sched540b[24]) );
   GetLine("CA540_Addit_24", &(sched540c[24]) );
@@ -606,7 +613,7 @@ int main( int argc, char *argv[] )
   GetLine("CA540_Addit_31", &(sched540c[31]) );
   GetLine("CA540_Addit_33", &(sched540c[33]) );
 
- for (j=1; j <= 21; j++)
+ for (j=1; j <= 20; j++)
   {
    if (j <= 5)
     sched540[j] = PrelimFedReturn.fedline[j];
@@ -616,6 +623,8 @@ int main( int argc, char *argv[] )
    if (sched540[j] != 0.0)
     fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
 
+   if (j == 5)
+    sched540b[j] = sched540[j];		/* Subtract SocSec payments from AGI in CA. */
 
    sched540b[22] = sched540b[22] + sched540b[j];
    if (sched540b[j] != 0.0)
@@ -625,6 +634,25 @@ int main( int argc, char *argv[] )
    if (sched540c[j] != 0.0)
     fprintf(outfile," SchedCA540_%dc = %6.2f\n", j, sched540c[j] );
   }
+
+ sched540[21] = PrelimFedReturn.sched1[21];
+ showline_wlabelnz( " SchedCA540_21", sched540[21] );
+ sched540[22] = sched540[22] + sched540[21];
+ showline_wlabelnz( " SchedCA540_21ba", sched540b21a );
+ sched540b[22] = sched540b[22] + sched540b21a;
+ showline_wlabelnz( " SchedCA540_21bb", sched540b21b );
+ sched540b[22] = sched540b[22] + sched540b21b;
+ showline_wlabelnz( " SchedCA540_21cc", sched540c21c );
+ sched540c[22] = sched540c[22] + sched540c21c;
+ showline_wlabelnz( " SchedCA540_21bd", sched540b21d );
+ sched540b[22] = sched540b[22] + sched540b21d;
+ showline_wlabelnz( " SchedCA540_21be", sched540b21e );
+ sched540b[22] = sched540b[22] + sched540b21e;
+ showline_wlabelnz( " SchedCA540_21bf", sched540b21f );
+ sched540b[22] = sched540b[22] + sched540b21f;
+ showline_wlabelnz( " SchedCA540_21cf", sched540c21f );
+ sched540c[22] = sched540c[22] + sched540c21f;
+
  fprintf(outfile," SchedCA540_%d = %6.2f\n", 22, sched540[22] );
  fprintf(outfile," SchedCA540_%db = %6.2f\n", 22, sched540b[22] );
  fprintf(outfile," SchedCA540_%dc = %6.2f\n", 22, sched540c[22] );

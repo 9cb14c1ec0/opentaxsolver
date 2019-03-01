@@ -42,6 +42,7 @@ FILE *infile=0,	 /* Main input file to be used for reading tax input data. */
 int verbose=0;	 /* Declare and set the "verbosity" flag. */
 int notappvalue=0;
 int single_line_entry=0;
+int whole_line_entry=0;
 
 
 /********************************************************************************/
@@ -62,9 +63,12 @@ void get_word( FILE *infile, char *word )	/* Absorb comments. */
 {
  int j=0;
  char ltc='\n';	 /* Line termination character. */
+ char spc=' ';
 
  if (single_line_entry)
   ltc = ' ';
+ if (whole_line_entry)
+  spc='\n';
  do
   {  /*Absorb any leading white-space.*/
      word[j]=getc(infile); 
@@ -98,7 +102,7 @@ void get_word( FILE *infile, char *word )	/* Absorb comments. */
         if (word[j]=='{') do word[j] = getc(infile); while ((!feof(infile)) && (word[j]!='}'));
 	if (word[j]==',') word[j] = getc(infile);
       } 
-   while ((!feof(infile)) && ((word[j]!=' ') && (word[j]!='\t') && (word[j]!='\n') && (word[j]!=';')));
+   while ((!feof(infile)) && ((word[j]!=spc) && (word[j]!='\t') && (word[j]!='\n') && (word[j]!=';')));
    if (word[j]==';') ungetc(word[j],infile);
   }
  word[j] = '\0';	/* Add termination character. */
@@ -165,6 +169,9 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
  int i, *ii;
  double y, *yy;
 
+ if (kind=='w') 
+  { single_line_entry = 1;  whole_line_entry = 1; }
+
  get_word(infile, word);
 
  if (feof(infile))
@@ -197,6 +204,16 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
     { if (strcmp(word,emssg)!=0) 
        {printf("ERROR1: Found '%s' when expecting '%s'\n", word, emssg); fprintf(outfile,"ERROR1: Found '%s' when expecting '%s'\n", word, emssg); exit(1); } 
     }
+  }
+ else
+ if (kind=='w')
+  {
+   owrd = (char *)x;
+   owrd[0] = '\0';
+   strcat( owrd, word );
+   strcat( owrd, " " );
+   single_line_entry = 0;
+   whole_line_entry = 0;
   }
  else
  if (kind=='l')		/* Literal string. Do not check for match. */

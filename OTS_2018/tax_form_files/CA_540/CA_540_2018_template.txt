@@ -24,7 +24,6 @@ CA540_Subtr_3		; { Subtractions for Ordinary dividends. }
 CA540_Addit_3		; { Additions for Ordinary dividends. }
 CA540_Subtr_4		; { Subtractions for IRAs, pensions, and annuities. }
 CA540_Addit_4		; { Additions for IRAs, pensions, and annuities. }
-CA540_Subtr_5		; { Subtractions for Social security benefits. }
 CA540_Subtr_10		; { Subtractions for Taxable refunds, credits, ... }
 CA540_Addit_11		; { Additions for Alimony received }
 CA540_Subtr_12		; { Subtractions for Business income or loss }
@@ -38,7 +37,13 @@ CA540_Addit_17		; { Additions for Rental real estate, royalties, partnerships }
 CA540_Subtr_18		; { Subtractions for Farm income }
 CA540_Addit_18		; { Additions for Farm income }
 CA540_Subtr_19		; { Subtractions for Unemployment compensation }
-CA540_Addit_21		; { Additions for Other income }
+CA540_Subtr_21a		; { Subtractions for California Lottery Winnings }
+CA540_Subtr_21b		; { Subtractions for Disaster Loos deuctions from FTB 3895V }
+CA540_Addit_21c		; { Additions for Federal NOL }
+CA540_Subtr_21d		; { Subtractions for NOL deduction from FTB 3805V }
+CA540_Subtr_21e		; { Subtractions for NOL deduction from FTB 3805Z, 3806, 3807, 3809 }
+CA540_Subtr_21f		; { Subtractions for Other income }
+CA540_Addit_21f		; { Additions for Other income }
 CA540_Subtr_23		; { Subtractions for Educator expenses }
 CA540_Subtr_24		; { Subtractions for Certain business expenses }
 CA540_Addit_24		; { Additions for Certain business expenses }

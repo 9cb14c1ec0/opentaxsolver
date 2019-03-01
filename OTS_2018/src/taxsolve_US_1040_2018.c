@@ -1492,7 +1492,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
  while (!gotS1_32)	/* Get optional alimony recipient SSN, or next normal line (S1_32). */
   { /* Expect: S1_32 or AlimRecipSSN or AlimRecipName. */
-   get_parameter( infile, 'l', labelx, "S1_32 or AlimRecipSSN or AlimRecipName" );
+   get_parameter( infile, 'l', labelx, "S1_32 or AlimRecipSSN: or AlimRecipName:" );
    if (strcmp( labelx, "S1_32" ) == 0)
     {
      get_parameters( infile, 'f', &tmpval, "S1_32" );
@@ -1501,23 +1501,23 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
      gotS1_32 = 1;
     }
    else
-   if (strcmp( labelx, "AlimRecipSSN" ) == 0)
+   if (strncmp( labelx, "AlimRecipSSN", 12 ) == 0)
     {
-     get_parameters( infile, 'w', word, "AlimRecipSSN" );
+     get_parameter( infile, 'w', word, "AlimRecipSSN:" );
      if (strlen( word ) > 0)
-      fprintf(outfile," AlimRecipSSN = %s\n", word );
+      fprintf(outfile," AlimRecipSSN: %s\n", word );
     }
    else
-   if (strcmp( labelx, "AlimRecipName" ) == 0)
+   if (strncmp( labelx, "AlimRecipName", 13 ) == 0)
     { 
-     get_parameters( infile, 'w', word, "AlimRecipName" );
+     get_parameter( infile, 'w', word, "AlimRecipName:" );
      if (strlen( word ) > 0)
-      fprintf(outfile," AlimRecipName = %s\n", word );
+      fprintf(outfile," AlimRecipName: %s\n", word );
     }
    else
     {
-     printf("ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN or AlimRecipName'\n", labelx ); 
-     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN or AlimRecipName'\n", labelx );
+     printf("ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN: or AlimRecipName:'\n", labelx ); 
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN: or AlimRecipName:'\n", labelx );
      exit(1);
     }
   }
