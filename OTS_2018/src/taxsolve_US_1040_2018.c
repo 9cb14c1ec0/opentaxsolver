@@ -29,7 +29,7 @@
 /* Aston Roberts 1-26-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.02;
+float thisversion=16.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -1440,11 +1440,6 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  GetLineF( "L4a", &L4a );	/* IRAs, pensions, and annuities. */
  GetLineF( "L4b", &L[4] );	/* Taxable IRAs, pensions, and annuities. */
  GetLineF( "L5a", &L5a );	/* Social Security benefits.  Forms SSA-1099 box-5. */
- SocSec_Worksheet();		/* This calc. depends on line L5a.  Calculates L5b. */
- showline_wlabel( "L5b", L[5] ); 
-
- for (j=1; j <= 5; j++)
-  L[6] = L[6] + L[j];
 
  GetLine( "L9", &L[9] );	/* Qualified business income deduction. */
  GetLine( "L12a", &L[12] );	/* Child tax credit/credit for other dependents. */
@@ -1478,6 +1473,11 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  for (j=10; j <= 21; j++)
   Sched1[22] = Sched1[22] + Sched1[j];
  showline_wlabel( "S1_22", Sched1[22] );
+
+ SocSec_Worksheet();		/* This calc. depends on line L5a and Sched1[22].  Calculates L5b. */
+
+ for (j=1; j <= 5; j++)
+  L[6] = L[6] + L[j];
 
  /* Adjusted Gross Income section. */
  GetLineFnz( "S1_23", &Sched1[23] );	/* Educator expenses */
@@ -1558,6 +1558,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
  /* -- End of Schedule-1 -- */
 
+ showline_wlabel( "L5b", L[5] ); 
 
  L[6] = L[6] + Sched1[22];
  showline_wmsg( 6, "Total Income" );
@@ -1912,7 +1913,9 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
  /* -- End of Schedule 5 -- */
 
-
+ showline_wlabelnz( "L17a", L17a );
+ showline_wlabelnz( "L17b", L17b );
+ showline_wlabelnz( "L17c", L17c );
 
  L[17] = L17a + L17b + L17c + Sched5[75];
  showline( 17 );
@@ -1934,6 +1937,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
    fprintf(outfile,"L22 = %6.2f  DUE !!!\n", L[22] );
    fprintf(outfile,"         (Which is %2.1f%% of your Total Federal Tax.)\n", 100.0 * L[22] / (L[15] + 1e-9) );
   }
+ fprintf(outfile,"------------------------------\n");
 
  
  fprintf(outfile,"\n{ --------- Identity-Information:  --------- }\n");
