@@ -306,6 +306,12 @@ void get_parameters( FILE *infile, char kind, void *x, char *emssg )
    else
    if ((strcasecmp(word,"FALSE")==0) || (strcasecmp(word,"NO")==0) || (strcmp(word,"N")==0) || (strcmp(word,"0")==0))
 	j = 0;
+   else
+   if (strcasecmp(word,"n/a")==0)
+     {
+	get_word(infile,word);
+	return;
+     }
    else 
     {printf("ERROR2: Bad boolean '%s', reading %s.\n", word, emssg); 
      fprintf(outfile,"ERROR: Bad boolean '%s', reading %s.\n", word, emssg); 

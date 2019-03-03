@@ -112,6 +112,12 @@ S1_33             ;       { Student loan interest deduction }
  A15            ;       { Casualty or theft loss(es).}
  A16            ;       { Other expenses}
 
+{ -- Schedule B: Part III -- }
+ B7a	N	;	{ Financial account in foreign country ? (answer: Yes, No) }
+ B7aa		;	{ If yes above, did you file FinCEN Form 114 ? (answer: n/a, Yes, No) }
+ B7b		;	{ If yes above, name of country. }
+ B8	N	;	{ Did you receive a foreign trust ? (answer: Yes, No) }
+
 
 { --- Schedule 2: Tax --- }
 S2_46		;	{ Excess advance premium tax credit repayment. Form 8962. }
@@ -141,7 +147,6 @@ S5_71		;	{ Amnt paid in filing extension req. }
 S5_72		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
 S5_73		;	{ Credits for federal tax on fuels. Attach form 4136. }
 S5_74		;	{ Credits from Form 2439, 4136, 6801, 8885. }
-
 
 
 { -------------------------------------------- } 

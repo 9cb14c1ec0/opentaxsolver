@@ -283,6 +283,15 @@ Page 9
  B5_16		779 855 12
  B6		779 876 12
 
+ CkB7a_Y	822  962
+ CkB7a_N	856  962
+ CkB7aa_Y	822 1019
+ CkB7aa_N	856 1019
+ B7b		410 1078
+ CkB8_Y		822 1081
+ CkB8_N		856 1081
+
+
 Optional_Page 10
 
  YourNames: 	135 142
@@ -352,9 +361,8 @@ Optional_Page 10
  Baddi_26    650 928 12
  Baddi_27    650 955 12
  Baddi_28    650 983 12
- Baddi_29    	650 1010 12
-
- Btotal		650 1036 12
+ Baddi_29    650 1010 12
+ Btotal	     650 1036 12
 
 
 Optional_Page 11

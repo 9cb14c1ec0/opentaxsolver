@@ -160,6 +160,12 @@ S1_33             ;       { Student loan interest deduction }
  A15            ;       { Casualty or theft loss(es).}
  A16            ;       { Other expenses}
 
+{ -- Schedule B: Part III -- }
+ B7a	N	;	{ Financial account in foreign country ? (answer: Yes, No) }
+ B7aa		;	{ If yes above, did you file FinCEN Form 114 ? (answer: n/a, Yes, No) }
+ B7b		;	{ If yes above, name of country. }
+ B8	N	;	{ Did you receive a foreign trust ? (answer: Yes, No) }
+
 
 { --- Schedule 2: Tax --- }
 S2_46		;	{ Excess advance premium tax credit repayment. Form 8962. }

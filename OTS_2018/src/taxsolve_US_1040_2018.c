@@ -1308,6 +1308,8 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  double NumDependents=0.0;
  double localtax[10], loctaxlimit, homemort[10];
  int StdDedChart_NumBoxesChecked=0, HealthCoverageChecked=0, gotS1_32=0, gotS2_46=0;
+ int SchedB7a=0, SchedB7aa=-1, SchedB8=0;
+ char SchedB7b[0124]="";
 
  /* Decode any command-line arguments. */
  printf("US 1040 2018 - v%3.2f\n", thisversion);
@@ -1766,15 +1768,17 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  /* -- Schedule 2 -- Tax */
  while (!gotS2_46)	/* Get any optional AMTws lines, or the next normal line S2_46. */
   {
-   GetOptionalLine( "S2_46 or AMTwsXX", labelx, &tmpval );
+   get_parameter( infile, 'l', labelx, "S2_46 or AMTwsXX or B7a");
    if (strcmp( labelx, "S2_46" ) == 0)
     {
+     get_parameters( infile, 'f', &tmpval, labelx );
      Sched2[46] = tmpval;
      gotS2_46 = 1;
     }
    else
    if (strstr( labelx, "AMTws" ) != 0)
     { 
+     get_parameters( infile, 'f', &tmpval, labelx );
      if ((sscanf( &(labelx[5]), "%d", &j) == 1) && (j >= 3) && (j < 3))
       amtws[j] = tmpval;
      else
@@ -1784,12 +1788,51 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
       }
     }
    else
+   if (strcmp( labelx, "B7a" ) == 0)
     {
-     printf("ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX'\n", labelx ); 
+     get_parameters( infile, 'b', &SchedB7a, labelx );
+    }
+   else
+   if (strcmp( labelx, "B7aa" ) == 0)
+    {
+     get_parameters( infile, 'b', &SchedB7aa, labelx );
+    }
+   else
+   if (strcmp( labelx, "B7b" ) == 0)
+    {
+     get_parameters( infile, 'w', &SchedB7b, labelx );
+    }
+   else
+   if (strcmp( labelx, "B8" ) == 0)
+    {
+     get_parameters( infile, 'b', &SchedB8, labelx );
+    }
+   else
+    {
+     printf("ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX or B7a'\n", labelx ); 
      fprintf(outfile,"ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX'\n", labelx );
      exit(1);
     }
   }
+
+ if (SchedB7a)
+  fprintf(outfile,"CkB7a_Y X\n");
+ else
+  fprintf(outfile,"CkB7a_N X\n");
+
+ if (SchedB7aa == 1)
+  fprintf(outfile,"CkB7aa_Y X\n");
+ else
+ if (SchedB7aa == 0)
+  fprintf(outfile,"CkB7aa_N X\n");
+
+ if (strlen( SchedB7b ) > 0)
+  fprintf(outfile,"B7b = %s\n", SchedB7b );
+
+ if (SchedB8)
+  fprintf(outfile,"CkB8_Y X\n");
+ else
+  fprintf(outfile,"CkB8_N X\n");
 
  // GetLine( "S2_46", &Sched2[46] );	/* Excess advance premium tax credit repayment. Form 8962. */
 					/* (Needed by AMT form6251.) */
