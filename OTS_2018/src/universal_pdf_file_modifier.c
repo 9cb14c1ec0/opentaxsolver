@@ -19,7 +19,7 @@
 #define MaxPages 100
 #define MAXLINE 2048
 
-float version=1.05;
+float version=1.06;
 int verbose=0;
 int testmode=0;
 int no_zero_entries=0;
@@ -265,6 +265,12 @@ void append_global_results_to_optional_pages()
 }
 
 
+/* Prototype. */
+void new_metadata_item( int pg, char *label, int xpos, int ypos, int FontSz, int txtcolor, 
+	float txtred, float txtgrn, float txtblu, int add_commas, int padlen, float dx );
+
+
+
 void read_replacement_text( char *fname )
 {
  int idinfo, pageorder;
@@ -316,6 +322,25 @@ void read_replacement_text( char *fname )
      strcpy( word2, line );
      idinfo = 1;
     }
+   else
+   if (strcmp( word1, "NewPDFMarkup(" ) == 0)
+    { int pg=0;  float xpos, ypos;
+     next_word( line, word2, " \t," );
+     if (sscanf( word2, "%d", &pg ) != 1)
+	printf("Error reading PDFMarkup page '%s'\n", word2 );
+     next_word( line, word2, " \t," );
+     if (sscanf( word2, "%f", &xpos ) != 1)
+	printf("Error reading PDFMarkup Xpos '%s'\n", word2 );
+     next_word( line, word2, " \t,)" );
+     if (sscanf( word2, "%f", &ypos ) != 1)
+	printf("Error reading PDFMarkup Ypos '%s'\n", word2 );
+     next_word( line, word2, " \t,)\r\n" );
+     new_metadata_item( pg - 1, word2, xpos, ypos, FontSz, txtcolor, txtred, txtgrn, txtblu, add_commas, 0, 0.0 );
+     word2[0] = '\0';
+    }
+   else
+   if (word2[0] == '!')		/* Comment character. Lines beginning with '!" are ignored. */
+    word2[0] = '\0';
    else
     next_word( line, word2, " \t=\n\r" );
    if (word2[0] != '\0')
@@ -412,16 +437,39 @@ void transform_coords( int xpix, int ypix, int *xpt, int *ypt )
 }
 
 
+void new_metadata_item( int pg, char *label, int xpos, int ypos, int FontSz, int txtcolor, 
+	float txtred, float txtgrn, float txtblu, int add_commas, int padlen, float dx )
+{
+ struct metadata_rec *newitem;
+ newitem = (struct metadata_rec *)calloc( 1, sizeof(struct metadata_rec) );
+ newitem->nxt = metadata[pg]->fields;
+ metadata[pg]->fields = newitem;
+ newitem->label = strdup( label );
+ newitem->fsz = FontSz;
+ newitem->txtcolor = txtcolor;
+ newitem->txtred = txtred;
+ newitem->txtgrn = txtgrn;
+ newitem->txtblu = txtblu;
+ newitem->add_commas = add_commas;
+ newitem->x = xpos;
+ newitem->y = ypos;
+ if (pixCoords)
+  transform_coords( newitem->x, newitem->y, &(newitem->x), &(newitem->y) );
+ newitem->padlen = padlen;
+ newitem->dx = dx;
+}
+
+
+
 /* -----------------
     Metadata entry tags will be of the form:
-	xPos  yPos  RightPaddingSpaces  CharSpacing
+	TagName xPos  yPos  RightPaddingSpaces  CharSpacing
 
   ------------------ */
 void read_metadata( char *fname )
 {
  int pg=-1, k, nparamsrd;
- char line[MAXLINE], wrd[MAXLINE];
- struct metadata_rec *newitem;
+ char line[MAXLINE], wrd[MAXLINE], wrd2[MAXLINE];
  FILE *infile;
  infile = fopen( fname, "rb" );
  if (infile == 0) { printf("Could not open '%s'\n", fname );  exit(1); }
@@ -429,7 +477,7 @@ void read_metadata( char *fname )
  while (!feof(infile))
   {
    next_word( line, wrd, " \t\n\r" );
-   if ((wrd[0] != '\0') && (wrd[0] != '!'))
+   if ((wrd[0] != '\0') && (wrd[0] != '!'))	/* Comment lines begin with "!" to be ignored. */
     {
      if (strcmp( wrd, "Page" ) == 0)
       {
@@ -595,29 +643,21 @@ void read_metadata( char *fname )
       }
      else
       {
+	int xpos, ypos, padlen=0;
+        float dx=0.0;
 	if (pg < 0) { printf("Error: Missing 'Page' tag before field tag.\n");  exit(1); }
-	newitem = (struct metadata_rec *)calloc( 1, sizeof(struct metadata_rec) );
-	newitem->nxt = metadata[pg]->fields;
-	metadata[pg]->fields = newitem;
-	newitem->label = strdup( wrd );
-	newitem->fsz = FontSz;
-	newitem->txtcolor = txtcolor;
-	newitem->txtred = txtred;
-	newitem->txtgrn = txtgrn;
-	newitem->txtblu = txtblu;
-	newitem->add_commas = add_commas;
-	next_word( line, wrd, " \t\n\r," );
-	sscanf( wrd, "%d", &(newitem->x) );
-	next_word( line, wrd, " \t\n\r," );
-	sscanf( wrd, "%d", &(newitem->y) );
-	if (pixCoords)
-	 transform_coords( newitem->x, newitem->y, &(newitem->x), &(newitem->y) );
-	next_word( line, wrd, " \t\n\r," );
-	if (wrd[0] != '\0')
-	 sscanf( wrd, "%d", &(newitem->padlen) );
-	next_word( line, wrd, " \t\n\r," );
-	if (wrd[0] != '\0')
-	 sscanf( wrd, "%f", &(newitem->dx) );
+	next_word( line, wrd2, " \t\n\r," );
+	sscanf( wrd2, "%d", &xpos );
+	next_word( line, wrd2, " \t\n\r," );
+	sscanf( wrd2, "%d", &ypos );
+	next_word( line, wrd2, " \t\n\r," );
+	if (wrd2[0] != '\0')
+	 sscanf( wrd2, "%d", &padlen );
+	next_word( line, wrd2, " \t\n\r," );
+	if (wrd2[0] != '\0')
+	 sscanf( wrd2, "%f", &dx );
+	new_metadata_item( pg, wrd, xpos, ypos, FontSz, txtcolor, txtred, txtgrn, txtblu, 
+			   add_commas, padlen, dx );
       }
     }
    fgets( line, 1024, infile );

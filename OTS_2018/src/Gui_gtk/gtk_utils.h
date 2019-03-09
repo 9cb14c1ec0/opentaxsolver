@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#define GtkUtils_Version 1.0
+
 
 /* ------------- Text-Label Routines ----------------- */
 GtkWidget *make_label( GtkWidget *panel, int xpos, int ypos, const char *text );
@@ -330,6 +332,14 @@ GtkWidget *file_browser_popup( const char *dir, const char *text, void callback(
 
 	   file_browser_popup( ".", "Select File", receive_filename );
 	*/
+
+
+/* ------------- Progress Bar ----------------- */
+
+void adjust_progress_bar( GtkWidget *wdg, double fraction );
+
+GtkWidget *make_progress_bar( GtkWidget *panel, int xpos, int ypos, int width, char *text );
+
 
 
 /* ------------- General Stuff ----------------- */

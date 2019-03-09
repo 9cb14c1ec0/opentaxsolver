@@ -29,7 +29,7 @@
 
 #include "taxsolve_routines.c"
 
-double thisversion=16.00;
+double thisversion=16.01;
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -92,7 +92,7 @@ char *pull_initial( char *name )
 int main( int argc, char *argv[] )
 {
  int j, k, mm;
- char word[4000], outfname[4000], label[90], *socsec, *pname, *MidInit;
+ char word[4000], *infname=0, outfname[4000], label[90], *socsec, *pname, *MidInit;
  int status=0, exemptions=0, qualify_jfc=0;
  time_t now;
  double factorA, factorB;
@@ -109,6 +109,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[mm]);
     infile = fopen(argv[mm],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[mm]);  exit(1);}
     k = 2;
@@ -460,6 +461,7 @@ printf("factorB = %g, word = '%s'\n", factorB, word );
   fprintf(outfile,"CkFYrResSp: X\n");
 
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  Display_File( outfname );
  printf("\nResults written to file:  %s\n", outfname);

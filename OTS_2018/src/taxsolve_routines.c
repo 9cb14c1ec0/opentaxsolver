@@ -490,6 +490,26 @@ void read_line( FILE *infile, char *line )
 }
 
 
+void read_comment_filtered_line( FILE *infile, char *line, int maxlen )
+{ /* Read next line, while filtering-out any comments. */
+ int j=0;
+ do
+  {
+   line[j] = getc(infile);  
+   if (line[j]=='{') 
+    { 
+     do line[j] = getc(infile); 
+     while ((line[j] != '}') && (!feof(infile)));
+       line[j] = getc(infile);
+     line[j] = ' ';
+    }
+   j++;
+  }
+ while ((!feof(infile)) && (line[j-1] != '\n') && (j < maxlen-2));
+ line[j-1] = '\0';
+}
+
+
 /* Show a line-number and it's value. */
 void showline( int j )
 { fprintf(outfile, "L%d = %6.2f\n", j, L[j]); }
@@ -762,3 +782,132 @@ void substitute_chars( char *line, char *badchars, char replace_char )
    }
 }
 
+
+/* --- PDF Markup Support --- */
+/* This object supports the ability to intercept "MarkupPDF" commands in a Tax Input File,
+   and to forward them to the Tax Output File, where they can be interpretted by the
+   universal_pdf_file_modifer to place the desired markups onto the resulting PDF form pages.
+   It gives users the ability to add and maintain their own markups in their tax-input files,
+   which then show up on their printed tax-forms.
+   For example, you could use this feature to fill-in answers on the forms that are not
+   provided by the default OTS programs.   You could also use it to re-position or
+   override the values provided by the default programs.
+   Example Usage - Syntax of line(s) you would add to your tax input file(s):
+    1. To specify a value for an existing PDF-tag-name (whose page and position is already
+	defined in the default src/forms metadata.dat file):
+		MarkupPDF  tag_name  = value
+	Example:
+		MarkupPDF  L22 = 567.12
+   2. To specify a new mark-up (or to re-position an existing one):
+		MarkupPDF( page_number, xpos, ypos ) tag_name  = value
+	Example:
+		MarkupPDF( 5, 344, 800 ) CountyName = Warthberry
+      Note that the page-number refers to the page generated, starting from page 1.
+	The xpos and ypos are the positions from the top-left of the page,
+	assuming 110 units per inch.
+   You can add such markup commands to your saved tax file.
+*/
+struct pdf_markup_record
+ {
+  char *tagname, *value;
+  int page;
+  float xpos, ypos;
+  struct pdf_markup_record *next;
+ } *pdf_markup_list=0;
+
+void add_pdf_markup( char *tagname, int page, float xpos, float ypos, char *value )
+{
+ struct pdf_markup_record *new;
+ new = (struct pdf_markup_record *)calloc( 1, sizeof( struct pdf_markup_record ) );
+ new->next = pdf_markup_list;
+ pdf_markup_list = new;
+ new->tagname = strdup( tagname );
+ new->value = strdup( value );
+ new->page = page;
+ new->xpos = xpos;
+ new->ypos = ypos;
+}
+
+void process_pdf_markup_command( char *line )
+{
+ char word[4096], tagname[4096], value[4096];
+ int pgnum=-1;
+ float xpos=0.0, ypos=0.0;
+ if (mystrcasestr( line, "MarkupPDF" ) == 0) return;
+ if (mystrcasestr( line, "MarkupPDF(" ) != 0)
+  {
+   next_word( line, word, " \t(" );
+   next_word( line, word, " \t(," );
+   if (sscanf( word, "%d", &pgnum ) != 1)
+    { printf("Error reading MarkupPDF page-num '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF page-num '%s'\n", word );
+      return;
+    }
+   next_word( line, word, " \t," );
+   if (sscanf( word, "%f", &xpos ) != 1)
+    { printf("Error reading MarkupPDF Xposition '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF Xposition '%s'\n", word );
+      return;
+    }
+   next_word( line, word, " \t,)" );
+   if (sscanf( word, "%f", &ypos ) != 1)
+    { printf("Error reading MarkupPDF Yposition '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF Yposition '%s'\n", word );
+      return;
+    }
+   next_word( line, word, " \t,)=" );
+  }
+ else
+  {
+   next_word( line, word, " \t" );
+   next_word( line, word, " \t=" );
+  }
+ strcpy( tagname, word );		/* Grab tag-name. */
+ next_word( line, value, " \t=" );	/* Grab 1st word of value after '=', if any. */
+ strcat( value, " " );			/* Add white-space in case other words on line. */
+ strcat( value, line );			/* Add any following words on the remainder of the line. */
+ add_pdf_markup( tagname, pgnum, xpos, ypos, value );
+}
+
+void intercept_any_pdf_markups( FILE *infile )
+{
+ char line[8192];
+ if (!outfile) return;
+ read_comment_filtered_line( infile, line, 8192 );
+ while (!feof(infile))
+  {
+   if (strstr( line, "MarkupPDF" ) != 0)
+    process_pdf_markup_command( line );
+   read_comment_filtered_line( infile, line, 8192 );
+  }
+}
+
+void exude_pdf_markups( FILE *outfile )
+{ /* Add any intercepted PDF-markups to the tax-output file. */
+  struct pdf_markup_record *old;
+  if (!outfile) return;  
+  while (pdf_markup_list)
+   {
+    if (pdf_markup_list->page > 0)
+     fprintf(outfile,"NewPDFMarkup( %d, %g, %g ) %s\n", pdf_markup_list->page, 
+		pdf_markup_list->xpos, pdf_markup_list->ypos, pdf_markup_list->tagname );
+    fprintf(outfile,"%s = %s\n", pdf_markup_list->tagname, pdf_markup_list->value );
+    old = pdf_markup_list;
+    pdf_markup_list = pdf_markup_list->next;
+    free( old->tagname );
+    free( old->value );
+    free( old );
+   }
+}
+
+void grab_any_pdf_markups( char *infname, FILE *outfile )
+{
+ FILE *infile;
+ infile = fopen( infname, "rb" );
+ if (infile == 0) { printf("GAPM: Cannot open '%s' for reading.\n", infname );  return; }
+ intercept_any_pdf_markups( infile );
+ fclose( infile );
+ exude_pdf_markups( outfile );
+}
+
+/* --- End PDF Markup Support --- */

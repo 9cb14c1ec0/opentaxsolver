@@ -24,7 +24,7 @@
 /* Aston Roberts 1-12-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-#define thisversion 16.00
+#define thisversion 16.01
 
 #include "taxsolve_routines.c"
 
@@ -50,7 +50,7 @@ double pos( double x )
 int main( int argc, char *argv[] )
 {
  int i, j, k, status=0;
- char word[2000], outfname[1500];
+ char word[2000], *infname=0, outfname[1500];
  time_t now;
  double oneA, oneB;
  char *Your1stName=0, *YourLastName=0, *Spouse1stName=0, *SpouseLastName, *YourNames;
@@ -64,6 +64,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[i]);
     infile = fopen(argv[i],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[i]); exit(1);}
     k = 2;
@@ -256,6 +257,7 @@ int main( int argc, char *argv[] )
    fprintf(outfile,"YourNames: %s\n", YourNames );
   }
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  printf("\nListing results from file: %s\n\n", outfname);
  Display_File( outfname );

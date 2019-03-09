@@ -36,7 +36,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #define SINGLE                  1
 #define MARRIED_FILLING_JOINTLY 2
@@ -141,7 +141,7 @@ void ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 int main( int argc, char *argv[] )
 {
  int j, jj, k, status;
- char word[1000], outfname[1000], *socsec, socsectmp[100];
+ char word[1000], *infname=0, outfname[1000], *socsec, socsectmp[100];
  time_t now;
  struct FedReturnData fed_data;
  double stdded, min_payment=0.0, min2file;
@@ -158,6 +158,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[jj]);
     infile = fopen(argv[jj],"r");
     if (infile==0)
      {
@@ -423,6 +424,7 @@ int main( int argc, char *argv[] )
  GetTextLineF( "Zipcode:" );
 
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  Display_File( outfname );
  printf("\nResults written to file '%s'\n", outfname);

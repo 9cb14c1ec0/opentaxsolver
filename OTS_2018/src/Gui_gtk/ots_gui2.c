@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.26;
-char package_date[]="Feb. 25, 2019";
-char ots_release_package[]="16.01";
+float version=2.27;
+char package_date[]="Mar. 7, 2019";
+char ots_release_package[]="16.03";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -110,6 +110,7 @@ int filingstatus_mfj=1;
 
 void pick_file( GtkWidget *wdg, void *data );	/* Prototype */
 void consume_leading_trailing_whitespace( char *line );
+void get_line_entry( char *word, int maxn, FILE *infile );
 void Run_TaxSolver( GtkWidget *wdg, void *x );
 void helpabout2( GtkWidget *wdg, void *data );
 void dump_taxinfo();
@@ -306,6 +307,38 @@ void pasteurize_entry( char *text )	/* Filter disallowed characters from user in
 }
 
 
+struct line_record
+ {
+  char *line;
+  struct line_record *next;
+ } *markup_commands_hd=0, *markup_commands_tl=0;
+
+void add_markup_command( char *markup )
+{
+ struct line_record *new;
+ new = (struct line_record *)calloc( 1, sizeof( struct line_record ) );
+ new->line = strdup( markup );
+ if (markup_commands_hd == 0)
+  markup_commands_hd = new;
+ else
+  markup_commands_tl->next = new;
+ markup_commands_tl = new;
+}
+
+void dump_any_markup_commands( FILE *outfile )
+{
+ struct line_record *old;
+ while (markup_commands_hd)
+  {
+   if (verbose) printf("MARKup: %s\n", markup_commands_hd->line );
+   fprintf(outfile,"%s\n", markup_commands_hd->line );
+   old = markup_commands_hd;
+   markup_commands_hd = markup_commands_hd->next;
+   free( old->line );
+   free( old );
+  }
+}
+
 
 /*--------------------------------------------------------------*/
 /* Get_Next_Entry - Reads next item from input file.		*/
@@ -367,6 +400,19 @@ int get_next_entry( char *word, int maxn, int *column, int *linenum, FILE *infil
 	if (word[k-1] == '\n') { ots_column = 0;  ots_line++; } else ots_column++;
       }
     if (k>=maxn) {printf("Error: Character buffer overflow detected.\n"); exit(1);}
+    word[k] = '\0';
+    if (strncasecmp( word, "MarkupPDF", 9 ) == 0)
+     { /* Store any custom markup commands. */
+       if (word[k-1] != '\n')
+	{ /* Get the remainder of the line. */
+	 do word[k++] = getc(infile); while ((!feof(infile)) && (word[k-1] != '\n'));
+	}
+       word[k-1] = '\0';
+       ots_column = 0;
+       ots_line++;
+       add_markup_command( word );
+       return NOTHING;
+     }
     if (word[k-1]==';')
      { 
       if (k==1) { word[1] = '\0';  return SEMICOLON; }
@@ -720,7 +766,7 @@ char *taxform_name;
 void Read_Tax_File( char *fname )
 {
  int j, k, kind, state=0, column=0, linenum=0, linecnt=0, lastline=0, newentry=0, entrycnt=0;
- char word[10000], *tmpstr, tmpstr2[100], tmpstr3[100];
+ char word[10000], *tmpstr, tmpstr2[200], tmpstr3[200];
  struct taxline_record *txline=0;
  struct value_list *tmppt, *newitem, *oldtail;
 
@@ -1496,7 +1542,8 @@ void Save_Tax_File( char *fname )
    if (semicolon) fprintf(outfile,"\n		;");
    txline = txline->nxt;
   }
-
+ fprintf(outfile,"\n");
+ dump_any_markup_commands( outfile );
  fclose(outfile);
  save_needed = 0;
  printf("\nWrote form-data to file %s\n.", yourfilename );
@@ -1650,6 +1697,7 @@ void quote_file_name( char *fname )	/* Place quotes around a file name.  With sp
 }
 
 
+
 void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
 {
  char cmd[MaxFname], outfname[MaxFname];
@@ -1706,6 +1754,7 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
 
  printf("Invoking '%s'\n", cmd );
  system(cmd);		/* Run the TaxSolver. */
+ Sleep_seconds( 0.1 );
 
  /* Make a popup window telling where the results are, and showing them. */
  predict_output_filename( current_working_filename, outfname );

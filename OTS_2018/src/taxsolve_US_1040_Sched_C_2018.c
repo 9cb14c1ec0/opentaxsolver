@@ -29,7 +29,7 @@
 /* Earlier Updates	Robert Heller  heller@deepsoft.com		*/
 /************************************************************************/
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -43,10 +43,10 @@ float thisversion=16.00;
 
 /*----------------------------------------------------------------------------*/
 
-int main ( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
  int i, j, k;
- char word[4000], outfname[4000], *EIN=0, *answ;
+ char word[4000], outfname[4000], *EIN=0, *answ, *infname=0;
  time_t now;
  double L16b=0.0, L20b=0.0, L24b=0.0, Mileage=0.0;
  int L32;
@@ -61,11 +61,12 @@ int main ( int argc, char *argv[] )
   else
   if (k==1)
    {
-    infile = fopen(argv[i],"r");
-    if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[i]); exit(1);}
+    infname = strdup(argv[i]);
+    infile = fopen(infname,"r");
+    if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", infname ); exit(1);}
     k = 2;
     /* Base name of output file on input file. */
-    strcpy(outfname,argv[i]);
+    strcpy(outfname,infname);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
     if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
@@ -376,7 +377,7 @@ int main ( int argc, char *argv[] )
   fprintf(outfile,"Ck47bNo: X\n");
 
  fclose(infile);
-
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
 
  printf("\nListing results from file: %s\n\n", outfname);

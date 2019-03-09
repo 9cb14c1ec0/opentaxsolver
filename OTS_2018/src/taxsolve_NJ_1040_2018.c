@@ -26,7 +26,7 @@
 /*      2-24-06 Further updates BWB					*/
 /************************************************************************/
 
-float thisversion=16.01;
+float thisversion=16.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -127,7 +127,7 @@ double TaxRateFunction( double income, int status )     /* Emulates table lookup
 int main( int argc, char *argv[] )
 {
  int i, j, k;
- char word[1000], outfname[4000];
+ char word[1000], *infname=0, outfname[4000];
  int status=0;
  time_t now;
  double L16b=0.0, L20b=0.0, L28a=0.0, L28b=0.0;
@@ -146,6 +146,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[i]);
     infile = fopen(argv[i],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[i]); exit(1);}
     k = 2;
@@ -621,6 +622,7 @@ int main( int argc, char *argv[] )
  GetTextLineF( "Zipcode:" );
 
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  Display_File( outfname );
  printf("\nResults written to file:  %s\n", outfname);

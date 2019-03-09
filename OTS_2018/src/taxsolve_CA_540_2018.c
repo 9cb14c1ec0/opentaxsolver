@@ -24,7 +24,7 @@
 /* Aston Roberts 2-6-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.02;
+float thisversion=16.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -454,7 +454,7 @@ int main( int argc, char *argv[] )
  int argk, j, k, iline7, iline8, iline9, iline10;
  double min2file=0.0, sched540[MAX_LINES], sched540b[MAX_LINES], sched540c[MAX_LINES],
 	threshA=0, std_ded=0;
- char word[4000], outfname[4000], prelim_1040_outfilename[5000];
+ char word[4000], *infname=0, outfname[4000], prelim_1040_outfilename[5000];
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
 	*Spouse1stName="", *SpouseLastName="", *socsec;
@@ -470,6 +470,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[argk]);
     infile = fopen(argv[argk],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[argk]); exit(1);}
     k = 2;
@@ -1145,8 +1146,8 @@ int main( int argc, char *argv[] )
  GetTextLineF( "Town:" );
  fprintf(outfile,"State: CA\n");
  GetTextLineF( "Zipcode:" );
-
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  Display_File( outfname );
  return 0;

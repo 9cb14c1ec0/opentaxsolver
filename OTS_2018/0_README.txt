@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 28, 2019 v16.02 - For 2018 tax-year.
+March 8, 2019 v16.03 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,18 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v16.03 (3/8/2019) - Added Sched-B Part-III lines to the US-1040 
+	(ticket #63). Added PDF metadata for dependent and occupation
+	fill-in tags, so users can add these to their results output
+	file (_out.txt) to fill-out the PDF forms (ticket #64).
+	Added ability to add additional PDF mark-ups, or change them,
+	from your Tax Input Files, by adding "MarkupPDF" lines --
+	documented under OTS's "Data Input Format" web page.
+	Added ability to comment-out lines of your result files
+	(_out.txt) by placing exclamation mark "!" as first character
+	on a line.  Commented lines will be ignored by the PDF generator
+	(ticket #65).  Fixed NY State importing of Fed Sched-1 data
+	(ticket #66), and warning on line 17 (ticket #67).
     * v16.02 (2/28/2019) - To the Federal form, added Alimony
 	recipient info, which is then also imported by some state
 	forms.   Fixed some PDF positioning on federal form,

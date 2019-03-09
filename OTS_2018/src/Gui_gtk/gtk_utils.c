@@ -1252,6 +1252,29 @@ GtkWidget *file_browser_popup( const char *dir, const char *text, void callback(
 	*/
 
 
+/* ------------- Progress Bar ----------------- */
+
+void adjust_progress_bar( GtkWidget *wdg, double fraction )
+{
+ gtk_progress_bar_set_fraction( (GtkProgressBar *)wdg, fraction );
+}
+
+
+GtkWidget *make_progress_bar( GtkWidget *panel, int xpos, int ypos, int width, char *text )
+{
+ GtkWidget *bpanel, *bar;
+ bpanel = gtk_fixed_new();
+ gtk_fixed_put( GTK_FIXED( panel ), bpanel, xpos, ypos );
+ bar = gtk_progress_bar_new();
+ gtk_progress_bar_set_text( (GtkProgressBar *)bar, text );
+ if (width < 1) width = 150;  /* Assume default width if not specified. */
+ gtk_widget_set_size_request( bar, width, 20 );
+ gtk_container_add( GTK_CONTAINER( bpanel ), bar );
+ return bar;
+}
+
+
+
 /* ------------- General Stuff ----------------- */
 int udchck_flag=0;
 

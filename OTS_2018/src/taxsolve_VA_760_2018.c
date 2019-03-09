@@ -29,7 +29,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -67,7 +67,7 @@ struct date_record yourDOB, spouseDOB, DL;
 int main( int argc, char *argv[] )
 {
  int i, j, k;
- char word[1000], outfname[4000], *lnameptr, lastname[1024], *socsec, *datestr, *twrd;
+ char word[1000], outfname[4000], *lnameptr, lastname[1024], *socsec, *datestr, *twrd, *infname=0;
  int status=0, exemptionsA=0, exemptionsB=0, youBlind=0, spouseBlind=0;
  time_t now;
  double L20b=0.0, std_ded=0.0, min2file;
@@ -81,6 +81,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[i]);
     infile = fopen(argv[i],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[i]); exit(1);}
     k = 2;
@@ -403,6 +404,7 @@ int main( int argc, char *argv[] )
   }
 
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  Display_File( outfname );
  printf("\nResults written to file:  %s\n", outfname);

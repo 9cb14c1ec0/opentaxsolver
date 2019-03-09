@@ -27,7 +27,7 @@
 /* Modified for NY 2005-2018 taxes - Skeet Monker			*/
 /************************************************************************/
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #include "taxsolve_routines.c"
 
@@ -99,7 +99,7 @@ char *pull_initial( char *name )
 int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 {
  FILE *infile;
- char fline[4000], word[4000];
+ char fline[4000], word[4000], tword[2000];
  int linenum, j;
 
  for (linenum=0; linenum<MAX_LINES; linenum++) 
@@ -193,8 +193,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    else
    if (strncmp(word,"S1_",3) == 0)
     {
-     next_word(fline, word, " \t=:");
-     if (sscanf( word, "%d", &linenum) != 1)
+     next_word( &(word[3]), tword, " \t=:");
+     if (sscanf( tword, "%d", &linenum) != 1)
       printf("Error: Reading Fed sched1 line-number '%s'\n", word );
      else
       {
@@ -206,8 +206,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    else
    if (strncmp(word,"S2_",3) == 0)
     {
-     next_word(fline, word, " \t=:");
-     if (sscanf( word, "%d", &linenum) != 1)
+     next_word( &(word[3]), tword, " \t=:");
+     if (sscanf( tword, "%d", &linenum) != 1)
       printf("Error: Reading Fed sched2 line-number '%s'\n", word );
      else
       {
@@ -219,8 +219,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    else
    if (strncmp(word,"S3_",3) == 0)
     {
-     next_word(fline, word, " \t=:");
-     if (sscanf( word, "%d", &linenum) != 1)
+     next_word( &(word[3]), tword, " \t=:");
+     if (sscanf( tword, "%d", &linenum) != 1)
       printf("Error: Reading Fed sched3 line-number '%s'\n", word );
      else
       {
@@ -232,8 +232,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    else
    if (strncmp(word,"S4_",3) == 0)
     {
-     next_word(fline, word, " \t=:");
-     if (sscanf( word, "%d", &linenum) != 1)
+     next_word( &(word[3]), tword, " \t=:");
+     if (sscanf( tword, "%d", &linenum) != 1)
       printf("Error: Reading Fed sched4 line-number '%s'\n", word );
      else
       {
@@ -245,8 +245,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    else
    if (strncmp(word,"S5_",3) == 0)
     {
-     next_word(fline, word, " \t=:");
-     if (sscanf( word, "%d", &linenum) != 1)
+     next_word( &(word[3]), tword, " \t=:");
+     if (sscanf( tword, "%d", &linenum) != 1)
       printf("Error: Reading Fed sched5 line-number '%s'\n", word );
      else
       {
@@ -769,11 +769,11 @@ void tax_computation_worksheet( int status )
 int main( int argc, char *argv[] )
 {
  int j, k, argk, day, month, yyyy;
- char word[1000], outfname[1000], *answ;
+ char word[1000], *infname=0, outfname[1000], *answ;
  time_t now;
  int Dependent, Exemptions, nyc_resident;
  double itemized_ded, std_ded=0.0, LTC=0, AddAdj=0.0, CollegeDed=0.0;
- double ded_sched[MAX_LINES], tid_thrsh=0.0;
+ double ded_sched[MAX_LINES];
  char prelim_1040_outfilename[5000];
  char YourNames[2048]="";
 
@@ -786,6 +786,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[argk]);
     infile = fopen(argv[argk],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[argk]);  exit(1);}
     k = 2;
@@ -982,10 +983,10 @@ int main( int argc, char *argv[] )
  for (j=13; j <= 16; j++)
   L[17] = L[17] + L[j];
  showline(17);
- if (absolutev( L[17] - PrelimFedReturn.fedline[7]) > 0.1)
+ if (absolutev( L[17] - PrelimFedReturn.fedline[6]) > 0.1)
   {
-   printf(" Warning: L[17] = %6.2f, while Fed-line[7] = %6.2f\n", L[17], PrelimFedReturn.fedline[7] );
-   fprintf(outfile," Warning: L[17] = %6.2f, while Fed-line[7] = %6.2f\n", L[17], PrelimFedReturn.fedline[7] );
+   printf(" Warning: L[17] = %6.2f, while Fed-line[6] = %6.2f\n", L[17], PrelimFedReturn.fedline[6] );
+   fprintf(outfile," Warning: L[17] = %6.2f, while Fed-line[6] = %6.2f\n", L[17], PrelimFedReturn.fedline[6] );
   }
 
  // GetLineF( "L18", &L[18] );	/* Total federal adjustments to income (pg 14) */
@@ -1063,92 +1064,6 @@ int main( int argc, char *argv[] )
  ded_sched[40] = ded_sched[4] + ded_sched[9] + ded_sched[15] + ded_sched[19] + ded_sched[20] 
 		 + ded_sched[28] + ded_sched[39];	
  itemized_ded = ded_sched[40];
-
- switch (status)
-  {
-   case MARRIED_FILLING_JOINTLY:
-   case WIDOW:  			tid_thrsh = 320000.0;	break;
-   case HEAD_OF_HOUSEHOLD:		tid_thrsh = 293350.0;	break;
-   case SINGLE:  			tid_thrsh = 266700.0;	break;
-   case MARRIED_FILLING_SEPARAT:	tid_thrsh = 160000.0;	break;
-   default: tid_thrsh = 160000.0;
-  }
-
- if (L[19] > tid_thrsh)
-  { /* Total itemized deductions (tid) worksheet */
-    double tidws[100];
-    tidws[1] = ded_sched[4] + ded_sched[9] + ded_sched[15] + ded_sched[19] + ded_sched[20] 
-		+ ded_sched[28] + ded_sched[39];
-    printf("Your deductions may be limited.\n");    
-    fprintf(outfile,"Your deductions may be limited.\n");    
-  } 
-
-#if (0)
-
- ded_sched[11] = AddAdj;
- ded_sched[12] = ded_sched[10] + ded_sched[11];
- if (L[33] <= 100000.0)
-  ded_sched[13] = 0.0;
- else
-  { /*L33_morethan_100000*/
-   double ws[50];
-   if (L[33] <= 475000.0)
-    { /* Worksheet 3 pg 58 */
-      ws[1] = L[33];
-      switch (status)
-       {
-        case SINGLE:  case MARRIED_FILLING_SEPARAT: ws[2] = 100000.0; break;
-        case HEAD_OF_HOUSEHOLD:                     ws[2] = 150000.0; break;
-        case MARRIED_FILLING_JOINTLY:  case WIDOW:  ws[2] = 200000.0; break;
-	default: ws[2] = 0.0;
-       }
-      ws[3] = ws[1] - ws[2];
-      if (ws[3] < 0.0)
-	ded_sched[13] = 0.0;
-      else
-       {
-	ws[4] = smallerof( ws[3], 50000.0 );
-	ws[5] = 0.0001 * Round( 10000.0 * (ws[4] / 50000) );
-	ws[6] = 0.25 * ded_sched[1];
-	ws[7] = ws[5] * ws[6];
-	ded_sched[13] = ws[7];
-       }
-    }
-   else
-   if (L[33] <= 525000.0)
-    { /* Worksheet 4 pg 58 */
-      ws[1] = L[33] - 475000.0;
-      ws[2] = 0.0001 * Round( 10000.0 * (ws[1] / 50000) );
-      ws[3] = 0.25 * ded_sched[1];
-      ws[4] = ws[2] * ws[3];
-      ws[5] = ws[3] + ws[4];
-      ded_sched[13] = ws[5];  
-    }
-   else
-   if (L[33] <= 1000000.0)
-    ded_sched[13] = 0.5 * ded_sched[12];
-   else
-   if (L[33] <= 10000000.0)
-    { /* Worksheet 5 pg 39 */
-      ws[1] = L[33];
-      ws[2] = 0.5 * ded_sched[4];
-      ws[3] = ws[1] - ws[2];
-      ded_sched[13] = ws[3];  
-    }
-   else
-    { /* Worksheet 6 pg 39 */
-      ws[1] = L[33];
-      ws[2] = 0.25 * ded_sched[4];
-      ws[3] = ws[1] - ws[2];
-      ded_sched[13] = ws[3];  
-    }
-   } /*L33_morethan_100000*/
- ded_sched[14] = ded_sched[12] - ded_sched[13];
- ded_sched[15] = CollegeDed;
- ded_sched[16] = ded_sched[14] + ded_sched[15];
- itemized_ded = ded_sched[16];
- // GetLine( "Itemized_Deduction", &itemized_ded );     /* Form IT-201-ATT or 0.0 if std ded. */
-#endif
 
  switch (status)	/* Determine the Std. Deduction. Pg. 21. */
   {
@@ -1437,6 +1352,7 @@ int main( int argc, char *argv[] )
   }
 
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
  printf("\nListing results from file: %s\n\n", outfname);
  Display_File( outfname );

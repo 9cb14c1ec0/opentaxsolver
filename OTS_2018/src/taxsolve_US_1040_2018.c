@@ -404,6 +404,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2018. 
   } 
  amtws[10] = L11a + Sched2[46] - Sched3[48];
  amtws[11] = NotLessThanZero( amtws[9] - amtws[10] );
+ printf("	AMTws[11] = Abs( %6.2f - %6.2f ) = Abs( %6.2f )\n", amtws[9], amtws[10], amtws[9] - amtws[10] );
  // Sched2[45] = amtws[11];	/* Redundant.  Is assigned by return value below. */
 
  /* These rules are stated on Form-6251 Instructions page-1. */
@@ -439,6 +440,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2018. 
   }
  if (file_amt)
   fprintf(outfile,"EndPDFpage.\n");
+ fprintf(outfile,"	AMTws[11] = Abs( %6.2f - %6.2f ) = Abs( %6.2f )\n", amtws[9], amtws[10], amtws[9] - amtws[10] );
  fprintf(outfile,"Your Alternative Minimum Tax = %8.2f\n", amtws[11] ); 
  printf("Your Alternative Minimum Tax = %8.2f\n", amtws[11] ); 
  return amtws[11];
@@ -2018,6 +2020,7 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
  fclose(infile);
  Grab_ScheduleB_Payer_Lines( infname, outfile );
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
 
  printf("\nListing results from file: %s\n\n", outfname);

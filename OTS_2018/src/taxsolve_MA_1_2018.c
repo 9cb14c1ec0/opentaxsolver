@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <time.h>
 
-float thisversion=16.00;
+float thisversion=16.01;
 
 #include "taxsolve_routines.c"
 
@@ -72,7 +72,7 @@ int main( int argc, char *argv[] )
 {
  int i, j, k, status=0, i65, iblind, ndep, dep_deduct;
  int flag, notaxstatus=0;
- char word[4000], outfname[4000], *answ;
+ char word[4000], *infname=0, outfname[4000], *answ;
  time_t now;
  double Exemptions[10];
  double MassBankInterest, Iexempt, AGI;
@@ -91,6 +91,7 @@ int main( int argc, char *argv[] )
   else
   if (k==1)
    {
+    infname = strdup(argv[i]);
     infile = fopen(argv[i],"r");
     if (infile==0) {printf("ERROR: Parameter file '%s' could not be opened.\n", argv[i]); exit(1);}
     k = 2;
@@ -523,6 +524,7 @@ int main( int argc, char *argv[] )
  GetTextLineF( "Zipcode:" );
 
  fclose(infile);
+ grab_any_pdf_markups( infname, outfile );
  fclose(outfile);
 
  printf("\nListing results from file: %s\n\n", outfname);
