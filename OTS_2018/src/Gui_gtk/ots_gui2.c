@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.27;
-char package_date[]="Mar. 7, 2019";
-char ots_release_package[]="16.03";
+float version=2.28;
+char package_date[]="Mar. 9, 2019";
+char ots_release_package[]="16.04";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -725,7 +725,7 @@ void warn_about_save_needed_switch()
 }
 
 
-void quit_wcheck( GtkWidget *wdg, void *x );		/* Protoyypes */
+void quit_wcheck( GtkWidget *wdg, void *x );		/* Prototypes */
 void print_outfile_directly( GtkWidget *wdg, void *data );
 void create_pdf_file_directly( GtkWidget *wdg, void *data );
 
@@ -3153,6 +3153,10 @@ int main(int argc, char *argv[] )
  mpanel = init_top_outer_window( &argc, &argv, winwidth, winht, "OpenTaxSolver-GUI", 0, 0 );
  gtk_window_set_resizable( GTK_WINDOW( outer_window ), 0 );
  // make_sized_label( mpanel, 180, 10, "Open-Tax-Solver", 20.0 );
+
+ /* When the window is given the "delete_event" signal by the window manager, exit the program. */
+ gtk_signal_connect( GTK_OBJECT(outer_window), "delete_event", GTK_SIGNAL_FUNC(quit), NULL );
+ // g_signal_connect( GTK_WINDOW(outer_window), "destroy", quit, NULL);
 
  gtk_widget_set_app_paintable( outer_window, TRUE );
  g_signal_connect( outer_window, "expose-event", G_CALLBACK(on_expose_event), NULL);

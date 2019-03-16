@@ -22,7 +22,8 @@ L1      20267.70        { Wages, salaries, tips (W-2's Box-1). }
         28188.53         { Spouse's}
 	        ;
 
- { -- Tax-Exempt interest. (Only used for SocialSecurity calculations). -- }
+ { -- Tax-Exempt interest. (Only used for SocialSecurity calculations). -- 
+      (Any private activity bond interest exempt from regular tax, enter under Schedule 2 below.) }
 L2a   	 	;
 
  { -- Interest 1099-INT(s) box 1  -- }
@@ -168,6 +169,8 @@ S1_33             ;       { Student loan interest deduction }
 
 
 { --- Schedule 2: Tax --- }
+AMTws2c         ;       { Investment interest expense (difference between regular tax and AMT) (Form 6251 line 2c). }
+AMTws2g         ;       { Private activity bond interest exempt from regular tax (Form 6251 line 2g). }
 S2_46		;	{ Excess advance premium tax credit repayment. Form 8962. }
 
 { --- Schedule 3: Nonrefundable Credits --- }

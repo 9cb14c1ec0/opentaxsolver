@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 8, 2019 v16.03 - For 2018 tax-year.
+March 15, 2019 v16.04 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,14 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v16.04 (3/15/2019) - Added optional AMT worksheet line inputs to 
+	the Fed 1040 template. The AMT worksheet lines 2a through 2g now
+	display in the PDF outputs.  The OTS GUI now catches forced kills
+	by the window manager when user clicks the "X" in the window tab,
+	which now eliminates hanging zombe processes under MS-Windows.
+	The "MarkupPDF" construct now supports quoted string values.
+	This enables proper PDF display of multi-word answers, as well as
+	explicit/literal character sequences without numeric formating.
     * v16.03 (3/8/2019) - Added Sched-B Part-III lines to the US-1040 
 	(ticket #63). Added PDF metadata for dependent and occupation
 	fill-in tags, so users can add these to their results output

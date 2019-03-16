@@ -19,7 +19,7 @@
 #define MaxPages 100
 #define MAXLINE 2048
 
-float version=1.06;
+float version=1.07;
 int verbose=0;
 int testmode=0;
 int no_zero_entries=0;
@@ -116,7 +116,8 @@ void add_entry( char *label, char *value )      /* Builds list of result items (
  struct nvpair *item;
  if (verbose) printf("Adding entry: label='%s', value='%s'\n", label, value );
  if ((no_zero_entries) && ((strcmp( value, "0.00" ) == 0) || (strcmp( value, "0" ) == 0)
-     || (strcmp( value, "0.0" ) == 0)) && (checknzoveride(label))) return;
+     || (strcmp( value, "0.0" ) == 0) || (strcmp( value, "-0.00") == 0)) && (checknzoveride(label)))
+  return;
  item = new_item( label, value );
  item->nxt = results_list;
  results_list = item;
@@ -270,6 +271,22 @@ void new_metadata_item( int pg, char *label, int xpos, int ypos, int FontSz, int
 	float txtred, float txtgrn, float txtblu, int add_commas, int padlen, float dx );
 
 
+void get_remainder_of_quoted_string( char *line, char *word )
+{
+ int j=0, k=0;
+ if (word[0] == '"')
+  {
+   j = 1;
+   while ((word[j] != '"') && (word[j] != '\0')) j++;
+   if (word[j] == '\0')	/* Check for end-quote in the first first word. */
+    { /* No end-quote in first word, so append from remainder of line until end-quote. */
+      do word[j++] = line[k++];
+      while ((line[k-1] != '"') && (line[k-1] != '\0'));
+      word[j] = '\0';
+    }
+  }
+}
+
 
 void read_replacement_text( char *fname )
 {
@@ -368,8 +385,13 @@ void read_replacement_text( char *fname )
      else
       {
  	filter_text( word2 );
+	if (word2[0] == '"')
+	 { /* Quoted string */
+	   get_remainder_of_quoted_string( line, word2 );
+	 }
+	else
 	if ( (!idinfo) && round_to_whole_numbers && ( isdigit(word2[0]) || ( (word2[0] == '-') && isdigit(word2[1]) ) ) )
-	 {
+	 { /* Numeric or word. */
 	  if (sscanf( word2, "%lf", &x) != 1)
 	   printf("Error reading number '%s'\n", word2 );
 	  else
@@ -797,6 +819,22 @@ float leading_sign( char *value )
 }
 
 
+void filter_quotes( char *value )
+{
+ int j=0;
+ if (value[0] == '"')
+  {
+   do
+    {
+     value[j] = value[j+1];
+     j++;
+    }
+   while ((value[j-1] != '"') && (value[j-1] != '\0'));
+   if (value[j-1] == '"') value[j-1] = '\0';
+  }
+}
+
+
 void place_overlay_text( char *streambuf, int page )
 {
  int j, nspc;
@@ -816,6 +854,7 @@ void place_overlay_text( char *streambuf, int page )
     { /*valid*/
       if (item->dx > 0.0)
        { /* Separated characters. */
+	   if (value[0] == '"') filter_quotes( value );
            j=0;
            x = item->x;
            while (value[j] != '\0')
@@ -834,7 +873,7 @@ void place_overlay_text( char *streambuf, int page )
 	 float xadj=0.0;
 	 if (add_commas && (strstr( item->label, "SocSec" ) == 0) && (strstr( item->label, "Zipcode" ) == 0) &&
 	     (strstr( item->label, "Street" ) == 0) && (strstr( item->label, "Birth" ) == 0) &&
-	     (strstr( item->label, "Check_") == 0))
+	     (strstr( item->label, "Check_") == 0) && (value[0] != '"'))
 	  { /*number*/
 	    xadj = leading_sign( value );
 	   comma_format( value );
@@ -842,6 +881,7 @@ void place_overlay_text( char *streambuf, int page )
 	    right_justify( value, rjustify );
 	   xadj = xadj + adjust_xpos_for_commas( value );
 	  } /*number*/
+	 if (value[0] == '"') filter_quotes( value );
 	 if (verbose) printf("Placing '%s' to '%s'\n", item->label, value );
 	 if ((ck_sz_w == 0) || (strstr( item->label, "Check_") == 0))
 	  append_buf( streambuf, item->fsz, item->x - xadj, item->y, value );

@@ -29,7 +29,7 @@
 /* Aston Roberts 1-26-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.03;
+float thisversion=16.04;
 
 #include <stdio.h>
 #include <time.h>
@@ -55,6 +55,8 @@ double L5a=0.0;			/* Social security benefits. */
 double L11a=0.0;		/* Tax before Sched-2. */
 double S4_60b=0.0;		/* First-time homebuyer credit repayment. Form 5405. */
 double qcgws6=0.0, qcgws7=0.0;	/* Support for AMT calculation. (qual.div+cap.gain wrksht vals.)*/
+double amtws2c=0.0;		/* Investment interest expense (difference between regular tax and AMT) - AMT entry */
+double amtws2g=0.0;		/* Specified private activity bond interest exempt from regular tax - AMT entry */
 int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No;
 int status, under65=Yes, over65=No, dependent=No, force_print_all_pdf_forms=0;
 double  collectibles_gains=0.0, ws_sched_D[MAX_LINES], L17a=0.0, L17b=0.0, L17c=0.0;
@@ -251,7 +253,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2018. 
  // amtws2s = -0.0;	/* Income from certain installment sales before 1/1/87 (As negaitive amount.) */
  // amtws2t = 0.0;	/* Intangible drilling costs preference */
 
- amtws[2] = amtws2a + amtws2b + amtws2e;
+ amtws[2] = amtws2a + amtws2b + amtws2c + amtws2e + amtws2g;
 
  // amtws[3] = 0.0;	/* Other adjustments, including income-based related adjustments */
 
@@ -430,6 +432,20 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2018. 
   fprintf(outfile,"PDFpage: 15 15\n");	/* Optional PDF Page. */
  for (j=0; j<100; j++) 
   {
+   if (j == 2)
+    {
+     char tmplabel[1024];
+     sprintf( tmplabel, " 		AMT_Form_6251_L2a");
+     showline_wlabelnz( tmplabel, amtws2a );
+     sprintf( tmplabel, " 		AMT_Form_6251_L2b");
+     showline_wlabelnz( tmplabel, amtws2b );
+     sprintf( tmplabel, " 		AMT_Form_6251_L2c");
+     showline_wlabelnz( tmplabel, amtws2c );
+     sprintf( tmplabel, " 		AMT_Form_6251_L2e");
+     showline_wlabelnz( tmplabel, amtws2e );
+     sprintf( tmplabel, " 		AMT_Form_6251_L2g");
+     showline_wlabelnz( tmplabel, amtws2g );
+    }
    if ((j == 11) || (amtws[j] != 0.0))
     {
      printf(" 		AMT Form 6251 L%d = %8.2f\n", j, amtws[j] );
@@ -1776,6 +1792,16 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
      get_parameters( infile, 'f', &tmpval, labelx );
      Sched2[46] = tmpval;
      gotS2_46 = 1;
+    }
+   else
+   if (strcasecmp( labelx, "AMTws2c" ) == 0)
+    {
+     get_parameters( infile, 'f', &amtws2c, labelx );
+    }
+   else
+   if (strcasecmp( labelx, "AMTws2g" ) == 0)
+    {
+     get_parameters( infile, 'f', &amtws2g, labelx );
     }
    else
    if (strstr( labelx, "AMTws" ) != 0)

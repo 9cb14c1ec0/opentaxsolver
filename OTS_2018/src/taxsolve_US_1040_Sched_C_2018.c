@@ -29,7 +29,7 @@
 /* Earlier Updates	Robert Heller  heller@deepsoft.com		*/
 /************************************************************************/
 
-float thisversion=16.01;
+float thisversion=16.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -302,14 +302,14 @@ int main( int argc, char *argv[] )
  L[31] = L[29] - L[30];
  showline_wmsg(31,"Net Profit (loss)");
  if (L[31] > 0.0)
-  fprintf(outfile,"Enter %2.2f on Form 1040 line 12. Sched-SE line 2. Estates/trusts on 1040 line 3.\n", L[31]);
+  fprintf(outfile,"Enter %2.2f on Form 1040 line S1_12. Sched-SE line 2. Estates/trusts on Form 1041 line 3.\n", L[31]);
  else
  if (L[31] < 0.0)
   {
    // fprintf(outfile,"Mark box 32a accordingly\n");
    if (L32 == Yes)
     {
-     fprintf(outfile,"If you checked 32a, enter %2.2f on Form 1040 line 12.\n", L[31]);
+     fprintf(outfile,"If you checked 32a, enter %2.2f on Form 1040 line S1_12.\n", L[31]);
      fprintf(outfile,"        Estates and trusts, enter on Form 1041, line 3.\n");
      fprintf(outfile,"Ck32a: x\n");
     }
