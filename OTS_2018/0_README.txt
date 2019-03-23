@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 15, 2019 v16.04 - For 2018 tax-year.
+March 21, 2019 v16.05 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,9 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v16.05 (3/21/2019) - Improved GUI display formatting, and
+	save-file formatting.  Fixed NJ-State lines 74 + 75, and PDF
+	positioning of line 17.
     * v16.04 (3/15/2019) - Added optional AMT worksheet line inputs to 
 	the Fed 1040 template. The AMT worksheet lines 2a through 2g now
 	display in the PDF outputs.  The OTS GUI now catches forced kills

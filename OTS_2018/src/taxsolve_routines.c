@@ -864,7 +864,7 @@ void process_pdf_markup_command( char *line )
   }
  strcpy( tagname, word );		/* Grab tag-name. */
  next_word( line, value, " \t=" );	/* Grab 1st word of value after '=', if any. */
- strcat( value, " " );			/* Add white-space in case other words on line. */
+ // strcat( value, " " );			/* Add white-space in case other words on line. */
  strcat( value, line );			/* Add any following words on the remainder of the line. */
  add_pdf_markup( tagname, pgnum, xpos, ypos, value );
 }

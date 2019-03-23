@@ -26,7 +26,7 @@
 /*      2-24-06 Further updates BWB					*/
 /************************************************************************/
 
-float thisversion=16.02;
+float thisversion=16.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -562,22 +562,27 @@ int main( int argc, char *argv[] )
  for (j=53; j <= 60; j++)
   L[61] = L[61] + L[j];
  showline_wmsg( 61, "Total Withholding Payments & Credits" );
+
+ for (j=64; j <= 72; j++)
+  L[73] = L[73] + L[j];
  
  if (L[61] < L[52])
   {
    L[62] = L[52] - L[61];
    fprintf(outfile, "L62 = %6.2f	DUE !!!\n", L[62] );
    fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[62] / (L[43] + 1e-9) );
+   showline_wmsg( 73, "( Total Adjustments to tax due )");
+   L[74] = L[62] + L[73];
+   showline_wmsg(74, "Balance Due");
   }
  else
   {
    L[63] = L[61] - L[52];
    fprintf(outfile, "L63 = %6.2f	Overpayment\n", L[63] );
 
-   L[73] = 0.0;
-   showline_wmsg( 73, "( Total Contributions from overpayment )");
-   L[74] = L[63] - L[73];
-   showline_wmsg(74, "Refund !!!");
+   showline_wmsg( 73, "( Total Adjustments to overpayment )");
+   L[75] = L[63] - L[73];
+   showline_wmsg(75, "Refund !!!");
   }
  
  fprintf(outfile,"\n{ --------- }\n");

@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.28;
-char package_date[]="Mar. 9, 2019";
-char ots_release_package[]="16.04";
+float version=2.29;
+char package_date[]="Mar. 18, 2019";
+char ots_release_package[]="16.05";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -102,6 +102,7 @@ char directory_incl[MaxFname]="tax_form_files", wildcards_incl[MaxFname]="*_out.
 char directory_fb[MaxFname]="", wildcards_fb[MaxFname]="", filename_fb[MaxFname]="";
 char *title_line="Tax File", *current_working_filename=0, *invocation_path, *include_file_name=0;
 char wildcards_out[MaxFname]="*_out.txt";
+char run_options[MaxFname]="";
 int fronty1, fronty2, computed=0, ok_slcttxprog=1;
 char *yourfilename=0;
 char toolpath[MaxFname]="", *start_cmd;
@@ -110,7 +111,7 @@ int filingstatus_mfj=1;
 
 void pick_file( GtkWidget *wdg, void *data );	/* Prototype */
 void consume_leading_trailing_whitespace( char *line );
-void get_line_entry( char *word, int maxn, FILE *infile );
+void get_line_entry( char *word, int maxn, int *linenum, FILE *infile );
 void Run_TaxSolver( GtkWidget *wdg, void *x );
 void helpabout2( GtkWidget *wdg, void *data );
 void dump_taxinfo();
@@ -354,6 +355,7 @@ int get_next_entry( char *word, int maxn, int *column, int *linenum, FILE *infil
  int k=0;
 
  /* Get up to the next non-white-space character. */
+ ots_line = *linenum;
  do 
   { 
    word[k] = getc(infile);
@@ -411,14 +413,14 @@ int get_next_entry( char *word, int maxn, int *column, int *linenum, FILE *infil
        ots_column = 0;
        ots_line++;
        add_markup_command( word );
-       return NOTHING;
+         return NOTHING;
      }
     if (word[k-1]==';')
      { 
       if (k==1) { word[1] = '\0';  return SEMICOLON; }
       else { ungetc(word[k-1], infile); word[k-1] = '\0';  return VALUE_LABEL; }
      }
-    else { word[k-1] = '\0';  return VALUE_LABEL; }
+    else { ungetc(word[k-1], infile);  word[k-1] = '\0';  return VALUE_LABEL; }
   } /*get_value_or_linelabel*/
 }
 
@@ -426,7 +428,7 @@ int get_next_entry( char *word, int maxn, int *column, int *linenum, FILE *infil
 /*--------------------------------------------------------------*/
 /* Get_Line_Entry - Reads remainder of line from input file.	*/
 /*--------------------------------------------------------------*/
-void get_line_entry( char *word, int maxn, FILE *infile )
+void get_line_entry( char *word, int maxn, int *linenum, FILE *infile )
 {
  int k=0;
  word[k] = getc(infile);
@@ -453,6 +455,8 @@ void get_line_entry( char *word, int maxn, FILE *infile )
   }
  if (word[k] == '{')
   ungetc( word[k], infile );
+ else
+  *linenum = *linenum + 1;
  word[k] = '\0';
  // printf("	k = %d, word[%d] = %d\n", k, k, word[k] );
  // printf("	word = '%s'\n", word );
@@ -765,7 +769,11 @@ char *taxform_name;
 /***********************/
 void Read_Tax_File( char *fname )
 {
- int j, k, kind, state=0, column=0, linenum=0, linecnt=0, lastline=0, newentry=0, entrycnt=0;
+ int 	j, k, kind, state=0, column=0, 
+	linenum=0, 	/* Line number in input file. */
+	linecnt=0, 	/* Line number of gui display. */
+	lastline=0, newentry=0, entrycnt=0;
+ int lastlinenum=-1;
  char word[10000], *tmpstr, tmpstr2[200], tmpstr3[200];
  struct taxline_record *txline=0;
  struct value_list *tmppt, *newitem, *oldtail;
@@ -797,7 +805,7 @@ void Read_Tax_File( char *fname )
     {
      case VALUE_LABEL: 
 	 if (state==0) 
-	  {
+	  { /*statezero*/
 	   if (verbose) printf(" LineLabel:	'%s'\n", word);
 	   state = 1;
 	   entrycnt = 0;
@@ -814,16 +822,16 @@ void Read_Tax_File( char *fname )
 		(strcmp(txline->linename, "PrincipalBus:") == 0) || (strcmp(txline->linename, "BusinessName:") == 0))
 	    {
 	     if (ots_column > 0)
-	      get_line_entry( word, 10000, infile );
+	      { get_line_entry( word, 10000, &linenum, infile ); }
 	     else
 	      word[0] = '\0';
 	     tmppt = new_list_item_value( VKIND_TEXT, txline, word, column, linecnt );
 	     tmppt->formtype = ID_INFO;	/* Special ID-only info lines. */
 	     state = 0;
 	    }
-	  }
+	  } /*statezero*/
 	 else
-	  {
+	  { /*stateNotzero*/
 	   if (verbose) printf(" Value:	%s\n", word);
 	   if (strcasecmp(txline->linename, "Status") == 0)
 	    {
@@ -831,17 +839,18 @@ void Read_Tax_File( char *fname )
 	     state = 0;
 	    }
 	   else
-	    {
+	    { /*Accept normal value. */
 	     tmppt = new_list_item_value( VKIND_TEXT, txline, word, column, linecnt );
 	     if (strstr( txline->linename, ":" ) != 0)
 		 tmppt->formtype = LITERAL_INFO;
 	     entrycnt++;
 	    }
-	  }
+	  } /*stateNotzero*/
 	newentry++;
 	break;
      case COMMENT: if (verbose) printf(" Comment:	%s\n", word);
-	if (txline==0) txline = new_taxline("", linecnt);
+	if ((txline==0) || ((strncasecmp(txline->linename, "CapGains",7) != 0) && (lastlinenum > 0) && (linenum > lastlinenum)))
+	 txline = new_taxline("", linecnt);
 	new_list_item_value( VKIND_COMMENT, txline, word, column, linecnt );
 	newentry++;
 	break;
@@ -859,11 +868,23 @@ void Read_Tax_File( char *fname )
 	 }
 	state = 0;
 	new_list_item_value( VKIND_COLON, txline, word, column, linecnt );
+	lastlinenum = linenum;
 	break;
     }
    column = column + strlen(word);
+   lastlinenum = linenum;
    kind = get_next_entry( word, 10000, &column, &linenum, infile );
-   if (linenum > lastline) { lastline = linenum;  if (newentry) linecnt++;  newentry = 0; }
+   if (linenum > lastline) 
+    { 
+     if ((txline!=0) && (strncasecmp(txline->linename, "CapGains",7) == 0))
+      {
+       if ((entrycnt % 4) == 0)
+        linecnt++;
+      }
+     lastline = linenum;
+     linecnt++;  
+     newentry = 0;
+    }
   } /*Loop1*/
  fclose(infile);
 
@@ -891,6 +912,7 @@ void Read_Tax_File( char *fname )
     }
    txline = txline->nxt;
   }
+ // dump_taxinfo();
 }
 
 
@@ -1121,6 +1143,86 @@ void open_include_file( GtkWidget *wdg, gpointer data )
 }
 
 
+void escape_special_symbols( char *phrase, int maxlen )
+{ /* Replace any ampersand (&), quotes ("), or brackets (<,>), with XML escapes. */
+  int j=0, k, m, n;
+  n = strlen(phrase);
+  do
+   {
+    if (phrase[j]=='&') 
+     {
+      k = n + 4;  m = n;  n = n + 4;
+      if (n > maxlen) {printf("xml_Parse: MaxStrLen %d exceeded.\n",maxlen); return;}
+      do phrase[k--] = phrase[m--]; while (m > j);
+      j++;  phrase[j++] = 'a';  phrase[j++] = 'm';  phrase[j++] = 'p';  phrase[j++] = ';';
+     } else
+    if (phrase[j]=='"') 
+     {
+      k = n + 5;  m = n;  n = n + 5;
+      if (n > maxlen) {printf("xml_Parse: MaxStrLen %d exceeded.\n",maxlen); return;}
+      do phrase[k--] = phrase[m--]; while (m > j);
+      phrase[j++] = '&';  phrase[j++] = 'q';  phrase[j++] = 'u';  phrase[j++] = 'o';  phrase[j++] = 't';  phrase[j++] = ';';
+     } else
+    if (phrase[j]=='<') 
+     {
+      k = n + 3;  m = n;  n = n + 3;
+      if (n > maxlen) {printf("xml_Parse: MaxStrLen %d exceeded.\n",maxlen); return;}
+      do phrase[k--] = phrase[m--]; while (m > j);
+      phrase[j++] = '&';  phrase[j++] = 'l';  phrase[j++] = 't';  phrase[j++] = ';';
+     } else
+    if (phrase[j]=='>') 
+     {
+      k = n + 3;  m = n;  n = n + 3;
+      if (n > maxlen) {printf("xml_Parse: MaxStrLen %d exceeded.\n",maxlen); return;}
+      do phrase[k--] = phrase[m--]; while (m > j);
+      phrase[j++] = '&';  phrase[j++] = 'g';  phrase[j++] = 't';  phrase[j++] = ';';
+     } else j++;
+   }
+  while (phrase[j] != '\0');
+}
+
+
+GtkWidget *make_bold_label( GtkWidget *panel, int xpos, int ypos, char *text )
+{
+ GtkWidget *bpanel, *label;
+ char *tmptxt1, *tmptxt2;
+ bpanel = gtk_fixed_new();
+ gtk_fixed_put( GTK_FIXED( panel ), bpanel, xpos, ypos );
+ label = gtk_label_new( text );
+ tmptxt1 = (char *)malloc( strlen(text) + 1000 );
+ tmptxt2 = (char *)malloc( strlen(text) + 1000 );
+ strcpy( tmptxt1, text );
+ escape_special_symbols( tmptxt1, 1000 );
+ sprintf( tmptxt2, "<b>%s</b>", tmptxt1 );
+ gtk_label_set_markup( (GtkLabel *)label, tmptxt2 );
+ gtk_container_add( GTK_CONTAINER( bpanel ), label );
+ free( tmptxt1 );
+ free( tmptxt2 );
+ return label;
+}
+
+
+char *mystrcasestr( char *haystack, char *needle )
+{
+ int j=0;
+ char *hs, *ndl, *pt;
+ hs = strdup( haystack );
+ while (hs[j] != '\0') { hs[j] = toupper( hs[j] );  j++; }
+ ndl = strdup( needle );
+ j = 0;
+ while (ndl[j] != '\0') { ndl[j] = toupper( ndl[j] );  j++; }
+ pt = strstr( hs, ndl );
+ if (pt != 0)
+  {
+   j = 0;
+   while (pt != &(hs[j])) j++;
+   pt = &(haystack[j]);
+  }
+ free( ndl );
+ free( hs );
+ return pt;
+}
+
 
 
 /*************************************************************************/
@@ -1254,10 +1356,13 @@ void DisplayTaxInfo()
 		  add_menu_item( menu, "Head_of_Household", status_choice_HH, entry );
 		  add_menu_item( menu, "Widow(er)", status_choice_W, entry );
 		  comment_x0 = comment_x0 + 20;
-		  if (strstr( entry->text, "Married/Joint" ) != 0)
-		   filingstatus_mfj = 1;
-		  else
-		   filingstatus_mfj = 0;
+		  if (strlen( entry->text ) > 2)
+		   {
+		    if (mystrcasestr( entry->text, "Married/Joint" ) != 0)
+		     filingstatus_mfj = 1;
+		    else
+		     filingstatus_mfj = 0;
+		   }
 		 }
 		else
 		if (iscapgains)
@@ -1309,6 +1414,11 @@ void DisplayTaxInfo()
 		     sectionheader = 1;
 		     y1 = y1 + 10;
 		     y1a = y1a + 10;
+		     if (startswith( entry->comment, "---" ))
+			{
+			 comment_x0 = 20;
+			 sectionheader = 2;
+			}
 		 }
 		if ((lastbox != 0) && (strstr( entry->comment, "(answer: " ) != 0))
 		 { char tmpline[1024], tmpword[512];		/* Add choices-spinner. */
@@ -1336,8 +1446,11 @@ void DisplayTaxInfo()
 		  comment_x0 = comment_x0 + 20;
 		 }
 
-	        // printf(" Comment %d (%3d, %3d): '%s'\n", txline->linenum, comment_x0, y1a, entry->comment );
-		label = make_label( mpanel2, comment_x0, y1a, entry->comment );
+		// printf(" Comment %d (%3d, %3d): '%s'\n", txline->linenum, comment_x0, y1a, entry->comment );
+		if (sectionheader < 2)
+		 label = make_label( mpanel2, comment_x0, y1a, entry->comment );
+		else
+		 label = make_bold_label( mpanel2, comment_x0, y1a, entry->comment );
 		entry->comment_label = label;
 
 		/* Add edit_line_comment button */
@@ -1437,7 +1550,7 @@ void Save_Tax_File( char *fname )
 {
  struct taxline_record *txline;
  struct value_list *tmppt;
- int lastline=-1, semicolon, j;
+ int lastline=-1, semicolon, j, newline;
  char *suffix, *tmpstr;
  FILE *outfile;
 
@@ -1512,36 +1625,78 @@ void Save_Tax_File( char *fname )
   }
  if (yourfilename != 0) free( yourfilename );
  yourfilename = strdup( current_working_filename );
- fprintf(outfile,"%s\n", title_line);
+ fprintf(outfile,"%s", title_line);
  txline = taxlines_hd;
  while (txline!=0)
-  {
-   fprintf(outfile,"\n%s", txline->linename );
+  { /*txline*/
+   int numvals=0, numcoms=0, iscapgains;
+   // printf("\nNewTaxLine: '%s' (linenum = %d)\n", txline->linename, txline->linenum );
+   fprintf(outfile,"\n%s", txline->linename );		/* Write line-label, if any. */
+   if (strncasecmp(txline->linename, "CapGains",7) == 0)
+    iscapgains = 1;
+   else
+    iscapgains = 0;
    semicolon = 0;
+   newline = 0;
    lastline = txline->linenum;
    tmppt = txline->values_hd;
-   while (tmppt!=0)
-    {
-     if (tmppt->linenum != lastline)
-      { fprintf(outfile,"\n");  lastline = tmppt->linenum; }
+   while (tmppt!=0)					/* Now write the line-value(s), comment(s), and ";", if any. */
+    { /*line_item*/
+     
      switch (tmppt->kind)
       {
-       case VKIND_FLOAT:   fprintf(outfile,"	%6.2f	", tmppt->value ); break;
-       case VKIND_INT:     fprintf(outfile,"	%d	", (int)(tmppt->value) ); break;
-       case VKIND_TEXT:    
-		if ((filingstatus_mfj) || (strstr( txline->linename, "Spouse" ) == 0))
-		 fprintf(outfile,"	%s	", tmppt->text );
+       case VKIND_FLOAT:
+		if (newline) fprintf(outfile,"\n");
+		fprintf(outfile,"	%6.2f	", tmppt->value );
+		numvals++;
+		// printf("	FloatValue: '%6.2f' (linenum = %d)\n", tmppt->value, tmppt->linenum );
+		break;
+       case VKIND_INT:
+		if (newline) fprintf(outfile,"\n");
+		fprintf(outfile,"	%d	", (int)(tmppt->value) );
+		numvals++;
+		// printf("	IntValue: '%d' (linenum = %d)\n", (int)(tmppt->value), tmppt->linenum );
+		break;
+       case VKIND_TEXT:
+		if (iscapgains)
+		 {
+		  if (lastline != tmppt->linenum)
+		   { int j;  for (j=0; j < tmppt->linenum - lastline; j++) fprintf(outfile,"\n");  lastline++; }
+		 }
 		else
-		 fprintf(outfile,"\t\t" );
-	break;		 
-       case VKIND_COMMENT: if (strlen(tmppt->comment)>0) fprintf(outfile," {%s}", tmppt->comment ); break;
-       case VKIND_COLON:   semicolon = 1; break;
+		 if (newline) fprintf(outfile,"\n");
+		fprintf(outfile,"	%s	", tmppt->text );
+		numvals++;
+		// printf("	TextValue: '%s' (linenum = %d)\n", tmppt->text, tmppt->linenum );
+		break;		 
+       case VKIND_COMMENT:
+		if (tmppt->linenum != lastline) fprintf(outfile,"\n\t");
+		if (strlen(tmppt->comment)>0) fprintf(outfile," {%s}", tmppt->comment );
+		// printf("	Comment: '%s' (linenum = %d)\n", tmppt->comment, tmppt->linenum );
+		numcoms++;
+		break;
+       case VKIND_COLON:   
+		if ((numvals < 2) && (numcoms == 0))
+		 fprintf(outfile,"\t;");
+		else
+		 semicolon = 1;
+		// printf("	SemiColon: numvals = %d (linenum = %d)\n", numvals, tmppt->linenum );
+		break;
       }
+     newline = 1;
+     lastline = tmppt->linenum;
      tmppt = tmppt->nxt;
+    } /*line_item*/
+
+   if (semicolon)
+    {
+     fprintf(outfile,"\n");
+     fprintf(outfile,"		;");
     }
-   if (semicolon) fprintf(outfile,"\n		;");
    txline = txline->nxt;
-  }
+  } /*txline*/
+
+
  fprintf(outfile,"\n");
  dump_any_markup_commands( outfile );
  fclose(outfile);
@@ -1734,7 +1889,7 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
   }
 
  #if (PLATFORM_KIND == Posix_Platform)
-  sprintf(cmd,"'%s' '%s' &", taxsolvecmd, current_working_filename );
+  sprintf(cmd,"'%s' %s '%s' &", taxsolvecmd, run_options, current_working_filename );
  #else
    if ((strlen(taxsolvecmd) > 2 ) && (taxsolvecmd[1] == ':') && (taxsolvecmd[2] != '"')) 
     { /*Insert quotes around file name for Microsoft, in case pathname has spaces in it.*/
@@ -1749,7 +1904,7 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
      strcat( tstr, "\"" );
      taxsolvecmd = tstr;
     }
-  sprintf(cmd,"%s \"%s\"", taxsolvecmd, current_working_filename );
+  sprintf(cmd,"%s %s \"%s\"", taxsolvecmd, run_options, current_working_filename );
  #endif
 
  printf("Invoking '%s'\n", cmd );
@@ -3098,6 +3253,7 @@ int main(int argc, char *argv[] )
     printf("OTS GUI v%1.2f, %s:\n", version, package_date );
     printf(" Command-line Options:\n");
     printf("  -verbose          - Show debugging messages.\n");
+    printf("  -debug            - Set debug mode.\n");
     printf("  -taxsolver xx     - Set path and name of the tax-solver executable.\n");
     printf("  {file-name}.txt   - Set path and name of the tax data input file.\n\n");
     exit(0);
