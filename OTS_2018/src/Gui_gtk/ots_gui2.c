@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.29;
-char package_date[]="Mar. 18, 2019";
-char ots_release_package[]="16.05";
+float version=2.30;
+char package_date[]="Mar. 28, 2019";
+char ots_release_package[]="16.06";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -1545,6 +1545,19 @@ char *my_strcasestr( char *line, char *srchstr )
 }
 
 
+int lookaheadvals( struct value_list *linept )
+{ /* Look ahead and count the number of any remaining values in the list of items for the given line pointer. */
+ int nn=0;
+ while (linept != 0)
+  {
+   if ((linept->kind==VKIND_FLOAT) || (linept->kind==VKIND_TEXT) || (linept->kind==VKIND_INT))
+    nn++;
+   linept = linept->nxt;
+  }
+ return nn;
+}
+
+
 
 void Save_Tax_File( char *fname )
 {
@@ -1676,7 +1689,7 @@ void Save_Tax_File( char *fname )
 		numcoms++;
 		break;
        case VKIND_COLON:   
-		if ((numvals < 2) && (numcoms == 0))
+		if ((numvals < 2) && (numcoms == 0) && (lookaheadvals(tmppt->nxt) == 0))
 		 fprintf(outfile,"\t;");
 		else
 		 semicolon = 1;

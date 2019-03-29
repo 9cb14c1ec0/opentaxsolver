@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 21, 2019 v16.05 - For 2018 tax-year.
+March 28, 2019 v16.06 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,9 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v16.06 (3/28/2019) - Fixed new GUI-bug that was introduced in
+	last update, which could cause some line semi-colons to be
+	misplaced in the save-file.
     * v16.05 (3/21/2019) - Improved GUI display formatting, and
 	save-file formatting.  Fixed NJ-State lines 74 + 75, and PDF
 	positioning of line 17.  Fixed GUI issue when loading State 
