@@ -24,7 +24,7 @@
 /* Aston Roberts 2-6-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.03;
+float thisversion=16.04;
 
 #include <stdio.h>
 #include <time.h>
@@ -739,7 +739,7 @@ int main( int argc, char *argv[] )
  sched540part2[12] = PrelimFedReturn.schedA[12];
  GetLine("CA540_P2_Sub_12", &(sched540part2_sub[12]) );
  GetLine("CA540_P2_Add_12", &(sched540part2_add[12]) );
- sched540part2[12] = PrelimFedReturn.schedA[13];
+ sched540part2[13] = PrelimFedReturn.schedA[13];
  GetLine("CA540_P2_Sub_13", &(sched540part2_sub[13]) );
  GetLine("CA540_P2_Add_13", &(sched540part2_add[13]) );
  sched540part2[14] = sched540part2[11] + sched540part2[12]+ sched540part2[13];

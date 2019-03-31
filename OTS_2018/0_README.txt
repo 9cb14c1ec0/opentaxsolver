@@ -33,8 +33,8 @@ Also contains an Automatic PDF Form-Fillout function:
 
 History:
     * v16.06 (3/28/2019) - Fixed new GUI-bug that was introduced in
-	last update, which could cause some line semi-colons to be
-	misplaced in the save-file.
+	last update, which could cause some line semi-colons, for newly
+	added line-values, to be misplaced in save-files.
     * v16.05 (3/21/2019) - Improved GUI display formatting, and
 	save-file formatting.  Fixed NJ-State lines 74 + 75, and PDF
 	positioning of line 17.  Fixed GUI issue when loading State 
