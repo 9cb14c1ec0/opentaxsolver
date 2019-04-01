@@ -29,7 +29,7 @@
 /* Aston Roberts 1-26-2019	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=16.04;
+float thisversion=16.05;
 
 #include <stdio.h>
 #include <time.h>
@@ -1494,11 +1494,6 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
   Sched1[22] = Sched1[22] + Sched1[j];
  showline_wlabel( "S1_22", Sched1[22] );
 
- SocSec_Worksheet();		/* This calc. depends on line L5a and Sched1[22].  Calculates L5b. */
-
- for (j=1; j <= 5; j++)
-  L[6] = L[6] + L[j];
-
  /* Adjusted Gross Income section. */
  GetLineFnz( "S1_23", &Sched1[23] );	/* Educator expenses */
  GetLineFnz( "S1_24", &Sched1[24] );	/* Bus. exp.: reservists, artists, ... Attach Form 2106 */
@@ -1544,6 +1539,13 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
 
  // GetLineFnz( "S1_32", &Sched1[32] );	/* IRA deduction (Done above) */
 
+ SocSec_Worksheet();		/* This calc. depends on line L5a and Sched1[22].  Calculates L5b. */
+
+ for (j=1; j <= 5; j++)
+  L[6] = L[6] + L[j];
+
+ L[6] = L[6] + Sched1[22];
+
  GetLine( "S1_33", &Sched1[33] );	/* Student loan interest deduction */
  if (Sched1[33] != 0.0)
   { /* Student loan interest calculation pg 96. */
@@ -1579,8 +1581,6 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
  /* -- End of Schedule-1 -- */
 
  showline_wlabel( "L5b", L[5] ); 
-
- L[6] = L[6] + Sched1[22];
  showline_wmsg( 6, "Total Income" );
 
  if (under65 == 0) over65 = 1; 

@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 28, 2019 v16.06 - For 2018 tax-year.
+April 1, 2019 v16.07 - For 2018 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,10 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v16.07 (4/1/2019) - Added PDF metadata for California Schedule 
+	CA (540) 2018, Part II, Line 4, column A.
+	On US 1040, adjusted calling of SocSec_Worksheet() until after
+	Schedule-1 line 32, on which it could depend.
     * v16.06 (3/28/2019) - Fixed new GUI-bug that was introduced in
 	last update, which could cause some line semi-colons, for newly
 	added line-values, to be misplaced in save-files.
