@@ -1650,9 +1650,9 @@ int main( int argc, char *argv[] )						/* NOT Updated for 2018. */
   showline_wlabel( "A8b", homemort[3] );
  homemort[5] = homemort[1] + homemort[2] + homemort[3];
   showline_wlabel( "A8e", homemort[5] );
- GetLine( "A9", &SchedA[14] );	/* Investment interest. Attach Form 4952*/
+ GetLine( "A9", &SchedA[9] );	/* Investment interest. Attach Form 4952*/
   showschedA(9);
- SchedA[10] = homemort[5] + SchedA[14];
+ SchedA[10] = homemort[5] + SchedA[9];
   showschedA(10);
 
  GetLine( "A11", &SchedA[11] );	/* Charity contributions by cash or check.*/
