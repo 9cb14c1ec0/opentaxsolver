@@ -1,0 +1,225 @@
+Title:  US Federal 1040 Tax Form - 2019 - EXAMPLE
+
+{ ------------ Example ------------- }
+{ --- Filing Status & Exemptions --- }
+
+Status     Married/Joint { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
+
+You_65+Over?	N	{ Were you born before January 2, 1954 ? (answer: Yes, No) }
+You_Blind?	N	{ Are you blind ? (answer: Yes, No) }
+Spouse_65+Over?	 Y	{ Was Spouse born before January 2, 1954 ? (answer: Yes, No) }
+Spouse_Blind?	 N	{ Is Spouse blind ? (answer: Yes, No) }
+
+HealthCoverage?	 Y	{ Covered by Health care insurance or exempt ? (answer: Yes, No) }
+
+Dependents       2      { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)
+				self=1, spouse, etc. }
+
+{ ---- Income ---- }
+
+{ -- Wages, salaries, tips (W-2's Box-1). -- }
+L1      20267.70        { Wages, salaries, tips (W-2's Box-1). }
+        28188.53         { Spouse's}
+	        ;
+
+ { -- Tax-Exempt interest. (Only used for SocialSecurity calculations). -- 
+      (Any private activity bond interest exempt from regular tax, enter under Schedule 2 below.) }
+L2a   	 	;
+
+ { -- Interest 1099-INT(s) box 1  -- }
+L2b       37.71           { Bank Savings}
+          12.65           { Credit Union}
+          16.85           { Savings Bank}
+ 	;
+
+ { -- Qualified Dividends 1099-DIV box 1b -- }
+L3a       
+         70.90            {USX Dividends}
+         14.36            {Fidelity Mutual Funds}
+          0.0             {  Growth Fund}
+         61.25            {Company Stock Div}
+	;
+
+ { -- Ordinary Dividends 1099-DIV box 1a. -- }
+L3b
+         70.90            {USX Dividends}
+         44.36            {Fidelity Mutual Funds}
+         64.13            {  Growth Fund}
+         74.52            {Company Stock Div}
+         	;
+			{}
+
+L4a		;       { IRA distributions, Pensions, Annuites. }
+L4b		;       { Taxable IRA distributions, Pensions, Annuites. }
+
+L5a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
+
+L9		;	{ Qualified business income deduction. }
+L12a		; 	{ Child tax credit/credit for other dependents. }
+
+L16	 965.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, etc..  }
+	1688.09         { Spouse's}
+                ;
+
+{ -- Refundable Credits -- }
+L17a	207	;	{ Earned Income Credit (EIC) }
+L17b		;	{ Child Tax Credit, Schedule 8812 }
+L17c		;	{ Education Credits, Form 8863 }
+
+{ -- Penalties -- }
+L23		;	{ Estimated Tax Under-payment Penalty }
+
+
+{ --- Schedule D: Capital Gains/Loses --- }
+CapGains-A/D            { Capital Gains/Losses, 1099-B. For Basis Reported to IRS (Form 8949 check A or D) }
+                        {  Enter for each:  BuyAmnt Date, SellAmnt Date }
+         -800.99        6-20-18         { 40 Shares WMT }
+          950.99        10-12-18
+
+         -800.99        6-20-2018       { 40 Shares AAP }
+          950.99        10-12-18
+
+        -3658.22        1-15-17        { 100 Shares XOM }
+         4209.95        12-25-18
+
+        -4949.98        3-26-17        { 500 Shares NAB }
+         6009.01        12-27-2019
+
+        -4949.98        3-26-11         { 500 Shares FBK  }
+         6009.01        12-27-2019
+                ;
+CapGains-B/E            { Capital Gains/Losses, 1099-B. For Basis NOT Reported to IRS (Form 8949 check B/E) }
+                        {  Enter for each:  BuyAmnt Date, SellAmnt Date }
+
+        100 1-1-1980    { IBM }
+        1000 2-2-2019
+
+        8000 12-24-1980 { SNA }
+        1000 12-28-17
+                ;
+CapGains-C/F            { Capital Gains/Losses, 1099-B. For when Form 8949 (A,B,D,E) CANNOT be checked. (check C/F) }
+                        {  Enter for each:  BuyAmnt Date, SellAmnt Date }
+        900 1-1-1980    { MSFT }
+        9000 2-2-2019
+        100 1-1-1980    { CLF }
+        4000 2-2-2019
+                ;
+D4		;	{ Short-term gain from 6252, gain or loss from Forms 4684, 6781, 8824. }
+D5		;	{ Short-term gain/loss from partnerships, S corps, estates, trusts, K-1. }
+D6              ;       { Short-term 2018 loss carryover. Or, LastYear's return output File-name. }
+D11		;       { Gain from Form 4797. }
+D12		;       { Partnership net long-term gains or losses. }
+D13		;       { Cap Gains Distributions - 1099-DIV column 2a. }
+D14             ;       { Long-term 2018 loss carryover. Leave blank if file-name used in line D6. }
+Collectibles 	;	{ Long Term Gain or Loss from Collectibles, Form 8949 Part II. (Usually zero.) }
+
+
+			{ }
+
+{ --- Schedule 1: Additional Income --- }
+S1_10		;       { Taxable refunds. }
+S1_11		;       { Alimony received. }
+S1_12		;       { Business income/loss. (Sched C) }
+S1_14		;       { Other gains or losses. (form 4797) }
+S1_17		;       { Rent realestate/royalties/partnerships/S corp. Sched E }
+S1_18		;       { Farm income/loss. (Sched F) }
+S1_19		;       { Unemployment compensation }
+S1_21		;       { Other income. }
+
+{ ---- Adjustments to Gross Income ---- }
+S1_23             ;       { Educator expenses }
+S1_24             ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
+S1_25             ;       { Health savings account deduction. Attach Form 8889 }
+S1_26             ;       { Moving expenses. Attach Form 3903 }
+S1_27             ;       { Deductable part of self-employment tax. Attach Schedule SE}
+S1_28             ;       { Self-employed SEP, SIMPS1_E, and qualified plans }
+S1_29             ;       { Self-employed health insurance deduction }
+S1_30             ;       { Penalty on early withdrawal of savings }
+S1_31a            ;       { Alimony paid }
+ AlimRecipSSN:             { Alimony recipient's SocSec Number. }
+ AlimRecipName:            { Alimony recipient's Name. }
+S1_32             ;       { IRA deduction }
+S1_33             ;       { Student loan interest deduction }
+
+{ ---- Tax and Credits ---- }
+ { -- Schedule A: Itemized deductions -- }
+ A1             ;       { Unreimbursed medical expenses. }
+ A5a                    { State and local income taxes. (W-2's boxes 17 + 19.)  Or sales taxes. }
+	  39.88          { State-UI (Unemployment Insurance) }
+        1479.21          { State-tax withheld/owed }
+        1928.35          { Spouse's local tax (paid) }
+		;
+ A5b                    { Real estate taxes.}
+	1771.05 ;        {Prop-tax}
+ A5c            ;       { Personal property (eg. automobile) taxes. }
+ A6             ;       { Other taxes.}
+ A8a            ;       { Home mortgage interest and points reported to you on Form 1098.}
+ A8b            ;       { Home mortgage interest not reported to you on Form 1098.}
+ A8c            ;       { Points not reported to you on Form 1098.}
+ A9             ;       { Investment interest. Attach Form 4952}
+ A11            ;       { Charity contributions by cash or check.}
+ A12            ;       { Contributions other than cash or check.}
+ A13            ;       { Carryover from prior year}
+ A15            ;       { Casualty or theft loss(es).}
+ A16            ;       { Other expenses}
+
+{ -- Schedule B: Part III -- }
+ B7a	N	;	{ Financial account in foreign country ? (answer: Yes, No) }
+ B7aa		;	{ If yes above, did you file FinCEN Form 114 ? (answer: n/a, Yes, No) }
+ B7b		;	{ If yes above, name of country. }
+ B8	N	;	{ Did you receive a foreign trust ? (answer: Yes, No) }
+
+
+{ --- Schedule 2: Tax --- }
+AMTws2c         ;       { Investment interest expense (difference between regular tax and AMT) (Form 6251 line 2c). }
+AMTws2g         ;       { Private activity bond interest exempt from regular tax (Form 6251 line 2g). }
+S2_46		;	{ Excess advance premium tax credit repayment. Form 8962. }
+
+{ --- Schedule 3: Nonrefundable Credits --- }
+S3_48             ;       { Foreign tax credit, form 1116 }
+S3_49             ;       { Child/dependent care expense credits. Form 2441. }
+S3_50             ;       { Education credits. Form 8863, line 19. }
+S3_51             ;       { Retirement savings contributions credit. Form 8880. }
+S3_53             ;       { Residential energy credits. Form 5695. }
+S3_54             ;       { Other credits. Forms 3800, 8801, etc. }
+
+{ --- Schedule 4: Other Taxes --- }
+S4_57             ;       { Self-employment tax. Sched SE }
+S4_58             ;       { Unreported social security and Medicare tax from Form 4137, 8919 }
+S4_59             ;       { Additional tax on IRAs, other qualified retirement plans, Form 5329 }
+S4_60a            ;       { Household employment taxes. Sched H }
+S4_60b            ;       { First-time homebuyer credit repayment. Form 5405. }
+S4_61             ;       { Health care: individual responsibility. }
+S4_62		  ;	  { Taxes from Forms 8959, 8960, others. }
+S4_63		  ;	  { Section 965 net tax liability installment from Form965-A. }
+
+{ --- Schedule 5: Other Payments and Refundable Credits --- }
+S5_66		;	{ 2019 estimated payments + amnt applied from last year. }
+S5_70		;	{ Net premium tax credit. Form 8962. }
+S5_71		;	{ Amnt paid in filing extension req. }
+S5_72		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
+S5_73		;	{ Credits for federal tax on fuels. Attach form 4136. }
+S5_74		;	{ Credits from Form 2439, 4136, 6801, 8885. }
+
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+
+	{ Your 1st-Name, Middle-Initial }
+ Your1stName:	 Fred, D.
+ YourLastName:   Smythe
+ YourSocSec#: 	 409-31-7804
+
+	{ Spouse 1st-Name, Middle-Initial -- If Married-Filing-Jointly, otherwise leave spouse fields blank. }
+ Spouse1stName:  Sarah, M.             { Leave blank if Single, etc. }
+ SpouseLastName:   Smythe
+ SpouseSocSec#:   409-33-9408
+
+ 	{ Your Address }
+ Number&Street:  1567 W. Hamptonshire
+ Apt#:		 
+ TownStateZip:   Springfield, IL 62722
+
+{
+ --------------------------------------------
+}

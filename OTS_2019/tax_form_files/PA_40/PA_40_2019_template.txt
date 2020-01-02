@@ -1,0 +1,64 @@
+Title:  PA State Tax Form PA-40 for 2019
+
+{ -- Your Filing Status -- }
+
+Status	   		{Single, Married/Joint, Married/Sep, Widow(er)}
+
+{ -- Income -- }
+
+L1a        		{Gross compensation.}
+			 {spouse}
+		;
+L1b        	;	{ Unreimbursed employee business expenses.}
+L2	    		{ Interest Income. }
+		;
+L3	    		{ Dividend and Capital Gains Distributions Income. }
+		;
+L4	    	;	{ Net Income or Loss for Business Operations. }
+L5	    	;	{ Net Gain or Loss from Sale, Exchange or Disposition of Property. }
+L6	    	;	{ Net Income or Loss from Rents, Royalties, Patents, or Copyrights. }
+L7	    	;	{ Estate or Trust Income. }
+L8	    	;	{ Gambling or lottery winnings. }
+L10	    	;	{ Other Deductions. }
+
+
+{ -- Withholdings -- }
+
+L13	     		{ Total PA Tax withheld. }
+	    		 {spouse}
+		;
+
+{ -- Credits & Deductions -- }
+
+L14	    0   ;	{ Credit from 2018 PA income tax return. }
+L15	    0 	;	{ 2019 Estimated Installment payments. }
+L16	    0 	;	{ 2019 Extension payment. }
+L17	    0   ;	{ Non-resident tax withheld. }
+L21	    0   ;	{ Tax Back/Tax Forgiveness Credit (Part D line 16 Sched SP). }
+L22	    0   ;	{ Resident credit (Scheds G/RK-1). }
+L23	    0   ;	{ Other credits (Sched OC). }
+L25	    0   ;	{ Use Tax }
+L27         0   ;       { Penalties and underpayment interest. }
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+ Your1stName:	
+ MidInitial:	
+ YourLastName:	
+ YourSocSec#:	
+ Spouse1stName: 		{ Leave blank if Single, etc. }
+ SpouseMidInit:	 
+ SpouseLastName: 
+ SpouseSocSec#:	 
+ Number&Street:	
+ Town:		
+ Zipcode:   	
+ Phone:		
+ SchoolCode:    
+ SchooldDist:	
+ YourOccupation:  
+ SpouseOccupat:   
+
+{
+ --------------------------------------------
+}

@@ -1,0 +1,293 @@
+Page 1
+
+ TxtColor: 0 0 0.6
+
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+ round_to_whole_numbers
+ no_zero_entries
+
+Your1stName:	 60 184		0 12.4
+YourMidInit:	285 184		0 1
+YourLastName:	316 184		0 12.4
+YourSocSec#: 	663 184		0 12
+
+Spouse1stName:	 60 228		0 12.4
+SpouseMidInit:	285 228		0 1
+SpouseLastName:	316 228		0 12.4
+SpouseSocSec#:	663 228		0 12
+
+Number&Street:	 60 320		0 12.4
+Apt#: 		598 320		0 13.6
+Town:     	 60 366		0 12.4
+State:		615 366		0 12.4
+Zipcode: 	660 366		0 12.4
+
+YourDOB:	125 465		0 12.4
+SpouseDOB:	488 465		0 12.4
+
+FontSz 18
+ CkSingle: 118 587 
+ CkMFJ:    118 622 
+ CkMFS:    118 694 
+ CkHH:     382 587 
+ CkQW:     382 622 
+ CkDep:	   715 730
+FontSz 10
+
+L7a 	618 794
+L7 	778 794
+L8a 	618 832
+L8 	778 832
+L9a 	618 870
+L9 	778 870
+L10a	618 1066	
+L10	778 1066	
+L11	778 1098
+
+
+Page 2
+
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:	135 125	0 11.8
+YourSocSec#:	538 125 0 12
+
+L12	560 180		14
+L13	725 209		14
+L14     725 239		14
+L15     725 269		14
+L16     725 299		14
+L17	725 330		14
+L18	725 431		14
+
+showevenifzero L19
+L19	725 462		14
+
+FontSz 18
+ CkTxTable:    277 508
+ CkTxRateSchd: 401 508
+FontSz 10
+
+L31	725 529		14
+L32     725 575		14
+
+showevenifzero L33
+L33    725 607		14
+
+L34     725 637		14
+L35	725 668		14
+L40	725 715		14
+L43     725 744		14
+L44     725 776		14
+L45     725 808		14
+L46     725 841		14
+L47     725 873		14
+
+showevenifzero L48
+L48	725 907		14
+
+L61	725 953		14
+L62	725 982		14
+L63	725 1013	14
+L64	725 1043	14
+
+
+Page 3
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:	135 125	0 11.8
+YourSocSec#:	538 125 0 12
+
+L71	725 179		14
+L72     725 210		14
+L73     725 240		14
+L74     725 272		14
+L75     725 302		14
+L76	725 334		14
+showevenifzero L91
+L91	562 386		14
+CkNoUseTaxOwed 	   278 420  
+CkPayedUseTaxCDTFA 278 453  
+L92	725 493		14
+L93     725 525		14
+L94     725 554		14
+L95     725 584		14
+L96     725 615		14
+L97     725 647		14
+
+
+Page 4
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:       135 125 0 11.8
+YourSocSec#:    538 125 0 12
+
+L111	688 217	8 14
+L112	728 281	6 14
+L113	728 313	6 14
+L114	728 346	6 14
+L115	688 432	8 14
+
+Page 5
+
+YourNames:	 60 160 0 13.5
+YourSocSec#:    644 160 0 17.5
+
+
+SchedCA540_1 	 574 220 	9
+SchedCA540_1b 	 684 220 	9
+SchedCA540_1c 	 794 220 	9
+SchedCA540_2 	 574 241	9
+SchedCA540_2b 	 684 241 	9
+SchedCA540_2c 	 794 241 	9
+SchedCA540_3 	 574 262 	9
+SchedCA540_3b 	 684 262 	9
+SchedCA540_3c 	 794 262 	9
+SchedCA540_4 	 574 281 	9
+SchedCA540_4b 	 684 281 	9
+SchedCA540_4c 	 794 281 	9
+SchedCA540_5 	 574 302 	9
+SchedCA540_5b 	 684 302 	9
+
+SchedCA540_10    574 345	9
+SchedCA540_10b   684 345	9
+SchedCA540_11    574 365	9
+SchedCA540_11c   794 365	9
+SchedCA540_12    574 386	9
+SchedCA540_12b   684 386	9
+SchedCA540_12c   794 386	9
+SchedCA540_13    574 403	9
+SchedCA540_13b   684 403	9
+SchedCA540_13c   794 403	9
+SchedCA540_14    574 423	9
+SchedCA540_14b   684 423	9
+SchedCA540_14c   794 423	9
+SchedCA540_17    574 485	9
+SchedCA540_17b   684 485	9
+SchedCA540_17c   794 485	9
+SchedCA540_18    574 504	9
+SchedCA540_18b   684 504	9
+SchedCA540_18c   794 504	9
+SchedCA540_19    574 525	9
+SchedCA540_19b   684 525	9
+SchedCA540_19c   794 525	9
+SchedCA540_21    570 604	9
+SchedCA540_21ba  684 565	9
+SchedCA540_21bb  684 583	9
+SchedCA540_21bd  684 624	9
+SchedCA540_21be  684 644	9
+SchedCA540_21bf  684 663	9
+SchedCA540_21cc  794 604	9
+SchedCA540_21cf  794 663	9
+SchedCA540_22    574 703	9
+SchedCA540_22b   684 703	9
+SchedCA540_22c   794 703	9
+
+SchedCA540_23    574 756	9
+SchedCA540_23b   684 756	9
+SchedCA540_24    574 790	9
+SchedCA540_24b   684 790	9
+SchedCA540_24c   794 790	9
+SchedCA540_25    574 811	9
+SchedCA540_25b   684 811	9
+SchedCA540_26    574 830	9
+SchedCA540_26c   794 830	9
+SchedCA540_27    574 850	9
+SchedCA540_28    574 870	9
+SchedCA540_29    574 890	9
+SchedCA540_30    574 910	9
+AlimRecipSSN:	300 928 0 13.4
+AlimRecipName:	330 959 
+SchedCA540_31    574 959	9
+SchedCA540_31c   794 959	9
+SchedCA540_32    574 979	9
+SchedCA540_33    574 999	9
+SchedCA540_33c   794 999	9
+SchedCA540_36    574 1079	9
+SchedCA540_36b   684 1079	9
+SchedCA540_36c   794 1079	9
+SchedCA540_37    574 1110	9
+SchedCA540_37b   684 1110	9
+SchedCA540_37c   794 1110	9
+
+
+
+
+Page 6
+
+SchedCA540_Part2_1	423 184	9
+SchedCA540_Part2_2	341 205	9
+SchedCA540_Part2_3	423 225	9
+SchedCA540_Part2_4a	570 245	9
+SchedCA540_Part2_5aa	570 285	9
+SchedCA540_Part2_5ab	677 285	9
+SchedCA540_Part2_5ba	570 305	9
+SchedCA540_Part2_5ca	570 325	9
+SchedCA540_Part2_5da	570 345	9
+SchedCA540_Part2_5ea	570 400	9
+SchedCA540_Part2_5eb	677 400	9
+SchedCA540_Part2_5ec	787 400	9
+SchedCA540_Part2_6a	570 420	9
+SchedCA540_Part2_6b	677 420	9
+SchedCA540_Part2_6c	787 420	9
+SchedCA540_Part2_7a	570 440	9
+SchedCA540_Part2_7b	677 440	9
+SchedCA540_Part2_7c	787 440	9
+
+SchedCA540_Part2_8aa	570 478	9
+SchedCA540_Part2_8ac	787 478	9
+SchedCA540_Part2_8ba	570 498	9
+SchedCA540_Part2_8bc	787 498	9
+SchedCA540_Part2_8ca	570 518	9
+SchedCA540_Part2_8cc	787 518	9
+SchedCA540_Part2_8ea	570 558	9
+SchedCA540_Part2_8ec	787 558	9
+SchedCA540_Part2_9a	570 578	9
+SchedCA540_Part2_9b	677 578	9
+SchedCA540_Part2_9c	787 578	9
+SchedCA540_Part2_10a	570 598	9
+SchedCA540_Part2_10b	677 598	9
+SchedCA540_Part2_10c	787 598	9
+SchedCA540_Part2_11a	570 638	9
+SchedCA540_Part2_11b	677 638	9
+SchedCA540_Part2_11c	787 638	9
+SchedCA540_Part2_12a	570 658	9
+SchedCA540_Part2_12b	677 658	9
+SchedCA540_Part2_12c	787 658	9
+SchedCA540_Part2_13a	570 678	9
+SchedCA540_Part2_13b	677 678	9
+SchedCA540_Part2_13c	787 678	9
+SchedCA540_Part2_14a	570 698	9
+SchedCA540_Part2_14b	677 698	9
+SchedCA540_Part2_14c	787 698	9
+SchedCA540_Part2_15a	570 757	9
+SchedCA540_Part2_15b	677 757	9
+SchedCA540_Part2_15c	787 757	9
+SchedCA540_Part2_16a	570 797	9
+SchedCA540_Part2_16b	677 797	9
+SchedCA540_Part2_16c	787 797	9
+SchedCA540_Part2_17a	570 817	9
+SchedCA540_Part2_17b	677 817	9
+SchedCA540_Part2_17c	787 817	9
+SchedCA540_Part2_18	790 848 9
+
+Page 7
+
+SchedCA540_Part2_19	556 173 9
+SchedCA540_Part2_20	556 206 9
+SchedCA540_Part2_21	556 241 9
+SchedCA540_Part2_22	556 274 9
+SchedCA540_Part2_23	342 308 9
+SchedCA540_Part2_24	556 342 9
+SchedCA540_Part2_25	784 377 9
+SchedCA540_Part2_26	784 410 9
+SchedCA540_Part2_27	784 445 9
+SchedCA540_Part2_28	784 479 9
+SchedCA540_Part2_29	784 624 9
+SchedCA540_Part2_30	784 731 9
+
