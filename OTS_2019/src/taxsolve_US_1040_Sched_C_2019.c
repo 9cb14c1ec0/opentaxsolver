@@ -165,7 +165,7 @@ int main( int argc, char *argv[] )
  GetLine( "L9", &L[9] );	/* Car & truck expenses */
 
  GetLine( "Miles", &Mileage );	/* Miles for Line 9, not already included in Line 9. */
- L[9] = L[9] + 0.545 * Mileage;					/* Updated for 2019. */
+ L[9] = L[9] + 0.58 * Mileage;					/* Updated for 2019. */
 
  GetLine( "L10", &L[10] );	/* Commissions & fees */
 

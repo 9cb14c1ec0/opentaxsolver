@@ -46,7 +46,7 @@
 
 float version=2.31;
 char package_date[]="Jan. 2, 2020";
-char ots_release_package[]="17.00";
+char ots_release_package[]="17.00-preRelease";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -3344,18 +3344,21 @@ int main(int argc, char *argv[] )
  formid = setform( form_US_1040 );
  txprogstog = make_radio_button( mpanel, 0, x, y, "US 1040 (w/Scheds A,B,D)", slcttxprog, formid );
  add_tool_tip( txprogstog, "Also does the 8949 forms." );
+gtk_widget_set_sensitive( txprogstog, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_US_1040_Sched_C );
  make_radio_button( mpanel, txprogstog, x, y, "US 1040 Sched C", slcttxprog, formid );
  y = y + dy;
  formid = setform( form_CA_540 );
- make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, formid );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, formid );
+gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_NC_D400 );
  make_radio_button( mpanel, txprogstog, x, y, "NC State DC400", slcttxprog, formid );
  y = y + dy;
  formid = setform( form_NJ_1040 );
- make_radio_button( mpanel, txprogstog, x, y, "NJ State 1040", slcttxprog, formid );
+ tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NJ State 1040", slcttxprog, formid );
+gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_GA_500 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "GA State 500", slcttxprog, formid );
@@ -3368,7 +3371,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_PA_40 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "PA State 40", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_VA_760 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "VA State 760", slcttxprog, formid );
@@ -3376,11 +3379,11 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_NY_IT201 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NY State IT201", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_MA_1 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "MA State 1", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_other );
  txprogstog = make_radio_button( mpanel, txprogstog, x, y, "Other", slcttxprog, formid );

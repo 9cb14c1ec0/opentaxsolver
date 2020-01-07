@@ -41,23 +41,21 @@ L5	40	;	{ Social Security Act, Tier 1 Railroad Retirement Act benef. }
 L6	50	;	{ State Income Tax refund or overpayment credit }
 L7	60	;	{ Subtractions from Schedule ADJ, line 7 }
 L10	70.0	;	{ Itemized Deductions - Otherwise enter 0.0 for Std. Ded. }
-L11	80	;	{ State and Local Income Taxes claimed on federal Sched-A. }
-L14	90	;	{ Deductions from VAGI Schedule ADJ, Line 9. }
-L18	10	;	{ Spouse Tax Adjustment. }
-L20a  4,718.00 	;	{ Virginia tax withheld for 2019. }
-L20b	11	;	{ Spouse's Virginia tax withheld. }
-L21	12	;	{ Estimated tax paid for 2019. (form 760ES) }
-L22	13	;	{ Amount of 2018 overpayment applied toward 2019 estimated tax. }
-L23	14	;	{ Extension payments (form 760IP). }
-L24	15	;	{ Tax Credit, Low Income Individuals (Sch. ADJ, line 17) }
-L25	16	;	{ Credit, Tax Paid to other State (Sch. OSC line 21 ...) }
-L26	17	;	{ Credit for Political Contributions. }
-L27	18	;	{ Credits from attached Schedule CR, Section 5, Part 1, Line 1A }
-L31	19	;	{ Amount of overpayment to credit to next year's estimated tax.}
-L32	20	;	{ VA College Savings Plan Contributions, Sched-VAC, I-6. }
-L33	21	;	{ Other voluntary contribitions. }
-L34	22	;	{ Addition to Tax, Penalty, Interest, Sched-ADJ, Line 21 }
-L35	23	;	{ Consumer's Use Tax. }
+L13	90	;	{ Deductions from VAGI Schedule ADJ, Line 9. }
+L17	10	;	{ Spouse Tax Adjustment. }
+L19a  4,718.00 	;	{ Virginia tax withheld for 2019. }
+L19b	11	;	{ Spouse's Virginia tax withheld. }
+L20	12	;	{ Estimated tax paid for 2019. (form 760ES) }
+L21	13	;	{ Amount of 2018 overpayment applied toward 2019 estimated tax. }
+L22	14	;	{ Extension payments (form 760IP). }
+L23	15	;	{ Tax Credit, Low Income Individuals (Sch. ADJ, line 17) }
+L24	16	;	{ Credit, Tax Paid to other State (Sch. OSC line 21 ...) }
+L25	18	;	{ Credits from attached Schedule CR, Section 5, Part 1, Line 1A }
+L29	19	;	{ Amount of overpayment to credit to next year's estimated tax.}
+L30	20	;	{ VA College Savings Plan Contributions, Sched-VAC, I-6. }
+L31	21	;	{ Other voluntary contribitions. }
+L32	22	;	{ Addition to Tax, Penalty, Interest, Sched-ADJ, Line 21 }
+L33	23	;	{ Consumer's Use Tax. }
 
 {
  -----------------------

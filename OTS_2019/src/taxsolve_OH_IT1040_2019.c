@@ -37,29 +37,25 @@ double thisversion=17.00;
 #define HEAD_OF_HOUSEHOLD       1
 
 double TaxRateFunction( double x, int status )
-{							/* Not Updated for 2019. */
- if (x <= 10850.0) return     0.0; else
- if (x < 16300.0) return    80.56 + (x-10850.0)  * 0.01980; else
- if (x < 21750.0) return   188.47 + (x-16300.0)  * 0.02476; else
- if (x < 43450.0) return   323.41 + (x-21750.0)  * 0.02969; else
- if (x < 86900.0) return   967.68 + (x-43450.0)  * 0.03465; else
- if (x < 108700.0) return 2473.22 + (x-86900.0)  * 0.03960; else
- if (x < 217400.0) return 3336.50 + (x-108700.0) * 0.04597;
- else 		   return 8333.44 + (x-217400.0) * 0.04997;
+{							/* Updated for 2019. */
+ if (x <= 21750.0) return    0.0; else
+ if (x <  43450.0) return  310.47 + (x-21750.0)  * 0.02850; else
+ if (x <  86900.0) return  928.92 + (x-43450.0)  * 0.03326; else
+ if (x < 108700.0) return 2374.07 + (x-86900.0)  * 0.03802; else
+ if (x < 217400.0) return 3202.91 + (x-108700.0) * 0.04413;
+ else 		   return 7999.84 + (x-217400.0) * 0.04797;
 }
 
 
 void Report_bracket_info( double income, double tx, int status )
-{							/* Not Updated for 2019. */
+{							/* Updated for 2019. */
  double rate;
- if (income <= 10850.0) rate = 0.0; else
- if (income < 16300.0)  rate = 0.01980; else
- if (income < 21750.0)  rate = 0.02476; else
- if (income < 43450.0)  rate = 0.02969; else
- if (income < 86900.0)  rate = 0.03465; else
- if (income < 108700.0) rate = 0.03960; else
- if (income < 217400.0) rate = 0.04597;
- else 		   	rate = 0.04997;
+ if (income <= 21750.0) rate = 0.0; else
+ if (income <  43450.0) rate = 0.02850; else
+ if (income <  86900.0) rate = 0.03326; else
+ if (income < 108700.0) rate = 0.03802; else
+ if (income < 217400.0) rate = 0.04413;
+ else 		   	rate = 0.04797;
  printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
 	  100.0 * rate, 100.0 * tx / income );
  fprintf(outfile," You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
@@ -135,6 +131,7 @@ int main( int argc, char *argv[] )
    SchedA[mm] = 0.0;
    SchedC[mm] = 0.0;
   }
+ do_all_caps = 1;
 
  /* Accept parameters from input file. */
  /* Expect  OH IT1040 lines, something like:
@@ -217,10 +214,11 @@ int main( int argc, char *argv[] )
  GetLine( "SchedA_31", &SchedA[21] );	/* Ohio 529 contributions, tuition credit purchases */
  GetLine( "SchedA_32", &SchedA[32] );	/* Pell College Opportunity taxable grant amounts used for room and board */
 
- GetLine( "SchedA_33", &SchedA[33] );	/* Disability and survivorship benefi ts */
- GetLine( "SchedA_34", &SchedA[34] );	/* Unreimbursed long-term care insurance premiums ... */
- GetLine( "SchedA_35", &SchedA[35] );	/* Funds deposited into, and earnings of, a medical savings account */
- GetLine( "SchedA_36", &SchedA[36] );	/* Qualified organ donor expenses */
+ GetLine( "SchedA_33", &SchedA[33] );	/* Disability benefits */
+ GetLine( "SchedA_34", &SchedA[34] );	/* Survivorship benefits */
+ GetLine( "SchedA_35", &SchedA[35] );	/* Unreimbursed long-term care insurance premiums ... */
+ GetLine( "SchedA_36", &SchedA[36] );	/* Funds deposited into, and earnings of, a medical savings account */
+ GetLine( "SchedA_37", &SchedA[37] );	/* Qualified organ donor expenses */
  
  /* Schedule of Credits. */
  GetLine( "Credits_2", &SchedC[2] );	/* Retirement income credit */
@@ -249,22 +247,23 @@ int main( int argc, char *argv[] )
  GetLine( "Credits_16", &SchedC[16] );	/* Credit for eligible new employees in an enterprise zone */
  GetLine( "Credits_17", &SchedC[17] );	/* Credit for purchases of grape production property */
  GetLine( "Credits_18", &SchedC[18] );	/* Invest Ohio */
- GetLine( "Credits_19", &SchedC[19] );	/* Tech investment credit */
- GetLine( "Credits_20", &SchedC[20] );	/* Enterprise zone day care and training credits */
- GetLine( "Credits_21", &SchedC[21] );	/* Research and development credit */
- GetLine( "Credits_22", &SchedC[22] );	/* Ohio historic preservation credit, nonrefundable carryforward portion */
+ GetLine( "Credits_19", &SchedC[19] );	/* Opportunity zone investment credit */
+ GetLine( "Credits_20", &SchedC[20] );	/* Tech investment credit */
+ GetLine( "Credits_21", &SchedC[21] );	/* Enterprise zone day care and training credits */
+ GetLine( "Credits_22", &SchedC[22] );	/* Research and development credit */
+ GetLine( "Credits_23", &SchedC[23] );	/* Ohio historic preservation credit, nonrefundable carryforward portion */
 
- GetLine( "Credits_25", &SchedC[25] );	/*  Portion L3 was not earned in Ohio. */
+ GetLine( "Credits_26", &SchedC[26] );	/*  Portion L3 was not earned in Ohio. */
 
- GetLine( "Credits_28", &SchedC[28] );	/* Portion L3 taxed by other states */
- GetLine( "Credits_31", &SchedC[31] );	/* Income Tax paid to Other States */
+ GetLine( "Credits_29", &SchedC[29] );	/* Portion L3 taxed by other states */
+ GetLine( "Credits_32", &SchedC[32] );	/* Income Tax paid to Other States */
 
- GetLine( "Credits_34", &SchedC[34] );	/* Historic preservation credit */
- GetLine( "Credits_35", &SchedC[35] );	/* Business jobs credit */
- GetLine( "Credits_36", &SchedC[36] );	/* Pass-through entity credit */
- GetLine( "Credits_37", &SchedC[37] );	/* Motion picture production credit */
- GetLine( "Credits_38", &SchedC[38] );	/* Financial Institutions Tax (FIT) credit */
- GetLine( "Credits_39", &SchedC[39] );	/* Venture capital credit */
+ GetLine( "Credits_35", &SchedC[35] );	/* Historic preservation credit */
+ GetLine( "Credits_36", &SchedC[36] );	/* Business jobs credit */
+ GetLine( "Credits_37", &SchedC[37] );	/* Pass-through entity credit */
+ GetLine( "Credits_38", &SchedC[38] );	/* Motion picture production credit */
+ GetLine( "Credits_39", &SchedC[39] );	/* Financial Institutions Tax (FIT) credit */
+ GetLine( "Credits_40", &SchedC[40] );	/* Venture capital credit */
 
 
  /* ---- Do Calculations. ---- */
@@ -272,14 +271,14 @@ int main( int argc, char *argv[] )
  for (j=1; j <= 9; j++)
   SchedA[10] = SchedA[10] + SchedA[j];
 
- for (j=11; j <= 36; j++)
-  SchedA[37] = SchedA[37] + SchedA[j];
+ for (j=11; j <= 37; j++)
+  SchedA[38] = SchedA[38] + SchedA[j];
 
  L2a = SchedA[10];
- L2b = SchedA[37];
+ L2b = SchedA[38];
  L[3] = L[1] + L2a - L2b;
 
- if (L[3] <= 40000.0)			/* Not Updated for 2019. */
+ if (L[3] <= 40000.0)			/* Updated for 2019. */
   exemption_amnt = 2350.0;
  else
  if (L[3] <= 80000.0)
@@ -314,15 +313,15 @@ int main( int argc, char *argv[] )
     SchedC[12] = smallerof( jfc * L[11], 650.0 );
   } /*Joint_Filing_Credit*/
 
- for (j=12; j <= 22; j++)
-  SchedC[23] = SchedC[23] + SchedC[j];          
- SchedC[24] = NotLessThanZero( SchedC[11] - SchedC[23] );
+ for (j=12; j <= 23; j++)
+  SchedC[24] = SchedC[24] + SchedC[j];          
+ SchedC[25] = NotLessThanZero( SchedC[11] - SchedC[24] );
 
- SchedC[26] = L[3];
- j = 10000.0 * SchedC[25] / SchedC[26];
+ SchedC[27] = L[3];
+ j = 10000.0 * SchedC[26] / SchedC[27];
  factorA = (double)j / 10000.0;
  // printf(" %4g\n", factorA );
- SchedC[27] = SchedC[24] * factorA;
+ SchedC[28] = SchedC[25] * factorA;
 
  SchedC[29] = L[3];
  j = 10000.0 * SchedC[28] / SchedC[29];
@@ -332,12 +331,12 @@ int main( int argc, char *argv[] )
  // SchedC[31] = L[13];
  SchedC[32] = smallerof( SchedC[30], SchedC[31] );
 
- SchedC[33] = SchedC[10] + SchedC[23] + SchedC[27] + SchedC[32];
- L[9] = SchedC[33];
+ SchedC[34] = SchedC[10] + SchedC[24] + SchedC[28] + SchedC[33];
+ L[9] = SchedC[34];
 
- for (j=34; j <= 39; j++)
-  SchedC[40] = SchedC[40] + SchedC[j];          
- L[16] = SchedC[40];
+ for (j=35; j <= 40; j++)
+  SchedC[41] = SchedC[41] + SchedC[j];          
+ L[16] = SchedC[41];
 
  L[10] = NotLessThanZero( L8c - L[9] );
  L[13] = L[10] + L[11] + L[12];			/* Total Ohio tax liability before withholding or estimated payments. */
@@ -354,10 +353,10 @@ int main( int argc, char *argv[] )
    L[27] = L[24];
   }
 
- if ((L[1] < 12950.0) && (L[3] < 0.0))
+ if ((L[1] < 21750.0) && (L[3] < 0.0))		/* Min2File. */
   fprintf(outfile, "You do not need to file Ohio tax return (Fed AGI < minimum).\n");
 
- if ((L[1] < 12950.0) && (L[4] >= L[3]))
+ if ((L[1] < 21750.0) && (L[4] >= L[3]))
   fprintf(outfile, "You do not need to file Ohio tax return (L[4] >= L[3]).\n");
 
 
@@ -400,7 +399,7 @@ int main( int argc, char *argv[] )
   }
 
  fprintf(outfile,"\n-- 2019 Ohio Schedule A --\n");
- for (j = 1; j <= 37; j++)
+ for (j = 1; j <= 38; j++)
   {
    sprintf( label, "SchedA%d", j );
    showline_wlabel( label, SchedA[j] );
@@ -414,15 +413,15 @@ int main( int argc, char *argv[] )
   }
  sprintf(word,"%5.4f", factorA);
 printf("factorA = %g, word = '%s'\n", factorA, word );
- fprintf(outfile,"   Credits27_Factor %s\n", &(word[2]) );
+ fprintf(outfile,"   Credits28_Factor %s\n", &(word[2]) );
  showline_wlabel( "Credits28", SchedC[28] );
  showline_wlabel( "Credits29", SchedC[29] );
  showline_wlabel( "Credits30", SchedC[30] );
  sprintf(word,"%5.4f", factorB );
 printf("factorB = %g, word = '%s'\n", factorB, word );
- fprintf(outfile,"   Credits30_Factor %s\n", &(word[2]) );
+ fprintf(outfile,"   Credits31_Factor %s\n", &(word[2]) );
 
- for (j = 31; j <= 40; j++)
+ for (j = 31; j <= 41; j++)
   {
    sprintf( label, "Credits%d", j );
    showline_wlabel( label, SchedC[j] );
@@ -448,7 +447,10 @@ printf("factorB = %g, word = '%s'\n", factorB, word );
  writeout_line = 0;
  socsec = GetTextLineF( "SpouseSocSec#:" );
  format_socsec( socsec, 0 );
- fprintf(outfile,"SpouseSocSec#: %s\n", socsec );
+ if (status != MARRIED_FILLING_SEPARAT)
+  fprintf(outfile,"SpouseSocSec#: %s\n", socsec );
+ else
+  fprintf(outfile,"SpouseSocSec#Sep: %s\n", socsec );
  free( socsec );
  writeout_line = 1;
  GetTextLineF( "Number&Street:" );

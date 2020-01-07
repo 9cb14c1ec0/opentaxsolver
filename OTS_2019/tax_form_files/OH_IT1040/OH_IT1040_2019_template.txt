@@ -28,7 +28,7 @@ SchedA_5	;	{ Nonmedical withdrawals from medical savings account }
 SchedA_6	;	{ Reimbursement of expenses previously deducted for Ohio income tax ... }
 SchedA_7	;	{ Adjustment for Internal Revenue Code sections 168(k) and 179 }
 SchedA_8	;	{ Federal interest and dividends subject to state taxation }
-SchedA_9	;	{ Miscellaneous federal income tax additions }
+SchedA_9	;	{ Federal conformity additions }
 
 { --- Deductions --- }
 SchedA_11	;	{ Business income deduction (Ohio Schedule IT BUS, line 11) }
@@ -61,10 +61,11 @@ SchedA_31	;	{ Ohio 529 contributions, tuition credit purchases }
 SchedA_32	;	{ Pell College Opportunity taxable grant amounts used for room and board }
 
 { Medical } 
-SchedA_33	;	{ Disability and survivorship benefits }
-SchedA_34	;	{ Unreimbursed long-term care insurance premiums ...  }
-SchedA_35	;	{ Funds deposited into, and earnings of, a medical savings account }
-SchedA_36	;	{ Qualified organ donor expenses }
+SchedA_33	;	{ Disability benefits }
+SchedA_34	;	{ Survivorship benefits }
+SchedA_35	;	{ Unreimbursed long-term care insurance premiums ...  }
+SchedA_36	;	{ Funds deposited into, and earnings of, a medical savings account }
+SchedA_37	;	{ Qualified organ donor expenses }
 
 { --- Schedule of Credits --- }
 Credits_2	;	{ Retirement income credit.  See instructions page 27. }
@@ -81,25 +82,26 @@ Credits_15	;	{ Job retention credit, nonrefundable portion }
 Credits_16	;	{ Credit for eligible new employees in enterprise zones }
 Credits_17	;	{ Credit for purchases of grape production property }
 Credits_18	;	{ Invest Ohio }
-Credits_19	;	{ Tech investment credit }
-Credits_20	;	{ Enterprise zone day care and training credits }
-Credits_21	;	{ Research and development credit }
-Credits_22	;	{ Ohio historic preservation credit, nonrefundable carryforward portion }
+Credits_19	;	{ Opportunity zone investment credit }
+Credits_20	;	{ Tech investment credit }
+Credits_21	;	{ Enterprise zone day care and training credits }
+Credits_22	;	{ Research and development credit }
+Credits_23	;	{ Ohio historic preservation credit, nonrefundable carryforward portion }
 
 { - Nonresident Credit - }
-Credits_25	;	{  Portion L3 was not earned in Ohio }
+Credits_26	;	{  Portion L3 was not earned in Ohio }
 
 { - Resident Credit - }
-Credits_28	;	{  Portion of Line-3 (L3) taxed by other states }
-Credits_31	;	{  Income Tax paid to Other States }
+Credits_29	;	{  Portion of Line-3 (L3) taxed by other states }
+Credits_32	;	{  Income Tax paid to Other States }
 
 { - Refundable Credits - }
-Credits_34	;	{ Historic preservation credit }
-Credits_35	;	{ Business jobs credit }
-Credits_36	;	{ Pass-through entity credit }
-Credits_37	;	{ Motion picture production credit }
-Credits_38	;	{ Financial Institutions Tax (FIT) credit }
-Credits_39	;	{ Venture capital credit }
+Credits_35	;	{ Historic preservation credit }
+Credits_36	;	{ Business jobs credit }
+Credits_37	;	{ Pass-through entity credit }
+Credits_38	;	{ Motion picture production credit }
+Credits_39	;	{ Financial Institutions Tax (FIT) credit }
+Credits_40	;	{ Venture capital credit }
 
 { ------------------------------------------- } 
 { --- Optional info for Auto-PDF-Fillout. --- }

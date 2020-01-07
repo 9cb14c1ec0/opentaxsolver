@@ -183,11 +183,15 @@ int main( int argc, char *argv[] )
 	L42		{Witheld tax, from W-2}
 */
 
-
  /* Accept Form's "Title" line, and put out with date-stamp for records. */
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ) );
+
+ printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
+ printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
+ fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
+ fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
 
  /* get_parameter(infile, kind, x, mesage ) */
  get_parameter( infile, 's', word, "Status" );

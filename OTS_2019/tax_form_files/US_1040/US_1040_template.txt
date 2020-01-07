@@ -86,6 +86,7 @@ S1_17		;       { Rent realestate/royalties/partnerships/S corp. Sched E }
 S1_18		;       { Farm income/loss. (Sched F) }
 S1_19		;       { Unemployment compensation }
 S1_21		;       { Other income. }
+ S1_21_Type:             { Type of Other Income. }
 
 { ---- Adjustments to Gross Income ---- }
 S1_23             ;       { Educator expenses }
@@ -129,6 +130,8 @@ S1_33             ;       { Student loan interest deduction }
 { --- Schedule 2: Tax --- }
 AMTws2c		;	{ Investment interest expense (difference between regular tax and AMT) (Form 6251 line 2c). }
 AMTws2g		;	{ Private activity bond interest exempt from regular tax (Form 6251 line 2g). }
+	{ AMT Worksheet 6251 entries for lines 8-27 can be optionally added. For example "AMTws27  234.00". }
+
 S2_46		;	{ Excess advance premium tax credit repayment. Form 8962. }
 
 { --- Schedule 3: Nonrefundable Credits --- }

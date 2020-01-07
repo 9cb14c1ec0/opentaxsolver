@@ -1422,6 +1422,11 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ) );
 
+ printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
+ printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
+ fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
+ fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
+
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
@@ -1524,6 +1529,7 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  GetLineFnz( "S1_19", &Sched1[19] );	/* Unemployment compensation */
 
  GetLineFnz( "S1_21", &Sched1[21] );	/* Other income. (pg 28) */
+ GetTextLineF( "S1_21_Type:" );
 
  for (j=10; j <= 21; j++)
   Sched1[22] = Sched1[22] + Sched1[j];

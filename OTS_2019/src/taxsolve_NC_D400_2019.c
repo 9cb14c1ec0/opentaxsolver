@@ -46,7 +46,7 @@ float thisversion=17.00;
 #define Yes 1
 #define No  0
 
-double flat_tax_rate = 0.05499;
+double flat_tax_rate = 0.0525;		/* Updated for 2019. */
 
 
 struct FedReturnData
@@ -263,20 +263,20 @@ int main( int argc, char *argv[] )
 
  switch (status)
   {
-   case SINGLE: 		 stdded = 8750.0; 	/* NC std single deduction. */
-				 min2file = 8750.0;
+   case SINGLE: 		 stdded   = 10000.0; 	/* NC std single deduction. */
+				 min2file = 10000.0;
 	break;
-   case MARRIED_FILLING_JOINTLY: stdded = 17500.0; 	/* NC std Married/joint deduction. */
-				 min2file = 17500.0;
+   case MARRIED_FILLING_JOINTLY: stdded   = 20000.0; 	/* NC std Married/joint deduction. */
+				 min2file = 20000.0;
 	break;
-   case WIDOW:			 stdded = 17500.0; 	/* NC std widow(er) deduction. */
-				 min2file = 17500.0;
+   case WIDOW:			 stdded   = 20000.0; 	/* NC std widow(er) deduction. */
+				 min2file = 20000.0;
 	break;
-   case MARRIED_FILLING_SEPARAT: stdded = 8750.0; 	/* NC std Married/sep deduction. */
-				 min2file = 8750.0;
+   case MARRIED_FILLING_SEPARAT: stdded   = 10000.0; 	/* NC std Married/sep deduction. */
+				 min2file = 10000.0;
 	break;
-   case HEAD_OF_HOUSEHOLD:	 stdded = 14000.0; 	/* NC std Head of house deduction. */
-				 min2file = 14000.0;
+   case HEAD_OF_HOUSEHOLD:	 stdded   = 15000.0; 	/* NC std Head of house deduction. */
+				 min2file = 15000.0;
 	break;
    default:  
 	stdded = 0;  printf("Unknown status\n");  fprintf(outfile,"Unknown status\n");
@@ -376,7 +376,7 @@ int main( int argc, char *argv[] )
  showline(25);
  if (L[19] > L[25])
   {
-   showline_wmsg( 26, "TAX DUE" );
+   showline_wlabelmsg( "L26a", L[26], "TAX DUE" );
    showline_wmsg( 27, "Pay this amount" );
    fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[26] / (L[19] + 1e-9) );
    if ((L[23] < min_payment) && (L[19] > 1000.00))

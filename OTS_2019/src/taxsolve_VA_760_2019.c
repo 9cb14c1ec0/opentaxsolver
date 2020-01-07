@@ -70,7 +70,7 @@ int main( int argc, char *argv[] )
  char word[1000], outfname[4000], *lnameptr, lastname[1024], *socsec, *datestr, *twrd, *infname=0;
  int status=0, exemptionsA=0, exemptionsB=0, youBlind=0, spouseBlind=0;
  time_t now;
- double L20b=0.0, std_ded=0.0, min2file;
+ double L19b=0.0, std_ded=0.0, min2file;
 
  /* Intercept any command-line arguments. */
  printf("VA-760 2019 - v%3.1f\n", thisversion);
@@ -286,13 +286,11 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L10", &L[10] );	/* Deductions - Std or Itemized minus income taxes */
 
- GetLineF( "L11", &L[11] );	/* State and Local Income Taxes claimed on federal Schedule A. */
-
  switch (status)
   {
-   case SINGLE:  		  std_ded = 3000.0;  min2file = 11950.0;  break;
-   case MARRIED_FILLING_JOINTLY:  std_ded = 6000.0;  min2file = 23900.0;  break;
-   case MARRIED_FILLING_SEPARAT:  std_ded = 3000.0;  min2file = 11950.0;  break;
+   case SINGLE:  		  std_ded = 4500.0;  min2file = 11950.0;  break;
+   case MARRIED_FILLING_JOINTLY:  std_ded = 9000.0;  min2file = 23900.0;  break;
+   case MARRIED_FILLING_SEPARAT:  std_ded = 4500.0;  min2file = 11950.0;  break;
    default:  printf("Unexpected status.\n");
 	     fprintf(outfile,"Unexpected status.\n");
 	     exit(1);  
@@ -300,104 +298,102 @@ int main( int argc, char *argv[] )
   }
 
  if (L[10] != 0.0)
-  L[12] = L[10] - L[11];
- else
-  L[12] = std_ded;
+  L[11] = std_ded;
+ showline(11);
+
+ L[12] = 930.0 * exemptionsA + 800.0 * exemptionsB;
  showline(12);
-
- L[13] = 930.0 * exemptionsA + 800.0 * exemptionsB;
- showline(13);
   
- GetLineF( "L14", &L[14] );	/* Deductions from Virginia Adjusted Gross Income Schedule ADJ, Line 9. */
+ GetLineF( "L13", &L[13] );	/* Deductions from Virginia Adjusted Gross Income Schedule ADJ, Line 9. */
 
- L[15] = L[12] + L[13] + L[14];
- showline(15);
+ L[14] = L[10] + L[11] + L[12];
+ showline(14);
 
- L[16] = L[9] - L[15];
+ L[15] = L[9] - L[14];
+ showline_wmsg( 15, "Virginia Taxable Income" );
+
+ L[16] = TaxRateFunction( L[15], status );
  showline(16);
+ Report_bracket_info( L[15], L[16], status );
 
- L[17] = TaxRateFunction( L[16], status );
+ GetLine( "L17", &L[17] );	/* Spouse Tax Adjustment. */
  showline(17);
- Report_bracket_info( L[16], L[17], status );
 
- GetLine( "L18", &L[18] );	/* Spouse Tax Adjustment. */
- showline(18);
+ L[18] = L[18] - L[19];
+ showline_wmsg( 18, "Net Amount of Tax" );	
 
- L[19] = L[17] - L[18];
- showline_wmsg( 19, "Net Amount of Tax" );	
+ GetLineF( "L19a", &L[19] );	/* Virginia tax withheld for 2019. */
+ GetLineF( "L19b", &L19b );	/* Spouse's Virginia tax withheld. */
 
- GetLineF( "L20a", &L[20] );	/* Virginia tax withheld for 2019. */
- GetLineF( "L20b", &L20b );	/* Spouse's Virginia tax withheld. */
+ GetLineF( "L20", &L[20] );	/* Estimated tax paid for 2019. (form 760ES) */
 
- GetLineF( "L21", &L[21] );	/* Estimated tax paid for 2019. (form 760ES) */
+ GetLineF( "L21", &L[21] );	/* Amount of last year's overpayment applied toward 2019 estimated tax. */
 
- GetLineF( "L22", &L[22] );	/* Amount of last year's overpayment applied toward 2019 estimated tax. */
+ GetLineF( "L22", &L[22] );	/* Extension payments (form 760E). */
 
- GetLineF( "L23", &L[23] );	/* Extension payments (form 760E). */
+ GetLine( "L23", &L[23] );	/* Tax Credit, Low Income Individuals (Sch. ADJ, line 17) */
 
- GetLine( "L24", &L[24] );	/* Tax Credit, Low Income Individuals (Sch. ADJ, line 17) */
+ if (L[23] > L[18])
+  L[23] = L[18];	/* Low-Income Credit cannot exceed tax liability. */
 
- if (L[24] > L[19]) L[24] = L[19];	/* Low-Income Credit cannot exceed tax liability. */
-
- if ((L[24] > 0.0) && (exemptionsB > 0.0))
+ if ((L[23] > 0.0) && (exemptionsB > 0.0))
   {
    fprintf(outfile," Cannot claim both Low-Income Credit and Age or Blind Exemptions.\n");
-   L[24] = 0.0;	/* Cannot claim both low-income credit and exemptions. */
+   L[23] = 0.0;	/* Cannot claim both low-income credit and exemptions. */
   }
- showline(24);
+ showline(23);
 
- GetLineF( "L25", &L[25] );	/* Credit, Tax Paid to other State (Sched OSC, line 21 ...) */
- GetLineF( "L26", &L[26] );	/* Credit for Political Contributions */
- GetLineF( "L27", &L[27] );	/* Credits from enclosed Schedule CR, Section 5, Part 1, Line 1A */
+ GetLineF( "L24", &L[24] );	/* Credit, Tax Paid to other State (Sched OSC, line 21 ...) */
+ GetLineF( "L25", &L[25] );	/* Credits from enclosed Schedule CR, Section 5, Part 1, Line 1A */
 
- L[28] = L[20] + L20b + L[21] + L[22] + L[23] + L[24] + L[25] + L[26] + L[27];
- showline(28);
+ L[26] = L[19] + L19b + L[20] + L[21] + L[22] + L[23] + L[24] + L[25];
+ showline(26);
 
- if (L[28] < L[19])
+ if (L[26] < L[18])
   {
-   L[29] = L[19] - L[28];
-   showline_wmsg( 29, "Tax You Owe" );
-  }
- else
-  {
-   L[30] = L[28] - L[19];
-   showline_wmsg( 30, "Your Tax OverPayment" );
-  }
-
- GetLineF( "L31", &L[31] );	/* Amount of overpayment you want credited to next year's estimated tax. */
- GetLineF( "L32", &L[32] );	/* Virginia College Savings Plan Contributions from Schedule VAC, Section I, Line 6. */
- GetLineF( "L33", &L[33] );	/* Other voluntary contribitions. */
- GetLineF( "L34", &L[34] );	/* Addition to Tax, Penalty and Interest from attached Schedule ADJ, Line 21 */
- GetLineF( "L35", &L[35] );	/* Consumer's Use Tax. */
-
- for (j=31; j < 35; j++)
-   L[36] = L[36] + L[j];
- showline(36);
-
- if (L[29] > 0.0)
-  {
-   L[37] = L[29] + L[36];
-   showline_wmsg( 37, "AMOUNT DUE" );
-   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[37] / (L[19] + 1e-9) );
+   L[27] = L[18] - L[26];
+   showline_wmsg( 27, "Tax You Owe" );
   }
  else
- if (L[30] < L[36])
   {
-   L[37] = L[36] - L[30];
-   showline_wmsg( 37, "AMOUNT DUE" );
-   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[37] / (L[19] + 1e-9) );
+   L[28] = L[26] - L[18];
+   showline_wmsg( 28, "Your Tax OverPayment" );
+  }
+
+ GetLineF( "L29", &L[29] );	/* Amount of overpayment you want credited to next year's estimated tax. */
+ GetLineF( "L30", &L[30] );	/* Virginia College Savings Plan Contributions from Schedule VAC, Section I, Line 6. */
+ GetLineF( "L31", &L[31] );	/* Other voluntary contribitions. */
+ GetLineF( "L32", &L[32] );	/* Addition to Tax, Penalty and Interest from attached Schedule ADJ, Line 21 */
+ GetLineF( "L33", &L[33] );	/* Consumer's Use Tax. */
+
+ for (j=29; j < 33; j++)
+   L[34] = L[34] + L[j];
+ showline(34);
+
+ if (L[27] > 0.0)
+  {
+   L[35] = L[27] + L[34];
+   showline_wmsg( 35, "AMOUNT DUE" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[35] / (L[18] + 1e-9) );
   }
  else
- if (L[30] > L[36])
+ if (L[28] < L[34])
   {
-   L[38] = L[30] - L[36];
-   showline_wmsg( 38, "YOUR REFUND" );
+   L[35] = L[34] - L[28];
+   showline_wmsg( 35, "AMOUNT DUE" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[35] / (L[19] + 1e-9) );
+  }
+ else
+ if (L[28] > L[34])
+  {
+   L[36] = L[28] - L[34];
+   showline_wmsg( 36, "YOUR REFUND" );
   }
 
  if (L[9] < min2file)
   {
    fprintf(outfile,"\nYour VAGI is less than the minimum required to file a return.\n");
-   if (L[20] + L20b + L[21] > 0.0)
+   if (L[19] + L19b + L[20] > 0.0)
     fprintf(outfile," But you need to file return to receive refund of withheld taxes.\n");
    else
     fprintf(outfile,"You do not need to file return.  Your VA Tax is zero.\n");
