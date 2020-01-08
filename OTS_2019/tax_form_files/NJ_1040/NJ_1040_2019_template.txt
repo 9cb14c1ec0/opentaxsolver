@@ -52,14 +52,15 @@ L46	        ;	{ Sheltered Workshop Tax Credit. }
 L48		; 	{ Gold Start Family Counseling Credit }
 L50	        ;	{ Use Tax Due on Out-of-State Purchases (pg 37). }
 L51	        ;	{ Interest on underpayment of estimated tax. }
-L53                     { Withheld tax, from W-2's, Box 17 }
+L52             ;       { Shared Responsibility (Med. Insurance) Payment. }
+L54                     { Withheld tax, from W-2's, Box 17 }
                 ;
-L55             ;       { NJ Estimated Tax Payments/Credit from last year's return. }
-L56             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
-L57             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
-L58             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
-L59             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
-L60		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
+L56             ;       { NJ Estimated Tax Payments/Credit from last year's return. }
+L57             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
+L58             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
+L59             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
+L60             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
+L61		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }

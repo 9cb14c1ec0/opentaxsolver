@@ -188,11 +188,6 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ) );
 
- printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
- fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
-
  /* get_parameter(infile, kind, x, mesage ) */
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
@@ -276,7 +271,7 @@ int main( int argc, char *argv[] )
    if (j) fprintf(outfile," Check_SpVet = X\n");
   }
  fprintf(outfile, "L9a = %d\n", (int)(L[9]) );
- L[9] = 3000.0 * L[9];
+ L[9] = 6000.0 * L[9];
  shownum(9); 
 
  get_parameter( infile, 's', word, "L10" );	/* Exemptions, children. */
@@ -432,7 +427,7 @@ int main( int argc, char *argv[] )
        L[39] = H[4];
        L[40] = H[5];
        L[41] = H[6];
-       L[54] = 0.0;
+       L[55] = 0.0;
      } /*yes*/
     else
      { /*no*/
@@ -440,7 +435,7 @@ int main( int argc, char *argv[] )
        L[39] = 0.0;
        L[40] = Hb[5];
        L[41] = Hb[6];
-       L[54] = proptxcredit;
+       L[55] = proptxcredit;
      } /*no*/
   } /*Worksheet-H*/
  else
@@ -490,7 +485,7 @@ int main( int argc, char *argv[] )
       L[40] = COJ[6];
       L[41] = COJ[7];
       L[42] = I[2];
-      L[54] = 0.0;
+      L[55] = 0.0;
      }
     else
      {
@@ -499,13 +494,13 @@ int main( int argc, char *argv[] )
       L[40] = COJ_b[6];
       L[41] = COJ_b[7];
       L[42] = Ib[2];
-      L[54] = proptxcredit;
+      L[55] = proptxcredit;
      }
   } /*SchedA+Worksheet-I*/
 
 
  /* If no property tax was paid, ensure prop.tax credit is set to 0 */
- if ( L[38] == 0.0 ) L[54] = 0.0;
+ if ( L[38] == 0.0 ) L[55] = 0.0;
 
  if (L[38] > 0.0)
   fprintf(outfile, "L38a = %6.2f\n", L[38]);
@@ -540,51 +535,52 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L50", &L[50] );	/* Use Tax Due on Out-of-State Purchases (pg 37). */
  GetLineF( "L51", &L[51] );	/* Penalty for underpayment of estimated tax. */
+ GetLineF( "L52", &L[52] );	/* Shared Responsibility (Med. Insurance) Payment. */
 
- L[52] = L[49] + L[50] + L[51];
- showline_wmsg( 52, "Total Tax Due" );			/* Total Tax + Penalty. */
+ L[53] = L[49] + L[50] + L[51] + L[52];
+ showline_wmsg( 53, "Total Tax Due" );			/* Total Tax + Penalty. */
 
- GetLine( "L53", &L[53] );
- showline_wmsg( 53, "Total NJ Income Tax Withheld" );
+ GetLine( "L54", &L[54] );	/* Withheld amount. */
+ showline_wmsg( 54, "Total NJ Income Tax Withheld" );
 
- showline_wmsg( 54, "Property tax Credit" );
+ showline_wmsg( 55, "Property tax Credit" );
 
- GetLineF( "L55", &L[55] );	/* NJ Estimated Tax Payments/Credit from last year's return. */
+ GetLineF( "L56", &L[56] );	/* NJ Estimated Tax Payments/Credit from last year's return. */
 
- GetLineF( "L56", &L[56] );	/* NJ Earned Income Tax Credit. (See Sched pg 38.) */
+ GetLineF( "L57", &L[57] );	/* NJ Earned Income Tax Credit. (See Sched pg 38.) */
 
- GetLineF( "L57", &L[57] );	/* EXCESS NJ UI/HC/WD Withheld, (See pg 38.) */
+ GetLineF( "L58", &L[58] );	/* EXCESS NJ UI/HC/WD Withheld, (See pg 38.) */
 
- GetLineF( "L58", &L[58] );	/* EXCESS NJ Disability Insurance Withheld, (See pg 38.) */
+ GetLineF( "L59", &L[59] );	/* EXCESS NJ Disability Insurance Withheld, (See pg 38.) */
 
- GetLineF( "L59", &L[59] );	/* EXCESS NJ Family Leave Insurance Withheld, (See pg 38.) */
+ GetLineF( "L60", &L[60] );	/* EXCESS NJ Family Leave Insurance Withheld, (See pg 38.) */
 
- GetLineF( "L60", &L[60] );	/* Wounded Warrior Caregivers Credit */
+ GetLineF( "L61", &L[61] );	/* Wounded Warrior Caregivers Credit */
 
- for (j=53; j <= 60; j++)
-  L[61] = L[61] + L[j];
- showline_wmsg( 61, "Total Withholding Payments & Credits" );
+ for (j=54; j <= 61; j++)
+  L[62] = L[62] + L[j];
+ showline_wmsg( 62, "Total Withholding Payments & Credits" );
 
- for (j=64; j <= 72; j++)
-  L[73] = L[73] + L[j];
+ for (j=65; j <= 73; j++)
+  L[74] = L[74] + L[j];
  
- if (L[61] < L[52])
+ if (L[62] < L[53])
   {
-   L[62] = L[52] - L[61];
-   fprintf(outfile, "L62 = %6.2f	DUE !!!\n", L[62] );
-   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[62] / (L[43] + 1e-9) );
-   showline_wmsg( 73, "( Total Adjustments to tax due )");
-   L[74] = L[62] + L[73];
-   showline_wmsg(74, "Balance Due");
+   L[63] = L[53] - L[62];
+   fprintf(outfile, "L63 = %6.2f	DUE !!!\n", L[63] );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[63] / (L[43] + 1e-9) );
+   showline_wmsg( 74, "( Total Adjustments to tax due )");
+   L[75] = L[63] + L[74];
+   showline_wmsg( 75, "Balance Due" );
   }
  else
   {
-   L[63] = L[61] - L[52];
-   fprintf(outfile, "L63 = %6.2f	Overpayment\n", L[63] );
+   L[64] = L[62] - L[53];
+   fprintf(outfile, "L64 = %6.2f	Overpayment\n", L[64] );
 
-   showline_wmsg( 73, "( Total Adjustments to overpayment )");
-   L[75] = L[63] - L[73];
-   showline_wmsg(75, "Refund !!!");
+   showline_wmsg( 74, "( Total Adjustments to overpayment )");
+   L[76] = L[64] - L[74];
+   showline_wmsg( 76, "Refund !!!" );
   }
  
  fprintf(outfile,"\n{ --------- }\n");
