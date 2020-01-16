@@ -47,26 +47,28 @@ float thisversion=17.00;
 #define No  0
 
 double SchedA[MAX_LINES], SchedD[MAX_LINES], amtws[MAX_LINES];
-double Sched1[MAX_LINES], Sched2[MAX_LINES], Sched3[MAX_LINES], Sched4[MAX_LINES], Sched5[MAX_LINES];
+double Sched1[MAX_LINES], Sched2[MAX_LINES], Sched3[MAX_LINES];
 double L2a=0.0;			/* Tax-exempt interest (only for SocSec calculations). */
 double L3a=0.0;			/* Qualified dividends. */
 double L4a=0.0;			/* IRAs, pensions, and annuities. */
 double L5a=0.0;			/* Social security benefits. */
-double L11a=0.0;		/* Tax before Sched-2. */
+double L11a=0.0;
+double L12a=0.0;		/* Tax before Sched-2. */
+double L13a=0.0;		/* Child tax credit */
 double S4_60b=0.0;		/* First-time homebuyer credit repayment. Form 5405. */
 double qcgws6=0.0, qcgws7=0.0;	/* Support for AMT calculation. (qual.div+cap.gain wrksht vals.)*/
 double amtws2c=0.0;		/* Investment interest expense (difference between regular tax and AMT) - AMT entry */
 double amtws2g=0.0;		/* Specified private activity bond interest exempt from regular tax - AMT entry */
 int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No;
 int status, under65=Yes, over65=No, dependent=No, force_print_all_pdf_forms=0;
-double  collectibles_gains=0.0, ws_sched_D[MAX_LINES], L17a=0.0, L17b=0.0, L17c=0.0;
+double  collectibles_gains=0.0, ws_sched_D[MAX_LINES], L18a=0.0, L18b=0.0, L18c=0.0, L18d=0.0;
 
-				/* Following values taken from 1040 Instructions. */	/* Not Updated for 2019. */
+				/* Following values taken from 1040 Instructions. */	/* Updated for 2019. */
 double brkpt[4][9]={
-		{ 0.0,   9525.0,  38700.0,  82500.0, 157500.0, 200000.0, 500000.0, 9e9 },  /* Single */
-		{ 0.0,  19050.0,  77400.0, 165000.0, 315000.0, 400000.0, 600000.0, 9e9 },  /* Married, filing jointly. */
-		{ 0.0,   9525.0,  38700.0,  82500.0, 157500.0, 200000.0, 300000.0, 9e9 },  /* Married, filing separate. */
-		{ 0.0,  13600.0,  51800.0,  82500.0, 157500.0, 200000.0, 500000.0, 9e9 },  /* Head of Household. */
+		{ 0.0,   9700.0,  39475.0,  84200.0, 160725.0, 204100.0, 510300.0, 9e9 },  /* Single */
+		{ 0.0,  19400.0,  78950.0, 168400.0, 321450.0, 408200.0, 612350.0, 9e9 },  /* Married, filing jointly. */
+		{ 0.0,   9700.0,  39475.0,  84200.0, 160725.0, 204100.0, 306175.0, 9e9 },  /* Married, filing separate. */
+		{ 0.0,  13850.0,  52850.0,  84200.0, 160700.0, 204100.0, 510300.0, 9e9 },  /* Head of Household. */
 		     };
   double txrt[4][9] ={
 		{ 0.1, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37 },	/* Single */
@@ -140,16 +142,16 @@ void print2( char *msg )
 
 
 /*-----------------------------------------------------------------*/
-/* Qualified Dividends and Capital Gain Tax Worksheet for Line 11a. */
-/*  From page 40 of instructions.				   */
+/* Qualified Dividends and Capital Gain Tax Worksheet for Line 12a. */
+/*  From page 33 of instructions.				   */
 /*-----------------------------------------------------------------*/
-void capgains_qualdividends_worksheets( int status )			/* Not Updated for 2019. */
+void capgains_qualdividends_worksheets( int status )			/* Updated for 2019. */
 {
  double ws[50];
  int j;
 
  for (j=0; j<50; j++) ws[j] = 0.0;
- ws[1] = L[10];
+ ws[1] = L[1];
  ws[2] = L3a;
  if (Do_SchedD)
   ws[3] = NotLessThanZero(smallerof( SchedD[15], SchedD[16] ));
@@ -161,9 +163,9 @@ void capgains_qualdividends_worksheets( int status )			/* Not Updated for 2019. 
  ws[7] = NotLessThanZero( ws[1] - ws[6] );	qcgws7 = ws[7];
  switch (status)
   {
-   case SINGLE: case MARRIED_FILLING_SEPARAT: ws[8] = 38600.0; break;
-   case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[8] = 77200.0; break;
-   case HEAD_OF_HOUSEHOLD: 		      ws[8] = 51700.0; break;
+   case SINGLE: case MARRIED_FILLING_SEPARAT: ws[8] = 39375.0; break;
+   case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[8] = 78750.0; break;
+   case HEAD_OF_HOUSEHOLD: 		      ws[8] = 52750.0; break;
   }
  ws[9]  = smallerof( ws[1], ws[8] );
  ws[10] = smallerof( ws[7], ws[9] );
@@ -173,10 +175,10 @@ void capgains_qualdividends_worksheets( int status )			/* Not Updated for 2019. 
  ws[14] = ws[12] - ws[13];
  switch (status)
   {
-   case SINGLE:  			      ws[15] = 425800.0;  break;
-   case MARRIED_FILLING_SEPARAT:	      ws[15] = 239500.0;  break;
-   case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[15] = 479000.0;  break;
-   case HEAD_OF_HOUSEHOLD: 		      ws[15] = 452400.0;  break;
+   case SINGLE:  			      ws[15] = 434550.0;  break;
+   case MARRIED_FILLING_SEPARAT:	      ws[15] = 244425.0;  break;
+   case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[15] = 488850.0;  break;
+   case HEAD_OF_HOUSEHOLD: 		      ws[15] = 461700.0;  break;
   }
  ws[16] = smallerof( ws[1], ws[15] );
  ws[17] = ws[7] + ws[11];
@@ -196,7 +198,7 @@ void capgains_qualdividends_worksheets( int status )			/* Not Updated for 2019. 
    if (j == 3) { if (Do_SchedD) fprintf(outfile,"\t\t3: Check Yes.\n"); else fprintf(outfile,"\t\t3: Check No.\n"); }
    fprintf(outfile,"	Qual. Div & Gains WorkSheet %d:  %8.2f\n", j, ws[j] );
   }
- L11a = ws[27];
+ L12a = ws[27];
 }
 
 
@@ -221,22 +223,22 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
  fprintf(outfile,"Review AMT form6251 routine for your situation.\n");
 
  /* Part I - Alternative Minimum Taxable Income (AMTI) */
- if (L[10] > 0.0)  
-  amtws[1] = L[10];
+ if (L[11] > 0.0)  
+  amtws[1] = L[11];
  else
-  amtws[1] = L[7] - L[8] - L[9];
+  amtws[1] = L[8] - L[9] - L[10];
 
  if (itemized)
   amtws2a = SchedA[7];
  else
-  amtws2a = L[8];
+  amtws2a = L[9];
 
- amtws2b = -(Sched1[10] + Sched1[21]);
+ amtws2b = -(Sched1[1] + Sched1[8]);
 
 	/* Following amounts assumed normally zero, but review and adjust if needed. */
  // amtws2c = 0.0;	/* Investment interest expense. (Diff between regular tax and AMT). */
  // amtws2d = 0.0;	/* Depletion (Diff between regular tax and AMT). */
- amtws2e = absolutev( Sched1[21] );
+ amtws2e = absolutev( Sched1[1] );
  // amtws2f = -0.0; 	/* Alternative tax net operating loss deduction, as negative amount. */
  // amtws2g = 0.0;	/* Interest from specified private activity bonds exempt from the regular tax */
  // amtws2h = 0.0;	/* Qualified small business stock (7% of gain excluded under section 1202) */
@@ -260,37 +262,37 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
  for (j = 1; j <= 3; j++)
   amtws[4] = amtws[4] + amtws[j];
 
- if ((status == MARRIED_FILLING_SEPARAT) && (amtws[4] > 718800.0))
+ if ((status == MARRIED_FILLING_SEPARAT) && (amtws[4] > 733700.0))
   {
-   if (amtws[4] > 937600.0)
-    amtws[4] = amtws[4] + 54700.0;
+   if (amtws[4] > 957100.0)
+    amtws[4] = amtws[4] + 55850.0;
    else
-    amtws[4] = amtws[4] + 0.25 * (amtws[4] - 718800.0);
+    amtws[4] = amtws[4] + 0.25 * (amtws[4] - 733700.0);
   }
 
  /* Part II */
  switch (status)
   {
      case SINGLE: case HEAD_OF_HOUSEHOLD:
-	thresholdA = 500000.0;
+	thresholdA = 510300.0;
 	thresholdB = 781200.0;
-	thresholdC = 191100.0;
-	offsetA = 3822.0;
-	amtexmption = 70300.0;
+	thresholdC = 194800.0;
+	offsetA = 3896.0;
+	amtexmption = 71700.0;
 	break;
      case MARRIED_FILLING_JOINTLY: case WIDOW: 
-	thresholdA = 1000000.0;
+	thresholdA = 1020600.0;
 	thresholdB = 1437600.0;
-	thresholdC = 191100.0;
-	offsetA = 3822.0;
-	amtexmption = 109400.0;
+	thresholdC = 194800.0;
+	offsetA = 3896.0;
+	amtexmption = 111700.0;
 	break;
      case MARRIED_FILLING_SEPARAT: 
-	thresholdA = 500000.0;
+	thresholdA = 510300.0;
 	thresholdB = 718800.0;
-	thresholdC = 95550.0;
-	offsetA = 1911.0;
-        amtexmption = 54700.0;
+	thresholdC = 97400.0;
+	offsetA = 1948.0;
+        amtexmption = 55850.0;
 	break;
      default:  printf("Status %d not handled.\n", status);  exit(1); 
   }
@@ -318,7 +320,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
  if (amtws[6] > 0.0)
   { /* AMT Lines 7 through 9, */
 
-    if ((Sched1[13] != 0.0) || (L3a != 0.0) || ((SchedD[15] > 0.0) && (SchedD[16] > 0.0)))
+    if ((L[6] != 0.0) || (L3a != 0.0) || ((SchedD[15] > 0.0) && (SchedD[16] > 0.0)))
      { /* Part III */
        amtws[12] = amtws[6];
        amtws[13] = largerof( qcgws6, ws_sched_D[13] );
@@ -336,13 +338,13 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
        switch (status)
         {
            case MARRIED_FILLING_JOINTLY:  case WIDOW: 
-	     amtws[19] = 77200.0;
+	     amtws[19] = 78750.0;
 	   break;
            case SINGLE:  case MARRIED_FILLING_SEPARAT: 
-   	     amtws[19] = 38600.0;
+   	     amtws[19] = 39375.0;
    	   break;
            case HEAD_OF_HOUSEHOLD:
-   	     amtws[19] = 51700.0;
+   	     amtws[19] = 52750.0;
         }
        if (Do_QDCGTW)
         amtws[20] = NotLessThanZero( qcgws7 );
@@ -357,10 +359,10 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
        amtws[24] = amtws[22] - amtws[23];  
        switch (status)
 	{
-	   case SINGLE:  			      amtws[25] = 425800.0;  break;
-	   case MARRIED_FILLING_SEPARAT:	      amtws[25] = 239500.0;  break;
-	   case MARRIED_FILLING_JOINTLY: case WIDOW:  amtws[25] = 479900.0;  break;
-	   case HEAD_OF_HOUSEHOLD: 		      amtws[25] = 452400.0;  break;
+	   case SINGLE:  			      amtws[25] = 434550.0;  break;
+	   case MARRIED_FILLING_SEPARAT:	      amtws[25] = 244425.0;  break;
+	   case MARRIED_FILLING_JOINTLY: case WIDOW:  amtws[25] = 488850.0;  break;
+	   case HEAD_OF_HOUSEHOLD: 		      amtws[25] = 461700.0;  break;
 	   default:  printf("Status %d not handled.\n", status);  exit(1); 
 	}
        amtws[26] = amtws[21];
@@ -404,10 +406,10 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
      }
     amtws[9] = amtws[7] - amtws[8];
   } 
- amtws[10] = L11a + Sched2[46] - Sched3[48];
+ amtws[10] = L12a + Sched2[2] - Sched3[1];
  amtws[11] = NotLessThanZero( amtws[9] - amtws[10] );
  printf("	AMTws[11] = Abs( %6.2f - %6.2f ) = Abs( %6.2f )\n", amtws[9], amtws[10], amtws[9] - amtws[10] );
- // Sched2[45] = amtws[11];	/* Redundant.  Is assigned by return value below. */
+ // Sched2[1] = amtws[11];	/* Redundant.  Is assigned by return value below. */
 
  /* These rules are stated on Form-6251 Instructions page-1. */
  if (amtws[7] > amtws[10])
@@ -429,7 +431,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
  if (force_print_all_pdf_forms) 
   file_amt = 1;
  if (file_amt)
-  fprintf(outfile,"PDFpage: 15 15\n");	/* Optional PDF Page. */
+  fprintf(outfile,"PDFpage: 13 13\n");	/* Optional PDF Page. */
  for (j=0; j<100; j++) 
   {
    if (j == 2)
@@ -452,7 +454,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
      fprintf(outfile," 		AMT_Form_6251_L%d = %8.2f\n", j, amtws[j] );
     }
    if (file_amt && (j == 11))
-    fprintf(outfile,"EndPDFpage.\nPDFpage: 16 16\n");
+    fprintf(outfile,"EndPDFpage.\nPDFpage: 14 14\n");
   }
  if (file_amt)
   fprintf(outfile,"EndPDFpage.\n");
@@ -542,7 +544,7 @@ void ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 }
 
 
-void CapitalLossCarryOverWorksheet( char *fedlogfile, struct FedReturnData *LastYearsReturn )	/* Not Updated for 2019. */
+void CapitalLossCarryOverWorksheet( char *fedlogfile, struct FedReturnData *LastYearsReturn )	/* Updated for 2019. */
 { /* From instructions page D-11. */
  double ws[50];
  int k;
@@ -562,7 +564,7 @@ void CapitalLossCarryOverWorksheet( char *fedlogfile, struct FedReturnData *Last
   }
 
  for (k=0; k<50; k++) ws[k] = 0.0;
- ws[1] = LastYearsReturn->fedline[41];
+ ws[1] = LastYearsReturn->fedline[10];
  ws[2] = absolutev( LastYearsReturn->schedD[21] );	/* Loss from last year's Sched-D21 as positive amount. */
  ws[3] = NotLessThanZero( ws[1] + ws[2] );
  ws[4] = smallerof( ws[2], ws[3] );
@@ -828,7 +830,7 @@ void get_gain_and_losses( char *label )
 /*   sell_amnt  date 							*/
 /*									*/
 /************************************************************************/
-void get_cap_gains()							/* Not Updated for 2019. */
+void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
 {
  char word[4092], *LastYearsOutFile=0;
  int j, doline22=0;
@@ -938,7 +940,7 @@ void get_cap_gains()							/* Not Updated for 2019. */
  if (Do_SchedD)
   { /*Sched-D*/
    fprintf(outfile," Cap Gains/Losses Schedule-D\n");
-   fprintf(outfile,"PDFpage: 11 11\n");
+   fprintf(outfile,"PDFpage: 9 9\n");
    // Do_QDCGTW = Yes;	/* Tentatively set to do: Qualified Dividends and Capital Gain tax Worksheet. */
    fprintf(outfile,"\tNet Forms-8949 Short-term Gains = %10.2f\n", stcg );
    fprintf(outfile,"\tNet Forms-8949 Long-term Gains  = %10.2f\n", ltcg);
@@ -959,21 +961,21 @@ void get_cap_gains()							/* Not Updated for 2019. */
    fprintf(outfile," D14 = %6.2f	(Carry-over Loss)\n", SchedD[14] );
    SchedD[15] = SchedD[8] + SchedD[9] + SchedD[10] + SchedD[11] + SchedD[12] + SchedD[13] + SchedD[14];
    fprintf(outfile," D15 = %6.2f		{ Net long-term capital gain or loss }\n", SchedD[15] );
-   fprintf(outfile,"EndPDFpage.\nPDFpage: 12 12\n");
+   fprintf(outfile,"EndPDFpage.\nPDFpage: 9 9\n");
 
    /* Part ||| */
    SchedD[16] = SchedD[7] + SchedD[15];
    fprintf(outfile," D16 = %6.2f\n", SchedD[16]);
    if (SchedD[16] > 0.0) 
     { /*gain*/
-     Sched1[13] = SchedD[16];
+     L[6] = SchedD[16];
      if ((SchedD[15] > 0.0) && (SchedD[16] > 0.0))
       { /* Lines 17-21 */
 	double wsd[50];
 
 	fprintf(outfile," D17 = yes\n CkD17y X\n");
 
-	/* '28% Rate Gain Worksheet' on instructions page D-12. */
+	/* '28% Rate Gain Worksheet' on instructions page D-13. */
 	wsd[1] = collectibles_gains;	/* Gain or losses from "Collectibles" only.  Usually zero. */
 	wsd[2] = 0.0;	/* Any 1202 exclusions, usually 0.0. */
 	wsd[3] = 0.0;	/* Total collectibles on forms 4684, 6245, 6781, 8824. Usually no. */
@@ -984,7 +986,7 @@ void get_cap_gains()							/* Not Updated for 2019. */
 	SchedD[18] = wsd[7];
 	fprintf(outfile," D18 = %6.2f\n", SchedD[18]);
 
-	/* 'Unrecaptured Section 1250 Gain Worksheet' on page D13, usually 0. */
+	/* 'Unrecaptured Section 1250 Gain Worksheet' on page D14, usually 0. */
 	fprintf(outfile," D19 = %6.2f\n", SchedD[19]);
 
         if ((SchedD[18] == 0.0) && (SchedD[19] == 0.0))
@@ -1016,12 +1018,12 @@ void get_cap_gains()							/* Not Updated for 2019. */
      if (status == MARRIED_FILLING_SEPARAT) maxloss = -1500.0; else maxloss = -3000.0;
      if (SchedD[16] < maxloss) SchedD[21] = maxloss; else SchedD[21] = SchedD[16];
      fprintf(outfile," D21 = %6.2f\n", SchedD[21]);
-     Sched1[13] = SchedD[21];
+     L[6] = SchedD[21];
      doline22 = Yes;
     }
    else
     { /*Zero gain/loss.*/
-     Sched1[13] = 0.0;
+     L[6] = 0.0;
      doline22 = Yes;
     }
 
@@ -1048,13 +1050,13 @@ void get_cap_gains()							/* Not Updated for 2019. */
 /*------------------------------------------------------*/
 /* 'Schedule D Tax Worksheet', instructions page D-15.	*/
 /*------------------------------------------------------*/
-void sched_D_tax_worksheet( int status )			/* Not Updated for 2019. */
+void sched_D_tax_worksheet( int status )			/* Updated for 2019. */
 {
  double ws[100];
  int k;
 
  for (k = 0; k < 100; k++) ws[k] = 0.0;
- ws[1] = L[10];
+ ws[1] = L[1];
  ws[2] = L3a;
  ws[3] = 0.0;	/* Form 4952, line 4g. Usually 0.0. */
  ws[4] = 0.0;	/* Form 4952, line 4e. Usually 0.0. */
@@ -1072,26 +1074,32 @@ void sched_D_tax_worksheet( int status )			/* Not Updated for 2019. */
  fprintf(outfile,"  Sched-D tax Worksheet line 13 = %6.2f\n", ws[13]);
  fprintf(outfile,"  Sched-D tax Worksheet line 14 = %6.2f\n", ws[14]);
  switch (status) 
-  { case SINGLE: case MARRIED_FILLING_SEPARAT: ws[15] = 38600.0; break;
-    case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[15] = 77200.0; break;
-    case HEAD_OF_HOUSEHOLD:      	       ws[15] = 51700.0; break;
+  { case SINGLE: case MARRIED_FILLING_SEPARAT: ws[15] = 39375.0; break;
+    case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[15] = 78750.0; break;
+    case HEAD_OF_HOUSEHOLD:      	       ws[15] = 52750.0; break;
   }
  ws[16] = smallerof( ws[1], ws[15] );
  ws[17] = smallerof( ws[14], ws[16] );
  ws[18] = NotLessThanZero( ws[1] - ws[10] );
- ws[19] = largerof( ws[17], ws[18] );
- ws[20] = ws[16] - ws[17];	/* This amount is taxed at 0%. */
+ switch (status) 
+  { case SINGLE: case MARRIED_FILLING_SEPARAT: ws[19] = smallerof( ws[1], 160725.0 );  break;
+    case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[19] = smallerof( ws[1], 321450.0 );  break;
+    case HEAD_OF_HOUSEHOLD:      	       ws[19] = smallerof( ws[1], 160700.0 );  break;
+  }
+ ws[20] = smallerof( ws[14], ws[19] );
+ ws[21] = largerof( ws[18], ws[20] );
+ ws[22] = ws[16] - ws[17];	/* This amount is taxed at 0%. */
  if (ws[1] != ws[16])
-  { /*lines21-41*/
-   ws[21] = smallerof( ws[1], ws[13] );
-   ws[22] = ws[20];
-   ws[23] = NotLessThanZero( ws[21] - ws[22] );
+  { /*lines23-43*/
+   ws[23] = smallerof( ws[1], ws[13] );
+   ws[24] = ws[22];
+   ws[25] = NotLessThanZero( ws[23] - ws[24] );
    switch (status) 
-    { case SINGLE: 			ws[24] = 425800.0;  break;
-      case MARRIED_FILLING_SEPARAT: 	ws[24] = 239500.0;  break;
+    { case SINGLE: 			ws[24] = 434550.0;  break;
+      case MARRIED_FILLING_SEPARAT: 	ws[24] = 244425.0;  break;
       case MARRIED_FILLING_JOINTLY: 
-      case WIDOW:  			ws[24] = 479000.0;  break;
-      case HEAD_OF_HOUSEHOLD:		ws[24] = 452400.0;  break;
+      case WIDOW:  			ws[24] = 488850.0;  break;
+      case HEAD_OF_HOUSEHOLD:		ws[24] = 461700.0;  break;
     }
    ws[25] = smallerof( ws[1], ws[24] );
    ws[26] = ws[19] + ws[20];
@@ -1119,21 +1127,21 @@ void sched_D_tax_worksheet( int status )			/* Not Updated for 2019. */
 	 ws[41] = 0.28 * ws[40];
        } /*lines39-41*/
     } /*lines31-41*/
-  } /*lines21-41*/
- ws[42] = TaxRateFunction( ws[19], status );
- ws[43] = ws[29] + ws[32] + ws[38] + ws[41] + ws[42];
- ws[44] = TaxRateFunction( ws[1], status );
- ws[45] = smallerof( ws[43], ws[44] );
- L11a = ws[45];
+  } /*lines23-43*/
+ ws[44] = TaxRateFunction( ws[21], status );
+ ws[45] = ws[31] + ws[34] + ws[40] + ws[43] + ws[44];
+ ws[46] = TaxRateFunction( ws[1], status );
+ ws[47] = smallerof( ws[45], ws[46] );
+ L12a = ws[47];
  for (k = 0; k < 100; k++) ws_sched_D[k] = ws[k];	/* Save worksheet values for AMT, if needed. */
 }
 
 
 
 /*-------------------------------------------------------*/
-/* Social Security Worksheet - From Instructions page 33. */
+/* Social Security Worksheet - From Instructions page 28. */
 /*-------------------------------------------------------*/
-void SocSec_Worksheet()							/* Not Updated for 2019. */
+void SocSec_Worksheet()							/* Updated for 2019. */
 {
  double ws[100];
  int k;
@@ -1141,10 +1149,10 @@ void SocSec_Worksheet()							/* Not Updated for 2019. */
  for (k = 0; k < 100; k++) ws[k] = 0.0;
  ws[1] = L5a;
  ws[2] = 0.5 * ws[1];
- ws[3] = L[1] + L[2] + L[3] + L[4] + Sched1[22];
+ ws[3] = L[1] + L[2] + L[3] + L[4] + L[6] + Sched1[9];
  ws[4] = L2a;
  ws[5] = ws[2] + ws[3] + ws[4];
- for (k = 23; k <= 32; k++)
+ for (k = 10; k <= 19; k++)
   ws[6] = ws[6] + Sched1[k];
  for (k = 0; k <= 6; k++)
   fprintf(outfile,"\tSocSecWorkSheet[%d] = %6.2f\n", k, ws[k] );
@@ -1159,7 +1167,7 @@ void SocSec_Worksheet()							/* Not Updated for 2019. */
  ws[7] = ws[5] - ws[6];
  fprintf(outfile,"\tSocSecWorkSheet[7] = %6.2f  (Check 'Yes')\n", ws[7] );
  if (status == MARRIED_FILLING_JOINTLY)
-  ws[8] = 32000.0;      						/* Not Updated for 2019. */
+  ws[8] = 32000.0;      						/* Updated for 2019. */
  else
   ws[8] = 25000.0;
  fprintf(outfile,"\tSocSecWorkSheet[8] = %6.2f\n", ws[8] );
@@ -1174,7 +1182,7 @@ void SocSec_Worksheet()							/* Not Updated for 2019. */
  ws[9] = ws[7] - ws[8];
  fprintf(outfile,"\tSocSecWorkSheet[9] = %6.2f  (Check 'Yes')\n", ws[9] );
  if (status == MARRIED_FILLING_JOINTLY)
-  ws[10] = 12000.0;      						/* Not Updated for 2019. */
+  ws[10] = 12000.0;      						/* Updated for 2019. */
  else
   ws[10] = 9000.0;
  ws[11] = NotLessThanZero( ws[9] - ws[10] );
@@ -1272,7 +1280,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 		fprintf(outfile,"Btotal = %8.2f\n", total );
 		fprintf(outfile,"EndPDFpage.\n");
 	     }
-	    fprintf(outfile,"PDFpage: 10 10\n");
+	    fprintf(outfile,"PDFpage: 8 8\n");
 	    fprintf(outfile,"SchedB_Additional_form:  Schedule B - Additional Interest Income\n");
 	    strcpy( pgstr, "Baddi_" );
 	    cnt = 1;	ncnt = 30;	total = 0.0;
@@ -1312,7 +1320,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 		fprintf(outfile,"Btotal = %8.2f\n", total );
 		fprintf(outfile,"EndPDFpage.\n");
 	     }
-	    fprintf(outfile,"PDFpage: 10 10\n");
+	    fprintf(outfile,"PDFpage: 8 8\n");
 	    fprintf(outfile,"SchedB_Additional_form:  Schedule B - Additional Dividend Income\n");
 	    strcpy( pgstr, "Baddi_" );
 	    cnt = 1;	ncnt = 30;	total = 0.0;
@@ -1349,7 +1357,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 /*----------------------------------------------------------------------*/
 /* Main									*/
 /*----------------------------------------------------------------------*/
-int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
+int main( int argc, char *argv[] )						/* Updated for 2019. */
 {
  int argk, j, k, itemize=0;
  char word[2000], outfname[2000], *infname="", labelx[1024]="";
@@ -1359,9 +1367,10 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  char *Your1stName, *YourLastName, *Spouse1stName, *SpouseLastName, *socsec, socsectmp[100];
  double NumDependents=0.0;
  double localtax[10], loctaxlimit, homemort[10];
- int StdDedChart_NumBoxesChecked=0, HealthCoverageChecked=0, gotS1_32=0, gotS2_46=0;
+ int StdDedChart_NumBoxesChecked=0, gotS2_2=0;
  int SchedB7a=0, SchedB7aa=-1, SchedB8=0;
  char SchedB7b[0124]="";
+ double S2_7b=0.0;
 
  /* Decode any command-line arguments. */
  printf("US 1040 2019 - v%3.2f\n", thisversion);
@@ -1403,8 +1412,6 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
    Sched1[j] = 0.0;
    Sched2[j] = 0.0;
    Sched3[j] = 0.0;
-   Sched4[j] = 0.0;
-   Sched5[j] = 0.0;
    ws_sched_D[j] = 0.0;
    amtws[j] = 0.0; 
   }
@@ -1423,9 +1430,9 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ) );
 
  printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
+ printf("\tFULLY VERIFIED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
  fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
+ fprintf(outfile,"\tFULLY VERIFIED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
 
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
@@ -1473,11 +1480,6 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  if (j)
   fprintf(outfile,"CkSpouseBlind X\n");
 
- get_parameter( infile, 's', word, "HealthCoverage?" );	/* Full-year Heath care coverage ? (Y/N) */
- get_parameter( infile, 'b', &HealthCoverageChecked, "HealthCoverage?" );
- if (HealthCoverageChecked)
-  fprintf(outfile,"CkHealthCoverage X\n");
-
  switch (status)
   {
    case SINGLE: fprintf(outfile,"CkSingle X\nCkYourself X\nL6ab = 1\n");  break;
@@ -1500,104 +1502,82 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  GetLineF( "L4b", &L[4] );	/* Taxable IRAs, pensions, and annuities. */
  GetLineF( "L5a", &L5a );	/* Social Security benefits.  Forms SSA-1099 box-5. */
 
- GetLine( "L9", &L[9] );	/* Qualified business income deduction. */
- GetLine( "L12a", &L[12] );	/* Child tax credit/credit for other dependents. */
- GetLine( "L16", &L[16] );	/* Federal income tax withheld, Forms W-2, 1099 */
+ GetLine( "L10", &L[10] );	/* Qualified business income deduction. */
+ GetLine( "L13a", &L13a );	/* Child tax credit/credit for other dependents. */
+ GetLine( "L17", &L[17] );	/* Federal income tax withheld, Forms W-2, 1099 */
 
- GetLine( "L17a", &L17a );	/* Refundable credit: EIC */
- GetLine( "L17b", &L17b );	/* Refundable credit: Sch. 8812 */
- GetLine( "L17c", &L17c );	/* Refundable credit: Form 8863 */
- GetLine( "L23", &L[23] );	/* Estimated Tax Under-payment Penalty */
+ GetLine( "L18a", &L18a );	/* Refundable credit: EIC */
+ GetLine( "L18b", &L18b );	/* Refundable credit: Sch. 8812 */
+ GetLine( "L18c", &L18c );	/* Refundable credit: Form 8863 */
+ GetLine( "L24", &L[24] );	/* Estimated Tax Under-payment Penalty */
 
- get_cap_gains();	 /* Capital gains. (Schedule-D) */
+ get_cap_gains();	 /* Capital gains. (Schedule-D). This popuates "schedD[]" and L[6]. */
 
 
  /* -- Schedule-1 -- Additional Income and Adjustments */
 
- GetLineF( "S1_10", &Sched1[10] );	/* Taxable refunds. */
- GetLineF( "S1_11", &Sched1[11] );	/* Alimony received. */
- GetLineF( "S1_12", &Sched1[12] );	/* Business income/loss. */
+ get_parameter( infile, 's', word, "VirtCurr?" );	/* During the year, did you have Virtual Currency? (Y/N) */
+ get_parameter( infile, 'b', &j, "VirtCurr?" );
+ if (j == 0)
+  fprintf(outfile,"ChkVirtNo X\n");
+ else
+  fprintf(outfile,"ChkVirtYes X\n");
+ GetLineF( "S1_1", &Sched1[1] );	/* Taxable refunds. */
+ GetLineF( "S1_2a", &Sched1[2] );	/* Alimony received. */
+ GetTextLineF( "S1_2b:" );
 
- showline_wlabel( "S1_13", Sched1[13] );   /* This line was set in get_cap_gains() above. */
+ GetLineF( "S1_3", &Sched1[3] );	/* Business income/loss. */
+ showline_wlabel( "S1_3", Sched1[3] );   /* This line was set in get_cap_gains() above. */
 
- GetLineFnz( "S1_14", &Sched1[14] );	/* Other gains or losses. Form 4794. */
+ GetLineFnz( "S1_4", &Sched1[4] );	/* Other gains or losses. Form 4794. */
 
- GetLineFnz( "S1_17", &Sched1[17] );	/* Rent realestate, royalties, partnerships, S corp. (Sched E)*/
+ GetLineFnz( "S1_5", &Sched1[5] );	/* Rent realestate, royalties, partnerships, S corp. (Sched E)*/
 
- GetLineFnz( "S1_18", &Sched1[18] );	/* Farm income/loss. (Sched F) */
+ GetLineFnz( "S1_6", &Sched1[6] );	/* Farm income/loss. (Sched F) */
 
- GetLineFnz( "S1_19", &Sched1[19] );	/* Unemployment compensation */
+ GetLineFnz( "S1_7", &Sched1[7] );	/* Unemployment compensation */
 
- GetLineFnz( "S1_21", &Sched1[21] );	/* Other income. (pg 28) */
- GetTextLineF( "S1_21_Type:" );
+ GetLineFnz( "S1_8", &Sched1[8] );	/* Other income. (pg 28) */
+ GetTextLineF( "S1_8_Type:" );
 
- for (j=10; j <= 21; j++)
-  Sched1[22] = Sched1[22] + Sched1[j];
- showline_wlabel( "S1_22", Sched1[22] );
+ for (j=1; j <= 8; j++)
+  Sched1[9] = Sched1[9] + Sched1[j];
+ showline_wlabel( "S1_9", Sched1[9] );
+ showline_wlabel( "L7a", Sched1[9] );
 
  /* Adjusted Gross Income section. */
- GetLineFnz( "S1_23", &Sched1[23] );	/* Educator expenses */
- GetLineFnz( "S1_24", &Sched1[24] );	/* Bus. exp.: reservists, artists, ... Attach Form 2106 */
- GetLineFnz( "S1_25", &Sched1[25] );	/* Health savings account deduction. Attach Form 8889 */
- GetLineFnz( "S1_26", &Sched1[26] );	/* Moving expenses. Attach Form 3903*/
- GetLineFnz( "S1_27", &Sched1[27] );	/* One-half of self-employment tax. Attach Schedule SE*/
- GetLineFnz( "S1_28", &Sched1[28] );	/* Self-employed SEP, SIMPLE, and qualified plans */
- GetLineFnz( "S1_29", &Sched1[29] );	/* Self-employed health insurance deduction */
- GetLineFnz( "S1_30", &Sched1[30] );	/* Penalty on early withdrawal of savings*/
- GetLineFnz( "S1_31a", &Sched1[31] );	/* Alimony paid*/
+ GetLineFnz( "S1_10", &Sched1[10] );	/* Educator expenses */
+ GetLineFnz( "S1_11", &Sched1[11] );	/* Bus. exp.: reservists, artists, ... Attach Form 2106 */
+ GetLineFnz( "S1_12", &Sched1[12] );	/* Health savings account deduction. Attach Form 8889 */
+ GetLineFnz( "S1_13", &Sched1[13] );	/* Moving expenses. Attach Form 3903*/
+ GetLineFnz( "S1_14", &Sched1[14] );	/* One-half of self-employment tax. Attach Schedule SE*/
+ GetLineFnz( "S1_15", &Sched1[15] );	/* Self-employed SEP, SIMPLE, and qualified plans */
+ GetLineFnz( "S1_16", &Sched1[16] );	/* Self-employed health insurance deduction */
+ GetLineFnz( "S1_17", &Sched1[17] );	/* Penalty on early withdrawal of savings*/
+ GetLineFnz( "S1_18a", &Sched1[18] );	/* Alimony paid*/
+ GetTextLineF( "AlimRecipSSN:" );
+ GetTextLineF( "AlimRecipName:" );
 
- while (!gotS1_32)	/* Get optional alimony recipient SSN, or next normal line (S1_32). */
-  { /* Expect: S1_32 or AlimRecipSSN or AlimRecipName. */
-   get_parameter( infile, 'l', labelx, "S1_32 or AlimRecipSSN: or AlimRecipName:" );
-   if (strcmp( labelx, "S1_32" ) == 0)
-    {
-     get_parameters( infile, 'f', &tmpval, "S1_32" );
-     Sched1[32] = tmpval;	/* IRA deduction */
-     showline_wlabelnz( "S1_32", Sched1[32] );
-     gotS1_32 = 1;
-    }
-   else
-   if (strncmp( labelx, "AlimRecipSSN", 12 ) == 0)
-    {
-     get_parameter( infile, 'w', word, "AlimRecipSSN:" );
-     if (strlen( word ) > 0)
-      fprintf(outfile," AlimRecipSSN: %s\n", word );
-    }
-   else
-   if (strncmp( labelx, "AlimRecipName", 13 ) == 0)
-    { 
-     get_parameter( infile, 'w', word, "AlimRecipName:" );
-     if (strlen( word ) > 0)
-      fprintf(outfile," AlimRecipName: %s\n", word );
-    }
-   else
-    {
-     printf("ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN: or AlimRecipName:'\n", labelx ); 
-     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S1_32 or AlimRecipSSN: or AlimRecipName:'\n", labelx );
-     exit(1);
-    }
-  }
+ GetLineFnz( "S1_19", &Sched1[19] );	/* IRA deduction (Done above) */
 
- // GetLineFnz( "S1_32", &Sched1[32] );	/* IRA deduction (Done above) */
+ SocSec_Worksheet();		/* This calc. depends on line L5a and Sched1[9-19].  Calculates L5b, which is L[5]. */
+ showline_wlabel( "L5b", L[5] ); 
 
- SocSec_Worksheet();		/* This calc. depends on line L5a and Sched1[22].  Calculates L5b. */
+ showline( 6 );
+ L[7] = L[1] + L[2] + L[3] + L[4] + L[5] + L[6] + Sched1[9];
+ showline_wlabel( "L7b", L[7] );
 
- for (j=1; j <= 5; j++)
-  L[6] = L[6] + L[j];
-
- L[6] = L[6] + Sched1[22];
-
- GetLine( "S1_33", &Sched1[33] );	/* Student loan interest deduction */
- if (Sched1[33] != 0.0)
-  { /* Student loan interest calculation pg 96. */
+ GetLine( "S1_20", &Sched1[20] );	/* Student loan interest deduction - page 90 */
+ if (Sched1[20] != 0.0)
+  { /* Student loan interest calculation pg 90. */
    double ws[20], sum=0.0;
-   ws[1] = smallerof( Sched1[33], 2500.0 );
-   ws[2] = L[6];
-   for (j=23; j <= 32; j++)
+   ws[1] = smallerof( Sched1[20], 2500.0 );
+   ws[2] = L[7];
+   for (j=10; j <= 19; j++)
     sum = sum + Sched1[j];
    ws[3] = sum;
    ws[4] = ws[2] - ws[3];
-   if (status == MARRIED_FILLING_JOINTLY) ws[5] = 135000.0; else ws[5] = 65000.0;	/* Not Updated for2019. */
+   if (status == MARRIED_FILLING_JOINTLY) ws[5] = 140000.0; else ws[5] = 70000.0;	/* Updated for2019. */
    if (ws[4] > ws[5])
     {
      ws[6] = ws[4] - ws[5];
@@ -1611,56 +1591,56 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
     }
    else ws[8] = 0.0;
    ws[9] = ws[1] - ws[8];
-   Sched1[33] = ws[9];
+   Sched1[20] = ws[9];
   }
- showline_wlabel( "S1_33", Sched1[33] );
+ showline_wlabel( "S1_20", Sched1[20] );
 
- for (j=23; j <= 35; j++)
-  Sched1[36] = Sched1[36] + Sched1[j];
- showline_wlabel( "S1_36", Sched1[36] );
+ GetLineFnz( "S1_21", &Sched1[21] );	/* Tuition and fees. */
+
+ for (j=10; j <= 21; j++)
+  Sched1[22] = Sched1[22] + Sched1[j];
+ showline_wlabel( "S1_22", Sched1[22] );
 
  /* -- End of Schedule-1 -- */
 
- showline_wlabel( "L5b", L[5] ); 
- showline_wmsg( 6, "Total Income" );
+ showline_wlabel( "L8a", Sched1[22] );
+ L[8] = L[7] - Sched1[22];
+ showline_wlabelmsg( "L8b", L[8], "Adjusted Gross Income" );
 
  if (under65 == 0) over65 = 1; 
- switch (status)	/* Check for minimum income to file. */				/* Not Updated for 2019. */
+ switch (status)	/* Check for minimum income to file. */				/* Updated for 2019. */
   {
-   case SINGLE:  		  if (under65) exemption_threshold = 12000.0;
-				  else  exemption_threshold = 13600.0;
+   case SINGLE:  		  if (under65) exemption_threshold = 12200.0;
+				  else  exemption_threshold = 13850.0;
 	break;
-   case MARRIED_FILLING_JOINTLY:  if (under65==2) exemption_threshold = 24000.0;
+   case MARRIED_FILLING_JOINTLY:  if (under65==2) exemption_threshold = 24400.0;
 				  else 
-				  if (under65==1) exemption_threshold = 25300.0;  
-				  else  exemption_threshold = 26600.0;
+				  if (under65==1) exemption_threshold = 25700.0;  
+				  else  exemption_threshold = 27000.0;
 				  if (under65 != 2) over65 = 1;
 	break;
    case MARRIED_FILLING_SEPARAT:  exemption_threshold = 5.0;
 	break;
-   case HEAD_OF_HOUSEHOLD: 	  if (under65) exemption_threshold = 18000.0;  
-				  else  exemption_threshold = 19600.0;
+   case HEAD_OF_HOUSEHOLD: 	  if (under65) exemption_threshold = 18350.0;  
+				  else  exemption_threshold = 20000.0;
 	break;
-   case WIDOW:  		  if (under65) exemption_threshold = 24000.0;  
-				  else  exemption_threshold = 25300.0;
+   case WIDOW:  		  if (under65) exemption_threshold = 24400.0;  
+				  else  exemption_threshold = 25700.0;
   }
- if (L[6] < exemption_threshold)
+ if (L[8] < exemption_threshold)
   {
-   printf(" (L6 = %3.2f < Threshold = %3.2f)\n", L[6], exemption_threshold );
+   printf(" (L8 = %3.2f < Threshold = %3.2f)\n", L[8], exemption_threshold );
    printf("You may not need to file a return, due to your income level.\n"); 
    fprintf(outfile,"You may not need to file a return, due to your income level.\n");
   }
-
- L[7] = L[6] - Sched1[36];
- showline_wmsg( 7, "Adjusted Gross Income" );
 
 
  /* Schedule A */
  GetLine( "A1", &SchedA[1] );	/* Unreimbursed medical expenses. */
   showschedA(1);
- SchedA[2] = L[7];
+ SchedA[2] = L[8];
   showschedA(2);
- SchedA[3] = 0.075 * SchedA[2];
+ SchedA[3] = 0.01 * SchedA[2];
   showschedA(3);
  SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
   showschedA(4);
@@ -1710,8 +1690,8 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
   showschedA(16);
  SchedA[17] = SchedA[4] + SchedA[7] + SchedA[10] + SchedA[14] + SchedA[15] + SchedA[16];
   showschedA(17);
- L[8] = SchedA[17];	/* Tentative setting. */
- if (L[8] > 0.0)  itemize = Yes;  else  itemize = No;
+ L[9] = SchedA[17];	/* Tentative setting. */
+ if (L[9] > 0.0)  itemize = Yes;  else  itemize = No;
 
  if ((L[2] != 0.0) || (L[3] != 0.0))
   {
@@ -1724,38 +1704,38 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  fprintf(outfile, "StdDedChart_NumBoxesChecked = %d\n", StdDedChart_NumBoxesChecked ); 
  if (StdDedChart_NumBoxesChecked == 0)
   {
-   S_STD_DEDUC   = 12000.0;						/* Not Updated for 2019. */
-   MFJ_STD_DEDUC = 24000.0;
-   MFS_STD_DEDUC = 12000.0;
-   HH_STD_DEDUC  = 18000.0;
+   S_STD_DEDUC   = 12200.0;						/* Updated for 2019. */
+   MFJ_STD_DEDUC = 24400.0;
+   MFS_STD_DEDUC = 12200.0;
+   HH_STD_DEDUC  = 18350.0;
   }
  else
   { /* Std. Deduction chart for People who were Born Before January 2, 1953, or Were Blind, pg 35. */
     switch (StdDedChart_NumBoxesChecked)		/* Does not handle if someone claims you or joint-spouse as dependent. */
      {				/* (Qualifying Widow/er has same amounts as MFJ, so not broken into separate variable.) */
       case 1: 
-	S_STD_DEDUC   = 13600.0;					/* Not Updated for 2019. */
-	MFJ_STD_DEDUC = 25300.0;
-	MFS_STD_DEDUC = 13300.0;
-	HH_STD_DEDUC  = 19600.0;
+	S_STD_DEDUC   = 13850.0;					/* Updated for 2019. */
+	MFJ_STD_DEDUC = 25700.0;
+	MFS_STD_DEDUC = 13500.0;
+	HH_STD_DEDUC  = 20000.0;
 	break;
       case 2: 
-	S_STD_DEDUC   = 15200.0;
-	MFJ_STD_DEDUC = 26600.0;
-	MFS_STD_DEDUC = 14600.0;
-	HH_STD_DEDUC  = 21200.0;
+	S_STD_DEDUC   = 15500.0;
+	MFJ_STD_DEDUC = 27000.0;
+	MFS_STD_DEDUC = 14800.0;
+	HH_STD_DEDUC  = 21600.0;
 	break;
       case 3: 
-	MFJ_STD_DEDUC = 27900.0;
-	MFS_STD_DEDUC = 15900.0;
+	MFJ_STD_DEDUC = 28300.0;
+	MFS_STD_DEDUC = 16100.0;
 	S_STD_DEDUC   = 15200.0;	/* Cannot happen, but set to appease compiler. */
-	HH_STD_DEDUC  = 21200.0;	/* .. */
+	HH_STD_DEDUC  = 21600.0;	/* .. */
 	break;
       case 4: 
-	MFJ_STD_DEDUC = 29200.0;
-	MFS_STD_DEDUC = 17200.0;
+	MFJ_STD_DEDUC = 29600.0;
+	MFS_STD_DEDUC = 17400.0;
 	S_STD_DEDUC   = 15200.0;	/* Cannot happen, but set to appease compiler. */
-	HH_STD_DEDUC  = 21200.0;	/* .. */
+	HH_STD_DEDUC  = 21600.0;	/* .. */
 	break;
       default:  fprintf(outfile,"Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
 		printf("Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
@@ -1778,39 +1758,42 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
    default:  printf("Case (Line 8) not handled.\n"); fprintf(outfile,"Case (Line 8) not handled.\n"); exit(1);
   }
 
- if (L[8] <= std_deduc)
+ if (L[9] <= std_deduc)
   {
-   printf("	(Itemizations < Std-Deduction, %6.2f < %6.2f)\n", L[8], std_deduc );
-   fprintf(outfile,"	(Itemizations < Std-Deduction, %6.2f < %6.2f)\n", L[8], std_deduc );
-   L[8] = std_deduc;
+   printf("	(Itemizations < Std-Deduction, %6.2f < %6.2f)\n", L[9], std_deduc );
+   fprintf(outfile,"	(Itemizations < Std-Deduction, %6.2f < %6.2f)\n", L[9], std_deduc );
+   L[9] = std_deduc;
    fprintf(outfile,"Use standard deduction.\n");
    itemize = 0;
   }
  else
   {
-   printf("	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[8], std_deduc );
-   fprintf(outfile,"	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[8], std_deduc );
+   printf("	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[9], std_deduc );
+   fprintf(outfile,"	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[9], std_deduc );
    fprintf(outfile,"Itemizing.\n");
   }
- showline(8);
  showline(9);
+ showline(10);
 
- L[10] = NotLessThanZero( L[7] - L[8] - L[9] );
- showline_wmsg( 10, "Taxable Income" );
+ L11a = L[9] + L[10];
+ showline_wlabel( "L11a", L11a );
 
- L11a = TaxRateFunction( L[10], status );
+ L[11] = NotLessThanZero( L[8] - L11a );
+ showline_wmsg( 11, "Taxable Income" );
 
- if (L[10] <= 0.0) 
+ L12a = TaxRateFunction( L[11], status );
+
+ if (L[11] <= 0.0) 
   { /*exception*/
-    printf(" Exception (Sched-D Instructions page 14) - Do not use QDCGT or Sched-D Tax Worksheets.\n");
+    printf(" Exception (Sched-D Instructions page D-16) - Do not use QDCGT or Sched-D Tax Worksheets.\n");
   } /*exception*/
  else
   { /*no_exception*/
-   if ((!Do_SDTW) && (!Do_QDCGTW) && ((L[3] > 0.0) || (Sched1[13] > 0.0) || ((SchedD[15] > 0.0) && (SchedD[16] > 0.0)) ))
+   if ((!Do_SDTW) && (!Do_QDCGTW) && ((L3a > 0.0) || (Sched1[13] > 0.0) || ((SchedD[15] > 0.0) && (SchedD[16] > 0.0)) ))
     Do_QDCGTW = Yes;
    if (Do_QDCGTW)
     {
-     fprintf(outfile,"Doing 'Qualified Dividends and Capital Gain tax Worksheet', page 44.\n");
+     fprintf(outfile,"Doing 'Qualified Dividends and Capital Gain tax Worksheet', page 33.\n");
      capgains_qualdividends_worksheets( status );
     }
    else
@@ -1821,18 +1804,18 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
    }
   } /*no_exception*/
 
- showline_wlabel( "L11a", L11a );
+ showline_wlabel( "L12a", L12a );
 
 
- /* -- Schedule 2 -- Tax */
- while (!gotS2_46)	/* Get any optional AMTws lines, or the next normal line S2_46. */
+ /* -- Schedule 2 -- Additional Taxes */
+ while (!gotS2_2)	/* Get any optional AMTws lines, or the next normal line S2_2. */
   {
-   get_parameter( infile, 'l', labelx, "S2_46 or AMTwsXX or B7a");
-   if (strcmp( labelx, "S2_46" ) == 0)
+   get_parameter( infile, 'l', labelx, "S2_2 or AMTwsXX or B7a");
+   if (strcmp( labelx, "S2_2" ) == 0)
     {
      get_parameters( infile, 'f', &tmpval, labelx );
-     Sched2[46] = tmpval;
-     gotS2_46 = 1;
+     Sched2[2] = tmpval;
+     gotS2_2 = 1;
     }
    else
    if (strcasecmp( labelx, "AMTws2c" ) == 0)
@@ -1878,8 +1861,8 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
     }
    else
     {
-     printf("ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX or B7a'\n", labelx ); 
-     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S2_46 or AMTwsXX'\n", labelx );
+     printf("ERROR1: Found '%s' when expecting 'S2_2 or AMTwsXX or B7a'\n", labelx ); 
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'S2_2 or AMTwsXX'\n", labelx );
      exit(1);
     }
   }
@@ -1903,153 +1886,135 @@ int main( int argc, char *argv[] )						/* NOT Not Updated for 2019. */
  else
   fprintf(outfile,"CkB8_N X\n");
 
- // GetLine( "S2_46", &Sched2[46] );	/* Excess advance premium tax credit repayment. Form 8962. */
-					/* (Needed by AMT form6251.) */
- GetLine( "S3_48", &Sched3[48] ); /*  Foreign tax credit. Form 1116. */
+ // GetLine( "S2_2", &Sched2[2] );	/* Excess advance premium tax credit repayment. Form 8962. */
 					/* (Needed by AMT form6251.) */
 
- Sched2[45] = form6251_AlternativeMinimumTax( itemize );	/* (Depends on L11a and prior lines.) */
- if (Sched2[45] == 0.0)
+ GetLine( "S2_4", &Sched2[4] );		/* Self-employment tax. Sched SE. */
+ GetLine( "S2_5", &Sched2[5] );		/* Unreported social security and Medicare tax from Forms 4137, 8919 */
+ GetLine( "S2_6", &Sched2[6] );		/* Additional tax on IRAs, other qualified retirement plan, Form 5329 */
+ GetLine( "S2_7a", &Sched1[7] );	/* Household employment taxes. Sched H */
+ GetLine( "S2_7b", &S2_7b );		/* First-time homebuyer credit repayment. Form 5405. */
+ GetLine( "S2_8", &Sched2[8] );		/* Taxes from Forms 8959, 8960, others. */
+ GetLine( "S2_9", &Sched2[9] );		/* Section 965 net tax liability installment from Form965-A. */
+
+ GetLine( "S3_1", &Sched3[1] ); 	/*  Foreign tax credit. Form 1116. (Needed by AMT form6251.) */ 
+
+ Sched2[1] = form6251_AlternativeMinimumTax( itemize );	/* (Depends on L12a and prior lines.) */
+ if (Sched2[1] == 0.0)
   fprintf(outfile," (Not subject to Alternative Minimum Tax.)\n");
  else
   {
    fprintf(outfile," (You must pay Alternative Minimum Tax.)\n");
-   showline_wlabelmsg( "S2_45", Sched2[45], "Alternative Minimum Tax" );
+   showline_wlabelmsg( "S2_1", Sched2[1], "Alternative Minimum Tax" );
   }
- showline_wlabel( "S2_46", Sched2[46] );
- Sched2[47] = Sched2[45] + Sched2[46];
- showline_wlabel( "S2_47", Sched2[47] );
- /* -- End of Schedule 2 -- */
+
+ Sched2[3] = Sched2[1] + Sched2[2];
+ showline_wlabelnz( "S2_3", Sched2[3] );
+ showline_wlabelnz( "S2_4", Sched2[4] );
+ showline_wlabelnz( "S2_5", Sched2[5] );
+ showline_wlabelnz( "S2_6", Sched2[6] );
+ showline_wlabelnz( "S2_7a", Sched2[7] );
+ showline_wlabelnz( "S2_7b", S2_7b );
+ Sched2[7] = Sched2[7] + S2_7b;
+ showline_wlabelnz( "S2_8", Sched2[8] );
+ showline_wlabelnz( "S2_9", Sched2[9] );
+ for (j = 3; j <= 9; j++)
+   Sched2[10] = Sched2[10] + Sched2[j];
+ showline_wlabel( "S2_10", Sched2[10] );
+ /* -- End of Schedule 2 */
+
+ L[12] = Sched2[3] + L12a;
+ showline( 12 );
+ Report_bracket_info( L[11], Sched2[3], status );
  
- L[11] = L11a + Sched2[47];
- showline(11);
- Report_bracket_info( L[10], Sched2[47], status );
+ L[15] = Sched2[10];
+ 
 
+ /* -- Schedule 3 -- Part I - Nonrefundable Credits */
+ showline_wlabel( "S3_1", Sched3[1] );
 
- /* -- Schedule 3 -- Nonrefundable Credits */
- showline_wlabel( "S3_48", Sched3[48] );
+ GetLine( "S3_2", &Sched3[2] );		/* Child / dependent care expense credits. Form 2441. */
+ showline_wlabel( "S3_2", Sched3[2] );
 
- GetLine( "S3_49", &Sched3[49] );	/* Child / dependent care expense credits. Form 2441. */
- showline_wlabel( "S3_49", Sched3[49] );
+ GetLine( "S3_3", &Sched3[3] );		/*  Education credits. Form 8863. */
+ showline_wlabel( "S3_3", Sched3[3] );
 
- GetLine( "S3_50", &Sched3[50] );	/*  Education credits. Form 8863. */
- showline_wlabel( "S3_50", Sched3[50] );
+ GetLine( "S3_4", &Sched3[4] );		/*  Retirement savings contributions credit. Form 8880. */
+ showline_wlabel( "S3_4", Sched3[4] );
 
- GetLine( "S3_51", &Sched3[51] );	/*  Retirement savings contributions credit. Form 8880. */
- showline_wlabel( "S3_51", Sched3[51] );
+ GetLine( "S3_5", &Sched3[5] );		/*  Residential energy credits. Form 5695. */
+ showline_wlabel( "S3_5", Sched3[5] );
 
- GetLine( "S3_53", &Sched3[53] );	/*  Residential energy credits. Form 5695. */
- showline_wlabel( "S3_53", Sched3[53] );
+ GetLine( "S3_6", &Sched3[6] );	/*  Other credits. Forms 3800, 8801, ect. */
+ showline_wlabel( "S3_6", Sched3[6] );
 
- GetLine( "S3_54", &Sched3[54] );	/*  Other credits. Forms 3800, 8801, ect. */
- showline_wlabel( "S3_54", Sched3[54] );
+ for (j = 1; j <= 6; j++)
+  Sched3[7] = Sched3[7] + Sched3[j];
+ showline_wlabel( "S3_7", Sched3[7] );
+ L[13] = L13a + Sched3[7];
 
- for (j = 48; j <= 54; j++)
-  Sched3[55] = Sched3[55] + Sched3[j];
- showline_wlabel( "S3_55", Sched3[55] );
+ GetLine( "S3_8", &Sched3[8] );		/* 2019 estimated payments + amnt applied from last year. */
+ showline_wlabelnz( "S3_8", Sched3[8] );
+
+ GetLine( "S3_9", &Sched3[9] );	/* Net premium tax credit. Form 8962. */
+ showline_wlabelnz( "S3_9", Sched3[9] );
+
+ GetLine( "S3_10", &Sched3[10] );	/* Amnt paid in filing extension req. */
+ showline_wlabelnz( "S2_10", Sched3[10] );
+
+ GetLine( "S3_11", &Sched3[11] );	/* Excess Soc. Sec. + tier 1 RRTA tax withheld */
+ showline_wlabelnz( "S3_11", Sched3[11] );
+
+ GetLine( "S3_12", &Sched3[12] );	/* Credits for federal tax on fuels. Attach form 4136. */
+ showline_wlabelnz( "S3_12", Sched3[12] );
+
+ GetLine( "S3_13", &Sched3[13] );	/* Credits from Form 2439, 4136, 6801, 8885 */
+ showline_wlabelnz( "S3_13", Sched3[13] );
+
+ for (j = 8; j <= 13; j++)
+  Sched3[14] = Sched3[14] + Sched3[j];
+ showline_wlabelnz( "S3_14", Sched3[14] );
+ L18d = Sched3[14];
+
  /* -- End of Schedule 3 -- */
 
- L[12] = L[12] + Sched3[55];
- showline(12);
-
- L[13] = NotLessThanZero( L[11] - L[12] );
  showline(13);
 
-
-
- /* -- Schedule 4 -- Other Taxes. */
-
- GetLine( "S4_57", &Sched4[57] );	/* Self-employment tax. Sched SE */
- showline_wlabelnz( "S4_57", Sched4[57] );
-
- GetLine( "S4_58", &Sched4[58] );	/* Unreported social security and Medicare tax from Forms 4137, 8919 */
- showline_wlabelnz( "S4_58", Sched4[58] );
-
- GetLine( "S4_59", &Sched4[59] );	/* Additional tax on IRAs, other qualified retirement plan, Form 5329 */
- showline_wlabelnz( "S4_59", Sched4[59] );
-
- GetLine( "S4_60a", &Sched4[60] );	/* Household employment taxes. Sched H */
- showline_wlabelnz( "S4_60a", Sched4[60] );
-
- GetLine( "S4_60b", &S4_60b );	/* First-time homebuyer credit repayment. Form 5405. */
- showline_wlabelnz( "S4_60b", S4_60b );
- Sched4[60] = Sched4[60] + S4_60b;
-
- GetLine( "S4_61", &Sched4[61] );	/* Health care: individual responsibility. */
- showline_wlabelnz( "S4_61", Sched4[61] );
-
- GetLine( "S4_62", &Sched4[62] );	/* Taxes from Forms 8959, 8960, others. */
- showline_wlabelnz( "S4_62", Sched4[62] );
-
- GetLine( "S4_63", &Sched4[63] );	/* Section 965 net tax liability installment from Form965-A. */
- showline_wlabelnz( "S4_63", Sched4[63] );
-
- for (j = 57; j <= 62; j++)
-   Sched4[64] = Sched4[64] + Sched4[j];
- showline_wlabel( "S4_64", Sched4[64] );
- L[14] = Sched4[64];
+ L[14] = NotLessThanZero( L[12] - L[13] );
  showline(14);
- /* -- End of Schedule 4 */
+ showline(15);
 
+ L[16] = L[14] + L[15];
+ showline_wmsg( 16, "Total Tax" );
 
- L[15] = L[13] + L[14];
- showline_wmsg( 15, "Total Tax" );
-
- showline( 16 );
-
-
-
- /* -- Schedule 5 - Other Payments and Refundable Credits -- */
-
- GetLine( "S5_66", &Sched5[66] );	/* 2019 estimated payments + amnt applied from last year. */
- showline_wlabelnz( "S5_66", Sched5[66] );
-
- GetLine( "S5_70", &Sched5[70] );	/* Net premium tax credit. Form 8962. */
- showline_wlabelnz( "S5_70", Sched5[70] );
-
- GetLine( "S5_71", &Sched5[71] );	/* Amnt paid in filing extension req. */
- showline_wlabelnz( "S5_71", Sched5[71] );
-
- GetLine( "S5_72", &Sched5[72] );	/* Excess Soc. Sec. + tier 1 RRTA tax withheld */
- showline_wlabelnz( "S5_72", Sched5[72] );
-
- GetLine( "S5_73", &Sched5[73] );	/* Credits for federal tax on fuels. Attach form 4136. */
- showline_wlabelnz( "S5_73", Sched5[73] );
-
- GetLine( "S5_74", &Sched5[74] );	/* Credits from Form 2439, 4136, 6801, 8885 */
- showline_wlabelnz( "S5_74", Sched5[74] );
-
- for (j = 66; j <= 74; j++)
-  Sched5[75] = Sched5[75] + Sched5[j];
- showline_wlabelnz( "S5_75", Sched5[75] );
-
- /* -- End of Schedule 5 -- */
-
- showline_wlabelnz( "L17a", L17a );
- showline_wlabelnz( "L17b", L17b );
- showline_wlabelnz( "L17c", L17c );
-
- L[17] = L17a + L17b + L17c + Sched5[75];
  showline( 17 );
+
+ showline_wlabelnz( "L18a", L18a );
+ showline_wlabelnz( "L18b", L18b );
+ showline_wlabelnz( "L18c", L18c );
+ showline_wlabelnz( "L18d", L18d );
+
+ L[18] = L18a + L18b + L18c + L18d;
+ showline( 18 );
  
- L[18] = L[16] + L[17];
- showline_wmsg( 18, "Total Payments" );
+ L[19] = L[17] + L[18];
+ showline_wmsg( 19, "Total Payments" );
 
 
  /* Refund or Owe sections. */
- if (L[18] > L[15] + L[23])
+ if (L[19] > L[16])
   { /* Refund */
-   L[19] = L[18] - L[15] - L[23];
-   fprintf(outfile,"L19 = %6.2f  Amount you Overpaid!!!\n", L[19] );
-   fprintf(outfile,"L20a = %6.2f \n", L[19] );
+   L[20] = L[19] - L[16];
+   fprintf(outfile,"L20 = %6.2f  Amount you Overpaid!!!\n", L[20] );
+   fprintf(outfile,"L21a = %6.2f \n", L[20] );
   }
  else 
   { /* Tax-Due */
-   L[22] = L[15] - L[18] + L[23];
-   fprintf(outfile,"L22 = %6.2f  DUE !!!\n", L[22] );
-   fprintf(outfile,"         (Which is %2.1f%% of your Total Federal Tax.)\n", 100.0 * L[22] / (L[15] + 1e-9) );
+   L[23] = L[16] - L[19];
+   fprintf(outfile,"L23 = %6.2f  DUE !!!\n", L[23] );
+   fprintf(outfile,"         (Which is %2.1f%% of your Total Federal Tax.)\n", 100.0 * L[23] / (L[16] + 1e-9) );
   }
- ShowLineNonZero( 23 );
+ ShowLineNonZero( 24 );
  fprintf(outfile,"------------------------------\n");
 
  

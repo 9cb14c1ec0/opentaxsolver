@@ -3344,7 +3344,7 @@ int main(int argc, char *argv[] )
  formid = setform( form_US_1040 );
  txprogstog = make_radio_button( mpanel, 0, x, y, "US 1040 (w/Scheds A,B,D)", slcttxprog, formid );
  add_tool_tip( txprogstog, "Also does the 8949 forms." );
-gtk_widget_set_sensitive( txprogstog, grayed_out );  /* Gray-out for this version - Not Ready. */
+// gtk_widget_set_sensitive( txprogstog, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_US_1040_Sched_C );
  make_radio_button( mpanel, txprogstog, x, y, "US 1040 Sched C", slcttxprog, formid );

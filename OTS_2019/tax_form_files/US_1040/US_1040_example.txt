@@ -10,8 +10,6 @@ You_Blind?	N	{ Are you blind ? (answer: Yes, No) }
 Spouse_65+Over?	 Y	{ Was Spouse born before January 2, 1954 ? (answer: Yes, No) }
 Spouse_Blind?	 N	{ Is Spouse blind ? (answer: Yes, No) }
 
-HealthCoverage?	 Y	{ Covered by Health care insurance or exempt ? (answer: Yes, No) }
-
 Dependents       2      { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)
 				self=1, spouse, etc. }
 
@@ -54,20 +52,20 @@ L4b		;       { Taxable IRA distributions, Pensions, Annuites. }
 
 L5a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
 
-L9		;	{ Qualified business income deduction. }
-L12a		; 	{ Child tax credit/credit for other dependents. }
+L10		;	{ Qualified business income deduction. }
+L13a		; 	{ Child tax credit/credit for other dependents. }
 
-L16	 965.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, etc..  }
-	1688.09         { Spouse's}
+L17	1965.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, etc..  }
+	1888.09         { Spouse's}
                 ;
 
 { -- Refundable Credits -- }
-L17a	207	;	{ Earned Income Credit (EIC) }
-L17b		;	{ Child Tax Credit, Schedule 8812 }
-L17c		;	{ Education Credits, Form 8863 }
+L18a	207	;	{ Earned Income Credit (EIC) }
+L18b		;	{ Child Tax Credit, Schedule 8812 }
+L18c		;	{ Education Credits, Form 8863 }
 
 { -- Penalties -- }
-L23		;	{ Estimated Tax Under-payment Penalty }
+L24		;	{ Estimated Tax Under-payment Penalty }
 
 
 { --- Schedule D: Capital Gains/Loses --- }
@@ -117,30 +115,33 @@ Collectibles 	;	{ Long Term Gain or Loss from Collectibles, Form 8949 Part II. (
 			{ }
 
 { --- Schedule 1: Additional Income --- }
-S1_10		;       { Taxable refunds. }
-S1_11		;       { Alimony received. }
-S1_12		;       { Business income/loss. (Sched C) }
-S1_14		;       { Other gains or losses. (form 4797) }
-S1_17		;       { Rent realestate/royalties/partnerships/S corp. Sched E }
-S1_18		;       { Farm income/loss. (Sched F) }
-S1_19		;       { Unemployment compensation }
-S1_21		;       { Other income. }
- S1_21_Type:		 { Type of Other Income. }
+VirtCurr?       N       { During 2019, did you buy/sell/own and Virtual Currency ? (answer: Yes, No) }
+S1_1		;       { Taxable refunds. }
+S1_2a           ;       { Alimony received. }
+S1_2b:                   { Date of divorce or separation. }
+S1_3		;       { Business income/loss. (Sched C) }
+S1_4		;       { Other gains or losses. (form 4797) }
+S1_5		;       { Rent realestate/royalties/partnerships/S corp. Sched E }
+S1_6		;       { Farm income/loss. (Sched F) }
+S1_7		;       { Unemployment compensation }
+S1_8		;       { Other income. }
+ S1_8_Type:		 { Type of Other Income. }
 
 { ---- Adjustments to Gross Income ---- }
-S1_23             ;       { Educator expenses }
-S1_24             ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
-S1_25             ;       { Health savings account deduction. Attach Form 8889 }
-S1_26             ;       { Moving expenses. Attach Form 3903 }
-S1_27             ;       { Deductable part of self-employment tax. Attach Schedule SE}
-S1_28             ;       { Self-employed SEP, SIMPS1_E, and qualified plans }
-S1_29             ;       { Self-employed health insurance deduction }
-S1_30             ;       { Penalty on early withdrawal of savings }
-S1_31a            ;       { Alimony paid }
+S1_10             ;       { Educator expenses }
+S1_11             ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
+S1_12             ;       { Health savings account deduction. Attach Form 8889 }
+S1_13             ;       { Moving expenses. Attach Form 3903 }
+S1_14             ;       { Deductable part of self-employment tax. Attach Schedule SE}
+S1_15             ;       { Self-employed SEP, SIMPS1_E, and qualified plans }
+S1_16             ;       { Self-employed health insurance deduction }
+S1_17             ;       { Penalty on early withdrawal of savings }
+S1_18a            ;       { Alimony paid }
  AlimRecipSSN:             { Alimony recipient's SocSec Number. }
  AlimRecipName:            { Alimony recipient's Name. }
-S1_32             ;       { IRA deduction }
-S1_33             ;       { Student loan interest deduction }
+S1_19             ;       { IRA deduction }
+S1_20             ;       { Student loan interest deduction }
+S1_21             ;       { Tuition and fees. }
 
 { ---- Tax and Credits ---- }
  { -- Schedule A: Itemized deductions -- }
@@ -171,38 +172,35 @@ S1_33             ;       { Student loan interest deduction }
  B8	N	;	{ Did you receive a foreign trust ? (answer: Yes, No) }
 
 
-{ --- Schedule 2: Tax --- }
+{ --- Schedule 2: Additional Taxes --- }
 AMTws2c         ;       { Investment interest expense (difference between regular tax and AMT) (Form 6251 line 2c). }
 AMTws2g         ;       { Private activity bond interest exempt from regular tax (Form 6251 line 2g). }
         { AMT Worksheet 6251 entries for lines 8-27 can be optionally added. For example "AMTws27  234.00". }
 
-S2_46		;	{ Excess advance premium tax credit repayment. Form 8962. }
+S2_2		;	{ Excess advance premium tax credit repayment. Form 8962. }
+S2_4             ;       { Self-employment tax. Sched SE }
+S2_5             ;       { Unreported social security and Medicare tax from Form 4137, 8919 }
+S2_6             ;       { Additional tax on IRAs, other qualified retirement plans, Form 5329 }
+S2_7a            ;       { Household employment taxes. Sched H }
+S2_7b            ;       { First-time homebuyer credit repayment. Form 5405. }
+S2_8		  ;	  { Taxes from Forms 8959, 8960, others. }
+S2_9		  ;	  { Section 965 net tax liability installment from Form965-A. }
 
-{ --- Schedule 3: Nonrefundable Credits --- }
-S3_48             ;       { Foreign tax credit, form 1116 }
-S3_49             ;       { Child/dependent care expense credits. Form 2441. }
-S3_50             ;       { Education credits. Form 8863, line 19. }
-S3_51             ;       { Retirement savings contributions credit. Form 8880. }
-S3_53             ;       { Residential energy credits. Form 5695. }
-S3_54             ;       { Other credits. Forms 3800, 8801, etc. }
+{ --- Schedule 3: Part 1 - Nonrefundable Credits --- }
+S3_1             ;       { Foreign tax credit, form 1116 }
+S3_2             ;       { Child/dependent care expense credits. Form 2441. }
+S3_3             ;       { Education credits. Form 8863, line 19. }
+S3_4             ;       { Retirement savings contributions credit. Form 8880. }
+S3_5             ;       { Residential energy credits. Form 5695. }
+S3_6             ;       { Other credits. Forms 3800, 8801, etc. }
 
-{ --- Schedule 4: Other Taxes --- }
-S4_57             ;       { Self-employment tax. Sched SE }
-S4_58             ;       { Unreported social security and Medicare tax from Form 4137, 8919 }
-S4_59             ;       { Additional tax on IRAs, other qualified retirement plans, Form 5329 }
-S4_60a            ;       { Household employment taxes. Sched H }
-S4_60b            ;       { First-time homebuyer credit repayment. Form 5405. }
-S4_61             ;       { Health care: individual responsibility. }
-S4_62		  ;	  { Taxes from Forms 8959, 8960, others. }
-S4_63		  ;	  { Section 965 net tax liability installment from Form965-A. }
-
-{ --- Schedule 5: Other Payments and Refundable Credits --- }
-S5_66		;	{ 2019 estimated payments + amnt applied from last year. }
-S5_70		;	{ Net premium tax credit. Form 8962. }
-S5_71		;	{ Amnt paid in filing extension req. }
-S5_72		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
-S5_73		;	{ Credits for federal tax on fuels. Attach form 4136. }
-S5_74		;	{ Credits from Form 2439, 4136, 6801, 8885. }
+{ --- Schedule 3: Part II - Other Payments and Refundable Credits --- }
+S3_8		;	{ 2019 estimated payments + amnt applied from last year. }
+S3_9		;	{ Net premium tax credit. Form 8962. }
+S3_10		;	{ Amnt paid in filing extension req. }
+S3_11		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
+S3_12		;	{ Credits for federal tax on fuels. Attach form 4136. }
+S3_13		;	{ Credits from Form 2439, 4136, 6801, 8885. }
 
 
 { -------------------------------------------- } 
