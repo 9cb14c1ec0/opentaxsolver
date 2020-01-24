@@ -71,14 +71,14 @@ L24		;	{ Estimated Tax Under-payment Penalty }
 { --- Schedule D: Capital Gains/Loses --- }
 CapGains-A/D            { Capital Gains/Losses, 1099-B. For Basis Reported to IRS (Form 8949 check A or D) }
                         {  Enter for each:  BuyAmnt Date, SellAmnt Date }
-         -800.99        6-20-18         { 40 Shares WMT }
-          950.99        10-12-18
+         -800.99        6-20-19         { 40 Shares WMT }
+          950.99        10-12-19
 
-         -800.99        6-20-2018       { 40 Shares AAP }
-          950.99        10-12-18
+         -800.99        6-20-2019       { 40 Shares AAP }
+          950.99        10-12-19
 
-        -3658.22        1-15-17        { 100 Shares XOM }
-         4209.95        12-25-18
+        -3658.22        1-15-19        { 100 Shares XOM }
+         4209.95        12-25-19
 
         -4949.98        3-26-17        { 500 Shares NAB }
          6009.01        12-27-2019
@@ -93,7 +93,7 @@ CapGains-B/E            { Capital Gains/Losses, 1099-B. For Basis NOT Reported t
         1000 2-2-2019
 
         8000 12-24-1980 { SNA }
-        1000 12-28-17
+        1000 12-28-19
                 ;
 CapGains-C/F            { Capital Gains/Losses, 1099-B. For when Form 8949 (A,B,D,E) CANNOT be checked. (check C/F) }
                         {  Enter for each:  BuyAmnt Date, SellAmnt Date }
@@ -116,19 +116,19 @@ Collectibles 	;	{ Long Term Gain or Loss from Collectibles, Form 8949 Part II. (
 
 { --- Schedule 1: Additional Income --- }
 VirtCurr?       N       { During 2019, did you buy/sell/own and Virtual Currency ? (answer: Yes, No) }
-S1_1		;       { Taxable refunds. }
+S1_1	20.11	;       { Taxable refunds. }
 S1_2a           ;       { Alimony received. }
 S1_2b:                   { Date of divorce or separation. }
 S1_3		;       { Business income/loss. (Sched C) }
-S1_4		;       { Other gains or losses. (form 4797) }
+S1_4	17.18	;       { Other gains or losses. (form 4797) }
 S1_5		;       { Rent realestate/royalties/partnerships/S corp. Sched E }
 S1_6		;       { Farm income/loss. (Sched F) }
 S1_7		;       { Unemployment compensation }
-S1_8		;       { Other income. }
+S1_8	12.33	;       { Other income. }
  S1_8_Type:		 { Type of Other Income. }
 
 { ---- Adjustments to Gross Income ---- }
-S1_10             ;       { Educator expenses }
+S1_10    6.10     ;       { Educator expenses }
 S1_11             ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
 S1_12             ;       { Health savings account deduction. Attach Form 8889 }
 S1_13             ;       { Moving expenses. Attach Form 3903 }
@@ -140,7 +140,7 @@ S1_18a            ;       { Alimony paid }
  AlimRecipSSN:             { Alimony recipient's SocSec Number. }
  AlimRecipName:            { Alimony recipient's Name. }
 S1_19             ;       { IRA deduction }
-S1_20             ;       { Student loan interest deduction }
+S1_20      44.08  ;       { Student loan interest deduction }
 S1_21             ;       { Tuition and fees. }
 
 { ---- Tax and Credits ---- }
@@ -178,26 +178,26 @@ AMTws2g         ;       { Private activity bond interest exempt from regular tax
         { AMT Worksheet 6251 entries for lines 8-27 can be optionally added. For example "AMTws27  234.00". }
 
 S2_2		;	{ Excess advance premium tax credit repayment. Form 8962. }
-S2_4             ;       { Self-employment tax. Sched SE }
+S2_4     12.67  ;       { Self-employment tax. Sched SE }
 S2_5             ;       { Unreported social security and Medicare tax from Form 4137, 8919 }
 S2_6             ;       { Additional tax on IRAs, other qualified retirement plans, Form 5329 }
-S2_7a            ;       { Household employment taxes. Sched H }
+S2_7a     34.23  ;       { Household employment taxes. Sched H }
 S2_7b            ;       { First-time homebuyer credit repayment. Form 5405. }
 S2_8		  ;	  { Taxes from Forms 8959, 8960, others. }
 S2_9		  ;	  { Section 965 net tax liability installment from Form965-A. }
 
 { --- Schedule 3: Part 1 - Nonrefundable Credits --- }
-S3_1             ;       { Foreign tax credit, form 1116 }
+S3_1     14.15   ;       { Foreign tax credit, form 1116 }
 S3_2             ;       { Child/dependent care expense credits. Form 2441. }
 S3_3             ;       { Education credits. Form 8863, line 19. }
-S3_4             ;       { Retirement savings contributions credit. Form 8880. }
+S3_4     31.31   ;       { Retirement savings contributions credit. Form 8880. }
 S3_5             ;       { Residential energy credits. Form 5695. }
 S3_6             ;       { Other credits. Forms 3800, 8801, etc. }
 
 { --- Schedule 3: Part II - Other Payments and Refundable Credits --- }
 S3_8		;	{ 2019 estimated payments + amnt applied from last year. }
 S3_9		;	{ Net premium tax credit. Form 8962. }
-S3_10		;	{ Amnt paid in filing extension req. }
+S3_10	8.01	;	{ Amnt paid in filing extension req. }
 S3_11		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
 S3_12		;	{ Credits for federal tax on fuels. Attach form 4136. }
 S3_13		;	{ Credits from Form 2439, 4136, 6801, 8885. }

@@ -212,7 +212,7 @@ void capgains_qualdividends_worksheets( int status )			/* Updated for 2019. */
 /* simply add them to this section.  The balance of the routine will be helpful in either case. */
 /* --- Anyone indicated to fill-out Form 6251 should review the 6251 instruction booklet. ---	*/ 
 /*----------------------------------------------------------------------------------------------*/
-double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 2019. */
+double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2019. */
 {
  double thresholdA=0, thresholdB=0, thresholdC=0.0, amtexmption;
  double offsetA=0.0;
@@ -275,21 +275,21 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
   {
      case SINGLE: case HEAD_OF_HOUSEHOLD:
 	thresholdA = 510300.0;
-	thresholdB = 781200.0;
+	thresholdB = 797100.0;
 	thresholdC = 194800.0;
 	offsetA = 3896.0;
 	amtexmption = 71700.0;
 	break;
      case MARRIED_FILLING_JOINTLY: case WIDOW: 
 	thresholdA = 1020600.0;
-	thresholdB = 1437600.0;
+	thresholdB = 1467400.0;
 	thresholdC = 194800.0;
 	offsetA = 3896.0;
 	amtexmption = 111700.0;
 	break;
      case MARRIED_FILLING_SEPARAT: 
 	thresholdA = 510300.0;
-	thresholdB = 718800.0;
+	thresholdB = 733700.0;
 	thresholdC = 97400.0;
 	offsetA = 1948.0;
         amtexmption = 55850.0;
@@ -298,7 +298,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
   }
 
  if (amtws[4] > thresholdA)
-  { /* Exemption Worksheet */
+  { /* Exemption Worksheet - page 5. */
     double ews[20];
    if (amtws[4] > thresholdB)
     amtexmption = 0.0;
@@ -352,7 +352,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Not Updated for 20
        if (Do_SDTW)
 	amtws[20] = NotLessThanZero( ws_sched_D[14] );
        else
-	amtws[20] = NotLessThanZero( L[10] );
+	amtws[20] = NotLessThanZero( L[11] );
        amtws[21] = NotLessThanZero( amtws[19] - amtws[20] );
        amtws[22] = smallerof( amtws[12], amtws[13] );
        amtws[23] = smallerof( amtws[21], amtws[22] );
@@ -842,7 +842,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
  get_gain_and_losses( "CapGains-A/D" );	/* (A) Basis Reported to IRS. */
  if (short_trades)
   {
-   print_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (A) Basis Reported to IRS:", "13 13\n F8949_ckA X" );
+   print_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (A) Basis Reported to IRS:", "11 11\n F8949_ckA X" );
    SchedDd[1] = total_sales;
    SchedDe[1] = total_costs;
    SchedD[1] = SchedDd[1] + SchedDe[1];
@@ -850,7 +850,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
   }
  if (long_trades)
   {
-   print_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (D) Basis Reported to IRS:", "14 14\n F8949_ckD X" );
+   print_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (D) Basis Reported to IRS:", "12 12\n F8949_ckD X" );
    SchedDd[8] = total_sales;
    SchedDe[8] = total_costs;
    SchedD[8] = SchedDd[8] + SchedDe[8];
@@ -860,7 +860,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
  get_gain_and_losses( "CapGains-B/E" );	/* (B) Basis NOT Reported to IRS. */
  if (short_trades)
   {
-   print_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (B) Basis NOT Reported to IRS:", "13 13\n F8949_ckB X" );
+   print_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (B) Basis NOT Reported to IRS:", "11 11\n F8949_ckB X" );
    SchedDd[2] = total_sales;
    SchedDe[2] = total_costs;
    SchedD[2] = SchedDd[2] + SchedDe[2];
@@ -868,7 +868,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
   }
  if (long_trades)
   {
-   print_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (E) Basis NOT Reported to IRS:", "14 14\n F8949_ckE X"  );
+   print_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (E) Basis NOT Reported to IRS:", "12 12\n F8949_ckE X"  );
    SchedDd[9] = total_sales;
    SchedDe[9] = total_costs;
    SchedD[9] = SchedDd[9] + SchedDe[9];
@@ -878,7 +878,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
  get_gain_and_losses( "CapGains-C/F" );	/* (C) Cannot check (A) or (B). */
  if (short_trades)
   {
-   print_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (C) Not reported on Form 1099-B.\n", "13 13\n F8949_ckC X" );
+   print_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (C) Not reported on Form 1099-B.\n", "11 11\n F8949_ckC X" );
    SchedDd[3] = total_sales;
    SchedDe[3] = total_costs;
    SchedD[3] = SchedDd[3] + SchedDe[3];
@@ -886,7 +886,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
   }
  if (long_trades)
   {
-   print_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (F) Not reported on Form 1099-B.\n", "14 14\n F8949_ckF X" );
+   print_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (F) Not reported on Form 1099-B.\n", "12 12\n F8949_ckF X" );
    SchedDd[10] = total_sales;
    SchedDe[10] = total_costs;
    SchedD[10] = SchedDd[10] + SchedDe[10];
@@ -961,7 +961,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
    fprintf(outfile," D14 = %6.2f	(Carry-over Loss)\n", SchedD[14] );
    SchedD[15] = SchedD[8] + SchedD[9] + SchedD[10] + SchedD[11] + SchedD[12] + SchedD[13] + SchedD[14];
    fprintf(outfile," D15 = %6.2f		{ Net long-term capital gain or loss }\n", SchedD[15] );
-   fprintf(outfile,"EndPDFpage.\nPDFpage: 9 9\n");
+   fprintf(outfile,"EndPDFpage.\nPDFpage: 10 10\n");
 
    /* Part ||| */
    SchedD[16] = SchedD[7] + SchedD[15];
@@ -1429,11 +1429,6 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ) );
 
- printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- printf("\tFULLY VERIFIED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
- fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- fprintf(outfile,"\tFULLY VERIFIED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
-
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
@@ -1640,7 +1635,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
   showschedA(1);
  SchedA[2] = L[8];
   showschedA(2);
- SchedA[3] = 0.01 * SchedA[2];
+ SchedA[3] = 0.1 * SchedA[2];
   showschedA(3);
  SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
   showschedA(4);
@@ -1710,7 +1705,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
    HH_STD_DEDUC  = 18350.0;
   }
  else
-  { /* Std. Deduction chart for People who were Born Before January 2, 1953, or Were Blind, pg 35. */
+  { /* Std. Deduction chart for People who were Born Before January 2, 1955, or Were Blind, pg 30. */
     switch (StdDedChart_NumBoxesChecked)		/* Does not handle if someone claims you or joint-spouse as dependent. */
      {				/* (Qualifying Widow/er has same amounts as MFJ, so not broken into separate variable.) */
       case 1: 
@@ -1723,19 +1718,19 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
 	S_STD_DEDUC   = 15500.0;
 	MFJ_STD_DEDUC = 27000.0;
 	MFS_STD_DEDUC = 14800.0;
-	HH_STD_DEDUC  = 21600.0;
+	HH_STD_DEDUC  = 21650.0;
 	break;
       case 3: 
 	MFJ_STD_DEDUC = 28300.0;
 	MFS_STD_DEDUC = 16100.0;
-	S_STD_DEDUC   = 15200.0;	/* Cannot happen, but set to appease compiler. */
-	HH_STD_DEDUC  = 21600.0;	/* .. */
+	S_STD_DEDUC   = 15500.0;	/* Cannot happen, but set to appease compiler. */
+	HH_STD_DEDUC  = 21650.0;	/* .. */
 	break;
       case 4: 
 	MFJ_STD_DEDUC = 29600.0;
 	MFS_STD_DEDUC = 17400.0;
-	S_STD_DEDUC   = 15200.0;	/* Cannot happen, but set to appease compiler. */
-	HH_STD_DEDUC  = 21600.0;	/* .. */
+	S_STD_DEDUC   = 15500.0;	/* Cannot happen, but set to appease compiler. */
+	HH_STD_DEDUC  = 21650.0;	/* .. */
 	break;
       default:  fprintf(outfile,"Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
 		printf("Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
@@ -1892,14 +1887,14 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  GetLine( "S2_4", &Sched2[4] );		/* Self-employment tax. Sched SE. */
  GetLine( "S2_5", &Sched2[5] );		/* Unreported social security and Medicare tax from Forms 4137, 8919 */
  GetLine( "S2_6", &Sched2[6] );		/* Additional tax on IRAs, other qualified retirement plan, Form 5329 */
- GetLine( "S2_7a", &Sched1[7] );	/* Household employment taxes. Sched H */
+ GetLine( "S2_7a", &Sched2[7] );	/* Household employment taxes. Sched H */
  GetLine( "S2_7b", &S2_7b );		/* First-time homebuyer credit repayment. Form 5405. */
  GetLine( "S2_8", &Sched2[8] );		/* Taxes from Forms 8959, 8960, others. */
  GetLine( "S2_9", &Sched2[9] );		/* Section 965 net tax liability installment from Form965-A. */
 
  GetLine( "S3_1", &Sched3[1] ); 	/*  Foreign tax credit. Form 1116. (Needed by AMT form6251.) */ 
 
- Sched2[1] = form6251_AlternativeMinimumTax( itemize );	/* (Depends on L12a and prior lines.) */
+ Sched2[1] = form6251_AlternativeMinimumTax( itemize );	/* (Depends on L11 and prior lines.) */
  if (Sched2[1] == 0.0)
   fprintf(outfile," (Not subject to Alternative Minimum Tax.)\n");
  else
@@ -1960,7 +1955,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  showline_wlabelnz( "S3_9", Sched3[9] );
 
  GetLine( "S3_10", &Sched3[10] );	/* Amnt paid in filing extension req. */
- showline_wlabelnz( "S2_10", Sched3[10] );
+ showline_wlabelnz( "S3_10", Sched3[10] );
 
  GetLine( "S3_11", &Sched3[11] );	/* Excess Soc. Sec. + tier 1 RRTA tax withheld */
  showline_wlabelnz( "S3_11", Sched3[11] );

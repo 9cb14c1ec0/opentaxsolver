@@ -56,7 +56,7 @@ double Sum( double *v, int start_slot, int end_slot )
 
 
 double ComputeTax(double taxableIncome)
-{ double taxrate=0.051;					/* Updated for 2019. */
+{ double taxrate=0.0505;					/* Updated for 2019. */
  if (taxableIncome < 24000.0)
   return (int)(taxrate * (taxableIncome + 25.0) + 0.5);
  else
@@ -78,7 +78,7 @@ int main( int argc, char *argv[] )
  double MassBankInterest, Iexempt, AGI;
  double Unemployment, Lottery;
  double MassRetirement[2];
- double L23a=0.0, L33[6], L35a=0.0, L35b=0.0, L35c=0.0;
+ double L23a=0.0, L33[6], L35a=0.0, L35b=0.0;
  double L43a=0.0;
  
  printf("Massachusetts Form-1 2019 - v%3.2f\n", thisversion);
@@ -125,11 +125,6 @@ int main( int argc, char *argv[] )
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
-
- printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
- fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
 
  /* Get status as:  Single, Married/joint, Head house, Married/sep. */
  get_parameter( infile, 's', word, "Status" );
@@ -340,7 +335,7 @@ int main( int argc, char *argv[] )
  showline_wmsg(21, "Total 5.1% Taxable Income");
 
  L[22] = ComputeTax( L[21] );
- showline_wmsg(22,"5.1% Tax");
+ showline_wmsg(22,"5.05% Tax");
 
  GetLine( "L23a", &L23a ); 	/* 12% income */
  L[23] = NotLessThanZero( L23a * 0.12 );
@@ -362,7 +357,7 @@ int main( int argc, char *argv[] )
  L[28] = Sum( L, 22, 26 );
 
  if ((status == SINGLE) || (status == HEAD_OF_HOUSEHOLD) || (status == MARRIED_FILLING_JOINTLY))
- { /* AGI Worksheet pg 12+13. */
+ { /* AGI Worksheet pg 14. */
    double ws[20], threshA, threshB;
    for (j=0; j<20; j++) ws[j] = 0.0;
    ws[1] = NotLessThanZero( L[10] );
@@ -444,9 +439,7 @@ int main( int argc, char *argv[] )
  showline_wlabel( "L35a", L35a );
  GetLine1( "L35b", &L35b ); 	/* Health Care Penalty (spouse) */
  showline_wlabel( "L35b", L35b );
- GetLine1( "L35c", &L35c ); 	/* Health Care Penalty (federal) */
- showline_wlabel( "L35c", L35c );
- L[35] = L35a + L35b + L35c;
+ L[35] = L35a + L35b;
  if (L[35] != 0)
   showline_wmsg( 35, "Health Care penalty" );
 
@@ -485,28 +478,31 @@ int main( int argc, char *argv[] )
  GetLine( "L45", &L[45] );	/* Refundable credits, Sched RF, line 4. */
  ShowLineNonZero(45);
 
- L[46] = Sum( L, 38, 45 );
- showline_wmsg(45,"total payments");
+ GetLine( "L46", &L[46] );	/* Excess Paid Family Leave withholding. */
+ ShowLineNonZero(46);
 
- GetLine( "L48", &L[48] );	/* Overpayment to be applied to next year's estimated tax */
+ L[47] = Sum( L, 38, 46 );
+ showline_wmsg(47,"total payments");
+
+ GetLine( "L49", &L[49] );	/* Overpayment to be applied to next year's estimated tax */
 
  /* Refund or Owe section. */
- if (L[37] < L[46]) 
+ if (L[37] < L[47]) 
   {
-   L[47] = L[46] - L[37];
-   fprintf(outfile,"L47 = %6.2f  Overpayment!\n", L[47] );
-   if (L[48] > L[47])
-    L[48] = L[47];
-   showline_wmsg(48,"Overpayment to be applied to next year's estimated tax");
-   L[49] = L[47] - L[48];
-   fprintf(outfile,"L49 = %6.2f  THIS IS YOUR REFUND\n", L[49] );
+   L[48] = L[47] - L[37];
+   fprintf(outfile,"L48 = %6.2f  Overpayment!\n", L[48] );
+   if (L[49] > L[48])
+    L[49] = L[48];
+   showline_wmsg(49,"Overpayment to be applied to next year's estimated tax");
+   L[50] = L[48] - L[49];
+   fprintf(outfile,"L50 = %6.2f  THIS IS YOUR REFUND\n", L[50] );
   }
  else 
   {
-   L[50] = L[37] - L[46];
-   fprintf(outfile,"L50 = %6.2f  TAX DUE !!!\n", L[50] );
-   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[50] / (L[37] + 1e-9) );
-   if ((L[50] > 400.0) && (L[46] < 0.80 * L[37]))
+   L[51] = L[37] - L[47];
+   fprintf(outfile,"L51 = %6.2f  TAX DUE !!!\n", L[51] );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[51] / (L[37] + 1e-9) );
+   if ((L[51] > 400.0) && (L[47] < 0.80 * L[37]))
     fprintf(outfile," You may owe Underpayment of Estimated Tax penalty.\n");
   }
 

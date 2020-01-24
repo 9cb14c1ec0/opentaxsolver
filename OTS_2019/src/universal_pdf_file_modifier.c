@@ -903,6 +903,8 @@ void place_overlay_text( char *streambuf, int page )
     } /*valid*/
    item = item->nxt; 
   }
+ if (streambuf[0] == '\0')	/* Avoid empty output buffer. */
+  append_buf( streambuf, 8, 1, 1, " " );
 }
 
 
