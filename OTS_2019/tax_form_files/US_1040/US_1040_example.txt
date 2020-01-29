@@ -47,8 +47,10 @@ L3b
          	;
 			{}
 
-L4a		;       { IRA distributions, Pensions, Annuites. }
-L4b		;       { Taxable IRA distributions, Pensions, Annuites. }
+L4a	41.41	;       { IRA distributions. }
+L4b	41.00	;       { Taxable IRA distributions. }
+L4c	43.43	;       { Pensions and annuities. }
+L4d	43.00	;       { Taxable Pensions and annuities. }
 
 L5a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
 

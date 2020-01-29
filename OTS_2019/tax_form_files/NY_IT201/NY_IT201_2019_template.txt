@@ -24,9 +24,6 @@ G_SpecCondCode	    	{ 2-character special condition code if applicable. }
 
 Dependent  	no	{ Are you a Dependent on another's return? (answer: yes, no) }
 
-L9		;	{ Taxable IRA distributions }
-L10		;	{ Taxable pension/annuity amounts }
-
 	{ ----- NY Additions ----- }
 L20	    	;	{ Interest income from non-NY state or local bonds }
 L21	    	;	{ Public employee retirement contributions (pg 17) }

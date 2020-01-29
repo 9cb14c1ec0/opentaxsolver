@@ -50,7 +50,7 @@ char	*YourSocSec=0, *SpouseSocSec=0, *MailAddress=0, *AptNumber=0,
 struct FedReturnData
  {
   double fedline[MAX_LINES], schedA[MAX_LINES], schedD[MAX_LINES],
-	 sched[8][MAX_LINES];
+	 sched[8][MAX_LINES], fed_L4b, fed_L4d, fed_L5b;
   int Exception, Itemized;
  } PrelimFedReturn;
 
@@ -94,6 +94,8 @@ char *pull_initial( char *name )
 
 
 
+
+
 int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 {
  FILE *infile;
@@ -107,6 +109,9 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    fed_data->schedD[linenum] = 0.0;
    for (j=0; j < 8; j++) fed_data->sched[j][linenum] = 0.0;
   }
+ fed_data->fed_L4b = 0.0;
+ fed_data->fed_L4d = 0.0;
+ fed_data->fed_L5b = 0.0;
  convert_slashes( fedlogfile );
  infile = fopen(fedlogfile, "r");
  if (infile==0)
@@ -130,12 +135,19 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 	 printf("Error: Reading Fed line number '%s%s'\n",word,fline);
 	 fprintf(outfile,"Error: Reading Fed line number '%s%s'\n",word,fline);
 	}
-       next_word(fline, word, " \t=");
-       if (sscanf(word,"%lf", &fed_data->fedline[linenum])!=1)
+       next_word(fline, tword, " \t=");
+       if (sscanf(tword,"%lf", &fed_data->fedline[linenum])!=1)
 	{
-	 printf("Error: Reading Fed line %d '%s%s'\n",linenum,word,fline);
-	 fprintf(outfile,"Error: Reading Fed line %d '%s%s'\n",linenum,word,fline);
+	 printf("Error: Reading Fed line %d '%s%s'\n",linenum,tword,fline);
+	 fprintf(outfile,"Error: Reading Fed line %d '%s%s'\n",linenum,tword,fline);
 	}
+       if (strcmp(word,"L4b") == 0)
+	fed_data->fed_L4b = fed_data->fedline[linenum];
+       if (strcmp(word,"L4d") == 0)
+	fed_data->fed_L4d = fed_data->fedline[linenum];
+       if (strcmp(word,"L5b") == 0)
+	fed_data->fed_L5b = fed_data->fedline[linenum];
+
        if (verbose) printf("FedLin[%d] = %2.2f\n", linenum, fed_data->fedline[linenum]);
       }
     }
@@ -342,35 +354,35 @@ double TaxRateFunction( double income, int status )
  double tax;
  switch (status)
   {
-   case MARRIED_FILLING_JOINTLY: case WIDOW:					/* Not Updated for 2019. */
+   case MARRIED_FILLING_JOINTLY: case WIDOW:					/* Updated for 2019. */
 	if (income <=   17150.0) tax = 	         0.04 * income; else		/* Data from pg 57. */
 	if (income <=   23600.0) tax =   686.0 + 0.045  * (income - 17150.0); else
 	if (income <=   27900.0) tax =   976.0 + 0.0525 * (income - 23600.0); else
 	if (income <=   43000.0) tax =  1202.0 + 0.059  * (income - 27900.0); else
-	if (income <=  161550.0) tax =  2093.0 + 0.0633 * (income - 43000.0); else
-	if (income <=  323200.0) tax =  9597.0 + 0.0657 * (income - 161550.0); else
-	if (income <= 2155350.0) tax = 20218.0 + 0.0685 * (income - 323200.0); 
-	else			tax = 145720.0 + 0.0882 * (income - 2155350.0);
+	if (income <=  161550.0) tax =  2093.0 + 0.0621 * (income - 43000.0); else
+	if (income <=  323200.0) tax =  9455.0 + 0.0649 * (income - 161550.0); else
+	if (income <= 2155350.0) tax = 19946.0 + 0.0685 * (income - 323200.0); 
+	else			tax = 145448.0 + 0.0882 * (income - 2155350.0);
       break;
    case SINGLE: case MARRIED_FILLING_SEPARAT:
 	if (income <=    8500.0) tax =  	  0.04   * income; else
 	if (income <=   11700.0) tax =    340.0 + 0.045  * (income - 8500.0); else
 	if (income <=   13900.0) tax =    484.0 + 0.0525 * (income - 11700.0); else
 	if (income <=   21400.0) tax =    600.0 + 0.059  * (income - 13900.0); else
-	if (income <=   80650.0) tax =   1042.0 + 0.0633 * (income - 21400.0); else
-	if (income <=  215400.0) tax =   4793.0 + 0.0657 * (income - 80650.0); else
-	if (income <= 1077550.0) tax =  13646.0 + 0.0685 * (income - 215400.0); 
-	else 		 	 tax =  72703.0 + 0.0882 * (income - 1077550.0);
+	if (income <=   80650.0) tax =   1042.0 + 0.0621 * (income - 21400.0); else
+	if (income <=  215400.0) tax =   4721.0 + 0.0649 * (income - 80650.0); else
+	if (income <= 1077550.0) tax =  13467.0 + 0.0685 * (income - 215400.0); 
+	else 		 	 tax =  72524.0 + 0.0882 * (income - 1077550.0);
       break;
    case HEAD_OF_HOUSEHOLD:
 	if (income <=   12080.0) tax = 	         0.04 * income; else
 	if (income <=   17650.0) tax =   512.0 + 0.045  * (income - 12800.0); else
 	if (income <=   20900.0) tax =   730.0 + 0.0525 * (income - 17650.0); else
 	if (income <=   32200.0) tax =   901.0 + 0.059  * (income - 20900.0); else
-	if (income <=  107650.0) tax =  1568.0 + 0.0633 * (income - 32200.0); else
-	if (income <=  269300.0) tax =  6344.0 + 0.0657 * (income - 107650.0); else
-	if (income <= 1616450.0) tax = 16964.0 + 0.0685 * (income - 269300.0);
-	else			tax = 109244.0 + 0.0882 * (income - 1616450.0);
+	if (income <=  107650.0) tax =  1568.0 + 0.0621 * (income - 32200.0); else
+	if (income <=  269300.0) tax =  6253.0 + 0.0649 * (income - 107650.0); else
+	if (income <= 1616450.0) tax = 16744.0 + 0.0685 * (income - 269300.0);
+	else			tax = 109024.0 + 0.0882 * (income - 1616450.0);
       break;
    default: printf("Error: Unhandled status\n"); exit(0); break;
   }
@@ -383,13 +395,13 @@ void Report_bracket_info( double income, double tx, int status )
  double rate;
  switch (status)
   {
-   case MARRIED_FILLING_JOINTLY: case WIDOW:				/* Not Updated for 2019. */
+   case MARRIED_FILLING_JOINTLY: case WIDOW:				/* Updated for 2019. */
 	if (income <=   17150.0) rate = 0.04;  else
 	if (income <=   23600.0) rate = 0.045;  else
 	if (income <=   27900.0) rate = 0.0525;  else
 	if (income <=   43000.0) rate = 0.059;  else
-	if (income <=  161550.0) rate = 0.0633;  else
-	if (income <=  323200.0) rate = 0.0657;  else
+	if (income <=  161550.0) rate = 0.0621;  else
+	if (income <=  323200.0) rate = 0.0649;  else
 	if (income <= 2155350.0) rate = 0.0685;  else  rate = 0.0882;
       break;
    case SINGLE: case MARRIED_FILLING_SEPARAT:
@@ -397,8 +409,8 @@ void Report_bracket_info( double income, double tx, int status )
 	if (income <=   11700.0) rate = 0.045;  else
 	if (income <=   13900.0) rate = 0.0525;  else
 	if (income <=   21400.0) rate = 0.059;  else
-	if (income <=   80650.0) rate = 0.0633;  else
-	if (income <=  215400.0) rate = 0.0657;  else
+	if (income <=   80650.0) rate = 0.0621;  else
+	if (income <=  215400.0) rate = 0.0649;  else
 	if (income <= 1077550.0) rate = 0.0685;  else  rate = 0.0882;
       break;
    case HEAD_OF_HOUSEHOLD:
@@ -406,12 +418,14 @@ void Report_bracket_info( double income, double tx, int status )
 	if (income <=   17650.0) rate = 0.045;  else
 	if (income <=   20900.0) rate = 0.0525;  else
 	if (income <=   32200.0) rate = 0.059;  else
-	if (income <=  107650.0) rate = 0.0633;  else
-	if (income <=  269300.0) rate = 0.0657;  else
+	if (income <=  107650.0) rate = 0.0621;  else
+	if (income <=  269300.0) rate = 0.0649;  else
 	if (income <= 1616450.0) rate = 0.0685;  else  rate = 0.0882;
       break;
    default: printf("Error: Unhandled status\n"); exit(0); break;
   }
+printf("tx = %g, income = %g\n", tx, income );
+ if (income == 0.0) income = 0.0001;	/* Prevent divide by zero. */
  printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
 	  100.0 * rate, 100.0 * tx / income );
  fprintf(outfile," You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
@@ -448,7 +462,7 @@ double NYcityTaxRateFunction( double income, int status )	/* From page 69. */
  if (income < 65000.0)
   income = m * dx + 0.5 * dx;      /* Place into center of a $50 bracket. */
 
- if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))		/* Not Updated for 2019. */
+ if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))		/* Updated for 2019. */
   {
    if (income < 21600.0)  tax = income * 0.03078; else
    if (income < 45000.0)  tax = (income - 21600.00) * 0.03762 + 665.00; else
@@ -478,11 +492,11 @@ double NYcityTaxRateFunction( double income, int status )	/* From page 69. */
 }
 
 
-void worksheet1()	/*Tax Computation Worksheet 1 (pg 58) */		/* Not Updated for 2019. */
+void worksheet1()	/*Tax Computation Worksheet 1 (pg 58) */		/* Updated for 2019. */
 { double ws[100];
   ws[1] = L[33];
   ws[2] = L[38];
-  ws[3] = 0.0633 * ws[2];
+  ws[3] = 0.0621 * ws[2];
   if (ws[1] >= 157650.0)
     ws[9] = ws[3];
   else
@@ -503,14 +517,14 @@ void worksheet2()	/*Tax Computation Worksheet 2 (pg 58) */
 { double ws[100];
   ws[1] = L[33];
   ws[2] = L[38];
-  ws[3] = 0.0657 * ws[2];
+  ws[3] = 0.0649 * ws[2];
   if (ws[1] >= 211550.0)
     ws[11] = ws[3];
   else
    {
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
-    ws[6] = 629.0;
+    ws[6] = 577.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 161550.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -533,7 +547,7 @@ void worksheet3()	/*Tax Computation Worksheet 3 (pg 58) */
    {
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
-    ws[6] = 1017.0;
+    ws[6] = 1030.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 323200.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -557,12 +571,12 @@ void worksheet4()	/*Tax Computation Worksheet 4 (pg 58) */
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
     if (ws[2] <= 161550.0)
-     ws[6] = 629.0;
+     ws[6] = 577.0;
     else
     if (ws[2] <= 323200.0)
-     ws[6] = 1017.0;
+     ws[6] = 1030.0;
     else
-     ws[6] = 1650.0;
+     ws[6] = 2193.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 2155350.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -578,7 +592,7 @@ void worksheet5()	/*Tax Computation Worksheet 5 (pg 59) */
 { double ws[100];
   ws[1] = L[33];
   ws[2] = L[38];
-  ws[3] = 0.0657 * ws[2];
+  ws[3] = 0.0649 * ws[2];
   if (ws[1] >= 157650.0)
     ws[9] = ws[3];
   else
@@ -606,7 +620,7 @@ void worksheet6()	/*Tax Computation Worksheet 6 (pg 59) */
    {
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
-    ws[6] = 506.0;
+    ws[6] = 513.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 215400.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -630,9 +644,9 @@ void worksheet7()	/*Tax Computation Worksheet 7 (pg 59) */
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
     if (ws[2] <= 215400.0)
-     ws[6] = 506.0;
+     ws[6] = 513.0;
     else
-     ws[6] = 1109.0;
+     ws[6] = 1288.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 1077550.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -648,7 +662,7 @@ void worksheet8()	/*Tax Computation Worksheet 8 (pg 60) */
 { double ws[100];
   ws[1] = L[33];
   ws[2] = L[38];
-  ws[3] = 0.0657 * ws[2];
+  ws[3] = 0.0649 * ws[2];
   if (ws[1] >= 157650.0)
     ws[9] = ws[3];
   else
@@ -676,7 +690,7 @@ void worksheet9()	/*Tax Computation Worksheet 9 (pg 60) */
    {
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
-    ws[6] = 729.0;
+    ws[6] = 733.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 269300.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -700,9 +714,9 @@ void worksheet10()	/*Tax Computation Worksheet 10 (pg 60) */
     ws[4] = TaxRateFunction( ws[2], status );
     ws[5] = ws[3] - ws[4];
     if (ws[2] <= 269300.0)
-     ws[6] = 729.0;
+     ws[6] = 733.0;
     else
-     ws[6] = 1483.0;
+     ws[6] = 1703.0;
     ws[7] = ws[5] - ws[6];
     ws[8] = ws[1] - 1616450.0;
     /* Divide by 50k and round to forth decimal place. */
@@ -715,8 +729,8 @@ void worksheet10()	/*Tax Computation Worksheet 10 (pg 60) */
 
 
 void tax_computation_worksheet( int status )
-{ /* Worksheets from pages 58-60. Come here when AGI L[33] > $106,950. */
- switch (status)								/* Not Updated for 2019. */
+{ /* Worksheets from pages 58-60. Come here when AGI L[33] > $107,650. */
+ switch (status)								/* Updated for 2019. */
   {
      case MARRIED_FILLING_JOINTLY:  case WIDOW:
 	if (L[33] <= 2155350.0)
@@ -824,11 +838,6 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
- printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
- fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
-
  get_parameter( infile, 's', word, "FileName" );      /* Preliminary Return Output File-name. */
  get_word(infile, prelim_1040_outfilename );
  if (ImportFederalReturnData( prelim_1040_outfilename, &PrelimFedReturn ) == 0)
@@ -930,55 +939,52 @@ int main( int argc, char *argv[] )
  showline(3);
 
  // GetLineF( "L4", &L[4] );	/* Taxable refunds, credits, offsets */
- L[4] = PrelimFedReturn.sched[1][10];
+ L[4] = PrelimFedReturn.sched[1][1];
  showline(4);
 
  // GetLineF( "L5", &L[5] );	/* Alimony received */
- L[5] = PrelimFedReturn.sched[1][11];
+ L[5] = PrelimFedReturn.sched[1][2];
  showline(5);
 
  // GetLineF( "L6", &L[6] );	/* Business income/loss (fed sched C) */
- L[6] = PrelimFedReturn.sched[1][12];
+ L[6] = PrelimFedReturn.sched[1][3];
  showline(6);
 
  // GetLineF( "L7", &L[7] );	/* Capital gains/losses (fed sched D) */
- L[7] = PrelimFedReturn.sched[1][13];
+ L[7] = PrelimFedReturn.schedD[16];
  showline(7);
 
  // GetLineF( "L8", &L[8] );	/* Other gains/losses (fed form 4794) */
- L[8] = PrelimFedReturn.sched[1][14];
+ L[8] = PrelimFedReturn.sched[1][4];
  showline(8);
 
- GetLine( "L9", &L[9] );	/* Taxable IRA distributions */
- // L[9] = PrelimFedReturn.fedline[4];
+ // GetLine( "L9", &L[9] );	/* Taxable IRA distributions */
+ L[9] = PrelimFedReturn.fed_L4b;
  showline(9);
 
-	/* Had to place L9 & L10 back on NY input form, since they are not
-		broken-out on Federal forms.	*/
-
- GetLine( "L10", &L[10] );	/* Taxable pension/annuity amounts  */
- // L[10] = PrelimFedReturn.fedline[4];
+ // GetLine( "L10", &L[10] );	/* Taxable pension/annuity amounts  */
+ L[10] = PrelimFedReturn.fed_L4d;
  showline(10);
 
  // GetLineF( "L11", &L[11] );	/* Rental, royalties, partnership, S corp, (fed sched E) */
- L[11] = PrelimFedReturn.sched[1][17];
+ L[11] = PrelimFedReturn.sched[1][5];
  showline(11);
 
  // GetLineF( "L13", &L[13] );	/* Farm income (fed sched F) */
- L[13] = PrelimFedReturn.sched[1][18];
+ L[13] = PrelimFedReturn.sched[1][6];
  showline(13);
 
  // GetLineF( "L14", &L[14] );	/* Unemployment compensation */
- L[14] = PrelimFedReturn.sched[1][19];
+ L[14] = PrelimFedReturn.sched[1][7];
  showline(14);
 
  // GetLineF( "L15", &L[15] );	/* Taxable Social Sec. benefits */
- L[15] = PrelimFedReturn.fedline[5];
+ L[15] = PrelimFedReturn.fed_L5b;
  showline(15);
  L[27] = L[15];
 
  // GetLineF( "L16", &L[16] );	/* Other income (pg. 14) */
- L[16] = PrelimFedReturn.sched[1][21];
+ L[16] = PrelimFedReturn.sched[1][8];
  showline(16);
 
  for (j = 1; j <= 11; j++)
@@ -986,22 +992,22 @@ int main( int argc, char *argv[] )
  for (j=13; j <= 16; j++)
   L[17] = L[17] + L[j];
  showline(17);
- if (absolutev( L[17] - PrelimFedReturn.fedline[6]) > 0.1)
+ if (absolutev( L[17] - PrelimFedReturn.fedline[7]) > 0.1)
   {
-   printf(" Warning: L[17] = %6.2f, while Fed-line[6] = %6.2f\n", L[17], PrelimFedReturn.fedline[6] );
-   fprintf(outfile," Warning: L[17] = %6.2f, while Fed-line[6] = %6.2f\n", L[17], PrelimFedReturn.fedline[6] );
+   printf(" Warning: L[17] = %6.2f, while Fed-line[7b] = %6.2f\n", L[17], PrelimFedReturn.fedline[7] );
+   fprintf(outfile," Warning: L[17] = %6.2f, while Fed-line[7b] = %6.2f\n", L[17], PrelimFedReturn.fedline[7] );
   }
 
  // GetLineF( "L18", &L[18] );	/* Total federal adjustments to income (pg 14) */
- L[18] = PrelimFedReturn.sched[1][36];
+ L[18] = PrelimFedReturn.sched[1][22];
  showline(18);
 
  L[19] = L[17] - L[18];
  showline_wmsg( 19, "Federal adjusted gross income" );
- if (absolutev(L[19] - PrelimFedReturn.fedline[7]) > 0.1)
+ if (absolutev(L[19] - PrelimFedReturn.fedline[8]) > 0.1)
   {
-   printf(" Warning: L[19] = %6.2f, while Fed-line[7] = %6.2f\n", L[19], PrelimFedReturn.fedline[7] );
-   fprintf(outfile," Warning: L[19] = %6.2f, while Fed-line[7] = %6.2f\n", L[19], PrelimFedReturn.fedline[7] );
+   printf(" Warning: L[19] = %6.2f, while Fed-line[8b] = %6.2f\n", L[19], PrelimFedReturn.fedline[8] );
+   fprintf(outfile," Warning: L[19] = %6.2f, while Fed-line[8b] = %6.2f\n", L[19], PrelimFedReturn.fedline[8] );
   } 
 
  GetLineF( "L20", &L[20] );	/* Interest income from non-NY state or local bonds */
@@ -1071,7 +1077,7 @@ int main( int argc, char *argv[] )
  switch (status)	/* Determine the Std. Deduction. Pg. 21. */
   {
    case SINGLE: if (Dependent)   std_ded = 3100.0; 
-		else 		 std_ded = 8000.0;			/* Not Updated for 2019. */
+		else 		 std_ded = 8000.0;			/* Updated for 2019. */
 	break;
    case MARRIED_FILLING_JOINTLY: std_ded = 16050.0; break;
    case MARRIED_FILLING_SEPARAT: std_ded =  8000.0; break;
@@ -1122,7 +1128,7 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 'i', &Exemptions, "Exemptions" );
  if (Dependent)
   L[40] = 0.0;
- else	/* From tables starting on page 25. */
+ else	/* From tables starting on page 22. */
  if (status==SINGLE)
   {
    if (L[19] <  5000.0) L[40] = 75.0; else

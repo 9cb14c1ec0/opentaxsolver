@@ -37,8 +37,10 @@ L3b
 		;
 
  { --- Other Income & Credits --- }
-L4a		;       { IRA distributions, Pensions, Annuites. }
-L4b		;       { Taxable IRA distributions, Pensions, Annuites. }
+L4a		;       { IRA distributions. }
+L4b		;       { Taxable IRA distributions. }
+L4c		;       { Pensions, Annuites. }
+L4d		;       { Taxable Pensions, Annuites. }
 
 L5a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
 

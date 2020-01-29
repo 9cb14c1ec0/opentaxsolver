@@ -50,7 +50,10 @@ double SchedA[MAX_LINES], SchedD[MAX_LINES], amtws[MAX_LINES];
 double Sched1[MAX_LINES], Sched2[MAX_LINES], Sched3[MAX_LINES];
 double L2a=0.0;			/* Tax-exempt interest (only for SocSec calculations). */
 double L3a=0.0;			/* Qualified dividends. */
-double L4a=0.0;			/* IRAs, pensions, and annuities. */
+double L4a=0.0;			/* IRA distributions */
+double L4b=0.0;			/* Taxable IRA distributions */
+double L4c=0.0;			/* Pensions, and annuities. */
+double L4d=0.0;			/* Taxable pensions, and annuities. */
 double L5a=0.0;			/* Social security benefits. */
 double L11a=0.0;
 double L12a=0.0;		/* Tax before Sched-2. */
@@ -1493,8 +1496,11 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  GetLineF( "L3a", &L3a );	/* Qualified Dividends. (Sched-B) */
  if (L3a > 0.0) Do_QDCGTW = Yes;	
  GetLineF( "L3b", &L[3] );	/* Ordinary Dividends. (Sched-B) */
- GetLineF( "L4a", &L4a );	/* IRAs, pensions, and annuities. */
- GetLineF( "L4b", &L[4] );	/* Taxable IRAs, pensions, and annuities. */
+ GetLineF( "L4a", &L4a );	/* IRAs distributions. */
+ GetLineF( "L4b", &L4b );	/* Taxable IRAs distributions. */
+ GetLineF( "L4c", &L4c );	/* Pensions and annuities. */
+ GetLineF( "L4d", &L4d );	/* Taxable pensions, and annuities. */
+ L[4] = L4b + L4d;
  GetLineF( "L5a", &L5a );	/* Social Security benefits.  Forms SSA-1099 box-5. */
 
  GetLine( "L10", &L[10] );	/* Qualified business income deduction. */

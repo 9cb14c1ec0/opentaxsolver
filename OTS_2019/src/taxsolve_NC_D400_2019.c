@@ -259,7 +259,7 @@ int main( int argc, char *argv[] )
  /* ---- Do Tax Calculations ---- */
  /*-------------------------------*/
 
- L[6] = fed_data.fedline[7];		/* Taxable income from Fed1040 Line 7. */
+ L[6] = fed_data.fedline[8];		/* Taxable income from Fed1040 Line 8, AGI. */
 
  switch (status)
   {
