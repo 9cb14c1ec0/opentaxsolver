@@ -48,44 +48,44 @@ double 	sched540part2[MAX_LINES], sched540part2_sub[MAX_LINES], sched540part2_ad
 
 
 double TaxRateFormula( double income, int status )
-{
+{											/* Updated for 2019. */
  double tax;
  if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
   {
-   if (income <   8544.00)  tax =             0.01 * income;                else
-   if (income <  20255.00)  tax =    85.44 +  0.02 * (income -   8544.00);  else
-   if (income <  31969.00)  tax =   319.66 +  0.04 * (income -  20255.00);  else
-   if (income <  44377.00)  tax =   788.22 +  0.06 * (income -  31969.00);  else
-   if (income <  56085.00)  tax =  1532.70 +  0.08 * (income -  44377.00);  else
-   if (income < 286492.00)  tax =  2469.34 + 0.093 * (income -  56085.00);  else
-   if (income < 343788.00)  tax = 23897.19 + 0.103 * (income - 286492.00);  else
-   if (income < 572980.00)  tax = 29798.68 + 0.113 * (income - 343788.00);
-   else                     tax = 55697.38 + 0.123 * (income - 572980.00);
+   if (income <   8809.00)  tax =             0.01 * income;                else
+   if (income <  20883.00)  tax =    88.09 +  0.02 * (income -   8809.00);  else
+   if (income <  32960.00)  tax =   329.57 +  0.04 * (income -  20833.00);  else
+   if (income <  45753.00)  tax =   812.65 +  0.06 * (income -  32960.00);  else
+   if (income <  57824.00)  tax =  1580.23 +  0.08 * (income -  45753.00);  else
+   if (income < 295373.00)  tax =  2545.91 + 0.093 * (income -  57824.00);  else
+   if (income < 354445.00)  tax = 24637.97 + 0.103 * (income - 295373.00);  else
+   if (income < 590742.00)  tax = 30722.39 + 0.113 * (income - 354445.00);
+   else                     tax = 57423.95 + 0.123 * (income - 590742.00);
   }
  else
  if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
   {
-   if (income <   17088.00)  tax =             0.01 * income;                 else
-   if (income <   40510.00)  tax =   170.88 +  0.02 * (income -   17088.00);  else
-   if (income <   63938.00)  tax =   639.32 +  0.04 * (income -   40510.00);  else
-   if (income <   88754.00)  tax =  1576.44 +  0.06 * (income -   63938.00);  else
-   if (income <  112170.00)  tax =  3065.40 +  0.08 * (income -   88754.00);  else
-   if (income <  572984.00)  tax =  4938.68 + 0.093 * (income -  112170.00);  else
-   if (income <  687576.00)  tax = 47794.38 + 0.103 * (income -  572984.00);  else
-   if (income < 1145960.00)  tax = 59597.36 + 0.113 * (income -  687576.00);
-   else                     tax = 111394.75 + 0.123 * (income - 1145960.00);
+   if (income <   17618.00)  tax =              0.01 * income;                 else
+   if (income <   41766.00)  tax =    176.18 +  0.02 * (income -   17618.00);  else
+   if (income <   65920.00)  tax =    659.14 +  0.04 * (income -   41766.00);  else
+   if (income <   91506.00)  tax =   1625.30 +  0.06 * (income -   65920.00);  else
+   if (income <  115648.00)  tax =   3160.46 +  0.08 * (income -   91506.00);  else
+   if (income <  590746.00)  tax =   5091.82 + 0.093 * (income -  115648.00);  else
+   if (income <  708890.00)  tax =  49275.93 + 0.103 * (income -  590746.00);  else
+   if (income < 1181484.00)  tax =  61444.76 + 0.113 * (income -  708890.00);
+   else                      tax = 114847.88 + 0.123 * (income - 1181484.00);
   }
  else
   {
-   if (income <  17099.00)  tax =             0.01 * income;                else
-   if (income <  40512.00)  tax =   170.99 +  0.02 * (income -  17099.00);  else
-   if (income <  52224.00)  tax =   639.25 +  0.04 * (income -  40512.00);  else
-   if (income <  64632.00)  tax =  1107.73 +  0.06 * (income -  52224.00);  else
-   if (income <  76343.00)  tax =  1852.21 +  0.08 * (income -  64632.00);  else
-   if (income < 389627.00)  tax =  2789.09 + 0.093 * (income -  76343.00);  else
-   if (income < 467553.00)  tax = 31924.50 + 0.103 * (income - 389627.00);  else
-   if (income < 779253.00)  tax = 39950.88 + 0.113 * (income - 467553.00); 
-   else                     tax = 75172.98 + 0.123 * (income - 779253.00);
+   if (income <  17629.00)  tax =             0.01 * income;                else
+   if (income <  41768.00)  tax =   176.29 +  0.02 * (income -  17629.00);  else
+   if (income <  53848.00)  tax =   659.07 +  0.04 * (income -  41768.00);  else
+   if (income <  66636.00)  tax =  1142.07 +  0.06 * (income -  53848.00);  else
+   if (income <  78710.00)  tax =  1909.65 +  0.08 * (income -  66636.00);  else
+   if (income < 401705.00)  tax =  2875.57 + 0.093 * (income -  78710.00);  else
+   if (income < 482047.00)  tax = 32914.11 + 0.103 * (income - 401705.00);  else
+   if (income < 803410.00)  tax = 41189.34 + 0.113 * (income - 482047.00); 
+   else                     tax = 77503.36 + 0.123 * (income - 803410.00);
   }
  return (int)(tax+0.5);
 }
@@ -97,37 +97,37 @@ void Report_bracket_info( double income, int status )
  tx = TaxRateFormula( income, status );
  if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
   {
-   if (income <   8544.00)  rate = 0.01;  else
-   if (income <  20255.00)  rate = 0.02;  else
-   if (income <  31969.00)  rate = 0.04;  else
-   if (income <  44377.00)  rate = 0.06;  else
-   if (income <  56085.00)  rate = 0.08;  else
-   if (income < 286492.00)  rate = 0.093;  else
-   if (income < 343788.00)  rate = 0.103;  else
-   if (income < 572980.00)  rate = 0.113;  else  rate = 0.123; 
+   if (income <    8809.00)  rate = 0.01;  else
+   if (income <   20883.00)  rate = 0.02;  else
+   if (income <   32960.00)  rate = 0.04;  else
+   if (income <   45753.00)  rate = 0.06;  else
+   if (income <   57824.00)  rate = 0.08;  else
+   if (income <  295373.00)  rate = 0.093;  else
+   if (income <  354445.00)  rate = 0.103;  else
+   if (income <  590742.00)  rate = 0.113;  else  rate = 0.123;
   }
  else
  if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
   {
-   if (income <   17088.00)  rate = 0.01;  else
-   if (income <   40510.00)  rate = 0.02;  else
-   if (income <   63938.00)  rate = 0.04;  else
-   if (income <   88754.00)  rate = 0.06;  else
-   if (income <  112170.00)  rate = 0.08;  else
-   if (income <  572984.00)  rate = 0.093;  else
-   if (income <  687576.00)  rate = 0.103;  else
-   if (income < 1145960.0)  rate = 0.113;  else  rate = 0.123;
+   if (income <   17618.00)  rate = 0.01;  else
+   if (income <   41766.00)  rate = 0.02;  else
+   if (income <   65920.00)  rate = 0.04;  else
+   if (income <   91506.00)  rate = 0.06;  else
+   if (income <  115648.00)  rate = 0.08;  else
+   if (income <  590746.00)  rate = 0.093;  else
+   if (income <  708890.00)  rate = 0.103;  else
+   if (income < 1181484.00)  rate = 0.113;  else  rate = 0.123;
   }
  else
   {
-   if (income <  17099.00)  rate = 0.01;  else
-   if (income <  40512.00)  rate = 0.02;  else
-   if (income <  52224.00)  rate = 0.04;  else
-   if (income <  64632.00)  rate = 0.06;  else
-   if (income <  76343.00)  rate = 0.08;  else
-   if (income < 389627.00)  rate = 0.093;  else
-   if (income < 467553.00)  rate = 0.103;  else
-   if (income < 779253.00)  rate = 0.113;  else  rate = 0.123;
+   if (income <  17629.00)  rate = 0.01;  else
+   if (income <  41768.00)  rate = 0.02;  else
+   if (income <  53848.00)  rate = 0.04;  else
+   if (income <  66636.00)  rate = 0.06;  else
+   if (income <  78710.00)  rate = 0.08;  else
+   if (income < 401705.00)  rate = 0.093;  else
+   if (income < 482047.00)  rate = 0.103;  else
+   if (income < 803410.00)  rate = 0.113;  else  rate = 0.123;
   }
  printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
 	  100.0 * rate, 100.0 * tx / income );
@@ -174,13 +174,14 @@ void test_tax_function()
 
 struct FedReturnData
  {
-  double fedline[MAX_LINES], schedA[MAX_LINES], 
+  double fedline[MAX_LINES], schedA[MAX_LINES], fed_L2a, fed_L3a,
+	fed_L4a, fed_L4b, fed_L4c, fed_L4d, fed_L5a, fed_L5b,
 	schedA5a, schedA5b, schedA5c,
 	schedA8a, schedA8b, schedA8c,
 	sched1[MAX_LINES],
 	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
   int Exception, Itemized;
-  char AlimRecipSSN[256], AlimRecipName[1024];
+  char AlimRecipSSN[512], AlimRecipName[2048];
  } PrelimFedReturn;
 
 
@@ -238,6 +239,14 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    fed_data->schedA[linenum] = 0.0;
    fed_data->sched1[linenum] = 0.0;
   }
+ fed_data->fed_L2a = 0;
+ fed_data->fed_L3a = 0;
+ fed_data->fed_L4a = 0;
+ fed_data->fed_L4b = 0;
+ fed_data->fed_L4c = 0;
+ fed_data->fed_L4d = 0;
+ fed_data->fed_L5a = 0;
+ fed_data->fed_L5b = 0;
  fed_data->schedA5a = 0.0;
  fed_data->schedA5b = 0.0;
  fed_data->schedA5c = 0.0;
@@ -268,6 +277,29 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    next_word(fline, word, " \t=");
    if ((word[0] == 'L') && (strstr(fline," = ")!=0))
     { /*L*/
+     if (strcmp(word,"L2a") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L2a) );
+     else
+     if (strcmp(word,"L3a") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L3a) );
+     else
+     if (strcmp(word,"L4a") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L4a) );
+     else
+     if (strcmp(word,"L4b") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L4b) );
+     else
+     if (strcmp(word,"L4c") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L4c) );
+     else
+     if (strcmp(word,"L4d") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L4d) );
+     else
+     if (strcmp(word,"L5a") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L5a) );
+     else
+
+
      if (strcmp(word,"L8a") == 0)
       grab_line_value( word, fline, &(fed_data->fedline[8]) );
      else
@@ -452,14 +484,18 @@ void display_part2( int j )
 int main( int argc, char *argv[] )
 {
  int argk, j, k, iline7, iline8, iline9, iline10;
- double min2file=0.0, sched540[MAX_LINES], sched540b[MAX_LINES], sched540c[MAX_LINES],
+ double min2file=0.0, sched540A[MAX_LINES], sched540B[MAX_LINES], sched540C[MAX_LINES],
+	sched540Ab[MAX_LINES], sched540Ac[MAX_LINES],
+	sched540Bb[MAX_LINES], sched540Bc[MAX_LINES],
+	sched540Cb[MAX_LINES], sched540Cc[MAX_LINES],
 	threshA=0, std_ded=0;
  char word[4000], *infname=0, outfname[4000], prelim_1040_outfilename[5000];
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
 	*Spouse1stName="", *SpouseLastName="", *socsec;
- double  sched540b21a=0.0, sched540b21b=0.0, sched540c21c=0.0, sched540b21d=0.0,
-	 sched540b21e=0.0, sched540b21f=0.0, sched540c21f=0.0;
+ double  sched540A4d=0.0, sched540Ab4d=0.0, sched540Ac4d=0.0,
+	 sched540Bb8a=0.0, sched540Bb8b=0.0, sched540Bc8c=0.0, sched540Bb8d=0.0,
+	 sched540Bb8e=0.0, sched540Bb8f=0.0, sched540Bc8f=0.0, sched540Bb8g=0.0;
  time_t now;
 
  /* Decode any command-line arguments. */
@@ -495,9 +531,15 @@ int main( int argc, char *argv[] )
  for (j=0; j<MAX_LINES; j++) 
   { 
     L[j] = 0.0;  
-    sched540[j] = 0.0; 
-    sched540b[j] = 0.0; 
-    sched540c[j] = 0.0; 
+    sched540A[j] = 0.0; 
+    sched540Ab[j] = 0.0; 
+    sched540Ac[j] = 0.0; 
+    sched540B[j] = 0.0; 
+    sched540Bb[j] = 0.0; 
+    sched540Bc[j] = 0.0; 
+    sched540C[j] = 0.0; 
+    sched540Cb[j] = 0.0; 
+    sched540Cc[j] = 0.0; 
     sched540part2[j] = 0.0; 
     sched540part2_sub[j] = 0.0; 
     sched540part2_add[j] = 0.0; 
@@ -515,11 +557,6 @@ int main( int argc, char *argv[] )
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
-
- printf("\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- printf("\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
- fprintf(outfile,"\nWARNING: THIS IS A PRE-RELEASE DEVELOPMENT VERSION THAT HAS NOT BEEN\n");
- fprintf(outfile,"\tFULLY UPDATED FOR PRODUCTION USAGE.  DO NOT USE THIS VERSION.\n\n");
 
  get_parameter( infile, 's', word, "FileName" );      /* Preliminary Fed Return Output File-name. */
  get_word(infile, prelim_1040_outfilename );
@@ -548,24 +585,24 @@ int main( int argc, char *argv[] )
  if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT) || (status==HEAD_OF_HOUSEHOLD))
   iline7 = 1;  else  iline7 = 2;
  if (L[6] != 0.0) iline7 = 0; /* <-- Possible exceptions here. */
- L[7] = 118.0 * iline7;
+ L[7] = 122.0 * iline7;
  showline(7);
 
  get_parameter( infile, 's', word, "L8" );	/* Blind?, 1 if you or spouse, 2 if both. */
  get_parameter( infile, 'i', &iline8, "L8" );
- L[8] = iline8 * 118.0;
+ L[8] = iline8 * 122.0;
  showline(8);
  if (iline8 > 0) fprintf(outfile,"  L8a = %d\n", iline8 );
 
  get_parameter( infile, 's', word, "L9" );	/* Senior?, 1 if you or spouse, 2 if both. */
  get_parameter( infile, 'i', &iline9, "L9" );
- L[9] = iline9 * 118.0;
+ L[9] = iline9 * 122.0;
  showline(9);
  if (iline9 > 0) fprintf(outfile,"  L9a = %d\n", iline9 );
 
  get_parameter( infile, 's', word, "L10" );  /* Number of Dependents. */
  get_parameter( infile, 'i', &iline10, "L10"); 
- L[10] = iline10 * 367.0;
+ L[10] = iline10 * 378.0;
  showline(10);
  if (iline10 > 0) fprintf(outfile,"  L10a = %d\n", iline10 );
 
@@ -573,134 +610,279 @@ int main( int argc, char *argv[] )
  showline_wmsg(11, "Exemption amount");
 
  /* Taxable Income. */
- GetLineF( "L12", &L[12] );	/* State Wages (W2 box 16). */
+ GetLineF( "L12", &L[12] );		/* State Wages (W2 box 16). */
 
- L[13] = PrelimFedReturn.fedline[7];	/* Fed Wages (Fed 1040 line 7). */
+ L[13] = PrelimFedReturn.fedl8b;	/* Fed Wages (Fed 1040 line 8b). */
  showline(13);
 
 
  /* -- Sched540 Part I -- */
 
-  GetLine("CA540_Subtr_1", &(sched540b[1]) );
-  GetLine("CA540_Addit_1", &(sched540c[1]) );
-  GetLine("CA540_Subtr_2", &(sched540b[2]) );
-  GetLine("CA540_Addit_2", &(sched540c[2]) );
-  GetLine("CA540_Subtr_3", &(sched540b[3]) );
-  GetLine("CA540_Addit_3", &(sched540c[3]) );
-  GetLine("CA540_Subtr_4", &(sched540b[4]) );
-  GetLine("CA540_Addit_4", &(sched540c[4]) );
-  // GetLine("CA540_Subtr_5", &(sched540b[5]) );
-  GetLine("CA540_Subtr_10", &(sched540b[10]) );
-  GetLine("CA540_Addit_11", &(sched540c[11]) );
-  GetLine("CA540_Subtr_12", &(sched540b[12]) );
-  GetLine("CA540_Addit_12", &(sched540c[12]) );
-  GetLine("CA540_Subtr_13", &(sched540b[13]) );
-  GetLine("CA540_Addit_13", &(sched540c[13]) );
-  GetLine("CA540_Subtr_14", &(sched540b[14]) );
-  GetLine("CA540_Addit_14", &(sched540c[14]) );
-  GetLine("CA540_Subtr_17", &(sched540b[17]) );
-  GetLine("CA540_Addit_17", &(sched540c[17]) );
-  GetLine("CA540_Subtr_18", &(sched540b[18]) );
-  GetLine("CA540_Addit_18", &(sched540c[18]) );
-  GetLine("CA540_Subtr_19", &(sched540b[19]) );
+  GetLine("CA540_Subtr_A1", &(sched540Ab[1]) );
+  GetLine("CA540_Addit_A1", &(sched540Ac[1]) );
+  GetLine("CA540_Subtr_A2", &(sched540Ab[2]) );
+  GetLine("CA540_Addit_A2", &(sched540Ac[2]) );
+  GetLine("CA540_Subtr_A3", &(sched540Ab[3]) );
+  GetLine("CA540_Addit_A3", &(sched540Ac[3]) );
+  GetLine("CA540_Subtr_A4b", &(sched540Ab[4]) );
+  GetLine("CA540_Addit_A4b", &(sched540Ac[4]) );
+  GetLine("CA540_Subtr_A4d", &sched540Ab4d );
+  GetLine("CA540_Addit_A4d", &sched540Ac4d );
+  // GetLine("CA540_Subtr_A5", &(sched540Ab[5]) );	/* Soc Sec subtraction handled below. */
+  GetLine("CA540_Subtr_A6", &(sched540Ab[6]) );
+  GetLine("CA540_Addit_A6", &(sched540Ac[6]) );
 
-  GetLine("CA540_Subtr_21a", &sched540b21a );
-  GetLine("CA540_Subtr_21b", &sched540b21b );
-  GetLine("CA540_Addit_21c", &sched540c21c );
-  GetLine("CA540_Subtr_21d", &sched540b21d );
-  GetLine("CA540_Subtr_21e", &sched540b21e );
-  GetLine("CA540_Subtr_21f", &sched540b21f );
-  GetLine("CA540_Addit_21f", &sched540c21f );
+  GetLine("CA540_Subtr_B1", &(sched540Bb[1]) );
+  GetLine("CA540_Addit_B2", &(sched540Bc[2]) );
+  GetLine("CA540_Subtr_B3", &(sched540Bb[3]) );
+  GetLine("CA540_Addit_B3", &(sched540Bc[3]) );
+  GetLine("CA540_Subtr_B4", &(sched540Bb[4]) );
+  GetLine("CA540_Addit_B4", &(sched540Bc[4]) );
+  GetLine("CA540_Subtr_B5", &(sched540Bb[5]) );
+  GetLine("CA540_Addit_B5", &(sched540Bc[5]) );
+  GetLine("CA540_Subtr_B6", &(sched540Bb[6]) );
+  GetLine("CA540_Addit_B6", &(sched540Bc[6]) );
+  GetLine("CA540_Subtr_B7", &(sched540Bb[7]) );
 
-  GetLine("CA540_Subtr_23", &(sched540b[23]) );
-  GetLine("CA540_Subtr_24", &(sched540b[24]) );
-  GetLine("CA540_Addit_24", &(sched540c[24]) );
-  GetLine("CA540_Subtr_25", &(sched540b[25]) );
-  GetLine("CA540_Addit_31", &(sched540c[31]) );
-  GetLine("CA540_Addit_33", &(sched540c[33]) );
+  GetLine("CA540_Subtr_B8a", &sched540Bb8a );
+  GetLine("CA540_Subtr_B8b", &sched540Bb8b );
+  GetLine("CA540_Addit_B8c", &sched540Bc8c );
+  GetLine("CA540_Subtr_B8d", &sched540Bb8d );
+  GetLine("CA540_Subtr_B8e", &sched540Bb8e );
+  GetLine("CA540_Subtr_B8f", &sched540Bb8f );
+  GetLine("CA540_Addit_B8f", &sched540Bc8f );
+  GetLine("CA540_Subtr_B8g", &sched540Bb8g );
 
- for (j=1; j <= 20; j++)
+  GetLine("CA540_Subtr_C10", &(sched540Cb[10]) );
+  GetLine("CA540_Subtr_C11", &(sched540Cb[11]) );
+  GetLine("CA540_Addit_C11", &(sched540Cc[11]) );
+  GetLine("CA540_Subtr_C12", &(sched540Cb[12]) );
+  GetLine("CA540_Addit_C13", &(sched540Cc[13]) );
+  GetLine("CA540_Addit_C18", &(sched540Cc[18]) );
+  GetLine("CA540_Addit_C20", &(sched540Cc[20]) );
+  GetLine("CA540_Subtr_C21", &(sched540Cb[21]) );
+
+  sched540A[1] = PrelimFedReturn.fedline[1];
+  sched540B[9] = sched540B[9] + sched540A[1];
+  if (sched540A[1] != 0.0)
+   fprintf(outfile," SchedCA540_A1 = %6.2f\n", sched540A[1] );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[1];
+  if (sched540Ab[1] != 0.0)
+   fprintf(outfile," SchedCA540_A1b = %6.2f\n", sched540Ab[1] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[1];
+  if (sched540Ac[1] != 0.0)
+   fprintf(outfile," SchedCA540_A1c = %6.2f\n", sched540Ac[1] );
+
+
+  if (PrelimFedReturn.fed_L2a != 0.0)
+   fprintf(outfile," SchedCA540_A2a = %6.2f\n", PrelimFedReturn.fed_L2a );
+
+  sched540A[2] = PrelimFedReturn.fedline[2];
+  sched540B[9] = sched540B[9] + sched540A[2];
+  if (sched540A[2] != 0.0)
+   fprintf(outfile," SchedCA540_A2 = %6.2f\n", sched540A[2] );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[2];
+  if (sched540Ab[2] != 0.0)
+   fprintf(outfile," SchedCA540_A2b = %6.2f\n", sched540Ab[2] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[2];
+  if (sched540Ac[2] != 0.0)
+   fprintf(outfile," SchedCA540_A2c = %6.2f\n", sched540Ac[2] );
+
+
+  if (PrelimFedReturn.fed_L3a != 0.0)
+   fprintf(outfile," SchedCA540_A3a = %6.2f\n", PrelimFedReturn.fed_L3a );
+
+  sched540A[3] = PrelimFedReturn.fedline[3];
+  sched540B[9] = sched540B[9] + sched540A[3];
+  if (sched540A[3] != 0.0)
+   fprintf(outfile," SchedCA540_A3 = %6.2f\n", sched540A[3] );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[3];
+  if (sched540Ab[3] != 0.0)
+   fprintf(outfile," SchedCA540_A3b = %6.2f\n", sched540Ab[3] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[3];
+  if (sched540Ac[3] != 0.0)
+   fprintf(outfile," SchedCA540_A3c = %6.2f\n", sched540Ac[3] );
+
+
+  if (PrelimFedReturn.fed_L4a != 0.0)
+   fprintf(outfile," SchedCA540_A4a = %6.2f\n", PrelimFedReturn.fed_L4a );
+
+  sched540A[4] = PrelimFedReturn.fed_L4b;
+  sched540B[9] = sched540B[9] + sched540A[4];
+  if (sched540A[4] != 0.0)
+   fprintf(outfile," SchedCA540_A4 = %6.2f\n", sched540A[4] );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[4];
+  if (sched540Ab[4] != 0.0)
+   fprintf(outfile," SchedCA540_A4b = %6.2f\n", sched540Ab[4] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[4];
+  if (sched540Ac[4] != 0.0)
+   fprintf(outfile," SchedCA540_A4c = %6.2f\n", sched540Ac[4] );
+
+
+  if (PrelimFedReturn.fed_L4c != 0.0)
+   fprintf(outfile," SchedCA540_A4d_ = %6.2f\n", PrelimFedReturn.fed_L4c );
+
+  sched540A4d = PrelimFedReturn.fed_L4d;
+  sched540B[9] = sched540B[9] + sched540A[4];
+  if (sched540A4d != 0.0)
+   fprintf(outfile," SchedCA540_A4d = %6.2f\n", sched540A4d );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Ab4d;
+  if (sched540Ab4d != 0.0)
+   fprintf(outfile," SchedCA540_A4db = %6.2f\n", sched540Ab4d );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac4d;
+  if (sched540Ac4d != 0.0)
+   fprintf(outfile," SchedCA540_A4dc = %6.2f\n", sched540Ac4d );
+
+
+  if (PrelimFedReturn.fed_L5a != 0.0)
+   fprintf(outfile," SchedCA540_A5a = %6.2f\n", PrelimFedReturn.fed_L5a );
+
+  sched540A[5] = PrelimFedReturn.sched1[5];
+  sched540B[9] = sched540B[9] + sched540A[5];
+  if (sched540A[5] != 0.0)
+   fprintf(outfile," SchedCA540_A5 = %6.2f\n", sched540A[5] );
+
+  sched540Ab[5] = sched540A[5];			/* Subtract SocSec payments from AGI in CA. */
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[5];
+  if (sched540Ab[5] != 0.0)
+   fprintf(outfile," SchedCA540_A5b = %6.2f\n", sched540Ab[5] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[5];
+  if (sched540Ac[5] != 0.0)
+   fprintf(outfile," SchedCA540_A5c = %6.2f\n", sched540Ac[5] );
+
+
+  sched540A[6] = PrelimFedReturn.fedline[6];
+  sched540B[9] = sched540B[9] + sched540A[6];
+  if (sched540A[6] != 0.0)
+   fprintf(outfile," SchedCA540_A6 = %6.2f\n", sched540A[6] );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[6];
+  if (sched540Ab[6] != 0.0)
+   fprintf(outfile," SchedCA540_A6b = %6.2f\n", sched540Ab[6] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[6];
+  if (sched540Ac[6] != 0.0)
+   fprintf(outfile," SchedCA540_A6c = %6.2f\n", sched540Ac[6] );
+
+
+ for (j=1; j <= 7; j++)
   {
-   if (j <= 5)
-    sched540[j] = PrelimFedReturn.fedline[j];
-   else
-    sched540[j] = PrelimFedReturn.sched1[j];
-   sched540[22] = sched540[22] + sched540[j];
-   if (sched540[j] != 0.0)
-    fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
+   sched540B[j] = PrelimFedReturn.sched1[j];
+   sched540B[9] = sched540B[9] + sched540B[j];
+   if (sched540B[j] != 0.0)
+    fprintf(outfile," SchedCA540_B%d = %6.2f\n", j, sched540B[j] );
 
-   if (j == 5)
-    sched540b[j] = sched540[j];		/* Subtract SocSec payments from AGI in CA. */
+   sched540Bb[9] = sched540Bb[9] + sched540Bb[j];
+   if (sched540Bb[j] != 0.0)
+    fprintf(outfile," SchedCA540_B%db = %6.2f\n", j, sched540Bb[j] );
 
-   sched540b[22] = sched540b[22] + sched540b[j];
-   if (sched540b[j] != 0.0)
-    fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
-
-   sched540c[22] = sched540c[22] + sched540c[j];
-   if (sched540c[j] != 0.0)
-    fprintf(outfile," SchedCA540_%dc = %6.2f\n", j, sched540c[j] );
+   sched540Bc[9] = sched540Bc[9] + sched540Bc[j];
+   if (sched540Bc[j] != 0.0)
+    fprintf(outfile," SchedCA540_B%dc = %6.2f\n", j, sched540Bc[j] );
   }
 
- sched540[21] = PrelimFedReturn.sched1[21];
- showline_wlabelnz( " SchedCA540_21", sched540[21] );
- sched540[22] = sched540[22] + sched540[21];
- showline_wlabelnz( " SchedCA540_21ba", sched540b21a );
- sched540b[22] = sched540b[22] + sched540b21a;
- showline_wlabelnz( " SchedCA540_21bb", sched540b21b );
- sched540b[22] = sched540b[22] + sched540b21b;
- showline_wlabelnz( " SchedCA540_21cc", sched540c21c );
- sched540c[22] = sched540c[22] + sched540c21c;
- showline_wlabelnz( " SchedCA540_21bd", sched540b21d );
- sched540b[22] = sched540b[22] + sched540b21d;
- showline_wlabelnz( " SchedCA540_21be", sched540b21e );
- sched540b[22] = sched540b[22] + sched540b21e;
- showline_wlabelnz( " SchedCA540_21bf", sched540b21f );
- sched540b[22] = sched540b[22] + sched540b21f;
- showline_wlabelnz( " SchedCA540_21cf", sched540c21f );
- sched540c[22] = sched540c[22] + sched540c21f;
+  sched540B[8] = PrelimFedReturn.fedline[8];
+  sched540B[9] = sched540B[9] + sched540A[8];
+  if (sched540B[8] != 0.0)
+   fprintf(outfile," SchedCA540_B8 = %6.2f\n", sched540B[8] );
 
- fprintf(outfile," SchedCA540_%d = %6.2f\n", 22, sched540[22] );
- fprintf(outfile," SchedCA540_%db = %6.2f\n", 22, sched540b[22] );
- fprintf(outfile," SchedCA540_%dc = %6.2f\n", 22, sched540c[22] );
 
- for (j=23; j <= 35; j++)
-  {
-   sched540[j] = PrelimFedReturn.sched1[j];
-   sched540[36] = sched540[36] + sched540[j];
-   if (sched540[j] != 0.0)
-    fprintf(outfile," SchedCA540_%d = %6.2f\n", j, sched540[j] );
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8a;
+  if (sched540Bb8a != 0.0)
+   fprintf(outfile," SchedCA540_B8ba = %6.2f\n", sched540Bb8a );
 
-   sched540b[36] = sched540b[36] + sched540b[j];
-   if (sched540b[j] != 0.0)
-    fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8b;
+  if (sched540Bb8b != 0.0)
+   fprintf(outfile," SchedCA540_B8bb = %6.2f\n", sched540Bb8b );
 
-   sched540c[36] = sched540c[36] + sched540c[j];
-   if (sched540c[j] != 0.0)
-    fprintf(outfile," SchedCA540_%dc = %6.2f\n", j, sched540c[j] );
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8d;
+  if (sched540Bb8d != 0.0)
+   fprintf(outfile," SchedCA540_B8bd = %6.2f\n", sched540Bb8d );
 
-   if (j==31)
-    {
-     if (PrelimFedReturn.AlimRecipSSN[0] != '\0')
-	fprintf(outfile," AlimRecipSSN: %s\n", PrelimFedReturn.AlimRecipSSN );
-     if (PrelimFedReturn.AlimRecipName[0] != '\0')
-	fprintf(outfile," AlimRecipName: %s\n", PrelimFedReturn.AlimRecipName );
-    }
-  }
- fprintf(outfile," SchedCA540_%d = %6.2f\n", 36, sched540[36] );
- sched540[37] = sched540[22] - sched540[36];
- fprintf(outfile," SchedCA540_%d = %6.2f\n", 37, sched540[37] );
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8e;
+  if (sched540Bb8e != 0.0)
+   fprintf(outfile," SchedCA540_B8be = %6.2f\n", sched540Bb8e );
 
- fprintf(outfile," SchedCA540_%db = %6.2f\n", 36, sched540b[36] );
- sched540b[37] = sched540b[22] - sched540b[36];
- fprintf(outfile," SchedCA540_%db = %6.2f\n", 37, sched540b[37] );
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8f;
+  if (sched540Bb8f != 0.0)
+   fprintf(outfile," SchedCA540_B8bf = %6.2f\n", sched540Bb8f );
 
- fprintf(outfile," SchedCA540_%dc = %6.2f\n", 36, sched540c[36] );
- sched540c[37] = sched540c[22] - sched540c[36];
- fprintf(outfile," SchedCA540_%dc = %6.2f\n", 37, sched540c[37] );
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8g;
+  if (sched540Bb8g != 0.0)
+   fprintf(outfile," SchedCA540_B8bg = %6.2f\n", sched540Bb8g );
 
- for (j=1; j <= 37; j++)
-  if (sched540b[j] != 0.0)
-   fprintf(outfile," SchedCA540_%db = %6.2f\n", j, sched540b[j] );
+  sched540Bc[9] = sched540Bc[9] + sched540Bc8c;
+  if (sched540Bc8c != 0.0)
+   fprintf(outfile," SchedCA540_B8cc = %6.2f\n", sched540Bc8c );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Bc8f;
+  if (sched540Bc8f != 0.0)
+   fprintf(outfile," SchedCA540_B8cf = %6.2f\n", sched540Bc8f );
+
+
+  if (sched540B[9] != 0.0)
+   fprintf(outfile," SchedCA540_B9 = %6.2f\n", sched540B[9] );
+
+  if (sched540Bb[9] != 0.0)
+   fprintf(outfile," SchedCA540_B9b = %6.2f\n", sched540Bb[9] );
+
+  if (sched540Bc[9] != 0.0)
+   fprintf(outfile," SchedCA540_B9c = %6.2f\n", sched540Bc[9] );
+
+
+  for (j=10; j <= 21; j++)
+   {
+    sched540C[j] = PrelimFedReturn.sched1[j];
+    sched540C[22] = sched540C[22] + sched540C[j];
+    if (sched540C[j] != 0.0)
+     fprintf(outfile," SchedCA540_C%d = %6.2f\n", j, sched540C[j] );
+
+    sched540Cb[22] = sched540Cb[22] + sched540Cb[j];
+    if (sched540Cb[j] != 0.0)
+     fprintf(outfile," SchedCA540_C%db = %6.2f\n", j, sched540Cb[j] );
+
+    sched540Cc[22] = sched540Cc[22] + sched540Cc[j];
+    if (sched540Cc[j] != 0.0)
+     fprintf(outfile," SchedCA540_C%dc = %6.2f\n", j, sched540Cc[j] );
+   }
+
+  if (PrelimFedReturn.AlimRecipSSN[0] != '\0')
+   fprintf(outfile," AlimRecipSSN: %s\n", PrelimFedReturn.AlimRecipSSN );
+  if (PrelimFedReturn.AlimRecipName[0] != '\0')
+   fprintf(outfile," AlimRecipName: %s\n", PrelimFedReturn.AlimRecipName );
+
+  if (sched540C[22] != 0.0)
+   fprintf(outfile," SchedCA540_C22 = %6.2f\n", sched540C[22] );
+
+  if (sched540Cb[22] != 0.0)
+   fprintf(outfile," SchedCA540_C22b = %6.2f\n", sched540Cb[22] );
+
+  if (sched540Cc[22] != 0.0)
+   fprintf(outfile," SchedCA540_C22c = %6.2f\n", sched540Cc[22] );
+
+
+  sched540C[23] = sched540B[9] - sched540C[22];
+  if (sched540C[23] != 0.0)
+   fprintf(outfile," SchedCA540_C23 = %6.2f\n", sched540C[23] );
+
+  sched540Cb[23] = sched540Bb[9] - sched540Cb[22];
+  if (sched540Cb[23] != 0.0)
+   fprintf(outfile," SchedCA540_C23b = %6.2f\n", sched540Cb[23] );
+
+  sched540Cc[23] = sched540Bc[9] - sched540Cc[22];
+  if (sched540Cc[23] != 0.0)
+   fprintf(outfile," SchedCA540_C23c = %6.2f\n", sched540Cc[23] );
 
 
  /* -- Sched540 Part II -- */
@@ -779,10 +961,10 @@ int main( int argc, char *argv[] )
  switch (status)
   {
    case SINGLE:
-   case MARRIED_FILLING_SEPARAT:  threshA = 194504.0;	std_ded = 4401.0;  break;
+   case MARRIED_FILLING_SEPARAT:  threshA = 200534.0;	std_ded = 4537.0;  break;	/* Updated for 2019. */
    case MARRIED_FILLING_JOINTLY:
-   case WIDOW:                    threshA = 389013.0;	std_ded = 8802.0;  break;
-   case HEAD_OF_HOUSEHOLD:        threshA = 291760.0;	std_ded = 8802.0;  break;
+   case WIDOW:                    threshA = 401072.0;	std_ded = 9074.0;  break;
+   case HEAD_OF_HOUSEHOLD:        threshA = 300805.0;	std_ded = 9074.0;  break;
   }
  if (L[13] > threshA)
   { /*Itemized Deductions Worksheet*/
@@ -824,7 +1006,8 @@ int main( int argc, char *argv[] )
  display_part2column( 1, 0 );
  display_part2column( 2, 0 );
  display_part2column( 3, 0 );
- display_part2column( 4, 'a' );
+ fprintf(outfile," SchedCA540_Part2_%da = %6.2f\n", 4, sched540part2[4] );
+ fprintf(outfile," SchedCA540_Part2_%dc = %6.2f\n", 4, sched540part2_add[4] );
  if (sched540part2_5a != 0.0)
   fprintf(outfile," SchedCA540_Part2_5aa = %6.2f\n", sched540part2_5a );
  if (sched540part2_sub[5] != 0.0)
@@ -874,60 +1057,60 @@ int main( int argc, char *argv[] )
  /* -- End Sched540 Part II -- */
 
 
- L[14] = sched540b[37];		/* CA Adjustments, Schedule CA 540 line 37 column B. */
+ L[14] = sched540Cb[23];	/* CA Adjustments, Schedule CA 540 line 23 column B. */
  showline(14);
 
  L[15] = L[13] - L[14];
  if (L[15] < 0.0) fprintf(outfile,"L15 = (%f6.2)\n", -L[15] );
  else showline(15);
 
- L[16] = sched540c[37];		/* CA Adjustments, Schedule CA 540 line 37 column C. */
+ L[16] = sched540Cc[23];	/* CA Adjustments, Schedule CA 540 line 37 column C. */
  showline(16);
 
  L[17] = L[15] + L[16];		/* CA Adjusted Gross Income (AGI). */
  showline(17);
 
  switch (status)
-  {		/* Minimum AGI (Line 17) required to file. */
+  {		/* Minimum AGI (Line 17) required to file. */		/* Updated for 2019. */
     case SINGLE:
     case HEAD_OF_HOUSEHOLD:
 		if (iline9 == 0)		/*Under65*/
 		   switch (iline10)		  /*Dependents*/
 		    {
-		     case 0:  min2file = 14154.0;	break;
-		     case 1:  min2file = 26387.0;	break;
-		     default: min2file = 35562.0;	break;
+		     case 0:  min2file = 18241.0;	break;
+		     case 1:  min2file = 30841.0;	break;
+		     default: min2file = 40291.0;	break;
 		    }
 		else			 	/*Over65*/
 		   switch (iline10)		  /*Dependents*/
 		    {
-		     case 0:  min2file = 20054.0;	break;
-		     case 1:  min2file = 29229.0;	break;
-		     default: min2file = 36569.0;	break;
+		     case 0:  min2file = 24341.0;	break;
+		     case 1:  min2file = 33791.0;	break;
+		     default: min2file = 41351.0;	break;
 		    }
 	  break;
    case MARRIED_FILLING_JOINTLY: 
 		if (iline9 == 0)		 /*Both Under65*/
 		   switch (iline10)
 		    {
-		     case 0:  min2file = 28312.0;	break;
-		     case 1:  min2file = 40545.0;	break;
-		     default: min2file = 49720.0;	break;
+		     case 0:  min2file = 36485.0;	break;
+		     case 1:  min2file = 49085.0;	break;
+		     default: min2file = 58535.0;	break;
 		    }
 		else
 		if (iline9 == 1)		 /*One Over65*/
 		   switch (iline10)
 		    {
-		     case 0:  min2file = 34212.0;	break;
-		     case 1:  min2file = 43387.0;	break;
-		     default: min2file = 50727.0;	break;
+		     case 0:  min2file = 42585.0;	break;
+		     case 1:  min2file = 52035.0;	break;
+		     default: min2file = 59595.0;	break;
 		    }
 		else
 		   switch (iline10)		 /*Both Over65*/
 		    {
-		     case 0:  min2file = 40112.0;	break;
-		     case 1:  min2file = 49287.0;	break;
-		     default: min2file = 56627.0;	break;
+		     case 0:  min2file = 48685.0;	break;
+		     case 1:  min2file = 58135.0;	break;
+		     default: min2file = 65695.0;	break;
 		    }
 	  break;
    case WIDOW:
@@ -935,15 +1118,15 @@ int main( int argc, char *argv[] )
 		   switch (iline10)		  /*Dependents*/
 		    {
 		     case 0:  min2file = 0.0;		break;	/* N/A */
-		     case 1:  min2file = 26387.0;	break;
-		     default: min2file = 35562.0;	break;
+		     case 1:  min2file = 30841.0;	break;
+		     default: min2file = 40291.0;	break;
 		    }
 		else			 	/*Over65*/
 		   switch (iline10)		  /*Dependents*/
 		    {
 		     case 0:  min2file = 0.0;		break;	/* N/A */
-		     case 1:  min2file = 29229.0;	break;
-		     default: min2file = 36569.0;	break;
+		     case 1:  min2file = 33791.0;	break;
+		     default: min2file = 41351.0;	break;
 		    }
 	  break;
   }
@@ -958,9 +1141,9 @@ int main( int argc, char *argv[] )
 
  /* Tax. */
  if (L[19] < 100000.00)
-  fprintf(outfile,"Fill in circle from: Tax Table.\nCkTxTable: X\n");
+  fprintf(outfile,"Check box from: Tax Table.\nCkTxTable: X\n");
  else
-  fprintf(outfile,"Fill in circle from: Tax Rate Schedule.\nCkTxRateSchd: X\n");
+  fprintf(outfile,"Check box from: Tax Rate Schedule.\nCkTxRateSchd: X\n");
  L[31] = TaxRateFunction( L[19], status );
  showline( 31 );
  Report_bracket_info( L[19], status );
@@ -1050,21 +1233,23 @@ int main( int argc, char *argv[] )
  GetLineF( "L74", &L[74] ); 	/* Excess SDI. */
 
  GetLineF( "L75", &L[75] ); 	/* Earned Income Tax Credit (EITC). */
+
+ GetLineF( "L76", &L[76] ); 	/* Young Child Tax Credit (YCTC). */
  
- L[76] = L[71] + L[72] + L[73] + L[74] + L[75];
- showline_wmsg(76,"Total Payments");
+ L[77] = L[71] + L[72] + L[73] + L[74] + L[75] + L[76];
+ showline_wmsg(77,"Total Payments");
 
  GetLineF( "L91", &L[91] );	/* Use Tax. */
 
- if (L[76] > L[91])
+ if (L[77] > L[91])
   {
-   L[92] = L[76] - L[91];
+   L[92] = L[77] - L[91];
    showline(92);
   }
  else
- if (L[91] > L[76])
+ if (L[91] > L[77])
   {
-   L[93] = L[91] - L[76];
+   L[93] = L[91] - L[77];
    showline(93);
   }
  

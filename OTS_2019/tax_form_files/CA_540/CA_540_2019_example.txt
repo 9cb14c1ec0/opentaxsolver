@@ -18,40 +18,48 @@ L12      29,812.34      { State Wages (List all W2's box 16). }
          21,609.09 ;
 
 {--California Adjustments--}
-CA540_Subtr_1           ; { Subtractions for Wages, salaries, tips, etc.  }
-CA540_Addit_1           ; { Additions for Wages, salaries, tips, etc. }
-CA540_Subtr_2           ; { Subtractions for Taxable interest }
-CA540_Addit_2           ; { Additions for Taxable interest }
-CA540_Subtr_3           ; { Subtractions for Ordinary dividends. }
-CA540_Addit_3           ; { Additions for Ordinary dividends. }
-CA540_Subtr_4           ; { Subtractions for IRAs, pensions, and annuities. }
-CA540_Addit_4           ; { Additions for IRAs, pensions, and annuities. }
-CA540_Subtr_10		; { Subtractions for Taxable refunds, credits, ... }
-CA540_Addit_11		; { Additions for Alimony received }
-CA540_Subtr_12	2300	; { Subtractions for Business income or loss }
-CA540_Addit_12		; { Additions for Business income or loss }
-CA540_Subtr_13		; { Subtractions for Capital gain or loss }
-CA540_Addit_13		; { Additions for Capital gain or loss }
-CA540_Subtr_14		; { Subtractions for Other gains or losses }
-CA540_Addit_14		; { Additions for Other gains }
-CA540_Subtr_17		; { Subtractions for Rental real estate, royalties, partnerships}
-CA540_Addit_17		; { Additions for Rental real estate, royalties, partnerships }
-CA540_Subtr_18		; { Subtractions for Farm income }
-CA540_Addit_18		; { Additions for Farm income }
-CA540_Subtr_19		; { Subtractions for Unemployment compensation }
-CA540_Subtr_21a		; { Subtractions for California Lottery Winnings }
-CA540_Subtr_21b		; { Subtractions for Disaster Loos deuctions from FTB 3895V }
-CA540_Addit_21c		; { Additions for Federal NOL }
-CA540_Subtr_21d		; { Subtractions for NOL deduction from FTB 3805V }
-CA540_Subtr_21e		; { Subtractions for NOL deduction from FTB 3805Z, 3806, 3807, 3809 }
-CA540_Subtr_21f		; { Subtractions for Other income }
-CA540_Addit_21f		; { Additions for Other income }
-CA540_Subtr_23		; { Subtractions for Educator expenses }
-CA540_Subtr_24		; { Subtractions for Certain business expenses }
-CA540_Addit_24		; { Additions for Certain business expenses }
-CA540_Subtr_25		; { Subtractions for Health savings account }
-CA540_Addit_31		; { Additions for Alimony paid }
-CA540_Addit_33		; { Additions for Student loan interest }
+ { - Section A - }
+CA540_Subtr_A1		; { Subtractions for Wages, salaries, tips, etc.  }
+CA540_Addit_A1		; { Additions for Wages, salaries, tips, etc. }
+CA540_Subtr_A2		; { Subtractions for Taxable interest }
+CA540_Addit_A2		; { Additions for Taxable interest }
+CA540_Subtr_A3		; { Subtractions for Ordinary dividends. }
+CA540_Addit_A3		; { Additions for Ordinary dividends. }
+CA540_Subtr_A4b		; { Subtractions for IRAs. }
+CA540_Addit_A4b		; { Additions for IRAs. }
+CA540_Subtr_A4d		; { Subtractions for pensions and annuities. }
+CA540_Addit_A4d		; { Additions for pensions and annuities. }
+CA540_Subtr_A6		; { Capital gain or loss. }
+CA540_Addit_A6		; { Capital gain or loss. }
+ { - Section B - }
+CA540_Subtr_B1		; { Subtractions for Taxable refunds, credits, ... }
+CA540_Addit_B2		; { Additions for Alimony received }
+CA540_Subtr_B3	2300	; { Subtractions for Business income or loss }
+CA540_Addit_B3		; { Additions for Business income or loss }
+CA540_Subtr_B4		; { Subtractions for Other gains or losses }
+CA540_Addit_B4		; { Additions for Other gains }
+CA540_Subtr_B5		; { Subtractions for Rental real estate, royalties, partnerships}
+CA540_Addit_B5		; { Additions for Rental real estate, royalties, partnerships }
+CA540_Subtr_B6		; { Subtractions for Farm income }
+CA540_Addit_B6		; { Additions for Farm income }
+CA540_Subtr_B7		; { Subtractions for Unemployment compensation }
+CA540_Subtr_B8a		; { Subtractions for California Lottery Winnings }
+CA540_Subtr_B8b		; { Subtractions for Disaster Loos deuctions from FTB 3895V }
+CA540_Addit_B8c		; { Additions for Federal NOL }
+CA540_Subtr_B8d		; { Subtractions for NOL deduction from FTB 3805V }
+CA540_Subtr_B8e		; { Subtractions for NOL deduction from FTB 3805Z, 3806, 3807, 3809 }
+CA540_Subtr_B8f		; { Subtractions for Other income }
+CA540_Addit_B8f		; { Additions for Other income }
+CA540_Subtr_B8g         ; { Student Loan discharged due to closure of for-profit school }
+ { - Section C - }
+CA540_Subtr_C10		; { Subtractions for Educator expenses }
+CA540_Subtr_C11		; { Subtractions for Certain business expenses }
+CA540_Addit_C11		; { Additions for Certain business expenses }
+CA540_Subtr_C12		; { Subtractions for Health savings account }
+CA540_Addit_C13		; { Additions for Moving Expenses }
+CA540_Addit_C18		; { Additions for Alimony paid }
+CA540_Addit_C20		; { Additions for Student loan interest }
+CA540_Subtr_C21         ; { Subtractions for Tuition and fees }
 
 {--Part-II of California Adjustments--}
 CA540_P2_1		; { Medical and dental expenses }
@@ -60,8 +68,8 @@ CA540_P2_Sub_6		; { Subtractions for Other taxes }
 CA540_P2_Add_8a		; { Additions for home mortgage interest & points reported on Form 1098 }
 CA540_P2_Add_8b		; { Additions for home mortgage interest not reported on Form 1098 }
 CA540_P2_Add_8c		; { Additions for points not reported on Form 1098 }
-CA540_P2_Sub_9		; { Subtractions for inveestment interest }
-CA540_P2_Add_9		; { Additions for inveestment interest }
+CA540_P2_Sub_9		; { Subtractions for investment interest }
+CA540_P2_Add_9		; { Additions for investment interest }
 CA540_P2_Sub_11		; { Subtractions for Gifts by cash or check }
 CA540_P2_Add_11		; { Additions for Gifts by cash or check }
 CA540_P2_Sub_12		; { Subtractions for Gifts other than by cash or check }
@@ -97,6 +105,7 @@ CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
  L73               ;     { Realestate withholing (forms 592-B, 594, 597) (see pg 13). }
  L74               ;     { Excess SDI (pg 13). }
  L75               ;     { Earned Income Tax Credit (EITC). }
+ L76               ;     { Young Child Tax Credit (YCTC). }
 
  L91               ;     { Use Tax. }
 

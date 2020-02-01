@@ -3351,7 +3351,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_CA_540 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, formid );
-gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_NC_D400 );
  make_radio_button( mpanel, txprogstog, x, y, "NC State DC400", slcttxprog, formid );
