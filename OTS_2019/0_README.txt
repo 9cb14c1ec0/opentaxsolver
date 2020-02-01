@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-January 2, 2019 v17.00 - For 2019 tax-year.
+January 31, 2019 v17.00 - For 2019 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,7 +32,7 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v17.00 (1/2/2019) - Initial Release for Tax-Year 2019.
+    * v17.00 (1/31/2019) - Initial Release for Tax-Year 2019.
 
 Usage:
  RPLCSTRNG_03
@@ -69,14 +69,16 @@ Re-compiling:
  Unix/Linux/Mac:
   Pre-compiled executables for Unix/Linux are normally in bin directory.
   However to build the binaries in the bin/ directory:
-     rm ./bin/* Run_taxsolve_GUI    ( Clears executables. )
+     cd OpenTaxSolver2019_17.xx	      ( cd into top directory. )
+     rm ./bin/* Run_taxsolve_GUI      ( Clears executables. )
      src/Build_taxsolve_packages.sh   ( Creates executables. )
 
  MS-Windows:
    Pre-compiled executables are normally in bin directory.
    For compiling OTS on MSwindows, MinGW with Msys is recommended.
    From Msys terminal window:
-      rm ./bin/* Run_taxsolve_GUI.exe	 ( Clears executables. )
+      cd OpenTaxSolver2019_17.xx       ( cd into top directory. )
+      rm ./bin/* Run_taxsolve_GUI.exe  ( Clears executables. )
       src/Build_taxsolve_packages.sh   ( Creates executables. )
 
 Directory Structure:

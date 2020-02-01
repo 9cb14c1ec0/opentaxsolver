@@ -45,8 +45,8 @@
 /********************************************************/
 
 float version=2.31;
-char package_date[]="Jan. 2, 2020";
-char ots_release_package[]="17.00-preRelease";
+char package_date[]="Jan. 31, 2020";
+char ots_release_package[]="17.00";
 
 /************************************************************/
 /* Design Notes - 					    */

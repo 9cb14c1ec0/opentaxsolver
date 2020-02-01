@@ -153,12 +153,12 @@ S3_5             ;       { Residential energy credits. Form 5695. }
 S3_6             ;       { Other credits. Forms 3800, 8801, etc. }
 
 { --- Schedule 3: Part II - Other Payments and Refundable Credits --- }
-S5_8		;	{ 2019 estimated payments + amnt applied from last year. }
-S5_9		;	{ Net premium tax credit. Form 8962. }
-S5_10		;	{ Amnt paid in filing extension req. }
-S5_11		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
-S5_12		;	{ Credits for federal tax on fuels. Attach form 4136. }
-S5_13		;	{ Credits from Form 2439, 4136, 6801, 8885. }
+S3_8		;	{ 2019 estimated payments + amnt applied from last year. }
+S3_9		;	{ Net premium tax credit. Form 8962. }
+S3_10		;	{ Amnt paid in filing extension req. }
+S3_11		;	{ Excess Soc. Sec. + tier 1 RRTA tax withheld. }
+S3_12		;	{ Credits for federal tax on fuels. Attach form 4136. }
+S3_13		;	{ Credits from Form 2439, 4136, 6801, 8885. }
 
 
 { -------------------------------------------- } 
