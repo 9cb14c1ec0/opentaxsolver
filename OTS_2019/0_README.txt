@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-January 31, 2019 v17.00 - For 2019 tax-year.
+February 2, 2019 v17.01 - For 2019 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,7 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v17.01 (2/2/2019) - Fix to US-Fed 1040 Qualified Div&Cap-Gain Worksheet line-1.
     * v17.00 (1/31/2019) - Initial Release for Tax-Year 2019.
 
 Usage:

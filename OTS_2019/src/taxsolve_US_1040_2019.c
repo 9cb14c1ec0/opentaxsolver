@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.00;
+float thisversion=17.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -154,7 +154,7 @@ void capgains_qualdividends_worksheets( int status )			/* Updated for 2019. */
  int j;
 
  for (j=0; j<50; j++) ws[j] = 0.0;
- ws[1] = L[1];
+ ws[1] = L[11];
  ws[2] = L3a;
  if (Do_SchedD)
   ws[3] = NotLessThanZero(smallerof( SchedD[15], SchedD[16] ));
