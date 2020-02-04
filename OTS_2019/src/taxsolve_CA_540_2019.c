@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.00;
+float thisversion=17.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -792,8 +792,8 @@ int main( int argc, char *argv[] )
     fprintf(outfile," SchedCA540_B%dc = %6.2f\n", j, sched540Bc[j] );
   }
 
-  sched540B[8] = PrelimFedReturn.fedline[8];
-  sched540B[9] = sched540B[9] + sched540A[8];
+  sched540B[8] = PrelimFedReturn.sched1[8];
+  sched540B[9] = sched540B[9] + sched540B[8];
   if (sched540B[8] != 0.0)
    fprintf(outfile," SchedCA540_B8 = %6.2f\n", sched540B[8] );
 
