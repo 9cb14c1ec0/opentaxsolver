@@ -731,7 +731,7 @@ int main( int argc, char *argv[] )
    fprintf(outfile," SchedCA540_A4d_ = %6.2f\n", PrelimFedReturn.fed_L4c );
 
   sched540A4d = PrelimFedReturn.fed_L4d;
-  sched540B[9] = sched540B[9] + sched540A[4];
+  sched540B[9] = sched540B[9] + sched540A4d;
   if (sched540A4d != 0.0)
    fprintf(outfile," SchedCA540_A4d = %6.2f\n", sched540A4d );
 
@@ -756,11 +756,6 @@ int main( int argc, char *argv[] )
   sched540Bb[9] = sched540Bb[9] + sched540Ab[5];
   if (sched540Ab[5] != 0.0)
    fprintf(outfile," SchedCA540_A5b = %6.2f\n", sched540Ab[5] );
-
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[5];
-  if (sched540Ac[5] != 0.0)
-   fprintf(outfile," SchedCA540_A5c = %6.2f\n", sched540Ac[5] );
-
 
   sched540A[6] = PrelimFedReturn.fedline[6];
   sched540B[9] = sched540B[9] + sched540A[6];

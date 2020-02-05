@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.31;
-char package_date[]="Feb. 2, 2020";
-char ots_release_package[]="17.01";
+float version=2.32;
+char package_date[]="Feb. 5, 2020";
+char ots_release_package[]="17.02";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -917,6 +917,28 @@ void Read_Tax_File( char *fname )
 
 
 
+GtkWidget *options_window=0, *allforms_button;
+int allforms_toggle=0;
+
+void set_pdf_option( GtkWidget *wdg, void *data )
+{
+ allforms_toggle = !allforms_toggle;
+ printf("Allforms = %d\n", allforms_toggle );
+}
+
+void options_pdf_diaglog( GtkWidget *wdg, void *data )
+{
+ GtkWidget *panel;
+ int wd=400, ht=110;
+ panel = new_window( wd, ht, "Options Menu", &options_window );
+ make_sized_label( panel, 5, 1, "Options Menu:", 12 );
+ allforms_button = make_toggle_button( panel, 10, 30, "Force production of All PDF Form Pages", allforms_toggle, set_pdf_option, "allforms" );
+ make_button( panel, wd/2 - 30, ht - 35, " Close ", close_any_window, &options_window ); 
+ show_wind( options_window );
+}
+
+
+
 void Setup_Tax_Form_Page()	/* This is called whenever the form window needs to be redisplayed for any reason. */
 {
  GtkWidget *button;
@@ -943,20 +965,23 @@ void Setup_Tax_Form_Page()	/* This is called whenever the form window needs to b
  button = make_button( mpanel, xpos, winht - 35, "  Save  ", save_taxfile, "0" );	/* The "Save" button. */
  add_tool_tip( button, "Save your changes." );
 
- xpos = (int)(0.19 * (float)winwidth + 0.5);
+ xpos = (int)(0.17 * (float)winwidth + 0.5);
  button = make_button( mpanel, xpos, winht - 35, "Compute Tax", Run_TaxSolver, 0 );
  add_tool_tip( button, "Run TaxSolver." );
 
- xpos = (int)(0.41 * (float)winwidth + 0.5);
- // printf("Print = %1.2g, ", (float)xpos / (float)winwidth );
+ xpos = (int)(0.36 * (float)winwidth + 0.5);
  button = make_button( mpanel, xpos, winht - 35, "  Print  ", printout, 0 );
  add_tool_tip( button, "Print results." );
 
- xpos = (int)(0.63 * (float)winwidth + 0.5);
+ xpos = (int)(0.555 * (float)winwidth + 0.5);
+ button = make_button( mpanel, xpos, winht - 35, "Options", options_pdf_diaglog, 0 ); 
+ add_tool_tip( button, "Review and set options." );
+
+ xpos = (int)(0.66 * (float)winwidth + 0.5);
  button = make_button( mpanel, xpos, winht - 35, "Help", helpabout2, 0 );
  add_tool_tip( button, "Get information about this program,\n Help, and Updates." );
 
- xpos = (int)(0.74 * (float)winwidth + 0.5);
+ xpos = (int)(0.76 * (float)winwidth + 0.5);
  button = make_button( mpanel, xpos, winht - 35, "Switch Form", switch_form, 0 );
  add_tool_tip( button, "Switch to-, or Open-, another form." );
 
@@ -1370,23 +1395,23 @@ void DisplayTaxInfo()
 		  switch (capgtoggle)
 		   {
 		    case 0:
-			make_label( mpanel2, box_x0 + 15, y1 - 14, "Buy Cost" );
+			make_label( mpanel2, box_x0 + 15, y1 - 16, "Buy Cost" );
 			firstbox_on_line_x = box_x0;
 			box_x0 = comment_x0;
 			capgtoggle++;
 			break;
 		    case 1:
-			make_label( mpanel2, box_x0 + 15, y1 - 14, "Date Bought" );
+			make_label( mpanel2, box_x0 + 15, y1 - 16, "Date Bought" );
 			box_x0 = firstbox_on_line_x;
 			capgtoggle++;
 			break;
 		    case 2:
-			make_label( mpanel2, box_x0 + 15, y1 - 14, "Sold For" );
+			make_label( mpanel2, box_x0 + 15, y1 - 16, "Sold For" );
 			box_x0 = comment_x0;
 			capgtoggle++;
 			break;
 		    case 3:
-			make_label( mpanel2, box_x0 + 15, y1 - 14, "Date Sold" );
+			make_label( mpanel2, box_x0 + 15, y1 - 16, "Date Sold" );
 			capgtoggle = 0;
 		        y2 = y1 + entry_box_height - 1;
 		        button = make_button_wsizedcolor_text( mpanel2, box_x1 - 15, y2, "+", 6.0, "#000000", add_new_capgain_boxes, entry );   /* Add more boxes - button */
@@ -1901,6 +1926,11 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
    return;
   }
 
+ if ((allforms_toggle) && (selected_form == form_US_1040))
+  strcpy( run_options, "-allforms" );
+ else
+  strcpy( run_options, "" );
+
  #if (PLATFORM_KIND == Posix_Platform)
   sprintf(cmd,"'%s' %s '%s' &", taxsolvecmd, run_options, current_working_filename );
  #else
@@ -1932,8 +1962,8 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
  label = make_sized_label( panel, 30, 25, outfname, 8 );
  set_widget_color( label, "#0000ff" );
  // make_button( panel, wd/2 - 15, ht - 35, "  OK  ", canceltxslvr, 0 ); 
- make_button( panel, 60, ht - 35, "Print Result File", print_outfile_directly, 0 ); 
- make_button( panel, wd - 180, ht - 35, " Close ", canceltxslvr, 0 ); 
+ make_button( panel, 40, ht - 35, "Print Result File", print_outfile_directly, 0 ); 
+ make_button( panel, wd - 85, ht - 35, " Close ", canceltxslvr, 0 ); 
  show_wind( resultswindow );
  UpdateCheck();
  Sleep_seconds( 0.25 );
@@ -1966,7 +1996,7 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
    fclose(viewfile);
   }
  if ((valid_results) && (linesread > 10) && (supported_pdf_form))
-  make_button( panel, wd/2 - 80, ht - 35, "Fill-out PDF Forms", create_pdf_file_directly, 0 ); 
+   make_button( panel, wd/2 - 80, ht - 35, "Fill-out PDF Forms", create_pdf_file_directly, 0 ); 
  show_wind( resultswindow );
  computed = 1;
  compute_needed = 0;

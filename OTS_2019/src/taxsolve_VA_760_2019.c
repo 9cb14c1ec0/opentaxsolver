@@ -29,7 +29,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=17.00;
+float thisversion=17.01;
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -319,7 +319,7 @@ int main( int argc, char *argv[] )
  GetLine( "L17", &L[17] );	/* Spouse Tax Adjustment. */
  showline(17);
 
- L[18] = L[18] - L[19];
+ L[18] = L[16] - L[17];
  showline_wmsg( 18, "Net Amount of Tax" );	
 
  GetLineF( "L19a", &L[19] );	/* Virginia tax withheld for 2019. */
