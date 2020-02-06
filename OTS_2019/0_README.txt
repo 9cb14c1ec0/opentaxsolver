@@ -32,9 +32,10 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v17.02 (2/4/2019) - Fixed California SchedCA540 Line 4 value, and Line 8 to pull from Fed-Sched-1.
+    * v17.02 (2/4/2019) - Fixed California SchedCA540 Line 4 value, and Line 8 to
+	  pull from Fed-Sched-1.
 	- Fixed Virginia Line 18 subtraction lines.
-	- Added <i>Options Menu</i> to GUI, with option to force printing of <i>All Forms</i>
+	- Added "Options Menu" to GUI, with option to force printing of "All Forms"
 	  even if not normally needed.
     * v17.01 (2/2/2019) - Fix to US-Fed 1040 Qualified Div&Cap-Gain Worksheet line-1.
     * v17.00 (1/31/2019) - Initial Release for Tax-Year 2019.

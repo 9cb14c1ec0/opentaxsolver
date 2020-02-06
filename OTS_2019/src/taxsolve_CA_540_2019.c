@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.01;
+float thisversion=17.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -298,8 +298,9 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
      if (strcmp(word,"L5a") == 0)
       grab_line_value( word, fline, &(fed_data->fed_L5a) );
      else
-
-
+     if (strcmp(word,"L5b") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L5b) );
+     else
      if (strcmp(word,"L8a") == 0)
       grab_line_value( word, fline, &(fed_data->fedline[8]) );
      else
@@ -743,11 +744,10 @@ int main( int argc, char *argv[] )
   if (sched540Ac4d != 0.0)
    fprintf(outfile," SchedCA540_A4dc = %6.2f\n", sched540Ac4d );
 
-
   if (PrelimFedReturn.fed_L5a != 0.0)
    fprintf(outfile," SchedCA540_A5a = %6.2f\n", PrelimFedReturn.fed_L5a );
 
-  sched540A[5] = PrelimFedReturn.sched1[5];
+  sched540A[5] = PrelimFedReturn.fed_L5b;
   sched540B[9] = sched540B[9] + sched540A[5];
   if (sched540A[5] != 0.0)
    fprintf(outfile," SchedCA540_A5 = %6.2f\n", sched540A[5] );
