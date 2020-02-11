@@ -1331,6 +1331,8 @@ int main( int argc, char *argv[] )
  GetTextLineF( "Town:" );
  fprintf(outfile,"State: CA\n");
  GetTextLineF( "Zipcode:" );
+ GetTextLineF( "YourDOB:" );
+ GetTextLineF( "SpouseDOB:" );
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );
  fclose(outfile);

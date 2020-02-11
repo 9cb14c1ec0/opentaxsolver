@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.01;
+float thisversion=17.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -1919,7 +1919,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  Sched2[7] = Sched2[7] + S2_7b;
  showline_wlabelnz( "S2_8", Sched2[8] );
  showline_wlabelnz( "S2_9", Sched2[9] );
- for (j = 3; j <= 9; j++)
+ for (j = 4; j <= 8; j++)
    Sched2[10] = Sched2[10] + Sched2[j];
  showline_wlabel( "S2_10", Sched2[10] );
  /* -- End of Schedule 2 */
@@ -1996,7 +1996,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  showline_wlabelnz( "L18d", L18d );
 
  L[18] = L18a + L18b + L18c + L18d;
- showline( 18 );
+ showline_wlabelnz( "L18e", L[18] );
  
  L[19] = L[17] + L[18];
  showline_wmsg( 19, "Total Payments" );

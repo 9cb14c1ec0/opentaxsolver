@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 4, 2019 v17.02 - For 2019 tax-year.
+February 10, 2019 v17.03 - For 2019 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,10 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v17.03 (2/10/2019) - Fixed Fed 1040 Sched-2 summation for line 10, and display
+	 of Line 18e on main form.
+	- Fixed California SchedCA540 Line 4 to pull from Fed line 5b.
+	- Added DOB lines to California form.
     * v17.02 (2/4/2019) - Fixed California SchedCA540 Line 4 value, and Line 8 to
 	  pull from Fed-Sched-1.
 	- Fixed Virginia Line 18 subtraction lines.
