@@ -64,7 +64,7 @@ L17	1965.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, 
 { -- Refundable Credits -- }
 L18a	207	;	{ Earned Income Credit (EIC) }
 L18b		;	{ Child Tax Credit, Schedule 8812 }
-L18c		;	{ Education Credits, Form 8863 }
+L18c		;	{ American Opportunity Credit }
 
 { -- Penalties -- }
 L24		;	{ Estimated Tax Under-payment Penalty }
@@ -222,6 +222,10 @@ S3_13		;	{ Credits from Form 2439, 4136, 6801, 8885. }
  Number&Street:  1567 W. Hamptonshire
  Apt#:		 
  TownStateZip:   Springfield, IL 62722
+
+	{ Your Occupation(s) }
+ YourOccupat:	Merchant
+ SpouseOccupat: Welder
 
 {
  --------------------------------------------

@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.02;
+float thisversion=17.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -2051,6 +2051,8 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  GetTextLineF( "Number&Street:" );
  GetTextLineF( "Apt#:" );
  GetTextLineF( "TownStateZip:" );
+ GetTextLineF( "YourOccupat:" );
+ GetTextLineF( "SpouseOccupat:" );
 
  fclose(infile);
  Grab_ScheduleB_Payer_Lines( infname, outfile );

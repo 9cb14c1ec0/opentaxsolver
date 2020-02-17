@@ -54,9 +54,6 @@ CkDep4_ChildTxCrd  695 508
 CkDep4_CrdOtherDep 814 508
 CkMoreThan4Dep 866 331
 
-! YourOccupat	510 480
-! SpouseOccupat	510 517
-
  L1	770 528	12
  L2a	388 546	12
  L2b	770 546	12
@@ -110,6 +107,9 @@ Page 2
  CkL21cChecking 577 383
  CkL21cSavings  664 383 
  L21d	267 400 0 14.5
+
+YourOccupat: 510 590
+SpouseOccupat: 510 637
 
 
 Page 3

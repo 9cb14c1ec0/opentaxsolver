@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 10, 2019 v17.03 - For 2019 tax-year.
+February 15, 2020 v17.04 - For 2019 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,17 +32,21 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v17.03 (2/10/2019) - Fixed Fed 1040 Sched-2 summation for line 10, and display
+    * v17.04 (2/15/2020) - Added "Occupations" fields to Fed-1040 template.
+	- Added ability to see tax-instructions in the GUI for each tax-line,
+	  by clicking on the line-labels, or elsewhere on a line.
+	  Populated some instructions for Fed-1040 and CA forms.
+    * v17.03 (2/10/2020) - Fixed Fed-Sched2 sum for line 10, and display
 	 of Line 18e on main form.
 	- Fixed California SchedCA540 Line 4 to pull from Fed line 5b.
 	- Added DOB lines to California form.
-    * v17.02 (2/4/2019) - Fixed California SchedCA540 Line 4 value, and Line 8 to
+    * v17.02 (2/4/2020) - Fixed California SchedCA540 Line 4 value, and Line 8 to
 	  pull from Fed-Sched-1.
 	- Fixed Virginia Line 18 subtraction lines.
 	- Added "Options Menu" to GUI, with option to force printing of "All Forms"
 	  even if not normally needed.
-    * v17.01 (2/2/2019) - Fix to US-Fed 1040 Qualified Div&Cap-Gain Worksheet line-1.
-    * v17.00 (1/31/2019) - Initial Release for Tax-Year 2019.
+    * v17.01 (2/2/2020) - Fix to US-Fed 1040 Qualified Div&Cap-Gain Worksheet line-1.
+    * v17.00 (1/31/2020) - Initial Release for Tax-Year 2019.
 
 Usage:
  RPLCSTRNG_03

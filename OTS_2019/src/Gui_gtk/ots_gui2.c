@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.32;
-char package_date[]="Feb. 10, 2020";
-char ots_release_package[]="17.03";
+float version=2.33;
+char package_date[]="Feb. 15, 2020";
+char ots_release_package[]="17.04";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -114,6 +114,7 @@ void consume_leading_trailing_whitespace( char *line );
 void get_line_entry( char *word, int maxn, int *linenum, FILE *infile );
 void Run_TaxSolver( GtkWidget *wdg, void *x );
 void helpabout2( GtkWidget *wdg, void *data );
+void read_instructions( int init );
 void dump_taxinfo();
 int warn_release=0;
 
@@ -171,6 +172,15 @@ char *setform( int formnum )
 }
 
 
+#if (PLATFORM_KIND != Posix_Platform) 
+ char slashchr='\\';
+ char slashstr[]="\\";
+#else
+ char slashchr='/';
+ char slashstr[]="/";
+#endif
+
+
 void dismiss_general_warning( GtkWidget *wdg, void *data )
 {
  switch (warn_release)
@@ -186,6 +196,14 @@ void dismiss_general_warning( GtkWidget *wdg, void *data )
 	break;
    default:  close_any_window( 0, data );
   }
+}
+
+
+int dismiss_general_warning_ret0( GtkWidget *wdg, void *data )
+{
+ dismiss_general_warning( wdg, data );
+ warnwin = 0;
+ return 0;
 }
 
 
@@ -205,11 +223,12 @@ void GeneralWarning( char *mesg )       /* Used for one-line warning messages. *
 }
 
 
-void GeneralPopup( char *title, char *mesg )       /* Used for multi-line informational messages. */
+void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for multi-line informational messages. */
 {
- int xpos=20, ypos=20, winwdth, winhght, j=0, k=0, maxcols=0, nlines=0;
+ int xpos=20, ypos=20, winwdth, winhght, orig_winhght, j=0, k=0, maxcols=0, nlines=0;
  GtkWidget *winframe;
- printf("%s\n", mesg);
+ if (to_text_win)
+  printf("%s\n", mesg);
  while (mesg[k] != '\0')	/* Determine max line width and number of rows. */
   {
    if ((mesg[k] == '\n') || (mesg[k] == '\0'))
@@ -224,9 +243,30 @@ void GeneralPopup( char *title, char *mesg )       /* Used for multi-line inform
   }
  winwdth = 40 + maxcols * 7;
  winhght = 60 + 18 * nlines;
- winframe = new_window( winwdth, winhght, title, &warnwin );
+ orig_winhght = winhght;
+ if (winhght < 500) 
+  {
+   if (winwdth <= 600)
+    winframe = new_window( winwdth, winhght, title, &warnwin );
+   else
+    {
+     winwdth = 600;
+     winframe = new_scrolled_window_wkill( winwdth, winhght, title, &warnwin, 1, 0, dismiss_general_warning_ret0 );
+    }
+  }
+ else
+  {
+   winhght = 500;
+   if (winwdth <= 600)
+    winframe = new_scrolled_window_wkill( winwdth, winhght, title, &warnwin, 0, 1, dismiss_general_warning_ret0 );
+   else
+    {
+     winwdth = 600;
+     winframe = new_scrolled_window_wkill( winwdth, winhght, title, &warnwin, 1, 1, dismiss_general_warning_ret0 );
+    }
+  }
  make_label( winframe, xpos, ypos, mesg );
- make_button( winframe, winwdth/2 - 30, winhght - 30, "  Ok  ", dismiss_general_warning, &warnwin );
+ make_button( winframe, winwdth/2 - 30, orig_winhght - 35, "  Ok  ", dismiss_general_warning, &warnwin );
  gtk_window_set_keep_above( (GtkWindow *)warnwin, 1 );
  show_wind( warnwin );
 }
@@ -248,7 +288,7 @@ struct value_list
 struct taxline_record
  {
   char *linename;
-  int linenum;
+  int linenum, vpos;
   struct value_list *values_hd, *values_tl;	/* Head and tail list pointers for a tax-line-entry. */
   struct taxline_record *nxt;
  } *taxlines_hd=0, *taxlines_tl=0;		/* Head and tail list pointers for tax-form. */
@@ -734,6 +774,229 @@ void print_outfile_directly( GtkWidget *wdg, void *data );
 void create_pdf_file_directly( GtkWidget *wdg, void *data );
 
 
+/* ----------------- Tax Instructions Helper -------------------- */
+
+struct instruct_rec
+ {
+   char *instr_label, *instr_text;
+   int buflen;
+   struct instruct_rec *nxt;
+ } *instruct_lst=0;
+
+char *instructions_filename=0;
+
+
+void new_instruction( char *line_label, char *buf, int *buflen )
+{
+ struct instruct_rec *new;
+//if (instruct_lst != 0)
+//printf("	Instr: [%s] '%s'\n", instruct_lst->instr_label, buf );
+ if (instruct_lst != 0)
+  instruct_lst->instr_text = strdup( buf );	/* Store prior instruction text. */
+ buf[0] = '\0';					/* Clear buffer for new text. */
+ *buflen = 0;
+ new = (struct instruct_rec *)calloc( 1, sizeof( struct instruct_rec ) );
+ new->instr_label = strdup( line_label );
+ new->nxt = instruct_lst;
+ instruct_lst = new;
+}
+
+
+void strcat_safe( char *dst, const char *src, int maxlen, int *buflen )
+{ 
+  int j, k=0, oneless;
+//printf("Adding: '%s' + '%s' = ", dst, src );
+  oneless = maxlen - 1;
+  j = *buflen;
+  while ((j < oneless) && (src[k] != '\0')) { dst[j++] = src[k++]; }
+  dst[j] = '\0';
+  *buflen = j;
+//printf("'%s'\n", dst );
+}
+
+
+int found_char( char ch, char *srch )
+{
+ int j=0;
+ while ((ch != srch[j]) && (srch[j] != '\0'))
+  j++;
+ if (srch[j] != '\0')
+  return 1;
+ else
+  return 0;
+}
+
+
+void advance_word( char *tstr, char delim, char *srch )
+{
+ int j=0, k=0;
+ while ((tstr[j] != '\0') && (tstr[j] != delim))
+  j++;
+ if (tstr[j] != '\0')
+  j++;
+ while ((tstr[j] != '\0') && (found_char( tstr[j], srch )))
+  j++;
+ do
+  tstr[k++] = tstr[j++];
+ while (tstr[k-1] != '\0');
+}
+
+
+void dispose_instuctions()
+{
+ struct instruct_rec *old;
+ while (instruct_lst != 0)
+  {
+   old = instruct_lst;
+   instruct_lst = instruct_lst->nxt;
+   free( old->instr_label );
+   free( old->instr_text );
+   free( old );
+  }
+}
+
+
+void read_instructions( int init )
+{ char *tmpintsrfname, *tline, *tstr, *twrd, *buf;
+  int maxstr1=16384, maxstr2=32768, buflen=0;
+  FILE *instrfile;
+  /**
+    Instruction files must have the following form for any tax-lines with instructions:
+	[line-lable] instruction text
+    Example:
+	[L17] Report here your interest income.
+	      More instruction text ...
+	[L20] This should come from your 1099-G box 2a.
+	      Etc., etc..
+    The instructions can span multiple lines, as shown, until the next bracket line.
+    The label bracket, "[", must be the first character on the line.
+    Do not have tabs or line-feeds in text.  Only printable ascii characters!!!
+   **/
+  if (init == 1)
+   {
+    dispose_instuctions();
+    switch (selected_form)
+     {
+      case form_US_1040:
+	instructions_filename = strdup( "f1040_instructions.dat" );	break;
+      case form_US_1040_Sched_C:
+	instructions_filename = strdup( "f1040sc_instructions.dat" );	break;
+      case form_PA_40:
+	instructions_filename = strdup( "PA_instructions.dat" );	break;
+      case form_CA_540:
+	instructions_filename = strdup( "CA_540_instructions.dat" );	break;
+      case form_OH_IT1040:
+	instructions_filename = strdup( "OH_PIT_IT1040_instructions.dat" );	break;
+      case form_VA_760:
+	instructions_filename = strdup( "VA_760_instructions.dat" );	break;
+      case form_NJ_1040:
+	instructions_filename = strdup( "NJ_1040_instructions.dat" );	break;
+      case form_NY_IT201:
+	instructions_filename = strdup( "NY_it201_instructions.dat" );	break;
+      case form_MA_1:
+	instructions_filename = strdup( "MA_1_instructions.dat" );	break;
+      case form_NC_D400:
+	instructions_filename = strdup( "NC_instructions.dat" );	break;
+      default:
+	return;	
+     }
+    if (verbose) printf("Instruction file = '%s'\n", instructions_filename );
+   }
+  tmpintsrfname = (char *)malloc(4096);
+  tstr = (char *)malloc( 512 );
+  twrd = (char *)malloc( 512 );
+  tline = (char *)malloc( maxstr1 + 10 );
+  buf = (char *)calloc( 1, maxstr2 + 10 );
+  strcpy( tmpintsrfname, ots_path );
+  strcat( tmpintsrfname, "src" );  strcat( tmpintsrfname, slashstr );  
+  strcat( tmpintsrfname, "formdata" ); strcat( tmpintsrfname, slashstr );
+  strcat( tmpintsrfname, instructions_filename );
+
+  instrfile = fopen( tmpintsrfname, "rb" );
+  if (instrfile == 0)
+   {
+    if (verbose) printf("Could not open instructions file: '%s'\n", tmpintsrfname );
+    return;
+   }
+
+  fgets( tline, maxstr1, instrfile );
+  // printf("%s", tline );
+  while (!feof(instrfile))
+   {
+    // printf("%s", tline );
+    if (tline[0] == '[')
+     {
+      strcpy_safe( tstr, tline, 256 );
+      fb_next_word( tstr, twrd, "[] \t\n\r" );
+      // printf("Label: '%s'\n", twrd );
+      new_instruction( twrd, buf, &buflen );
+      advance_word( tline, ']', " \t" );
+     }
+    strcat_safe( buf, tline, maxstr2, &buflen );
+    fgets( tline, maxstr1, instrfile );
+   }
+  new_instruction( "_END_", buf, &buflen );
+  fclose( instrfile );
+  free( tmpintsrfname );
+  free( tstr );
+  free( twrd );
+}
+
+
+
+int mouse_clicked( GtkWidget *widget, GdkEventButton *event, gpointer data )
+{
+ int xpos, vpos, mindist=9999999;
+ GtkAdjustment *adj;
+ struct taxline_record *txline, *closest_line=0;
+ struct instruct_rec *tmpline, *picline=0;
+
+ if (warnwin)
+  { /* Remove any previously open text window. */
+   gtk_widget_destroy( warnwin );
+   warnwin = 0;
+  }
+ xpos = (int)(event->x);
+ if (((xpos > 100) && (xpos < 245)) || (xpos > 710))
+  return 1;	/* Too close to buttons or text-forms of a tax-line, so return from here. */
+
+ /* Find the closest tax-line to where clicked. */
+ // printf("Mouse button %d Pressed at: %d, %d, %g\n", (int)(event->button), (int)(event->x), (int)(event->y), (double)(event->time) );
+ adj = gtk_scrolled_window_get_vadjustment( (GtkScrolledWindow *)scrolledpane );
+ vpos = (int)(event->y + gtk_adjustment_get_value( adj ));
+ txline = taxlines_hd;
+ while (txline!=0)
+  {
+   if (abs( vpos - txline->vpos ) < mindist)
+    {
+	mindist = abs( vpos - txline->vpos );
+	closest_line = txline;
+    } 
+   txline = txline->nxt;
+  }
+ if ((closest_line != 0) && (vpos - closest_line->vpos > -30))
+  { /* Pop up instruction-text window, if clicked near enough, and/or below, a tax-line with instructions. */
+   // printf("Picked '%s', dist = %d\n", closest_line->linename, mindist );
+   tmpline = instruct_lst;
+   while ((tmpline != 0) && (strcmp( closest_line->linename, tmpline->instr_label ) != 0))
+    tmpline = tmpline->nxt;
+   if (tmpline != 0)
+    GeneralPopup( tmpline->instr_label, tmpline->instr_text, 0 );
+  }
+ return 1;      /* Stops other handlers from being invoked. */
+}
+
+
+int mouse_unclicked( GtkWidget *widget, GdkEventButton *event, gpointer data )
+{
+ printf("Mouse button %d Released at: %d, %d\n", (int)(event->button), (int)(event->x), (int)(event->y) );
+ return 1;      /* Stops other handlers from being invoked. */
+}
+
+
+/* ----------------- End Tax Instructions Helper -------------------- */
+
+
 
 /* Check if entry looks like a date. */
 /* If so, return 1, else return 0.  */
@@ -750,15 +1013,6 @@ int datecheck( char *word )
   }
  if (k==2) return 1; else return 0;
 }
-
-
-#if (PLATFORM_KIND != Posix_Platform) 
- char slashchr='\\';
- char slashstr[]="\\";
-#else
- char slashchr='/';
- char slashstr[]="/";
-#endif
 
 
 char *taxform_name;
@@ -939,13 +1193,14 @@ void options_pdf_diaglog( GtkWidget *wdg, void *data )
 
 
 
-void Setup_Tax_Form_Page()	/* This is called whenever the form window needs to be redisplayed for any reason. */
+void Setup_Tax_Form_Page( int init )	/* This is called whenever the form window needs to be redisplayed for any reason. */
 {
  GtkWidget *button;
  GtkRequisition actual;
  int x1=1, xpos;
  char *twrd;
  float fontsz;
+ double T1;
 
  gtk_widget_destroy( mpanel );	/* Clear out panel. */
  mpanel = gtk_fixed_new();
@@ -1007,6 +1262,17 @@ void Setup_Tax_Form_Page()	/* This is called whenever the form window needs to b
  set_widget_color( title_label, "#0000ff" );
  free( twrd );
 
+ if (init)
+  {
+T1 = Report_Time();
+   read_instructions( init );
+printf("\nRead_Instructions took %g Seconds.\n\n", Report_Time() - T1 );
+  }
+
+ g_signal_connect( outer_window, "button-press-event", G_CALLBACK( mouse_clicked ), NULL ); 
+ // gtk_widget_add_events( outer_window, GDK_BUTTON_RELEASE_MASK );
+ // g_signal_connect( outer_window, "button-release-event", G_CALLBACK( mouse_unclicked ), NULL ); 
+
  DisplayTaxInfo();
  gtk_widget_show_all( outer_window );
 }
@@ -1015,7 +1281,7 @@ void Setup_Tax_Form_Page()	/* This is called whenever the form window needs to b
 void Get_Tax_Form_Page( char *fname )		/* This is only called once, to bring up the initial form. */
 {
  Read_Tax_File( fname );
- Setup_Tax_Form_Page();
+ Setup_Tax_Form_Page(1);
 }
 
 
@@ -1285,6 +1551,7 @@ void DisplayTaxInfo()
      /* Place the line label. */
      // printf("\nAdding LineLabel %d (%3d, %d): '%s'\n", txline->linenum, 2, y1a, txline->linename );
      label = make_label( mpanel2, 2, y1a, txline->linename );
+     txline->vpos = y1a;
      gtk_widget_size_request( label, &req );	/* First find the label's size. */
      gtk_widget_destroy( label );			/* Remove it, then re-place it at best position. */
      label_width = req.width;
@@ -2519,68 +2786,6 @@ void setpdfoutputname( char *origname, char *suffix, char *newname )
 }
 
 
-/* --- This routine is deprecated. To be removed from future versions. --- */
-/*  (Is replaced by "prepare_universal_pdf_cmd()".)  */
-void prepare_pdf_cmd( char *options, char *metadata, char *contxt, char *wrkingfname, char *markedpdf, char *outputname )
-{ char *tmpmetadata, *tmpcntxt, *tmpwrkingfname, *tmpmarkedpdf, *tmpout;
-
- tmpmetadata = (char *)malloc(4096);
- tmpcntxt = (char *)malloc(4096);
- tmpwrkingfname = (char *)malloc(4096);
- tmpmarkedpdf = (char *)malloc(4096);
- tmpout = (char *)malloc(4096);
-
- strcpy( fillout_pdf_command, fillout_pdf_tool );
- strcat( fillout_pdf_command, " " );
- if (strlen(options) > 0) 
-  {
-   strcat( fillout_pdf_command, options );
-   strcat( fillout_pdf_command, " " );
-  }
-
- strcpy( tmpmetadata, ots_path );
- strcat( tmpmetadata, "src" );  strcat( tmpmetadata, slashstr );  
- strcat( tmpmetadata, "formdata" ); strcat( tmpmetadata, slashstr );
- strcat( tmpmetadata, metadata );
- quote_file_name( tmpmetadata );
-
- strcpy( tmpwrkingfname, wrkingfname );
- quote_file_name( tmpwrkingfname );
-
- strcpy( tmpmarkedpdf, ots_path );
- strcat( tmpmarkedpdf, "src" );  strcat( tmpmarkedpdf, slashstr );  
- strcat( tmpmarkedpdf, "formdata" ); strcat( tmpmarkedpdf, slashstr );
- strcat( tmpmarkedpdf, markedpdf );
- quote_file_name( tmpmarkedpdf );
-
- strcat( fillout_pdf_command, tmpmetadata );
- strcat( fillout_pdf_command, " " );
- if (strlen(contxt) > 0)
-  {
-   strcat( fillout_pdf_command, "-readSchedinput " );
-   strcpy( tmpcntxt, contxt );
-   quote_file_name( tmpcntxt );
-   strcat( fillout_pdf_command, tmpcntxt );
-   strcat( fillout_pdf_command, " " );
-  }
- strcat( fillout_pdf_command, tmpwrkingfname );
- strcat( fillout_pdf_command, " " );
- strcat( fillout_pdf_command, tmpmarkedpdf );
- if (strlen(outputname) > 0)
-  {
-   strcat( fillout_pdf_command, " -o " );
-   strcpy( tmpout, outputname );
-   quote_file_name( tmpout );
-   strcat( fillout_pdf_command, tmpout );
-  }
- free( tmpmetadata );
- free( tmpcntxt );
- free( tmpwrkingfname );
- free( tmpmarkedpdf );
- free( tmpout );
-}
-
-
 void prepare_universal_pdf_cmd( char *options, char *metadata, char *wrkingfname, char *markedpdf, char *outputname )
 { char *tmpmetadata, *tmpwrkingfname, *tmpmarkedpdf, *tmpout;
 
@@ -3230,12 +3435,13 @@ void helpabout1( GtkWidget *wdg, void *data )
  strcat( msg, "      click 'Open Saved Form' button, select your file or example,\n" ); 
  strcat( msg, "      and click 'Ok'\n");
  strcat( msg, " 3. Fill out the form that pops up.\n");
+ strcat( msg, "     (Click the label on any line to see tax-instructions, if provided.)\n" ); 
  strcat( msg, " 4. Save your filled-out form to a name of your choice.\n");
  strcat( msg, " 5. Click 'Compute Tax' to see your results.\n");
  strcat( msg, " 6. Click 'Print' to fill-out or print-out your forms.\n\n");
  strcat( msg, "For help, additional information, and updates:\n" );
  strcat( msg, " Surf to:   http://opentaxsolver.sourceforge.net/\n" );
- GeneralPopup( "OTS Information", msg );
+ GeneralPopup( "OTS Information", msg, 1 );
 }
 
 
@@ -3247,6 +3453,7 @@ void helpabout2( GtkWidget *wdg, void *data )
  strcat( msg, ots_release_package );   strcat( msg, "\n\n" );
  strcat( msg, "Use this GUI to fill-out tax forms and calculate taxes.\n");
  strcat( msg, "  1. Fill-out the line entries that apply to you.\n");
+ strcat( msg, "     (Click the label on any line to see tax-instructions, if provided.)\n" ); 
  strcat( msg, "  2. Save your filled-out form by clicking 'Save' button.\n");
  strcat( msg, "      (If you started a new form ('_template'), then save your\n");
  strcat( msg, "       version with a unique name that is meaningful to you.)\n");
@@ -3255,7 +3462,7 @@ void helpabout2( GtkWidget *wdg, void *data )
  strcat( msg, "       fill-out the final forms.\n\n"); 
  strcat( msg, "For help, additional information, and updates:\n" );
  strcat( msg, " Surf to:   http://opentaxsolver.sourceforge.net/\n" );
- GeneralPopup( "OTS Information", msg );
+ GeneralPopup( "OTS Information", msg, 1 );
 }
 
 
@@ -3454,7 +3661,7 @@ int main(int argc, char *argv[] )
     {
 	if (verbose) printf("	Resizing to (%d, %d)\n", winwidth, winht );
 	Update_box_info();
-	Setup_Tax_Form_Page();
+	Setup_Tax_Form_Page(0);
 	need_to_resize = 0;
     }
    if (schedule_PDF_conversion) do_pdf_conversion();
