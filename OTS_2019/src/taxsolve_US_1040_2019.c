@@ -835,8 +835,8 @@ void get_gain_and_losses( char *label )
 /************************************************************************/
 void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
 {
- char word[4092], *LastYearsOutFile=0;
- int j, doline22=0;
+ char word[4092], *LastYearsOutFile=0, labelx[1024]="";
+ int j, doline22=0, got_collectibles=0;
  double stcg=0.0, ltcg=0.0;      /* Variables for short and long term gains. */
  double SchedDd[20], SchedDe[20];
 
@@ -919,7 +919,26 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
  GetLine( "D13", &SchedD[13] );	    /* Cap Gains Distributions - 1099-DIV col. 2a. */
  GetLine( "D14", &SchedD[14] );     /* Carryover long-term loss from last year. Or, leave blank if last year's file entered in line D6. */
 
- GetLine( "Collectibles", &collectibles_gains );	/* Gains or Losses from Collectibles. (Usually zero.) */
+ while (!got_collectibles)
+  {
+   get_parameter( infile, 'l', labelx, "D19 or Collectibles" );
+   if (strcmp( labelx, "D19" ) == 0)
+     get_parameters( infile, 'f', &SchedD[19], labelx );
+   else
+   if (strcmp( labelx, "Collectibles" ) == 0)
+    {
+     get_parameters( infile, 'f', &collectibles_gains, labelx );
+     got_collectibles = 1;
+    }
+   else
+    {
+     printf("ERROR1: Found '%s' when expecting 'D19 or Collectibles'\n", labelx ); 
+     fprintf(outfile,"ERROR1: Found '%s' when expecting 'D19 or Collectibles'\n", labelx );
+     exit(1);
+    }
+  }
+
+ // GetLine( "Collectibles", &collectibles_gains );	/* Gains or Losses from Collectibles. (Usually zero.) */
  if (collectibles_gains != 0.0) fprintf(outfile, "Collectibles_Gains = %6.2f\n", collectibles_gains );
 
  if (LastYearsOutFile != 0)
@@ -2051,8 +2070,16 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  GetTextLineF( "Number&Street:" );
  GetTextLineF( "Apt#:" );
  GetTextLineF( "TownStateZip:" );
- GetTextLineF( "YourOccupat:" );
- GetTextLineF( "SpouseOccupat:" );
+
+ get_word(infile, labelx );	/* Look for optional occupation fields. */
+ if (!feof(infile))
+  {
+   fprintf(outfile, "%s ", labelx );
+   read_comment_filtered_line( infile, labelx, 256 );
+   fprintf(outfile, "%s\n", labelx );
+   // GetTextLineF( "YourOccupat:" );
+   GetTextLineF( "SpouseOccupat:" );
+  }
 
  fclose(infile);
  Grab_ScheduleB_Payer_Lines( infname, outfile );

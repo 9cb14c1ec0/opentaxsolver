@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.00;
+float thisversion=17.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -356,7 +356,7 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"\n");
  GetLine( "F1", &F[1] );	/* Worksheet F Medical Expenses (See pg 27). */
  showline_wrksht('F',1,F);
- F[2] = 0.02 * L[28];
+ F[2] = 0.02 * L[29];
  showline_wrksht('F',2,F);
  F[3] = NotLessThanZero( F[1] - F[2] );
  showline_wrksht('F',3,F);
@@ -367,7 +367,7 @@ int main( int argc, char *argv[] )
  F[6] = NotLessThanZero( F[3] + F[4] + F[5] );
  showline_wrksht('F',6,F);
  fprintf(outfile,"\n");
- L[10] = F[6];
+ L[31] = F[6];
  if (L[31] != 0.0)
   showline_wmsg(31," Medical Expenses Worksheet F (See pg 27)");
  /* end of Worksheet F */

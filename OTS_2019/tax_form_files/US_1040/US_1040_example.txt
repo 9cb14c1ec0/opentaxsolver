@@ -111,6 +111,7 @@ D11		;       { Gain from Form 4797. }
 D12		;       { Partnership net long-term gains or losses. }
 D13		;       { Cap Gains Distributions - 1099-DIV column 2a. }
 D14             ;       { Long-term 2018 loss carryover. Leave blank if file-name used in line D6. }
+D19		;	{ Amount, if any, from line 18 of Unrecaptured Section 1250 Gain Worksheet. }
 Collectibles 	;	{ Long Term Gain or Loss from Collectibles, Form 8949 Part II. (Usually zero.) }
 
 

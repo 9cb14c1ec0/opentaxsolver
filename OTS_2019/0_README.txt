@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 15, 2020 v17.04 - For 2019 tax-year.
+February 17, 2020 v17.04 - For 2019 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,7 +32,9 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v17.04 (2/15/2020) - Added "Occupations" fields to Fed-1040 template.
+    * v17.04 (2/17/2020) - Added "Occupations" fields to Fed-1040 template.
+	- Added input for Sched-D 19, unrecaptured gains.	
+	- Fixed NJ Medical Expenses worksheet F line 2 calculation.
 	- Added ability to see tax-instructions in the GUI for each tax-line,
 	  by clicking on the line-labels, or elsewhere on a line.
 	  Populated some instructions for Fed-1040 and CA forms.
