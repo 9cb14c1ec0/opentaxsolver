@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.33;
-char package_date[]="Feb. 15, 2020";
-char ots_release_package[]="17.04";
+float version=2.34;
+char package_date[]="Feb. 21, 2020";
+char ots_release_package[]="17.05";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -154,12 +154,14 @@ char program_names[30][100] =
 	 "taxsolve_NY_IT201_2019",		/* 9 */
 	 "taxsolve_MA_1_2019",			/* 10 */
 	 "taxsolve_GA_500",			/* 11 */
-	 "Other",				/* 12 */
+	 "Other",				/* xx */
 	};
 
 enum form_names { form_US_1040, form_US_1040_Sched_C, form_US_8829, form_CA_540, 
 		  form_NC_D400, form_NJ_1040, form_OH_IT1040, form_PA_40,
-		  form_VA_760, form_NY_IT201, form_MA_1, form_GA_500, form_other
+		  form_VA_760, form_NY_IT201, form_MA_1, form_GA_500, 
+		  form_other,
+		  form_1040e, form_4562, form_8582
 		};
 int selected_form=form_other;
 
@@ -242,7 +244,7 @@ void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for 
    k++;
   }
  winwdth = 40 + maxcols * 7;
- winhght = 60 + 18 * nlines;
+ winhght = 60 + 18 * nlines + 5;
  orig_winhght = winhght;
  if (winhght < 500) 
   {
@@ -266,7 +268,7 @@ void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for 
     }
   }
  make_label( winframe, xpos, ypos, mesg );
- make_button( winframe, winwdth/2 - 30, orig_winhght - 35, "  Ok  ", dismiss_general_warning, &warnwin );
+ make_button( winframe, winwdth/2 - 30, orig_winhght - 40, "  Ok  ", dismiss_general_warning, &warnwin );
  gtk_window_set_keep_above( (GtkWindow *)warnwin, 1 );
  show_wind( warnwin );
 }
@@ -772,6 +774,7 @@ void warn_about_save_needed_switch()
 void quit_wcheck( GtkWidget *wdg, void *x );		/* Prototypes */
 void print_outfile_directly( GtkWidget *wdg, void *data );
 void create_pdf_file_directly( GtkWidget *wdg, void *data );
+void set_pdfviewer( GtkWidget *wdg, void *data );
 
 
 /* ----------------- Tax Instructions Helper -------------------- */
@@ -857,7 +860,7 @@ void dispose_instuctions()
 
 
 void read_instructions( int init )
-{ char *tmpintsrfname, *tline, *tstr, *twrd, *buf;
+{ char *tmpinstrfname, *tline, *tstr, *twrd, *buf;
   int maxstr1=16384, maxstr2=32768, buflen=0;
   FILE *instrfile;
   /**
@@ -898,24 +901,28 @@ void read_instructions( int init )
       case form_NC_D400:
 	instructions_filename = strdup( "NC_instructions.dat" );	break;
       default:
-	return;	
+	if (strstr( taxsolvestrng, "taxsolve_HSA_f8889" ) != 0)
+	 instructions_filename = strdup( "f8889_instructions.dat" );
+	else
+	 return;	
      }
     if (verbose) printf("Instruction file = '%s'\n", instructions_filename );
    }
-  tmpintsrfname = (char *)malloc(4096);
+  tmpinstrfname = (char *)malloc(4096);
   tstr = (char *)malloc( 512 );
   twrd = (char *)malloc( 512 );
   tline = (char *)malloc( maxstr1 + 10 );
   buf = (char *)calloc( 1, maxstr2 + 10 );
-  strcpy( tmpintsrfname, ots_path );
-  strcat( tmpintsrfname, "src" );  strcat( tmpintsrfname, slashstr );  
-  strcat( tmpintsrfname, "formdata" ); strcat( tmpintsrfname, slashstr );
-  strcat( tmpintsrfname, instructions_filename );
+  strcpy( tmpinstrfname, ots_path );
+  strcat( tmpinstrfname, "src" );  strcat( tmpinstrfname, slashstr );  
+  strcat( tmpinstrfname, "formdata" ); strcat( tmpinstrfname, slashstr );
+  strcat( tmpinstrfname, instructions_filename );
+  if (verbose) printf("Opening: '%s'\n", tmpinstrfname );
 
-  instrfile = fopen( tmpintsrfname, "rb" );
+  instrfile = fopen( tmpinstrfname, "rb" );
   if (instrfile == 0)
    {
-    if (verbose) printf("Could not open instructions file: '%s'\n", tmpintsrfname );
+    if (verbose) printf("Could not open instructions file: '%s'\n", tmpinstrfname );
     return;
    }
 
@@ -937,7 +944,7 @@ void read_instructions( int init )
    }
   new_instruction( "_END_", buf, &buflen );
   fclose( instrfile );
-  free( tmpintsrfname );
+  free( tmpinstrfname );
   free( tstr );
   free( twrd );
 }
@@ -949,7 +956,7 @@ int mouse_clicked( GtkWidget *widget, GdkEventButton *event, gpointer data )
  int xpos, vpos, mindist=9999999;
  GtkAdjustment *adj;
  struct taxline_record *txline, *closest_line=0;
- struct instruct_rec *tmpline, *picline=0;
+ struct instruct_rec *tmpline;
 
  if (warnwin)
   { /* Remove any previously open text window. */
@@ -1183,10 +1190,11 @@ void set_pdf_option( GtkWidget *wdg, void *data )
 void options_pdf_diaglog( GtkWidget *wdg, void *data )
 {
  GtkWidget *panel;
- int wd=400, ht=110;
+ int wd=400, ht=140;
  panel = new_window( wd, ht, "Options Menu", &options_window );
  make_sized_label( panel, 5, 1, "Options Menu:", 12 );
  allforms_button = make_toggle_button( panel, 10, 30, "Force production of All PDF Form Pages", allforms_toggle, set_pdf_option, "allforms" );
+ make_button( panel, 10, 60, "Set PDF-Viewer", set_pdfviewer, 0 ); 
  make_button( panel, wd/2 - 30, ht - 35, " Close ", close_any_window, &options_window ); 
  show_wind( options_window );
 }
@@ -2067,6 +2075,9 @@ void set_tax_solver( char *fname )
  // printf("OTS_set_tax_solver RET: f='%s', dir='%s', wc='%s', fname='%s'\n", fname, toolpath, wildcards_fb, filename_fb );
  taxsolvecmd = strdup( fname );
  strcpy( taxsolvestrng, taxsolvecmd );
+
+ if (strstr( taxsolvestrng, "taxsolve_HSA_f8889" ) != 0)
+  supported_pdf_form = 1;
 }
 
 
@@ -2396,22 +2407,72 @@ void create_status_popup_window( int width, int height )
 }
 
 
+void get_cwd( char *pwd )
+{
+ int j=0;
+ FILE *fp;
+ fp = popen( "echo %cd%", "rb" );
+ if (fp != 0)
+  {
+   do pwd[j++] = getc( fp );
+   while ((!feof(fp)) && (pwd[j-1] != '\n') && (pwd[j-1] != '\r'));
+   if (j > 0) j--;
+   pwd[j] = '\0';
+   pclose(fp);
+  }
+ else
+  pwd[0] = '\0';
+}
+
+
 void call_pdfviewer( char *pdfname )
 {
  char cmd[4096], tmppdfname[4096];
  strcpy( tmppdfname, pdfname );
- quote_file_name( tmppdfname );
  #if (PLATFORM_KIND==Posix_Platform)
+  quote_file_name( tmppdfname );
   #ifdef __APPLE__
    strcpy( cmd, "open -a ");
    strcat( cmd, pdfviewer );
   #else
-   strcpy( cmd, pdfviewer );  
+   if (strcmp( pdfviewer, "default-pdf-viewer" ) == 0)
+    strcpy( cmd, "xdg-open" );
+   else
+    strcpy( cmd, pdfviewer );
   #endif
   strcat( cmd, " ");  strcat( cmd, tmppdfname );  strcat( cmd, " &" );
  #else
-  strcpy( cmd, "start ");  strcat( cmd, pdfviewer );  strcat( cmd, " ");  
-	strcat( cmd, tmppdfname );
+  strcpy( cmd, "start ");
+  if (strcmp( pdfviewer, "default-pdf-viewer" ) != 0)
+   { char pwd[4096];
+    strcat( cmd, pdfviewer );
+    strcat( cmd, " ");  
+    if ((strstr( pdfviewer, "chrome") != 0) || (strstr( pdfviewer, "firefox") != 0))
+     { /* Prepend 'file:///' + Path, to relative file name. */
+       strcat( cmd, "\"file://" );
+       get_cwd( pwd );
+       strcat( cmd, pwd );
+       strcat( cmd, "\\" );
+       strcat( cmd, tmppdfname );
+       strcat( cmd, "\"" );
+     }
+    else
+    if ((strstr( pdfviewer, "iexplore" ) != 0) || (strstr( pdfviewer, "edge") != 0))
+     { /* As above, but without quotes. */
+       strcat( cmd, "file://" );
+       get_cwd( pwd );
+       strcat( cmd, pwd );
+       strcat( cmd, "\\" );
+       strcat( cmd, tmppdfname );
+     }
+    else
+     strcat( cmd, tmppdfname );
+   }
+  else
+   { /* Default PDF-Viewer. */
+    strcat( cmd, " ");  
+    strcat( cmd, tmppdfname );
+   }
  #endif
  printf("Issuing: %s\n", cmd );
  system( cmd );
@@ -2459,16 +2520,13 @@ void get_pdf_viewer()
 {
  FILE *configfile;
  char fname[4096], line[4096];
- #if (PLATFORM_KIND!=Posix_Platform)
-  struct stat buf;
- #endif
 
  // printf("get_pdf_viewer:\n");
- pdfviewer = getenv( "PDF_VIEWER" );
+ pdfviewer = getenv( "PDF_VIEWER" );	/* First check if user has set PDF_Viewer environment variable. */
  if (pdfviewer != 0) return;
 
  if (verbose) printf(" Checking config file\n");
- set_invocation_path( toolpath );
+ set_invocation_path( toolpath );	/* Next check if user has set preferences in config-file. */
  strcpy( fname, toolpath );
  strcat( fname, "gui_settings.conf" );
  configfile = fopen( fname, "r" );
@@ -2496,7 +2554,7 @@ void get_pdf_viewer()
     }
    fclose( configfile );
   }
- if (pdfviewer == 0)
+ if (pdfviewer == 0)	/* If the above fails, then set viewer to a default. */
   {
    printf(" (Did not see preferred PDF_VIEWER in gui_settings.conf - Using default viewer.)\n");
    #if (PLATFORM_KIND==Posix_Platform)
@@ -2529,23 +2587,11 @@ void get_pdf_viewer()
         pdfviewer = check4tool( "ooffice" );
        if (pdfviewer == 0)
         pdfviewer = check4tool( "acroread" );
+       if (pdfviewer == 0)
+	pdfviewer = strdup( "xdg-open" );
    #else
-     /* --- The following are methods for opening PDF document(s) on Microsoft. --- */
-
-     if ((stat( "c:/Program Files (x86)/Google/Chrome/Application/chrome.exe", &buf ) != 0) ||
-	 (stat( "c:/Program Files/Google/Chrome/Application/chrome.exe", &buf ) != 0))
-      pdfviewer = strdup( "chrome" );
-     else
-      {
-       if (selected_form == form_US_1040)
-        GeneralWarning( "Chrome Browser is required for viewing these forms properly." );
-
-       // if (stat( "c:/Program Files (x86)/Mozilla Firefox/firefox.exe", &buf ) != 0)
-       // pdfviewer = strdup( "firefox" );
-       // else
-        pdfviewer = strdup( "" );		/* Calls default pdf viewer properly, like Acroread32.exe or whatever. */
-        // pdfviewer = strdup( "iexplore" );
-      }
+     /* --- The following is(are) method(s) for opening PDF document(s) on Microsoft. --- */
+     pdfviewer = strdup( "default-pdf-viewer" );	/* Calls default pdf viewer properly. */
    #endif
    if (pdfviewer == 0)
     {
@@ -2553,7 +2599,7 @@ void get_pdf_viewer()
      // pdfviewer = strdup( "google-chrome" );
     }
    else
-    printf("Found PDF viewer '%s'\n", pdfviewer );
+    printf("Using PDF viewer: '%s'\n", pdfviewer );
   }
 }
 
@@ -2662,6 +2708,7 @@ void set_pdfviewer( GtkWidget *wdg, void *data )
      append_selection_list( spdfvlist, &iter, "Preview" );
      append_selection_list( spdfvlist, &iter, "Safari" );
     #else
+     append_selection_list( spdfvlist, &iter, "default-pdf-viewer" );
      append_selection_list( spdfvlist, &iter, "google-chrome" );
     #endif
     append_selection_list( spdfvlist, &iter, "firefox" );
@@ -2675,8 +2722,10 @@ void set_pdfviewer( GtkWidget *wdg, void *data )
     append_selection_list( spdfvlist, &iter, "acroread" );
    #else
     /* --- For Microsoft --- */
+    append_selection_list( spdfvlist, &iter, "default-pdf-viewer" );
     append_selection_list( spdfvlist, &iter, "chrome" );
     append_selection_list( spdfvlist, &iter, "firefox" );
+    // append_selection_list( spdfvlist, &iter, "microsoft-edge:" );	/* Edge can't open local files. :-( */
     append_selection_list( spdfvlist, &iter, "iexplore" );
     append_selection_list( spdfvlist, &iter, "evince" );
     append_selection_list( spdfvlist, &iter, "xpdf" );
@@ -3014,7 +3063,7 @@ void do_pdf_conversion()
 	statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
 	add_view_pdf_button();
 	break;
-     case 12:
+     case form_1040e:
 	statusw.nfiles = 0;
 	setpdfoutputname( wrkingfname, ".pdf", outputname );
 	prepare_universal_pdf_cmd( "", "f1040e_meta.dat", wrkingfname, "f1040e_pdf.dat", outputname );
@@ -3025,7 +3074,7 @@ void do_pdf_conversion()
 	statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
 	add_view_pdf_button();
 	break;
-     case 13:
+     case form_4562:
 	statusw.nfiles = 0;
 	setpdfoutputname( wrkingfname, ".pdf", outputname );
 	prepare_universal_pdf_cmd( "", "f4562_meta.dat", wrkingfname, "f4562_pdf.dat", outputname );
@@ -3035,7 +3084,7 @@ void do_pdf_conversion()
 	statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
 	add_view_pdf_button();
 	break;
-     case 14:
+     case form_8582:
 	statusw.nfiles = 0;
 	setpdfoutputname( wrkingfname, ".pdf", outputname );
 	prepare_universal_pdf_cmd( "", "f8582_meta.dat", wrkingfname, "f8582_pdf.dat", outputname );
@@ -3046,8 +3095,25 @@ void do_pdf_conversion()
 	statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
 	add_view_pdf_button();
 	break;
-     default: printf("Form type not supported.\n");
-	make_button( status_panel, 30, statusw.ht - 50, " Ok ", dismiss_status_win, &status_win );
+     case form_other:
+     default: 
+	if (strstr( taxsolvestrng, "taxsolve_HSA_f8889" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "f8889_meta.dat", wrkingfname, "f8889_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	 }
+	else
+	 {
+	  printf("Form type not supported.\n");
+	  make_button( status_panel, 30, statusw.ht - 50, " Ok ", dismiss_status_win, &status_win );
+	 }
     }
 }
 
@@ -3415,7 +3481,7 @@ void set_ots_path()
  ots_path = strdup( invocation_path );
  j = strlen( ots_path ) - 1;
  while ((j >= 0) && (strstr( &(ots_path[j]), "bin" ) != &(ots_path[j]))) j--;
- if (j < 0) { ots_path = strdup( "../" );  ots_path[2] = slashchr; }
+ if (j < 0) { ots_path = strdup( "./" );  ots_path[1] = slashchr; }
  else
  if ((j > 1) && (ots_path[j-1] == 's')) ots_path[j-2] = '\0';
  else ots_path[j] = '\0';

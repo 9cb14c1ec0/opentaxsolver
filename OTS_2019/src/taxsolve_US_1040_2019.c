@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.03;
+float thisversion=17.04;
 
 #include <stdio.h>
 #include <time.h>
@@ -1660,7 +1660,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
   showschedA(1);
  SchedA[2] = L[8];
   showschedA(2);
- SchedA[3] = 0.1 * SchedA[2];
+ SchedA[3] = 0.075 * SchedA[2];
   showschedA(3);
  SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
   showschedA(4);

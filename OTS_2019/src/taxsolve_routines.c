@@ -603,7 +603,9 @@ void GetOptionalLine( char *linename, char *label, double *value )
 
 
 double smallerof( double a, double b ) { if (a<b) return a; else return b; }
+double SmallerOf( double a, double b ) { if (a<b) return a; else return b; }
 double largerof( double a, double b )  { if (a>b) return a; else return b; }
+double LargerOf( double a, double b )  { if (a>b) return a; else return b; }
 double NotLessThanZero( double a )    { if (a<0.0) return 0.0; else return a; }
 
 double absolutev( double val ) { if (val >= 0.0)  return val;  else  return -val; }

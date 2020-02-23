@@ -28,6 +28,7 @@ all: ../bin/taxsolve_US_1040_2019 \
      ../bin/taxsolve_NY_IT201_2019 \
      ../bin/taxsolve_MA_1_2019 \
      ../bin/taxsolve_CA_540_2019 \
+     ../bin/taxsolve_HSA_f8889 \
      ../bin/universal_pdf_file_modifier \
      ../bin/convert_results2xfdf \
      ../Run_taxsolve_GUI 
@@ -62,6 +63,9 @@ all: ../bin/taxsolve_US_1040_2019 \
 
 ../bin/taxsolve_MA_1_2019:            taxsolve_MA_1_2019.c             taxsolve_routines.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_MA_1_2019            taxsolve_MA_1_2019.c             $(SRCS) $(LIBS)
+
+../bin/taxsolve_HSA_f8889:            taxsolve_HSA_f8889.c             taxsolve_routines.c
+	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_HSA_f8889            taxsolve_HSA_f8889.c		     $(SRCS) $(LIBS)
 
 ../bin/universal_pdf_file_modifier: 	      universal_pdf_file_modifier.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/universal_pdf_file_modifier  universal_pdf_file_modifier.c	$(SRCS) $(LIBS)
