@@ -2,13 +2,34 @@
  Universal_PDF_File_Modifier.c - Pulls together a multi-page PDF-file based on 
   background image data files, with arbitrary text overlays.
 
- Provided to OpenTaxSolver project under GPL license by the Behemoth-Software Co..
+ Provided under LGPL license (v2) by the Behemoth-Software Co..
+ Copyright (C)  2018.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
+
+ You should have received a copy of the GNU Library General Public
+ License along with this library; if not, write to the
+ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ Boston, MA  02110-1301, USA.
 
  Compile:
-	cc -g universal_pdf_file_modifier.c -o universal_pdf_file_modifier
+	cc -O universal_pdf_file_modifier.c -o universal_pdf_file_modifier
 
  Run:
 	universal_pdf_file_modifier  metadata.txt  example_out.txt  formpages.data  
+
+ For more information, see:
+	https://behemoth-software.com/Products/uPDF-Modifier-Doc.html
+  and
+	https://behemoth-software.com/Products/uPdfMaker.html
 
  ***********************************************************************************/
 #include <stdio.h>
@@ -19,7 +40,7 @@
 #define MaxPages 100
 #define MAXLINE 2048
 
-float version=1.07;
+float version=1.09;
 int verbose=0;
 int testmode=0;
 int no_zero_entries=0;
@@ -918,6 +939,8 @@ void write_test_pattern( char *streambuf, int page )
    append_buf( streambuf, item->fsz, item->x, item->y, item->label );
    item = item->nxt; 
   }
+ if (streambuf[0] == '\0')	/* Avoid empty output buffer. */
+  append_buf( streambuf, 8, 1, 1, " " );
 } /*testmode*/
 
 
@@ -1161,6 +1184,8 @@ void show_help()
  printf(" -v            - Set to verbose mode.\n");
  printf(" -o  outfile   - Name the output file.\n");
  printf(" -help         - List these options.\n\n");
+ printf("Usage:\n");
+ printf("   universal_pdf_file_modifier  metadata  results.txt  pdf_objects\n\n");
 }
 
 
@@ -1192,7 +1217,7 @@ int main( int argc, char *argv[] )
 	outfname = strdup( argv[k] );
       }
      else
-     if (strcmp( argv[k], "-h" ) == 0)
+     if (strncmp( argv[k], "-help", 2 ) == 0)
       {
 	show_help();
 	exit(0);
@@ -1223,7 +1248,10 @@ int main( int argc, char *argv[] )
       {
        case 0:  read_metadata( argv[k] );		/* metadata.txt */
  		break;
-       case 1:  read_replacement_text( argv[k] );	/* example_out.txt */
+       case 1:  if (strcmp( argv[k], "no_file_test" ) != 0)
+		 read_replacement_text( argv[k] );	/* example_out.txt */
+		else
+		  testmode = 1;
  		break;
        case 2:  page_collector( argv[k], outfname );	/* formpages.data */
  		break;

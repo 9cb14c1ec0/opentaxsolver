@@ -57,7 +57,7 @@ L5a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
 L10		;	{ Qualified business income deduction. }
 L13a		; 	{ Child tax credit/credit for other dependents. }
 
-L17	1965.50	        { Federal income tax witheld, from W-2's, box-2, or 1099's, etc..  }
+L17	1965.50	        { Federal income tax withheld, from W-2's, box-2, or 1099's, etc..  }
 	1888.09         { Spouse's}
                 ;
 

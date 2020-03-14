@@ -36,7 +36,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=17.00;
+float thisversion=17.01;
 
 #define SINGLE                  1
 #define MARRIED_FILLING_JOINTLY 2
@@ -352,7 +352,7 @@ int main( int argc, char *argv[] )
  showline(9);	/* Deductions */
  showline(10);
  showline(11);
- if (L[11] < stdded)
+ if (L[11] <= stdded)
   fprintf(outfile," Check_UsedStdDed: X\n");
  else
   fprintf(outfile," Check_ItemizedDed: X\n");

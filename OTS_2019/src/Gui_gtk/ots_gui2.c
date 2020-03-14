@@ -45,8 +45,8 @@
 /********************************************************/
 
 float version=2.34;
-char package_date[]="Feb. 21, 2020";
-char ots_release_package[]="17.05";
+char package_date[]="Mar. 14, 2020";
+char ots_release_package[]="17.06";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -3214,6 +3214,10 @@ void slcttxprog( GtkWidget *wdg, void *data )
    fb_clear_banned_files();
    fb_ban_files( ".txt" );
    fb_ban_files( ".pdf" );
+   fb_ban_files( ".dll" );
+   fb_ban_files( "convert_results2xfdf" );
+   fb_ban_files( "ots_gui" );
+   fb_ban_files( "universal_pdf_file_modifier" );
    strcpy( wildcards_fb, "" );
    strcpy( filename_fb, "" );
    // printf("OTS_taxsolve: dir='%s', wc='%s', fname='%s'\n", toolpath, wildcards_fb, filename_fb );

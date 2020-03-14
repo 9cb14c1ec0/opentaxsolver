@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 17, 2020 v17.04 - For 2019 tax-year.
+March 14, 2020 v17.07 - For 2019 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -32,6 +32,12 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v17.07 (3/14/2020) - Minor improvement to Fed-1040 labeling of lines 11b and 13b.
+	- North Carolina fix for Std-Deductions check-box on printed form.
+    * v17.06 (2/27/2020) - Fixes to Fed-1040 Schedule D Tax Worksheet calculations.
+    * v17.05 (2/23/2020) - Added HSA Form 8889 under the "Other" forms category.
+	- Updated 1040 Sched-A line-3 to latest IRS (mid-season) change.
+	- Improved selection and opening of PDF-Viewer(s) for MS-Windows.
     * v17.04 (2/17/2020) - Added "Occupations" fields to Fed-1040 template.
 	- Added input for Sched-D 19, unrecaptured gains.	
 	- Fixed NJ Medical Expenses worksheet F line 2 calculation.

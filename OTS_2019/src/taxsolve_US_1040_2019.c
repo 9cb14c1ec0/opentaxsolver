@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.04;
+float thisversion=17.06;
 
 #include <stdio.h>
 #include <time.h>
@@ -1070,7 +1070,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2019. */
 
 
 /*------------------------------------------------------*/
-/* 'Schedule D Tax Worksheet', instructions page D-15.	*/
+/* 'Schedule D Tax Worksheet', instructions page D-16.	*/
 /*------------------------------------------------------*/
 void sched_D_tax_worksheet( int status )			/* Updated for 2019. */
 {
@@ -1078,7 +1078,7 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2019. */
  int k;
 
  for (k = 0; k < 100; k++) ws[k] = 0.0;
- ws[1] = L[1];
+ ws[1] = L[11];
  ws[2] = L3a;
  ws[3] = 0.0;	/* Form 4952, line 4g. Usually 0.0. */
  ws[4] = 0.0;	/* Form 4952, line 4e. Usually 0.0. */
@@ -1088,13 +1088,10 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2019. */
  ws[8] = smallerof( ws[3], ws[4] );
  ws[9] = NotLessThanZero( ws[7] - ws[8] );
  ws[10] = ws[6] + ws[9];
- fprintf(outfile,"  Sched-D tax Worksheet line 10 = %6.2f\n", ws[10]);
  ws[11] = SchedD[18] + SchedD[19];
  ws[12] = smallerof( ws[9], ws[11] );
  ws[13] = ws[10] - ws[12];
  ws[14] = NotLessThanZero( ws[1] - ws[13] );
- fprintf(outfile,"  Sched-D tax Worksheet line 13 = %6.2f\n", ws[13]);
- fprintf(outfile,"  Sched-D tax Worksheet line 14 = %6.2f\n", ws[14]);
  switch (status) 
   { case SINGLE: case MARRIED_FILLING_SEPARAT: ws[15] = 39375.0; break;
     case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[15] = 78750.0; break;
@@ -1117,45 +1114,50 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2019. */
    ws[24] = ws[22];
    ws[25] = NotLessThanZero( ws[23] - ws[24] );
    switch (status) 
-    { case SINGLE: 			ws[24] = 434550.0;  break;
-      case MARRIED_FILLING_SEPARAT: 	ws[24] = 244425.0;  break;
+    { case SINGLE: 			ws[26] = 434550.0;  break;
+      case MARRIED_FILLING_SEPARAT: 	ws[26] = 244425.0;  break;
       case MARRIED_FILLING_JOINTLY: 
-      case WIDOW:  			ws[24] = 488850.0;  break;
-      case HEAD_OF_HOUSEHOLD:		ws[24] = 461700.0;  break;
+      case WIDOW:  			ws[26] = 488850.0;  break;
+      case HEAD_OF_HOUSEHOLD:		ws[26] = 461700.0;  break;
     }
-   ws[25] = smallerof( ws[1], ws[24] );
-   ws[26] = ws[19] + ws[20];
-   ws[27] = NotLessThanZero( ws[25] - ws[26] );
-   ws[28] = smallerof( ws[23], ws[27] );
-   ws[29] = 0.15 * ws[28];
-   ws[30] = ws[22] + ws[28];
-   if (ws[1] != ws[30])
-    { /*lines31-41*/
-      ws[31] = ws[21] - ws[30];
-      ws[32] = 0.20 * ws[31];
+   ws[27] = smallerof( ws[1], ws[26] );
+   ws[28] = ws[21] + ws[22];
+   ws[29] = NotLessThanZero( ws[27] - ws[28] );
+   ws[30] = smallerof( ws[25], ws[29] );
+   ws[31] = 0.15 * ws[30];
+   ws[32] = ws[24] + ws[30];
+   if (ws[1] != ws[32])
+    { /*lines33-43*/
+      ws[33] = ws[23] - ws[32];
+      ws[34] = 0.20 * ws[33];
       if (SchedD[19] != 0.0)
-       { /*lines33-38*/
-	 ws[33] = smallerof( ws[9], SchedD[19] );
-	 ws[34] = ws[10] + ws[19];
-	 ws[35] = ws[1];
-	 ws[36] = NotLessThanZero( ws[34] - ws[35] );
-	 ws[37] = NotLessThanZero( ws[33] - ws[36] );
-	 ws[38] = 0.25 * ws[37];
-       } /*lines33-38*/
+       { /*lines35-40*/
+	 ws[35] = smallerof( ws[9], SchedD[19] );
+	 ws[36] = ws[10] + ws[21];
+	 ws[37] = ws[1];
+	 ws[38] = NotLessThanZero( ws[36] - ws[37] );
+	 ws[39] = NotLessThanZero( ws[35] - ws[38] );
+	 ws[40] = 0.25 * ws[39];
+       } /*lines35-40*/
       if (SchedD[18] != 0.0)
-       { /*lines39-41*/
-	 ws[39] = ws[19] + ws[20] + ws[28] + ws[31] + ws[37];
-	 ws[40] = ws[1] - ws[39];
-	 ws[41] = 0.28 * ws[40];
-       } /*lines39-41*/
-    } /*lines31-41*/
+       { /*lines41-43*/
+	 ws[41] = ws[21] + ws[22] + ws[30] + ws[33] + ws[39];
+	 ws[42] = ws[1] - ws[41];
+	 ws[43] = 0.28 * ws[42];
+       } /*lines41-43*/
+    } /*lines33-43*/
   } /*lines23-43*/
  ws[44] = TaxRateFunction( ws[21], status );
  ws[45] = ws[31] + ws[34] + ws[40] + ws[43] + ws[44];
  ws[46] = TaxRateFunction( ws[1], status );
  ws[47] = smallerof( ws[45], ws[46] );
  L12a = ws[47];
- for (k = 0; k < 100; k++) ws_sched_D[k] = ws[k];	/* Save worksheet values for AMT, if needed. */
+ for (k = 0; k < 100; k++)
+  {
+   ws_sched_D[k] = ws[k];	/* Save worksheet values for AMT, if needed. */
+   if (ws[k] != 0.0)
+    fprintf(outfile,"  Sched-D tax Worksheet line %d = %6.2f\n", k, ws[k]);
+  }
 }
 
 
@@ -1799,7 +1801,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  showline_wlabel( "L11a", L11a );
 
  L[11] = NotLessThanZero( L[8] - L11a );
- showline_wmsg( 11, "Taxable Income" );
+ showline_wlabelmsg( "L11b", L[11], "Taxable Income" );
 
  L12a = TaxRateFunction( L[11], status );
 
@@ -1819,7 +1821,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
    else
    if (Do_SDTW)
    {
-    fprintf(outfile,"Doing 'Schedule D Tax Worksheet', page D9.\n");
+    fprintf(outfile,"Doing 'Schedule D Tax Worksheet', page D16.\n");
     sched_D_tax_worksheet( status );
    }
   } /*no_exception*/
@@ -1998,7 +2000,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
 
  /* -- End of Schedule 3 -- */
 
- showline(13);
+ showline_wlabel( "L13b", L[13] );
 
  L[14] = NotLessThanZero( L[12] - L[13] );
  showline(14);
