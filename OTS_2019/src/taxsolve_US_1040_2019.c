@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.06;
+float thisversion=17.07;
 
 #include <stdio.h>
 #include <time.h>
@@ -2000,6 +2000,7 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
 
  /* -- End of Schedule 3 -- */
 
+ showline_wlabel( "L13a", L13a );
  showline_wlabel( "L13b", L[13] );
 
  L[14] = NotLessThanZero( L[12] - L[13] );
