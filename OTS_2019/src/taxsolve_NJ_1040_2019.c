@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.01;
+float thisversion=17.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
  int status=0;
  time_t now;
  double L16b=0.0, L20b=0.0, L28a=0.0, L28b=0.0;
- double COJ_b[10], COJ_9a=0.0, proptxcredit;
+ double COJ_b[10], COJ_9a=0.0, proptxcredit, filing_threshold;
  double H[10], Hb[10];	/* Worksheet H, added by BWB. */
  double I[10], Ib[10];	/* Worksheet I. */
  char *Your1stName="", *YourLastName="", *YourInitial="", *Spouse1stName="", *SpouseLastName="", *SpouseInitial="";
@@ -342,13 +342,12 @@ int main( int argc, char *argv[] )
  showline_wmsg(29,"NJ Gross Income");
 
  if ((status == SINGLE) || (status == MARRIED_FILLING_SEPARAT))		/* Min2File */
-  { if (L[29] < 10000.0)
-     fprintf(outfile," --- You do not need to file, (except to get refund).  Income < $10,000. ---\n");
-  }
+  filing_threshold = 10000.0;
  else
-  { if (L[29] < 20000.0) 
-     fprintf(outfile," --- You do not need to file, (except to get refund).  Income < $20,000. ---\n");
-  }
+  filing_threshold = 20000.0;
+
+ if (L[29] < filing_threshold)
+   fprintf(outfile," --- You do not need to file, (except to get refund).  Income < $%6.2f. ---\n", filing_threshold );
 
  L[30] = L[13];
  showline(30);
@@ -386,8 +385,9 @@ int main( int argc, char *argv[] )
 
  /* Taxable income. */
  L[37] = L[29] - L[36];
- if (L[37] > 0.0)
-  showline_wmsg(37, "(Taxable Income)");
+ if (L[37] < 0.0)
+  L[37] = 0.0;
+ showline_wmsg(37, "(Taxable Income)");
 
  GetLineF( "L38a", &L[38] );	/* Property Tax Paid. */
 
@@ -505,6 +505,17 @@ int main( int argc, char *argv[] )
  if (L[38] > 0.0)
   fprintf(outfile, "L38a = %6.2f\n", L[38]);
 
+ if ((L[29] < filing_threshold) || (L[7] > 0) || (L[8] > 0))
+  { /* Not eligible for property tax deduction as per right column on p. 23 of instructions. */
+    if (L[38] != 0.0)
+     {
+      printf("You are not eligible for property tax deduction as per right column on p. 23 of instructions.\n");
+      fprintf(outfile,"You are not eligible for property tax deduction as per right column on p. 23 of instructions.\n");
+     }
+    L[39] = 0.0;
+    L[55] = 0.0;
+  }
+
  showline(39);
 
  fprintf(outfile,"\n");  /* NJ Taxable Income.*/
@@ -513,6 +524,8 @@ int main( int argc, char *argv[] )
   showline_wmsg( 40, "NJ Taxable Income" );
 
  // L[41] = TaxRateFunction( L[40], status );  /* Handled above in Schedules+Worksheets, A, G, H, I. */
+ if ((L[29] < filing_threshold) || (L[41] < 0.0))
+  L[41] = 0.0;
  showline_wmsg(41, "TAX");
  Report_bracket_info( L[40], status );
 

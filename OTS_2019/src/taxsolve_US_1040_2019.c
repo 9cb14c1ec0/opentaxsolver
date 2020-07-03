@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=17.07;
+float thisversion=17.08;
 
 #include <stdio.h>
 #include <time.h>
@@ -1668,7 +1668,28 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
   showschedA(4);
  GetLine( "A5a", &localtax[1] );	/* State and local income taxes. Or sales taxes. */
   showline_wlabel( "A5a", localtax[1] );
- GetLine( "A5b", &localtax[2] );	/* State and local real estate taxes. */
+
+ get_parameter( infile, 'l', labelx, "CheckBoxA5a or A5b" );
+ if (strcmp( labelx, "CheckBoxA5a" ) == 0)
+  {
+   get_parameters( infile, 'b', &j, "CheckBoxA5a" );
+   if (j)
+    fprintf(outfile,"CheckBoxA5a X\n");
+   GetLine( "A5b", &localtax[2] );
+  }
+ else
+ if (strcmp( labelx, "A5b" ) == 0)
+  {
+   get_parameters( infile, 'f', &localtax[2], "A5b" );
+  }
+ else
+  {
+   printf("Error: Found '%s' when expecteding CheckBoxA5a or A5b,\n", labelx );
+   fprintf(outfile,"Error: Found '%s' when expecteding CheckBoxA5a or A5b,\n", labelx );
+   exit(1);
+  }
+
+ // GetLine( "A5b", &localtax[2] );	/* State and local real estate taxes. */	/* Optionally read-in just above. */
   showline_wlabel( "A5b", localtax[2] );
  GetLine( "A5c", &localtax[3] );	/* State and local personal property (eg. automobile) taxes. */
   showline_wlabel( "A5c", localtax[3] );
@@ -1685,15 +1706,39 @@ int main( int argc, char *argv[] )						/* Updated for 2019. */
  SchedA[7] = localtax[5] + SchedA[6];
   showschedA(7);
 
- GetLine( "A8a", &homemort[1] );	/* Home mortgage interest and points reported to you on Form 1098.*/
-  showline_wlabel( "A8a", homemort[1] );
- GetLine( "A8b", &homemort[2] );	/* Home mortgage interest not reported to you on Form 1098.*/
-  showline_wlabel( "A8b", homemort[2] );
- GetLine( "A8c", &homemort[3] );	/* Points not reported to you on Form 1098.*/
-  showline_wlabel( "A8b", homemort[3] );
- homemort[5] = homemort[1] + homemort[2] + homemort[3];
+ GetLine( "A8a", &homemort[0] );	/* Home mortgage interest and points reported to you on Form 1098.*/
+  showline_wlabel( "A8a", homemort[0] );
+ GetLine( "A8b", &homemort[1] );	/* Home mortgage interest not reported to you on Form 1098.*/
+  showline_wlabel( "A8b", homemort[1] );
+ GetLine( "A8c", &homemort[2] );	/* Points not reported to you on Form 1098.*/
+  showline_wlabel( "A8c", homemort[2] );
+
+ // GetLine( "A8d", &homemort[3] );	/* Mortgage insurance premiums. */
+ GetOptionalLine( "A8d or A9", labelx, &tmpval );
+ if (strcmp( labelx, "A9" ) == 0)
+  {
+   homemort[3] = 0.0;
+   SchedA[9] = tmpval;
+  }
+ else
+ if (strcmp( labelx, "A8d" ) == 0)
+  {
+   homemort[3] = tmpval;
+   GetLine( "A9", &SchedA[9] );
+  }
+ else
+  {
+   printf("Error: Found '%s' when expecteding A8d,\n", labelx );
+   fprintf(outfile,"Error: Found '%s' when expecteding A8d,\n", labelx );
+   exit(1);
+  }
+
+  showline_wlabel( "A8d", homemort[3] );
+ homemort[5] = homemort[0] + homemort[1] + homemort[2] + homemort[3];
   showline_wlabel( "A8e", homemort[5] );
- GetLine( "A9", &SchedA[9] );	/* Investment interest. Attach Form 4952*/
+
+ // GetLine( "A9", &SchedA[9] );	/* Investment interest. Attach Form 4952*/	/* Optionally read-in just above. */
+
   showschedA(9);
  SchedA[10] = homemort[5] + SchedA[9];
   showschedA(10);

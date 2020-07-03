@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <time.h>
 
-float thisversion=17.00;
+float thisversion=17.01;
 
 #include "taxsolve_routines.c"
 
@@ -72,7 +72,7 @@ int main( int argc, char *argv[] )
 {
  int i, j, k, status=0, i65, iblind, ndep, dep_deduct;
  int flag, notaxstatus=0;
- char word[4000], *infname=0, outfname[4000], *answ;
+ char word[4000], *infname=0, outfname[4000], *answ, labelx[4000];
  time_t now;
  double Exemptions[10];
  double MassBankInterest, Iexempt, AGI;
@@ -164,8 +164,25 @@ int main( int argc, char *argv[] )
 	break;
   }   
 
- GetLineF( "L1a", &(L[0]) );	/* Only for PDF form. */
- GetLineF( "L1b", &(L[0]) );	/* Only for PDF form. */
+ // GetLineF( "L1a", &(L[0]) );	/* Only for PDF form. */
+ GetOptionalLine( "L1a or La", labelx, &(L[0]) );	/* Correcting line-label in prior template files.  Remove this next year. */
+ if ((strcmp( labelx, "L1a" ) != 0) && (strcmp( labelx, "La") != 0))
+  {
+   printf("Error: Expected 'La', but found '%s'.\n", labelx );
+   fprintf(outfile,"Error: Expected 'La', but found '%s'.\n", labelx );
+   exit(1);
+  }
+ fprintf(outfile, "La = %6.2f\n", L[0] );
+
+ // GetLineF( "L1b", &(L[0]) );	/* Only for PDF form. */
+ GetOptionalLine( "L1b or Lb", labelx, &(L[0]) );	/* Correcting line-label in prior template files. */
+ if ((strcmp( labelx, "L1b" ) != 0) && (strcmp( labelx, "Lb") != 0))
+  {
+   printf("Error: Expected 'Lb', but found '%s'.\n", labelx );
+   fprintf(outfile,"Error: Expected 'Lb', but found '%s'.\n", labelx );
+   exit(1);
+  }
+ fprintf(outfile, "Lb = %6.2f\n", L[0] );
  
  fprintf(outfile,"L2. Exemptions: \n");
  fprintf(outfile,"  2a.  = %6.2f   Personal exemptions\n", Exemptions[0]);

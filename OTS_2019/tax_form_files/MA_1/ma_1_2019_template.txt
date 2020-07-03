@@ -4,8 +4,8 @@ Title:  Massachusetts Form 1 Tax Form - 2019
 
 Status         Single	{Single, Married/Joint, Married/Sep, Head_of_House.}
 
-L1a             ;       { Total federal income from US 1040 line 22. }
-L1b             ;       { Total federal adjusted gross income from US 1040 line 37. }
+La             ;       { Total federal income from US 1040 line 7b. }
+Lb             ;       { Total federal adjusted gross income from US 1040 line 8b. }
 
 {---- Exemptions ----}
 

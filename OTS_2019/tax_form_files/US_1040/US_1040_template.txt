@@ -111,12 +111,14 @@ S1_21		  ;	  { Tuition and fees. }
  { -- Schedule A: Itemized deductions -- }
  A1             ;       { Unreimbursed medical expenses. }
  A5a            ;       { State and local income taxes. (W-2's boxes 17 + 19.)  Or sales taxes. }
+ CheckBoxA5a    N ;     { Check (Y) if using sales taxes instead of income taxes. (answer: Yes, No) }
  A5b            ;       { Real estate taxes.}
  A5c            ;       { Personal property (eg. automobile) taxes. }
  A6             ;       { Other taxes.}
  A8a            ;       { Home mortgage interest and points reported to you on Form 1098.}
  A8b            ;       { Home mortgage interest not reported to you on Form 1098.}
  A8c            ;       { Points not reported to you on Form 1098.}
+ A8d            ;       { Mortgage insurance premiums. }
  A9             ;       { Investment interest. Attach Form 4952}
  A11            ;       { Charity contributions by cash or check.}
  A12            ;       { Contributions other than cash or check.}

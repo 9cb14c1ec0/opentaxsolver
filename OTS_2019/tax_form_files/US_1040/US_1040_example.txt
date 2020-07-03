@@ -154,6 +154,7 @@ S1_21             ;       { Tuition and fees. }
         1479.21          { State-tax withheld/owed }
         1928.35          { Spouse's local tax (paid) }
 		;
+ CheckBoxA5a	N ;	{ Check (Y) if using sales taxes instead of income taxes. (answer: Yes, No) }
  A5b                    { Real estate taxes.}
 	1771.05 ;        {Prop-tax}
  A5c            ;       { Personal property (eg. automobile) taxes. }
@@ -161,6 +162,7 @@ S1_21             ;       { Tuition and fees. }
  A8a            ;       { Home mortgage interest and points reported to you on Form 1098.}
  A8b            ;       { Home mortgage interest not reported to you on Form 1098.}
  A8c            ;       { Points not reported to you on Form 1098.}
+ A8d            ;       { Mortgage insurance premiums. }
  A9             ;       { Investment interest. Attach Form 4952}
  A11            ;       { Charity contributions by cash or check.}
  A12            ;       { Contributions other than cash or check.}
