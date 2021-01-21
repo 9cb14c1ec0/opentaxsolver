@@ -1,0 +1,82 @@
+Title:  NJ-1040 State 2020 Tax Form
+
+ { --- Your Filing Status & Exemptions --- }
+
+Status      Single      { Single, Married/joint, Married/separate, Head_of_household }
+YouOver65       no      { You Over 65? (answer: yes, no) }
+SpouseOver65    no      { Spouse Over 65? (answer: yes, no) (Ignored if not joint return.) }
+YouBlindDisa    no      { You Blind or Disabled? (answer: yes, no) }
+SpouseBlindDisa no      { Spouse Blind or Disabled (answer: yes, no) (Ignored if not joint return.) }
+YouVeteran	no      { You Veteran? (answer: yes, no) }
+SpouseVeteran	no      { Spouse Veteran? (answer: yes, no) (Ignored if not joint return.) }
+
+L10             0       { Number of qualified dependent children. }
+L11             0       { Number of other dependents. }
+L12             0       { Dependents attending college. }
+
+L15                     { Wages (W-2 Box-16) }
+                ;
+L16a                    { Taxable Interest }
+		;
+L16b            ;       { Tax-exempt Interest }
+L17                     { Dividends }
+                ;
+L18             ;       { Business profits, (Fed Sched C). }
+L19                    { Capital Gains -- (No dates needed) }
+			 { (Enter buy cost as negative (-), sell price as positive (+).)}
+		;
+L20a            ;       { Pensions, Annuities, and IRA Withdrawals (pg 14). }
+L20b            ;       { Excludable Pensions, Annuities, and IRA Withdrawals (pg 17). }
+L21             ;       { Partnership income. (See pg 18.) }
+L22             ;       { S Corporation income. (See pg 18.) }
+L23             ;       { Rent, royalty, patents income. (Sched NJ-BUS-1, Part IV, Line 4.) }
+L24             ;       { Gambling winnings. }
+L25             ;       { Alimony and maintenance payments Received. }
+L26             ;       { Other (See pg 20). }
+L28a            ;       { Pension Exclusion (See pg 21). }
+L28b            ;       { Other Retirement Income Exclusion (See worksheet pg 23). }
+F1		;	{ Worksheet F - Medical Expenses. For L30 calculation. }
+F4		;	{  Qualified Archer MSA contribs from Fed form 8853.}
+F5		;	{  Self-employed health insurance deduction. }
+L32             ;       { Alimony and maintenance payments Payed. }
+L33             ;       { Qualified Conservation Contribution. }
+L34             ;       { Health Enterprise Zone Deduction. }
+L35             ;       { Alternative Business Calc Adj (Sched NJ-BUS-2, Line 11) }
+
+L38a	        ;       { Property Tax Paid }
+COJ1            ;       { Income basis for any Out of State taxes paid. Sch COJ (Previously Sch A)}
+COJ9a           ;       { Out of state taxes paid (ex. City income tax), if any. Sch COJ (Previously Sch A)}
+
+L44             ;       { Child and Dependent Care Credit }
+L46	        ;	{ Sheltered Workshop Tax Credit. }
+L48		; 	{ Gold Start Family Counseling Credit }
+L50	        ;	{ Use Tax Due on Out-of-State Purchases (pg 37). }
+L51	        ;	{ Interest on underpayment of estimated tax. }
+L52             ;       { Shared Responsibility (Med. Insurance) Payment. }
+L54                     { Withheld tax, from W-2's, Box 17 }
+                ;
+L56             ;       { NJ Estimated Tax Payments/Credit from last year's return. }
+L57             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
+L58             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
+L59             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
+L60             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
+L61		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+ Your1stName:	
+ YourInitial:	
+ YourLastName:	
+ YourSocSec#:	
+ Spouse1stName:                 { Leave blank if Single, etc. }
+ SpouseInitial:	
+ SpouseLastName:   
+ SpouseSocSec#:	
+ Number&Street:	
+ Town:		
+ State:		NJ
+ Zipcode:   	
+
+{
+ --------------------------------------------
+}

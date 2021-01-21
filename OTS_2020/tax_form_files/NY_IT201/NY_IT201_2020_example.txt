@@ -1,0 +1,77 @@
+Title:  NY State 2020 Tax Form IT-201 - EXAMPLE
+
+{ --- EXAMPLE --- }
+
+	{ Data for NY Lines 1-19 is collected by scanning Federal return to avoid re-entering it. }
+FileName   tax_form_files/US_1040/US_1040_example_out.txt { File-name of Federal Return output file. }
+
+{ --- Your Info --- (fieldsz=12) }
+
+YourDOB   11/11/1988	{ Your Date of Birth (mm/dd/yyyy) }
+SpouseDOB   1/2/1991	{ Spouse Date of Birth (mm/dd/yyyy) or leave blank. }
+
+County		Putnam	  { County }
+SchooldDist	Wilshire  { School District (for PDF form). }
+SchoolCode	R456	  { School Code (for PDF form). }
+
+D1_ForeignAcct	   n	{ Did you have a foreign account? (answer: y, n) }
+D2_1-YonkRelCred  n/a  { Yonker resident recv. Prop. relief credit? (answer: y, n, n/a)) }
+D2_2-YRCamount	   	{ Enter amount of Yonkers Relief Credit (or leave blank). }
+D3-NonQualComp	   n	{ Required to report NonQualified Deferred Comp? (answer: y, n) }
+E1_LivedNYC	   n	{ Did you or spouse maintain living quarters in NYC? (answer: y, n) }
+E2_DaysNYC              { Days NYC? (or leave blank) }
+F1_MonthsYouNYC   	{ Months You lived in NYC }
+F2_MonthsSpNYC	   	{ Months Spouse lived in NYC }
+G_SpecCondCode	    	{ 2-character special condition code if applicable. }
+
+Dependent  	no	{ Are you a Dependent on another's return? (answer: yes, no) }
+
+	{ ----- NY Additions ----- }
+L20	    20	;	{ Interest income from non-NY state or local bonds }
+L21	    21	;	{ Public employee retirement contributions (pg 17) }
+L22	    22	;	{ New York's 529 college savings program distributions (pg 17) }
+L23	    23	;	{ Other (Form IT-225, line 9) }
+
+	{ ----- NY Subtractions ----- }
+L26	    26	;	{ Pensions of NYState, local & fed gov'ts (see page 18) }
+L28	    28	;	{ US Gov't Bond Interest }
+L29	    29	;	{ Pension and annuity income exclusion }
+L30	    30	;	{ New York's 529 college savings program deduction/earnings }
+L31	    31	;	{ Other (Form IT-225, line 18) }
+
+LTcare%	    10   ;	{ Percent of long-term care premiums in Fed-Sched-A line 1, if any. }	
+AddAdj	    20   ;	{ Any additional itemization adjustments (worksheet line k pg 26) }
+CollegeDed  30   ;	{ College tuition itemized deduction (Form IT-272 ) }
+
+L36	    36	;	{ Number of Dependent Exemptions (Pg 21) }
+Exemptions  1		{ Number of NY dependent exemptions, Pg 21. }
+
+L41	    41	;	{ Resident credit, Form IT-112-R or IT-112-C, pg 23 }
+L42	    42	;	{ Other New York State nonrefundable credits }
+L45	    45	;	{ Net Other New York State taxes, Form IT-201-ATT, line 30 }
+NYC_Resident  no ;      { City of New York Resident (answer: yes, no) }
+
+ { ----- City of New York taxes and credits -- ONLY ----- }
+  L50           ;       { Part-year New York City resident tax }
+  L51           ;       { Other NYC taxes (from IT-201-ATT part III, line 4) }
+  L53           ;       { NYC nonrefundable credits (from IT-201-ATT part IV, line 6-7) }
+ { -- }
+
+L59	    59	;	{ Sales or use tax, pg 27. }
+L60	    60	;	{ Voluntary Gift contributions, pg 28. }
+L63         63  ;       { Empire State child credit (attach new Form IT-213) }
+L64         64  ;       { NY Child care/dependent credit. Form IT-216. }
+L65	    65	;	{ NY Earned income credit. Form IT-213. }
+L66	    66	;	{ NY State noncustodial parent EIC (attach new Form IT-209) }
+L67	    67	;	{ Real property credit. Form IT-214. }
+L68	    68	;	{ College tuition credit. Form IT-272. }
+
+L71	    71	;	{ Other refundable credits, IT-201-ATT line 18)}
+L72	  1503	;	{ Total NY State tax withheld. }
+
+ { ----- NYC Residents ONLY  --- City and Yonkers tax withheld ----- }
+  L73      	; 	{ Total City of NY tax withheld. }
+  L74      	; 	{ Yonkers tax withheld. }
+ { -- }
+
+L75	    75	;	{ Total estimated tax payments (from IT-370) }

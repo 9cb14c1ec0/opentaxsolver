@@ -1,0 +1,44 @@
+Title: 8889 HSA Form - 2020
+
+{ --- Your Identity --- }
+
+YourName:
+YourSocSec#:
+
+{ --- Part I --- }
+
+{ Your Coverage }
+L1:                 { (answer: Self-Only, Family) }
+
+L2               { HSA contributions you made for 2020 }
+                ;
+
+L3		; { If you under 55 and eligible every month, enter 3,500. Or see instructions. }
+
+L4		; { Amount you and your employer contributed to your Archer MSAs for 2020 from Form 8853, lines 1 and 2.}
+
+L6		; { Only enter amount if your spouse has separate HSA and coverage under an HDHP. }
+
+L7		; { Additional contribution amount. }
+
+L9		; { Employer contributions made to your HSAs for 2020. }
+
+L10		; { Qualified HSA funding distributions. }
+
+
+{ --- Part II --- }
+
+L14a		; { Total distributions you received in 2020 from all HSAs} 
+
+L14b		; { Distributions included in L14a rolled over to another HSA. }
+
+L15		; { Qualified medical expenses paid using HSA distributions }
+
+L17a:		 { Do any distributions in L16 meet Exceptions to Addtl 20% tax ? { (answer: Y, N) }
+
+
+{ --- Part III --- }
+
+L18		; { Last-month rule }
+
+L19		; { Qualified HSA funding distribution }

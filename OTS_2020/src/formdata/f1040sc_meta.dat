@@ -1,0 +1,119 @@
+Page 1
+
+ TxtColor: 0 0 0.6
+
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134	110-dpi
+
+ YourName:	103 158
+ YourSocSec#: 	695 158 
+ PrincipalBus:	103 194
+ BusinessName:  103 232
+ ActivityCode:	755 194 0 14
+ BusinessEIN:	692 232	0 14
+ FontSz 8
+ Number&Street:	380 252
+ TownStateZip:	380 270
+ FontSz 10
+
+ CkFcash:	257 289
+ CkFaccrual:	355 289
+ CkFother:	465 289
+ CkParticipate:	   785 306
+ CkNotParticipate: 840 306
+ CkAcquired:	  785 323
+ CkReq1099:	  785 343
+ CkNotReq1099:	  840 343
+ CkWillFile1099:  785 362
+ CkNotFile1099:	  840 362
+ CkW2:	663 417
+
+ L1 	742 417 15
+ L2     742 435 15
+ L3     742 455 15
+ L4     742 473 15
+ L5     742 490 15
+ L6     742 509 15
+ L7	742 527 15
+ L8	315 565 15
+ L9	315 603 15
+ L10	315 620 15
+ L11	315 639 15
+ L12	315 658 15
+ L13	315 711 15
+ L14	315 747 15
+ L15	315 767 15
+ L16a	315 805 15
+ L16b	315 821 15
+ L17	315 839 15
+ 
+ L18	742 565 15
+ L19	742 583 15
+ L20a	742 620 15
+ L20b	742 638 15
+ L21	742 656 15
+ L22	742 674 15
+ L23	742 693 15
+ L24a	742 730 15
+ L24b	742 767 15
+ L25	742 785 15
+ L26	742 803 15
+ L27a	742 821 15
+ L28	742 857 15
+ L29	742 875 15
+ L30	742 965 15
+ L31	742 1021 15
+
+ Ck32a: 725 1092
+ Ck32b: 725 1112
+
+
+Page 2
+
+ Ck33aCost:   285 142
+ Ck33bMarket: 395 142
+ Ck33cOther:  606 142
+ Ck34Yes:     736 178
+ Ck34No:      825 178
+ L35	733 214 16
+ L36    733 250 16
+ L37    733 286 16
+ L38    733 324 16
+ L39    733 361 16
+ L40    733 397 16
+ L41    733 433 16
+ L42	733 472 16
+ L43mm:	610 561 
+ L43dd:	650 561 
+ L43yy:	692 561 0 8
+ L44a	178 637	
+ L44b	515 637	
+ L44c	724 637	
+ Ck45Yes:	750 675
+ Ck45No:	824 675
+ Ck46Yes:	750 711
+ Ck46No:	822 711
+ Ck47aYes:	750 748
+ Ck47aNo:	825 748
+ Ck47bYes:	750 785
+ Ck47bNo:	825 785
+ 
+ Part_IV_1a	80   832
+ Part_IV_1b	733  832
+ Part_IV_2a	80   871
+ Part_IV_2b	733  871
+ Part_IV_3a	80   908
+ Part_IV_3b	733  908
+ Part_IV_4a	80   945
+ Part_IV_4b	733  945
+ Part_IV_5a	80   981
+ Part_IV_5b	733  981
+ Part_IV_6a	80   1016
+ Part_IV_6b	733  1016
+ Part_IV_7a	80   1052
+ Part_IV_7b	733  1052
+ Part_IV_8a	80   1088
+ Part_IV_8b	733  1088
+ Part_IV_9a	80   1125
+ Part_IV_9b	733  1125
+ L48		733  1150

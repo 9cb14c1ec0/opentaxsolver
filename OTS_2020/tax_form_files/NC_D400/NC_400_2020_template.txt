@@ -1,0 +1,45 @@
+Title:  NC State Tax Form 400 for 2020
+
+ { Data is collected by scanning Federal Return results to avoid re-entering data. }
+
+FedReturn  tax_form_files/US_1040/fed_out.txt	{ File-name of Federal Return output file. }
+
+Status	    		{Single, Married/Joint, Married/Sep, Head_of_House, Widow(er)}
+
+L7	0	;	{ Additions to Fed AGI - From Sched-S Part A, Line 6. }
+L9	0	;	{ Deductions from Fed AGI - From Sched-S Part B, Line 14. * }
+L10a	0	;	{ Number of children qualifying for federal deductions. }
+L11	0	;	{ Enter 0 to use Std Deduction; Otherwise Itemized Ded. from Sched-S part C, Line 23. }
+L13	1	;	{ Enter 1 for full-year residents. Otherwise amount from Sched-S part D, Line 26. }
+L16	0	;	{ Tax credits. (D-400TC part 3 line 20) }
+L18	   0	;	{ Consumer Use Tax. (pg 10) }
+
+ { North Carolina Income Tax Withheld }
+L20a	   	;	{ Your tax withheld }
+L20b	   	;	{ Spouse's tax withheld }
+
+		{ --- Other tax payments. --- }
+L21a	    0	;	 { 2020 Estimated Tax }
+L21b	    0	;	 { Paid with Extension }
+L21c	    0	;	 { Partnership }
+L21d	    0	;	 { S Coroporation }
+
+{ -------------------------------------------- } 
+{ --- Optional info for Auto-Fillout only. --- }
+ Your1stName: 	
+ YourInitial:  	
+ YourLastName:    	
+ YourSocSec#: 	
+ Spouse1stName:                 { Leave blank if Single, etc. }
+ SpouseInitial: 	
+ SpouseLastName:   
+ SpouseSocSec#: 	
+ Number&Street: 	
+ Apt#:    
+ Town:		
+ State:		NC
+ Zipcode:   	
+
+{
+ --------------------------------------------
+}
