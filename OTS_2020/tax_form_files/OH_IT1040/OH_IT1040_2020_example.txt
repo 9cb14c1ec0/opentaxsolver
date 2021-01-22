@@ -59,13 +59,14 @@ SchedA_30	   ;	{ Certain Ohio National Guard reimbursements and benefits }
 { - Education - } 
 SchedA_31  500.00 ;	{ Ohio 529 contributions, tuition credit purchases }
 SchedA_32	  ;	{ Pell College Opportunity taxable grant amounts used for room and board }
+SchedA_33 	  ; 	{ Ohio educator expenses in excess of federal deduction }
 
 { Medical } 
-SchedA_33	  ;	{ Disability benefits }
-SchedA_34	  ;	{ Survivorship benefits }
-SchedA_35	  ;	{ Unreimbursed long-term care insurance premiums ...  }
-SchedA_36	  ;	{ Funds deposited into, and earnings of, a medical savings account }
-SchedA_37  230.00 ;	{ Qualified organ donor expenses }
+SchedA_34	  ;	{ Disability benefits }
+SchedA_35	  ;	{ Survivorship benefits }
+SchedA_36	  ;	{ Unreimbursed long-term care insurance premiums ...  }
+SchedA_37	  ;	{ Funds deposited into, and earnings of, a medical savings account }
+SchedA_38  230.00 ;	{ Qualified organ donor expenses }
 
 { --- Schedule of Credits --- }
 Credits_2	   ;	{ Retirement income credit.  See instructions page 27. }
@@ -74,19 +75,20 @@ Credits_4	   ;	{ Senior citizen credit }
 Credits_5	   ;	{ Lump sum distribution credit }
 Credits_6	   ;	{ Child care and dependent care credit }
 Credits_7   200.00 ;	{ Displaced worker training credit }
-Credits_8	   ;	{ Ohio political contributions credit }
+Credits_7a    4.44 ;	{ Campaign contribution credit for Ohio General Assembly }
 
-Credits_13	   ;	{ Earned income credit }
-Credits_14   50.00 ;	{ Ohio adoption credit  }
-Credits_15	   ;	{ Job retention credit, nonrefundable portion }
-Credits_16	   ;	{ Credit for eligible new employees in enterprise zones }
-Credits_17   32.32 ;	{ Credit for purchases of grape production property }
-Credits_18   10.00 ;	{ Invest Ohio }
+Credits_12	   ;	{ Earned income credit }
+Credits_13   50.00 ;	{ Ohio adoption credit  }
+Credits_14	   ;	{ Job retention credit, nonrefundable portion }
+Credits_15	   ;	{ Credit for eligible new employees in enterprise zones }
+Credits_16   32.32 ;	{ Credit for purchases of grape production property }
+Credits_17   10.00 ;	{ InvestOhio credit }
+Credits_18    3.50 ; 	{ Lead abatement credit }
 Credits_19   22.00 ;	{ Opportunity zone investment credit }
 Credits_20   75.00 ;	{ Tech investment credit }
 Credits_21	   ;	{ Enterprise zone day care and training credits }
 Credits_22  100.14 ;	{ Research and development credit }
-Credits_23	   ;	{ Ohio historic preservation credit, nonrefundable carryforward portion }
+Credits_23	   ;	{ Nonrefundable Ohio historic preservation credit }
 
 { - Nonresident Credit - }
 Credits_26  4,242,42;	{  Portion L3 was not earned in Ohio }
@@ -96,12 +98,11 @@ Credits_29  4,242,42;	{  Portion of Line-3 (L3) taxed by other states }
 Credits_32    383.11;	{  Income Tax paid to Other States }
 
 { - Refundable Credits - }
-Credits_35     1.0 ;	{ Historic preservation credit }
-Credits_36	   ;	{ Business jobs credit }
+Credits_35     1.0 ;	{ Refundable Historic preservation credit }
+Credits_36	   ;	{ Refundable Business jobs credit }
 Credits_37	   ;	{ Pass-through entity credit }
 Credits_38    20.0 ;	{ Motion picture production credit }
-Credits_39    10.0 ;	{ Financial Institutions Tax (FIT) credit }
-Credits_40	   ;	{ Venture capital credit }
+Credits_39    10.0 ;	{ Venture capital credit }
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }

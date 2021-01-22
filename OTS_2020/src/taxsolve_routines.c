@@ -562,7 +562,7 @@ int Round( double x )
 { int y; if (x<0.0) y = x - 0.5; else y = x + 0.5;  return y; }
 
 
-/* Get a line value. */
+/* Get a line value, or sum.  Must be terminated by ";". */
 void GetLine( char *linename, double *value )
 {
  char word[1024];
@@ -570,7 +570,7 @@ void GetLine( char *linename, double *value )
  get_parameters( infile, 'f', value, linename);
 }
 
-/* Get a single line value. */
+/* Get a single line value. (No ";") */
 void GetLine1( char *linename, double *value )
 {
  char word[1024];
@@ -578,7 +578,7 @@ void GetLine1( char *linename, double *value )
  get_parameter( infile, 'f', value, linename);
 }
 
-/* Get a line value, and print it to file. */
+/* Get a line value, or sum, and print it to file. */
 void GetLineF( char *linename, double *value )
 {
  GetLine( linename, value );
@@ -599,14 +599,28 @@ void GetOptionalLine( char *linename, char *label, double *value )
  get_parameters( infile, 'f', value, linename);
 }
 
-void GetYesNo( char *linename, int *answer )	/* Get a boolean Yes/No, or True/False value. */
+void GetYesNo( char *linename, int *answer )	/* Get a boolean Yes/No, or True/False value, followed by ';'. */
 {
  char word[1024];
  get_parameter( infile, 's', word, linename);
  get_parameters( infile, 'b', answer, linename );
 }
 
-void GetInteger( char *linename, int *answer )	/* Get an integer number value. */
+void GetYesNo1( char *linename, int *answer )	/* Get a boolean Yes/No, or True/False value. */
+{
+ char word[1024];
+ get_parameter( infile, 's', word, linename);
+ get_parameter( infile, 'b', answer, linename );
+}
+
+void GetYesNoSL( char *linename, int *answer )	/* Get a boolean Yes/No, or True/False value. */
+{
+ char word[1024];
+ get_parameter( infile, 's', word, linename);
+ get_param_single_line( infile, 'b', answer, linename );
+}
+
+void GetInteger( char *linename, int *answer )	/* Get an integer number value. (Must end with ";".) */
 {
  char word[1024];
  get_parameter( infile, 's', word, linename);

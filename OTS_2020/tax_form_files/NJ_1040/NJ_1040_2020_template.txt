@@ -21,8 +21,8 @@ L16a                    { Taxable Interest }
 L16b            ;       { Tax-exempt Interest }
 L17                     { Dividends }
                 ;
-L18             ;       { Business profits, (Fed Sched C). }
-L19                    { Capital Gains -- (No dates needed) }
+L18             ;       { Net Business profits, (Fed Sched C). }
+L19                     { Net Capital Gains -- (No dates needed) }
 			 { (Enter buy cost as negative (-), sell price as positive (+).)}
 		;
 L20a            ;       { Pensions, Annuities, and IRA Withdrawals (pg 14). }
@@ -30,7 +30,7 @@ L20b            ;       { Excludable Pensions, Annuities, and IRA Withdrawals (p
 L21             ;       { Partnership income. (See pg 18.) }
 L22             ;       { S Corporation income. (See pg 18.) }
 L23             ;       { Rent, royalty, patents income. (Sched NJ-BUS-1, Part IV, Line 4.) }
-L24             ;       { Gambling winnings. }
+L24             ;       { Net Gambling winnings. }
 L25             ;       { Alimony and maintenance payments Received. }
 L26             ;       { Other (See pg 20). }
 L28a            ;       { Pension Exclusion (See pg 21). }
@@ -42,25 +42,35 @@ L32             ;       { Alimony and maintenance payments Payed. }
 L33             ;       { Qualified Conservation Contribution. }
 L34             ;       { Health Enterprise Zone Deduction. }
 L35             ;       { Alternative Business Calc Adj (Sched NJ-BUS-2, Line 11) }
+L36		;	{ Organ/Bone Marrow Donation Deduction }
 
-L38a	        ;       { Property Tax Paid }
+L39a	        ;       { Property Tax Paid }
+ L39_Block:			{ Property Block# }
+ L39_Lot:			{ Property Lot# }
+ L39_Qual:			{ Property Qualifier }
+ L39_CntyCode:			{ County Code }
+ HomeOwner:			{ HomeOwner (answer: yes, no) }
+ Tenant:				{ Tenant (answer: yes, no) }
+
 COJ1            ;       { Income basis for any Out of State taxes paid. Sch COJ (Previously Sch A)}
 COJ9a           ;       { Out of state taxes paid (ex. City income tax), if any. Sch COJ (Previously Sch A)}
 
-L44             ;       { Child and Dependent Care Credit }
+L45             ;       { Child and Dependent Care Credit }
 L46	        ;	{ Sheltered Workshop Tax Credit. }
-L48		; 	{ Gold Start Family Counseling Credit }
-L50	        ;	{ Use Tax Due on Out-of-State Purchases (pg 37). }
-L51	        ;	{ Interest on underpayment of estimated tax. }
-L52             ;       { Shared Responsibility (Med. Insurance) Payment. }
-L54                     { Withheld tax, from W-2's, Box 17 }
+L47		; 	{ Gold Star Family Counseling Credit }
+L48		; 	{ Credit for Employer of Organ/Bone Marrow Donor }
+L51	        ;	{ Use Tax Due on Out-of-State Purchases (pg 37). }
+L52	        ;	{ Interest on underpayment of estimated tax. }
+L53             ;       { Shared Responsibility (Med. Insurance) Payment. }
+L55                     { Withheld tax, from W-2's, Box 17 }
                 ;
-L56             ;       { NJ Estimated Tax Payments/Credit from last year's return. }
-L57             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
-L58             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
-L59             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
-L60             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
-L61		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
+L57             ;       { NJ Estimated Tax Payments + Credit from last year's return. }
+L58             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
+L59             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
+L60             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
+L61             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
+L62		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
+L63		;	{ Pass-Through Business Alternatve Income Tax Credit }
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }

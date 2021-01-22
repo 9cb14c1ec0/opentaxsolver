@@ -87,14 +87,14 @@ CoordReference:  40, 750  61, 64
  L37 	653 958  9 19
  L38 	595 990  11 19
  L39a	535 1020 11 19
- L39blck 124 1056 9 10
- L39lot  402 1056 9 10
- L39qual 710 1056 9 10
- L39c    235 1085 4 19
+ L39_Block 124 1053 5 19
+ L39_Lot   402 1053 5 19
+ L39_Qual:  710 1053 5 19
+ L39_CntyCode: 235 1083 4 19
  L39chkG 439 1085 0
- L39dchkHO 503 1105
- L39dchkTen 648 1105
- L39dchkBoth 785 1105
+ HomeOwner 510 1105
+ Tenant    654 1105
+ Both_OwnerTenant 785 1105
 
 
 Page 3

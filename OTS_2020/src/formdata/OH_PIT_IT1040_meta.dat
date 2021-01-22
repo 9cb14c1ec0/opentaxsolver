@@ -21,9 +21,9 @@ State:		497 474 0 13.7
 Zipcode: 	553 474 0 13.7
 OhioCounty:	671 474 0 13.7
 
-CkFYrRes:   	 57 598
-CkPYrRes:	164 598
-CkFYrResSp:	 57 639
+CkFYrRes:   	 59 585
+CkPYrRes:	164 585
+CkFYrResSp:	 59 639
 CkPYrResSp:	164 639
 
 FontSz 12
@@ -40,7 +40,7 @@ L2a 	658 838 9 13.2
 L2b	658 875 9 13.2
 L3	658 912 9 13.2
 L4	738 948 5 13.2
-Exemptions 258 972 2 13.2
+Exemptions 500 972 2 13.2
 L5	658 984 9 13.2
 L6	658 1022 9 13.2
 L7	658 1058 9 13.2
@@ -148,9 +148,9 @@ CoordReference:  40, 750  61, 64
  Credits7	658 356  9 13.2
  Credits7a	658 400  9 13.2
  Credits8	658 432  9 13.2
-
  Credits9	658 467  9 13.2
  Credits10	658 505  9 13.2
+ JFC		315 542
  Credits11	658 541  9 13.2
  Credits12	658 577  9 13.2
  Credits13	658 613  9 13.2

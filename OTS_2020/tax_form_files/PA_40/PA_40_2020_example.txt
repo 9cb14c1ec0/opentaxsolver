@@ -17,15 +17,17 @@ L3	  143.65	{ Dividend and Capital Gains Distributions Income. }
 	   29.32
 		;
 L4	  -345	;	{ Net Income or Loss for Business Operations. }
-L5	  -23	;	{ Net Gain or Loss from Sale, Exchange or Disposition of Property. }
+L5	    23	;	{ Net Gain or Loss from Sale, Exchange or Disposition of Property. }
 L6	 -1092	;	{ Net Income or Loss from Rents, Royalties, Patents, or Copyrights. }
 L7	    0   ;	{ Estate or Trust Income. }
 L8	    0   ;	{ Gambling or lottery winnings. }
 L10	    0 	;	{ Other Deductions. }
 
+{ -- Withholdings -- }
 L13	    813.67	{ Total PA Tax withheld. }
 	    724.12	 {spouse}
 		;
+{ -- Credits & Deductions -- }
 L14	    0   ;	{ Credit from 2019 PA income tax return. }
 L15	    0 	;	{ 2020 Estimated Installment payments. }
 L16	    0 	;	{ 2020 Extension payment. }
