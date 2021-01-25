@@ -8,42 +8,40 @@ Page 1
  round_to_whole_numbers
  no_zero_entries
 
-Your1stName:	 60 184		0 12.4
-YourMidInit:	285 184		0 1
-YourLastName:	316 184		0 12.4
-YourSocSec#: 	663 184		0 12
+Your1stName:	 60 184
+YourMidInit:	284 184
+YourLastName:	316 184
+YourSocSec#: 	663 184		0 11
 
-Spouse1stName:	 60 228		0 12.4
-SpouseMidInit:	285 228		0 1
-SpouseLastName:	316 228		0 12.4
-SpouseSocSec#:	663 228		0 12
+Spouse1stName:	 60 228
+SpouseMidInit:	284 228
+SpouseLastName:	316 228
+SpouseSocSec#:	663 228		0 11
 
-Number&Street:	 60 320		0 12.4
-Apt#: 		598 320		0 13.6
-Town:     	 60 366		0 12.4
-State:		615 366		0 12.4
-Zipcode: 	660 366		0 12.4
+Number&Street:	 60 313
+Apt#: 		598 313
+Town:     	 60 357
+State:		615 357
+Zipcode: 	660 357		0 11
 
-YourDOB:	132 473		0 6
-SpouseDOB:	503 473		0 6
+YourDOB:	111 473		0 6
+SpouseDOB:	499 473		0 6
 
 FontSz 18
- CkSingle: 118 607 
- CkMFJ:    118 642 
- CkMFS:    118 716 
- CkHH:     372 606 
- CkQW:     372 643 
- CkDep:	   714 752
+ CkSingle: 118 806 
+ CkMFJ:    118 843
+ CkMFS:    118 916 
+ CkHH:     382 806 
+ CkQW:     382 843 
+ CkDep:	   710 953
 FontSz 10
 
-L7a 	585 822
-L7 	770 824
-L8a 	585 858
-L8 	770 860
-L9a 	585 896
-L9 	770 898
-L10a	568 1102	
-L10	755 1100
+L7a 	585 1022
+L7 	770 1024
+L8a 	585 1058
+L8 	770 1060
+L9a 	585 1096
+L9 	770 1098
 
 
 Page 2
@@ -51,97 +49,111 @@ Page 2
  CoordReference:  40, 750  61, 64
                   550, 50  841, 1134    110-dpi
 
-YourName:	139 88	
-YourSocSec#:	480 88 
+YourName:	145 88	
+YourSocSec#:	475 88 
 
-L11	700 144		14
-L12	470 200		14
-L13	715 235		14
-L14     715 273		14
-L15     715 310		14
-L16     715 346		14
-L17	715 382		14
-L18	715 491		14
+L10a	550 308
+L10	706 310
+L11	706 346		14
+L12	470 401		14
+L13	715 438		14
+L14     715 475		14
+L15     715 511		14
+L16     715 549		14
+L17	715 585		14
+L18	715 694		14
 
 showevenifzero L19
-L19	715 528		14
+L19	715 731		14
 
 FontSz 18
- CkTxTable:    283 588
- CkTxRateSchd: 413 588
+ CkTxTable:    282 788
+ CkTxRateSchd: 412 788
 FontSz 10
 
-L31	715 621		14
-L32     715 659		14
+L31	715 823		14
+L32     715 861		14
 
 showevenifzero L33
-L33    715 696		14
+L33	715 897		14
 
-L34     715 731		14
-L35	715 767		14
-L40	715 825		14
-L43     715 861		14
-L44     715 898		14
-L45     715 935		14
-L46     715 968		14
-L47     715 1005	14
-
-showevenifzero L48
-L48	715 1043	14
-
+L34     715 933		14
+L35	715 970		14
+L40	715 1026	14
+L43     715 1062	14
+L44     715 1100	14
 
 
 Page 3
  CoordReference:  40, 750  61, 64
                   550, 50  841, 1134    110-dpi
 
-YourName:	139 88
-YourSocSec#:	478 88
+YourName:	145 88
+YourSocSec#:	474 88
 
+L45     715 128		14
+L46     715 164		14
+L47     715 200		14
+showevenifzero L48
+L48	715 236		14
 
-L61	715 145		14
-L62	715 181		14
-L63	715 217		14
-L64	715 254		14
+L61	715 291		14
+L62	715 329		14
+L63	715 365		14
+L64	715 401		14
+L65	715 436		14
 
-L71	715 308		14
-L72     715 346		14
-L73     715 380		14
-L74     715 416		14
-L75     715 452		14
-L76	715 494		14
-L77	715 527		14
+L71	715 494		14
+L72     715 531		14
+L73     715 566		14
+L74     715 603		14
+L75     715 640		14
+L76	715 678		14
+L77	715 714		14
+L78	715 749		14
 showevenifzero L91
-L91	598 586		14
+L91	598 805		14
 FontSz 16
-CkNoUseTaxOwed 	   283 622
-CkPayedUseTaxCDTFA 283 658  
+CkNoUseTaxOwed 	   282 841
+CkPayedUseTaxCDTFA 457  841
 FontSz 10
-L92	715 714		14
-L93     715 750		14
-L94     715 788		14
-L95     715 824		14
-L96     715 861		14
-L97     715 898		14
+L92	598 898		14
+L93     715 990		14
+L94     715 1025	14
+L95     715 1062	14
+L96     715 1098	14
 
 
 Page 4
  CoordReference:  40, 750  61, 64
                   550, 50  841, 1134    110-dpi
 
-YourName:       139 88
-YourSocSec#:    478 88
+YourName:       144 88
+YourSocSec#:    476 88
+
+L97	715 145		14
+L98	715 181		14
+L99	715 217		14
+L100	715 254		14
+
+
+Page 5
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourName:       144 88
+YourSocSec#:    475 88
 
 L111	715 162		14
 L112	715 217		14
 L113	715 270		14
 L114	715 309		14
 L115	715 383		14
-L116	715 531		14
+L116	715 530		14
 L117	715 640		14
 
 
-Page 5
+Page 6
 
 YourNames:	 60 158 
 YourSocSec#:    644 158 
@@ -150,7 +162,7 @@ SchedCA540_A1 	 574 216 	9
 SchedCA540_A1b 	 684 216 	9
 SchedCA540_A1c 	 794 216 	9
 SchedCA540_A2a 	 240 238	9
-SchedCA540_A2 	 574 238	9
+SchedCA540_A2 	 574 237	9
 SchedCA540_A2b 	 684 238 	9
 SchedCA540_A2c 	 794 238 	9
 SchedCA540_A3a 	 350 255 	9
@@ -196,6 +208,7 @@ SchedCA540_B8bb  684 538	9
 SchedCA540_B8bd  684 578	9
 SchedCA540_B8be  684 598	9
 SchedCA540_B8bf  684 618	9
+SchedCA540_B8bg  684 649	9
 SchedCA540_B8cc  794 558	9
 SchedCA540_B8cf  794 618	9
 SchedCA540_B9    574 707	9
@@ -212,8 +225,10 @@ SchedCA540_C12b   684 812	9
 SchedCA540_C13    574 832	9
 SchedCA540_C13c   794 832	9
 SchedCA540_C14    574 852	9
+SchedCA540_C14b   684 852	9
 SchedCA540_C15    574 872	9
 SchedCA540_C16    574 892	9
+SchedCA540_C16b   684 892	9
 SchedCA540_C17    574 912	9
 AlimRecipSSN:	300 934 0 17.2
 AlimRecipName:	325 960 
@@ -234,7 +249,7 @@ SchedCA540_C23c   794 1090	9
 
 
 
-Page 6
+Page 7
 
 SchedCA540_Part2_1	423 183	9
 SchedCA540_Part2_2	423 203	9
@@ -294,7 +309,7 @@ SchedCA540_Part2_17b	677 817	9
 SchedCA540_Part2_17c	787 817	9
 SchedCA540_Part2_18	790 848 9
 
-Page 7
+Page 8
 
 SchedCA540_Part2_19	556 173 9
 SchedCA540_Part2_20	556 206 9

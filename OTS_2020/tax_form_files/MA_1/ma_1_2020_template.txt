@@ -4,8 +4,8 @@ Title:  Massachusetts Form 1 Tax Form - 2020
 
 Status         Single	{Single, Married/Joint, Married/Sep, Head_of_House.}
 
-La             ;       { Total federal income from US 1040 line 7b. }
-Lb             ;       { Total federal adjusted gross income from US 1040 line 8b. }
+La             ;       { Total federal income from US 1040 line 9. }
+Lb             ;       { Total federal adjusted gross income from US 1040 line 11. }
 
 {---- Exemptions ----}
 

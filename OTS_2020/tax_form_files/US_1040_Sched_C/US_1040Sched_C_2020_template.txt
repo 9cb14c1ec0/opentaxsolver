@@ -41,9 +41,7 @@ L6		 { Other income, fed & state fuel credit }
 		;
 L8		 { Advertising }
 		;
-L9		 { Car & truck expenses }
-		;
-Miles 		 { Mileage for Line 9, not already included in Line 9. }
+L9		 { Car & truck expenses  (other than mileage entered on Line 44) }
 		;
 L10		 { Commissions & fees }
 		;
@@ -85,8 +83,6 @@ L25		 { Utilities }
 		;
 L26		 { Wages (less employment credits) }
 		;
-L27a		 { List other expenses here from line 48 pg 2 }
-		;
 L30		 { Expenses for business use of home (form 8829) }
 		;
 L32a		 { All investment is at risk ?  (answer: Yes, No) }
@@ -111,13 +107,42 @@ L41		 { Inventory at year end }
 
  { --- Part IV - Complete only if claiming business vehicle. --- }
 L43:		 { When was vehicle placed in service for business ?  mm-dd-yyyy }
-L44a		 { Business Miles }
-L44b		 { Commuting Miles }
-L44c		 { Other Miles }
+L44a		; { Business Miles }
+L44b		; { Commuting Miles }
+L44c		; { Other Miles }
 L45:		 { Vehicle available off-duty for personal use ?  (answer: Yes, No, n/a) }
 L46:		 { Have another personal vehicle ?  (answer: Yes, No, n/a) }
 L47a:		 { Have evidence to support deduction ?  (answer: Yes, No, n/a) }
 L47b:		 { If so, is evidence written ?  (answer: Yes, No, n/a) }
+
+
+ { --- Part V - Other Expenses. List business expenses not included on lines 8-26 or 30. --- }
+L48a_descr:		{ Description of expense. }
+L48a_amnt	;	{ Amount of expense. }
+
+L48b_descr:		{ Description of expense. }
+L48b_amnt	;	{ Amount of expense. }
+
+L48c_descr:		{ Description of expense. }
+L48c_amnt	;	{ Amount of expense. }
+
+L48d_descr:		{ Description of expense. }
+L48d_amnt	;	{ Amount of expense. }
+
+L48e_descr:		{ Description of expense. }
+L48e_amnt	;	{ Amount of expense. }
+
+L48f_descr:		{ Description of expense. }
+L48f_amnt	;	{ Amount of expense. }
+
+L48g_descr:		{ Description of expense. }
+L48g_amnt	;	{ Amount of expense. }
+
+L48h_descr:		{ Description of expense. }
+L48h_amnt	;	{ Amount of expense. }
+
+L48i_descr:		{ Description of expense. }
+L48i_amnt	;	{ Amount of expense. }
 
 {
  --------------------------

@@ -48,8 +48,14 @@ int main( int argc, char *argv[] )
  int i, j, k;
  char word[4000], outfname[4000], *EIN=0, *answ, *infname=0;
  time_t now;
- double L16b=0.0, L20b=0.0, L24b=0.0, Mileage=0.0;
+ double L16b=0.0, L20b=0.0, L24b=0.0, Mileage=0.0, L44a=0.0, L44b=0.0, L44c=0.0;
  int L32;
+ char veh_mm[1024]="", veh_dd[1024]="", veh_yy[1024]="";
+ char Ck45[1024]="", L46answ[1024]="", L47a_answ[1024]="", L47b_answ[1024]="";
+ char *L48a_descr="", *L48b_descr="", *L48c_descr="", *L48d_descr="", *L48e_descr="",
+      *L48f_descr="", *L48g_descr="", *L48h_descr="", *L48i_descr="";
+ double L48a_amnt=0.0, L48b_amnt=0.0, L48c_amnt=0.0, L48d_amnt=0.0, L48e_amnt=0.0,
+        L48f_amnt=0.0, L48g_amnt=0.0, L48h_amnt=0.0, L48i_amnt=0.0;
 
  printf("US 1040 Schedule C, 2020 - v%3.2f\n", thisversion);
 
@@ -105,12 +111,11 @@ int main( int argc, char *argv[] )
  GetTextLineF( "TownStateZip:" );
 
  GetTextLineF( "ActivityCode:" );
- writeout_line = 0;	/* Suppress GetLineF's from immediately writing to outfile. */
- EIN = GetTextLineF( "BusinessEIN:" );
+ EIN = GetTextLine( "BusinessEIN:" );
  format_socsec( EIN, 1 );
  fprintf(outfile,"BusinessEIN: %s\n", EIN );
 
- answ = GetTextLineF( "Fmethod:" );
+ answ = GetTextLine( "Fmethod:" );
  next_word( answ, word, " \t;" );
  if (strcasecmp( word, "Cash" ) == 0)
   fprintf(outfile,"CkFcash: X\n");
@@ -121,7 +126,7 @@ int main( int argc, char *argv[] )
   if (strcasecmp( word, "Other" ) == 0)
   fprintf(outfile,"CkFother: X\n");
  
- answ = GetTextLineF( "GPartic:" );
+ answ = GetTextLine( "GPartic:" );
  next_word( answ, word, " \t;" );
  if (toupper( word[0] ) == 'Y')
   fprintf(outfile,"CkParticipate: X\n");
@@ -129,12 +134,12 @@ int main( int argc, char *argv[] )
  if ((mystrcasestr( word, "N/A" ) == 0) && (toupper( word[0] ) == 'N'))
   fprintf(outfile,"CkNotParticipate: X\n");
  
- answ = GetTextLineF( "Hacquired:" );
+ answ = GetTextLine( "Hacquired:" );
  next_word( answ, word, " \t;" );
  if (toupper( word[0] ) == 'Y')
   fprintf(outfile,"CkAcquired: X\n");
 
- answ = GetTextLineF( "Ireq1099s:" );
+ answ = GetTextLine( "Ireq1099s:" );
  next_word( answ, word, " \t;" );
  if (toupper( word[0] ) == 'Y')
   fprintf(outfile,"CkReq1099: X\n");
@@ -142,7 +147,7 @@ int main( int argc, char *argv[] )
  if ((mystrcasestr( word, "N/A" ) == 0) && (toupper( word[0] ) == 'N'))
   fprintf(outfile,"CkNotReq1099: X\n");
  
- answ = GetTextLineF( "Jfile1099s:" );
+ answ = GetTextLine( "Jfile1099s:" );
  next_word( answ, word, " \t;" );
  if (toupper( word[0] ) == 'Y')
   fprintf(outfile,"CkWillFile1099: X\n");
@@ -150,7 +155,6 @@ int main( int argc, char *argv[] )
  if ((mystrcasestr( word, "N/A" ) == 0) && (toupper( word[0] ) == 'N'))
   fprintf(outfile,"CkNotFile1099: X\n");
  
- writeout_line = 1;
 
  GetLine( "L1", &L[1] );	/* Gross Receipts */
 
@@ -163,9 +167,6 @@ int main( int argc, char *argv[] )
  GetLine( "L8", &L[8] );	/* Advertising */
 
  GetLine( "L9", &L[9] );	/* Car & truck expenses */
-
- GetLine( "Miles", &Mileage );	/* Miles for Line 9, not already included in Line 9. */
- L[9] = L[9] + 0.575 * Mileage;					/* Updated for 2020. */
 
  GetLine( "L10", &L[10] );	/* Commissions & fees */
 
@@ -207,7 +208,7 @@ int main( int argc, char *argv[] )
 
  GetLine( "L26", &L[26] );	/* Wages (less employment credits) */
 
- GetLine( "L27a", &L[27] );	/* Other expenses here from line 48 pg 2 */
+ // GetLine( "L27a", &L[27] );	/* Other expenses here from line 48 pg 2 */
 
  GetLine( "L30", &L[30] );	/* Expenses for business use of home (form 8829) */
 
@@ -216,8 +217,7 @@ int main( int argc, char *argv[] )
 
  /* Part III */
 
- writeout_line = 0;	/* Suppress GetLineF's from immediately writing to outfile. */
- answ = GetTextLineF( "L33:" );
+ answ = GetTextLine( "L33:" );
  next_word( answ, word, " \t;" );
  if (strcasecmp( word, "Cost" ) == 0)
   fprintf(outfile,"Ck33aCost: X\n");
@@ -229,16 +229,15 @@ int main( int argc, char *argv[] )
   fprintf(outfile,"Ck33cOther: X\n");
  else
  if (word[0] != '\0')
-  printf("Warning: Unexpted answer for L33: '%s'\n", word ); 
+  printf("Warning: Unexpected answer for L33: '%s'\n", word ); 
 
- answ = GetTextLineF( "L34:" );
+ answ = GetTextLine( "L34:" );
  next_word( answ, word, " \t;" );
  if (toupper( word[0] ) == 'Y')
   fprintf(outfile,"Ck34Yes: X\n");
  else
  if (toupper( word[0] ) == 'N')
   fprintf(outfile,"Ck34No: X\n");
- writeout_line = 1;
  
  GetLine( "L35", &L[35] );	/* Inventory at beginning of year */
 
@@ -257,6 +256,56 @@ int main( int argc, char *argv[] )
  L[42] = L[40] - L[41];
 
 
+ answ = GetTextLine( "L43:" );
+ next_word( answ, veh_mm, " \t-/.,;" );
+ next_word( answ, veh_dd, " \t-/.,;" );
+ next_word( answ, veh_yy, " \t-/.,;" );
+ 
+ GetLine( "L44a", &L44a );		/* Vehicle Miles */
+ GetLine( "L44b", &L44b );
+ GetLine( "L44c", &L44c );
+
+ answ = GetTextLine( "L45:" );
+ next_word( answ, Ck45, " \t;" );
+
+ answ = GetTextLine( "L46:" );
+ next_word( answ, L46answ, " \t;" );
+
+ answ = GetTextLine( "L47a:" );
+ next_word( answ, L47a_answ, " \t;" );
+
+ answ = GetTextLine( "L47b:" );
+ next_word( answ, L47b_answ, " \t;" );
+
+ L48a_descr = GetTextLine( "L48a_descr:" );
+ GetLine( "L48a_amnt", &L48a_amnt );
+ L[48] = L48a_amnt;
+ L48b_descr = GetTextLine( "L48b_descr:" );
+ GetLine( "L48b_amnt", &L48b_amnt );
+ L[48] = L[48] + L48b_amnt;
+ L48c_descr = GetTextLine( "L48c_descr:" );
+ GetLine( "L48c_amnt", &L48c_amnt );
+ L[48] = L[48] + L48c_amnt;
+ L48d_descr = GetTextLine( "L48d_descr:" );
+ GetLine( "L48d_amnt", &L48d_amnt );
+ L[48] = L[48] + L48d_amnt;
+ L48e_descr = GetTextLine( "L48e_descr:" );
+ GetLine( "L48e_amnt", &L48e_amnt );
+ L[48] = L[48] + L48e_amnt;
+ L48f_descr = GetTextLine( "L48f_descr:" );
+ GetLine( "L48f_amnt", &L48f_amnt );
+ L[48] = L[48] + L48f_amnt;
+ L48g_descr = GetTextLine( "L48g_descr:" );
+ GetLine( "L48g_amnt", &L48g_amnt );
+ L[48] = L[48] + L48g_amnt;
+ L48h_descr = GetTextLine( "L48h_descr:" );
+ GetLine( "L48h_amnt", &L48h_amnt );
+ L[48] = L[48] + L48h_amnt;
+ L48i_descr = GetTextLine( "L48i_descr:" );
+ GetLine( "L48i_amnt", &L48i_amnt );
+ L[48] = L[48] + L48i_amnt;
+ L[27] = L[48];
+
  /* -- Compute the tax form -- */
 
  showline(1);
@@ -271,6 +320,8 @@ int main( int argc, char *argv[] )
  L[7] = L[5] + L[6];
  showline_wmsg(7, "Gross income");
  showline(8);
+ Mileage = L44a;		/* Allowable "Business Mileage". */
+ L[9] = L[9] + 0.575 * Mileage;				/* Updated for 2020. */
  showline(9);
  showline(10);
  showline(11);
@@ -329,52 +380,68 @@ int main( int argc, char *argv[] )
  showline(41);
  showline_wmsg(42,"Cost of goods sold");
 
- writeout_line = 0;
- answ = GetTextLineF( "L43:" );
- next_word( answ, word, " \t-/.,;" );
- fprintf(outfile,"L43mm: %s\n", word);
- next_word( answ, word, " \t-/.,;" );
- fprintf(outfile,"L43dd: %s\n", word);
- next_word( answ, word, " \t-/.,;" );
- fprintf(outfile,"L43yy: %s\n", word);
- writeout_line = 1;
- GetTextLineF( "L44a" );
- GetTextLineF( "L44b" );
- GetTextLineF( "L44c" );
 
- writeout_line = 0;     /* Suppress GetLineF's from immediately writing to outfile. */
+ fprintf(outfile,"L43mm: %s\n", veh_mm );
+ fprintf(outfile,"L43dd: %s\n", veh_dd );
+ fprintf(outfile,"L43yy: %s\n", veh_yy );
 
- answ = GetTextLineF( "L45:" );
- next_word( answ, word, " \t;" );
- if (toupper( word[0] ) == 'Y')
+ showline_wlabelnz( "L44a", L44a );
+ showline_wlabelnz( "L44b", L44b );
+ showline_wlabelnz( "L44c", L44c );
+
+ if (toupper( Ck45[0] ) == 'Y')
   fprintf(outfile,"Ck45Yes: X\n");
  else
- if (strcasecmp( word, "No") == 0)
+ if (strcasecmp( Ck45, "No") == 0)
   fprintf(outfile,"Ck45No: X\n");
 
- answ = GetTextLineF( "L46:" );
- next_word( answ, word, " \t;" );
- if (toupper( word[0] ) == 'Y')
+ if (toupper( L46answ[0] ) == 'Y')
   fprintf(outfile,"Ck46Yes: X\n");
  else
- if (strcasecmp( word, "No") == 0)
+ if (strcasecmp( L46answ, "No") == 0)
   fprintf(outfile,"Ck46No: X\n");
 
- answ = GetTextLineF( "L47a:" );
- next_word( answ, word, " \t;" );
  if (toupper( word[0] ) == 'Y')
   fprintf(outfile,"Ck47aYes: X\n");
  else
  if (strcasecmp( word, "No") == 0)
   fprintf(outfile,"Ck47aNo: X\n");
 
- answ = GetTextLineF( "L47b:" );
- next_word( answ, word, " \t;" );
- if (toupper( word[0] ) == 'Y')
+ if (toupper( L47b_answ[0] ) == 'Y')
   fprintf(outfile,"Ck47bYes: X\n");
  else
- if (strcasecmp( word, "No") == 0)
+ if (strcasecmp( L47b_answ, "No") == 0)
   fprintf(outfile,"Ck47bNo: X\n");
+
+ if (strlen( L48a_descr ) > 0)
+  fprintf(outfile,"L48a_descr: %s\n", L48a_descr );
+ showline_wlabelnz( "L48a_amnt", L48a_amnt );
+ if (strlen( L48b_descr ) > 0)
+  fprintf(outfile,"L48b_descr: %s\n", L48b_descr );
+ showline_wlabelnz( "L48b_amnt", L48b_amnt );
+ if (strlen( L48c_descr ) > 0)
+  fprintf(outfile,"L48c_descr: %s\n", L48c_descr );
+ showline_wlabelnz( "L48c_amnt", L48c_amnt );
+ if (strlen( L48d_descr ) > 0)
+  fprintf(outfile,"L48d_descr: %s\n", L48d_descr );
+ showline_wlabelnz( "L48d_amnt", L48d_amnt );
+ if (strlen( L48e_descr ) > 0)
+  fprintf(outfile,"L48e_descr: %s\n", L48e_descr );
+ showline_wlabelnz( "L48e_amnt", L48e_amnt );
+ if (strlen( L48f_descr ) > 0)
+  fprintf(outfile,"L48f_descr: %s\n", L48f_descr );
+ showline_wlabelnz( "L48f_amnt", L48f_amnt );
+ if (strlen( L48g_descr ) > 0)
+  fprintf(outfile,"L48g_descr: %s\n", L48g_descr );
+ showline_wlabelnz( "L48g_amnt", L48g_amnt );
+ if (strlen( L48h_descr ) > 0)
+  fprintf(outfile,"L48h_descr: %s\n", L48h_descr );
+ showline_wlabelnz( "L48ha_amnt", L48h_amnt );
+ if (strlen( L48i_descr ) > 0)
+  fprintf(outfile,"L48i_descr: %s\n", L48i_descr );
+ showline_wlabelnz( "L48i_amnt", L48i_amnt );
+
+ showline_wmsg( 48, "Total other exoenses" );
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

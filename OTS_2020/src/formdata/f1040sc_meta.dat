@@ -116,4 +116,24 @@ Page 2
  Part_IV_8b	733  1088
  Part_IV_9a	80   1125
  Part_IV_9b	733  1125
- L48		733  1150
+
+ L48a_descr:	96  839
+ L48a_amnt	738 839	16
+ L48b_descr:	96  875
+ L48b_amnt	738 875	16
+ L48c_descr:	96  912
+ L48c_amnt	738 912	16
+ L48d_descr:	96  948
+ L48d_amnt	738 948	16
+ L48e_descr:	96  985
+ L48e_amnt	738 985	16
+ L48f_descr:	96  1021
+ L48f_amnt	738 1021 16
+ L48g_descr:	96  1057
+ L48g_amnt	738 1057 16
+ L48h_descr:	96  1094
+ L48h_amnt	738 1094 16
+ L48i_descr:	96  1129
+ L48i_amnt	738 1129 16
+
+ L48		738  1150 16

@@ -46,13 +46,8 @@ L8	456.78	 { Advertising }
 	198.78	
 		;
 
-L9	1,749.00	 { Car & truck expenses }
+L9	1,749.00	 { Car & truck expenses (other than mileage entered on Line 44) }
 	321.12	
-		;
-
-Miles 		{ Mileage for Line 9, not already included in Line 9. }
-	4,903	
-	9,808	
 		;
 
 L10	1,356.87	 { Commissions & fees }
@@ -116,9 +111,6 @@ L25	787.44	 { Utilities }
 L26	11,978.03	 { Wages (less employment credits) }
 		;
 
-L27a	0	 { List other expenses here from line 48 pg 2 }
-		;
-
 L30	450.00	 { Expenses for business use of home (form 8829) }
 		;
 
@@ -150,13 +142,45 @@ L41	8,000.00	 { Inventory at year end }
 
  { --- Part IV - Complete only if claiming business vehicle. --- }
 L43:	10-28-2003	 { When was vehicle placed in service for business ?  mm-dd-yyyy }
-L44a	4,500	 { Business Miles }
-L44b	450	 { Commuting Miles }
-L44c	123	 { Other Miles }
+L44a	4,903 	 { Business Miles }
+	9,808 ;
+L44b	3,128 ;	 { Commuting Miles }
+L44c	123   ;	 { Other Miles }
 L45:	Yes	 { Vehicle available off-duty for personal use ?  (answer: Yes, No, n/a) }
 L46:	Yes	 { Have another personal vehicle ?  (answer: Yes, No, n/a) }
 L47a:	yes	 { Have evidence to support deduction ?  (answer: Yes, No, n/a) }
 L47b:	No	 { If so, is evidence written ?  (answer: Yes, No, n/a) }
+
+
+
+ { --- Part V - Other Expenses. List expenses not included on lines 8-26 or 30. --- }
+L48a_descr:	Cleaning supplies	{ Description of expense. }
+L48a_amnt	380.34 ;	{ Amount of expense. }
+
+L48b_descr:	Brushes		{ Description of expense. }
+L48b_amnt	90.20	{ Amount of expense. }
+		80.90
+		      ;
+L48c_descr:		{ Description of expense. }
+L48c_amnt	;	{ Amount of expense. }
+
+L48d_descr:		{ Description of expense. }
+L48d_amnt	;	{ Amount of expense. }
+
+L48e_descr:		{ Description of expense. }
+L48e_amnt	;	{ Amount of expense. }
+
+L48f_descr:		{ Description of expense. }
+L48f_amnt	;	{ Amount of expense. }
+
+L48g_descr:		{ Description of expense. }
+L48g_amnt	;	{ Amount of expense. }
+
+L48h_descr:		{ Description of expense. }
+L48h_amnt	;	{ Amount of expense. }
+
+L48i_descr:		{ Description of expense. }
+L48i_amnt	;	{ Amount of expense. }
 
 {
  ---------------
