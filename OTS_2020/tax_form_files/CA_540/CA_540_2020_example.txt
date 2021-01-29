@@ -57,6 +57,8 @@ CA540_Subtr_C11		; { Subtractions for Certain business expenses }
 CA540_Addit_C11		; { Additions for Certain business expenses }
 CA540_Subtr_C12		; { Subtractions for Health savings account }
 CA540_Addit_C13		; { Additions for Moving Expenses }
+CA540_Subtr_C14	   3.33	; { Subtractions for Deductible part of self-employment tax. }
+CA540_Subtr_C16	   2.22	; { Subtractions for Self-employed health insurance deduction.  }
 CA540_Addit_C18		; { Additions for Alimony paid }
 CA540_Addit_C20		; { Additions for Student loan interest }
 CA540_Subtr_C21         ; { Subtractions for Tuition and fees }
@@ -98,6 +100,7 @@ CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
  L61               ;    { Alternative minimum tax Sched P (540), else 0 }
  L62               ;    { Mental Health Services Tax. (Instructions pg 13) }
  L63               ;    { Other taxes/credit recapture (pg 13), else 0 }
+ L64		   ;	{ Excess Advance Premium Assistance Subsidy (APAS) repayment. }
 
 {--Payments--}
  L71      1,119.20 ;     { CA state income tax withheld. }
@@ -106,8 +109,10 @@ CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
  L74               ;     { Excess SDI (pg 13). }
  L75               ;     { Earned Income Tax Credit (EITC). }
  L76               ;     { Young Child Tax Credit (YCTC). }
+ L77         32.10 ;     { Net Premium Assistance Subsidy (PAS). }
 
- L91               ;     { Use Tax. }
+ L91         50.00 ;     { Use Tax. }
+ L92         40.00 ;     { Individual Shared Responsibility (ISR) Penalty. }
 
  L112              ;     { Interest, late penalties. }
  L113              ;     { Underpayment of estimated tax penalty. (FTB 5805) }

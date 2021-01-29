@@ -172,10 +172,10 @@ void capgains_qualdividends_worksheets( int status )			/* Updated for 2020. */
  qcgws[9] = qcgws[7] - qcgws[8];				// This amount is taxed at 0%
  qcgws[10] = smallerof( qcgws[1], qcgws[4] );
  qcgws[11] = qcgws[9];
- qcgws[12] = qcgws[10] - qcgws[1];
+ qcgws[12] = qcgws[10] - qcgws[11];
  switch (status)
   {
-   case SINGLE:  			      qcgws[13] = 4414550.0;  break;
+   case SINGLE:  			      qcgws[13] = 441450.0;  break;
    case MARRIED_FILLING_SEPARAT:	      qcgws[13] = 248300.0;  break;
    case MARRIED_FILLING_JOINTLY: case WIDOW:  qcgws[13] = 496600.0;  break;
    case HEAD_OF_HOUSEHOLD: 		      qcgws[13] = 469050.0;  break;
