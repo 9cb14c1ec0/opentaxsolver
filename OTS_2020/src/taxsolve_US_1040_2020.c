@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -1836,7 +1836,7 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
   }
  showline_wlabel( "L10b", L10b );
 
- L[10] = L10a - L10b;
+ L[10] = L10a + L10b;
  showline_wlabelmsg( "L10c", L[10], "Total Adjustments to Income" );
 
  L[11] = L[9] - L[10];

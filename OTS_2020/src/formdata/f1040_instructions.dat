@@ -143,7 +143,7 @@ enter the taxable amounts on line 4b.
 But enter the amounts of those
 distributions on line 4a.
 
-[L4c] Pensions and Annuities
+[L5a] Pensions and Annuities
 
 You should receive a Form 1099-R
 showing the total amount of your pension
@@ -166,7 +166,30 @@ tirement plans. The plan must advise
 you of the year(s) the distributions are
 includible in income.
 
-[L4d] Taxable Pensions and Annuities
+[L5b] Taxable Pensions and Annuities
+
+Your payments are fully taxable if (a)
+you didn't contribute to the cost (see
+Cost, later) of your pension or annuity,
+or (b) you got your entire cost back tax
+free before 2020. But see Insurance Pre-
+miums for Retired Public Safety Offi-
+cers, later. If your pension or annuity is
+fully taxable, enter the total pension or
+annuity payments (from Form(s)
+1099-R, box 1) on line 5b; don't make
+an entry on line 5a.
+
+Fully taxable pensions and annuities
+also include military retirement pay
+shown on Form 1099-R. For details on
+military disability pensions, see Pub.
+525. If you received a Form
+RRB-1099-R, see Pub. 575 to find out
+how to report your benefits.
+
+
+[L6b] Taxable Pensions and Annuities
 
 Enter the pension or annuity payments
 from Form(s) 1099-R, box 1 on line 4d.
@@ -192,7 +215,7 @@ how to report your benefits.
 
 (See instructions pages 25-27 for more information.)
 
-[L5a] Social Security Benefits
+[L6a] Social Security Benefits
 
 You should receive a Form SSA-1099
 showing in box 3 the total social securi-
@@ -204,7 +227,7 @@ should receive a Form RRB-1099.
 
 (See instructions page 27 for more information.)
 
-[L10] Qualified Business Income Deduction
+[L13] Qualified Business Income Deduction
 (Section 199A Deduction)
 
 To figure your Qualified Business In-
@@ -229,7 +252,7 @@ information for figuring and reporting
 your qualified business income deduc-
 tion.
 
-[L13a] Child Tax Credit and Credit
+[L19] Child Tax Credit and Credit
 for Other Dependents
 
 Form 8862, who must file. You must
@@ -248,45 +271,68 @@ and its instructions for details.
 
 (See instructions pages 34-36 for more information.)
 
-[L17] Federal Income Tax Withheld
+[L25a] Federal Income Tax Withheld - Form(s) W-2
 
-Enter the amounts shown as federal income
-tax withheld on your Forms W-2,
-W-2G, and 1099-R. 
+Enter the amounts shown as federal income tax
+withheld on your Form(s) W-2.  The amounts withheld
+should be shown in box 2 of Form W-2. Attach your
+Form(s) W-2 to your return.
 
-The amount(s) withheld should be
-shown in box 2 of Form(s) W-2, and in
-box 4 of Form W-2G or 1099-R. 
+[L25b] Federal Income Tax Withheld - Form(s) 1099
 
-Attach your Form(s) W-2 to your return. 
-Attach Forms W-2G and 1099-R to the front of
-your return if federal income tax was withheld.
+Include on line 25b any federal income
+tax withheld on your Form(s) 1099-R.
+The amount withheld should be shown
+in box 4. Attach your Form(s) 1099-R to
+the front of your return if federal income
+tax was withheld.
 
-If you received a 2019 Form 1099
+If you received a 2020 Form 1099
 showing federal income tax withheld on
 dividends, taxable or tax-exempt interest
 income, unemployment compensation,
 social security benefits, railroad retire-
 ment benefits, or other income you re-
-ceived, enter the amount withheld 
-on line 17. This should be shown in box 4
-of Form 1099, box 6 of Form SSA-1099,
-or box 10 of Form RRB-1099.
+ceived, include the amount withheld in
+the total on line 25b. This should be
+shown in box 4 of Form 1099, box 6 of
+Form SSA-1099, or box 10 of Form
+RRB-1099.
+
+[L25c] Federal Income Tax Withheld - Other Forms
+
+Include on line 25c any federal income
+tax withheld on your Form(s) W-2G.
+The amount withheld should be shown
+in box 4. Attach Form(s) W-2G to the
+front of your return if federal income tax
+was withheld.
 
 If you had Additional Medicare Tax
 withheld, include the amount shown on
-Form 8959, line 24, on line 17.
-Attach Form 8959. 
+Form 8959, line 24, in the total on
+line 25c. Attach Form 8959.
 
-Include on line 17 any federal income
-tax withheld that is shown on a Schedule K-1.
-Also include on line 17 any tax with-held
-that is shown on Form 1042-S,
-Form 8805, or Form 8288-A. Youshould attach
-the form to your return to claim a credit for
-the withholding.
+Include on line 25c any federal in-
+come tax withheld that is shown on a
+Schedule K-1.
 
-[L18a] Earned Income Credit (EIC)
+Also include on line 25c any tax
+withheld that is shown on Form 1042-S,
+Form 8805, or Form 8288-A. You
+should attach the form to your return to
+claim a credit for the withholding.
+
+[L26] Estimated Tax Payments
+
+Enter any estimated federal income tax
+payments you made for 2020. Include
+any overpayment that you applied to
+your 2020 estimated tax from:
+ - Your 2019 return, or
+ - An amended return (Form 1040-X).
+
+[L27] Earned Income Credit (EIC)
 
 The EIC is a credit for certain people who work. The credit may
 give you a refund even if you don't owe any tax or didn't have
@@ -297,7 +343,7 @@ To Take the EIC:
 # Complete the worksheet that applies to you.
 # If you have a qualifying child, complete and attach Schedule EIC.
 
-[L18b] Additional Child Tax Credit
+[L28] Additional Child Tax Credit
 
 This credit is for certain people who
 have at least one qualifying child for the
@@ -309,12 +355,12 @@ have any tax withheld.
 
 (See instructions page 55 for more information.)
 
-[L18c] American Opportunity Credit
+[L29] American Opportunity Credit
 
 If you meet the requirements to claim an
 education credit (see the instructions for
-Schedule 3, line 3), enter on line 18c the
-amount, if any, from Form 8863, line 8.
+Schedule 3, line 3), enter the amount,
+if any, from Form 8863, line 8.
 You may be able to increase an educa-
 tion credit and reduce your total tax or
 increase your tax refund if the student
@@ -326,41 +372,74 @@ information.
 
 (See instructions page 55 for more information.)
 
-[L24] Estimated Tax Penalty
+[L30] Recovery Rebate Credit
 
-You may owe a penalty if:
-# Line 23 is at least $1,000 and it is
+The recovery rebate credit was paid out
+to eligible individuals in two rounds of
+advance payments called economic im-
+pact payments. The economic impact
+payments were based on your 2018 or
+2019 tax year information. The recovery
+rebate credit is figured like the economic
+impact payments except that the credit
+eligibility and the credit amount are
+based on your 2020 tax year informa-
+tion. If you didn't receive the full
+amount of the recovery rebate credit as
+economic impact payments, you may be
+able to claim the recovery rebate credit
+on your 2020 Form 1040 or 1040-SR.
+
+Generally, you are eligible to claim
+the recovery rebate credit if in 2020 you
+were a U.S. citizen or U.S. resident ali-
+en, weren't a dependent of another tax-
+payer, and have a valid social security
+number. This includes someone who
+died in 2020, if you are preparing a re-
+turn for that person. Use the Recovery
+Rebate Credit Worksheet to figure the
+credit, if any, you can claim. For more
+information on the recovery rebate cred-
+it, go to IRS.gov/RRC.
+
+[L38] Estimated Tax Penalty
+
+You may owe this penalty if:
+ - Line 37 is at least $1,000 and it is
 more than 10% of the tax shown on your
 return, or
-# You didn't pay enough estimated
+ - You didn't pay enough estimated
 tax by any of the due dates. This is true
 even if you are due a refund.
+For most people, the "tax shown on
+your return" is the amount on your 2020
+Form 1040 or 1040-SR, line 24, minus
+the total of any amounts shown on lines
+27, 28, 29, and 30; Schedule 3, lines 8
+and 11; and Forms 7202 (lines 24 and
+35), 8828, 4137, 5329 (Parts III through
+IX only), 8885, and 8919. 
 
-Exception. You won't owe the penalty
-if your 2018 tax return was for a tax
+Exception: You won't owe the penalty
+if your 2019 tax return was for a tax
 year of 12 full months and either of the
 following applies.
-1. You had no tax shown on your
-2018 return and you were a U.S. citizen
-or resident for all of 2018.
-2. The total of line 17 and Schedule
-3, lines 8 and 11, on your 2019 return is
-at least 100% of the tax shown on your
-2018 return (110% of that amount if you
-aren't a farmer or fisherman, and your
-adjusted gross income (AGI) shown on
-your 2018 return was more than
-$150,000 (more than $75,000 if married
-filing separately for 2019)). Your esti-
-mated tax payments for 2019 must have
-been made on time and for the required
-amount.
-
-Figuring the Penalty
-If you choose to figure the penalty yourself,
-use Form 2210 (or 2210-F for farmers and fishermen).
-
-(See instructions page 59 for more information.)
+ 1. You had no tax shown on your
+  2019 return and you were a U.S. citizen
+  or resident for all of 2019.
+ 2. The total of lines 25d, 26, and
+  Schedule 3, line 10, on your 2020 return
+  is at least 100% of the tax shown on
+  your 2019 return (110% of that amount
+  if you aren't a farmer or fisherman, and
+  your adjusted gross income (AGI)
+  shown on your 2019 return was more
+  than $150,000 (more than $75,000 if
+  married filing separately for 2020)).
+  Your estimated tax payments for 2020
+  must have been made on time and for
+  the required amount.
 
 [A9] Investment Interest
 

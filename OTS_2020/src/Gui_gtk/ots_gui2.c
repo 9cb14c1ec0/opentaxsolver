@@ -44,8 +44,8 @@
 /*							*/
 /********************************************************/
 
-float version=2.35;
-char package_date[]="Jan. 3, 2021";
+float version=2.36;
+char package_date[]="Jan. 25, 2021";
 char ots_release_package[]="18.00";
 
 /************************************************************/
@@ -292,6 +292,7 @@ struct taxline_record
   char *linename;
   int linenum, vpos;
   struct value_list *values_hd, *values_tl;	/* Head and tail list pointers for a tax-line-entry. */
+  struct instruct_rec *instructions;
   struct taxline_record *nxt;
  } *taxlines_hd=0, *taxlines_tl=0;		/* Head and tail list pointers for tax-form. */
 
@@ -789,11 +790,11 @@ struct instruct_rec
 char *instructions_filename=0;
 
 
-void new_instruction( char *line_label, char *buf, int *buflen )
+struct instruct_rec *new_instruction( char *line_label, char *buf, int *buflen )
 {
  struct instruct_rec *new;
-//if (instruct_lst != 0)
-//printf("	Instr: [%s] '%s'\n", instruct_lst->instr_label, buf );
+ //if (instruct_lst != 0)
+ //printf("	Instr: [%s] '%s'\n", instruct_lst->instr_label, buf );
  if (instruct_lst != 0)
   instruct_lst->instr_text = strdup( buf );	/* Store prior instruction text. */
  buf[0] = '\0';					/* Clear buffer for new text. */
@@ -802,6 +803,7 @@ void new_instruction( char *line_label, char *buf, int *buflen )
  new->instr_label = strdup( line_label );
  new->nxt = instruct_lst;
  instruct_lst = new;
+ return new;
 }
 
 
@@ -859,9 +861,27 @@ void dispose_instuctions()
 }
 
 
+void attach_instruction2line( struct instruct_rec *newinstr )
+{
+ struct taxline_record *txline, *closest_line=0;
+
+ txline = taxlines_hd;
+ while (txline!=0)
+  {
+   if (strcmp( txline->linename, newinstr->instr_label ) == 0)
+    {
+     txline->instructions = newinstr;
+     return;
+    }
+   txline = txline->nxt;
+  }
+}
+
+
 void read_instructions( int init )
 { char *tmpinstrfname, *tline, *tstr, *twrd, *buf;
   int maxstr1=16384, maxstr2=32768, buflen=0;
+  struct instruct_rec *newinstr;
   FILE *instrfile;
   /**
     Instruction files must have the following form for any tax-lines with instructions:
@@ -908,9 +928,9 @@ void read_instructions( int init )
      }
     if (verbose) printf("Instruction file = '%s'\n", instructions_filename );
    }
-  tmpinstrfname = (char *)malloc(4096);
-  tstr = (char *)malloc( 512 );
-  twrd = (char *)malloc( 512 );
+  tmpinstrfname = (char *)malloc(8192);
+  tstr = (char *)malloc( 1024 );
+  twrd = (char *)malloc( 1024 );
   tline = (char *)malloc( maxstr1 + 10 );
   buf = (char *)calloc( 1, maxstr2 + 10 );
   strcpy( tmpinstrfname, ots_path );
@@ -936,7 +956,8 @@ void read_instructions( int init )
       strcpy_safe( tstr, tline, 256 );
       fb_next_word( tstr, twrd, "[] \t\n\r" );
       // printf("Label: '%s'\n", twrd );
-      new_instruction( twrd, buf, &buflen );
+      newinstr = new_instruction( twrd, buf, &buflen );
+      attach_instruction2line( newinstr );
       advance_word( tline, ']', " \t" );
      }
     strcat_safe( buf, tline, maxstr2, &buflen );
@@ -956,7 +977,6 @@ int mouse_clicked( GtkWidget *widget, GdkEventButton *event, gpointer data )
  int xpos, vpos, mindist=9999999;
  GtkAdjustment *adj;
  struct taxline_record *txline, *closest_line=0;
- struct instruct_rec *tmpline;
 
  if (warnwin)
   { /* Remove any previously open text window. */
@@ -984,11 +1004,8 @@ int mouse_clicked( GtkWidget *widget, GdkEventButton *event, gpointer data )
  if ((closest_line != 0) && (vpos - closest_line->vpos > -30))
   { /* Pop up instruction-text window, if clicked near enough, and/or below, a tax-line with instructions. */
    // printf("Picked '%s', dist = %d\n", closest_line->linename, mindist );
-   tmpline = instruct_lst;
-   while ((tmpline != 0) && (strcmp( closest_line->linename, tmpline->instr_label ) != 0))
-    tmpline = tmpline->nxt;
-   if (tmpline != 0)
-    GeneralPopup( tmpline->instr_label, tmpline->instr_text, 0 );
+   if (closest_line->instructions)
+    GeneralPopup( closest_line->instructions->instr_label, closest_line->instructions->instr_text, 0 );
   }
  return 1;      /* Stops other handlers from being invoked. */
 }
@@ -1567,6 +1584,8 @@ void DisplayTaxInfo()
      if (label_x0 < 0) label_x0 = 0;
      if (debug) printf("%d: LineLabel '%s' at (%d, %d)\n",txline->linenum, txline->linename, label_x0, y1a );
      label = make_label( mpanel2, label_x0, y1a, txline->linename );
+     if (txline->instructions)
+      set_widget_color( label, "#0000a0" );
      label_x1 = label_x0 + label_width;
      box_x0 = label_x1 + horzpad;
      if (box_x0 < min_box_x0) box_x0 = min_box_x0;
