@@ -15,7 +15,9 @@ Page 1
 ! CkHealthCoverage 721 217
  Number&Street:  83 258
  Apt#: 		642 259
- TownStateZip: 	 83 294
+ Town/City: 	 83 294
+ State: 	 530 294
+ ZipCode: 	 630 294
 
  CkSingle 146 113
  CkMFJ    213 113

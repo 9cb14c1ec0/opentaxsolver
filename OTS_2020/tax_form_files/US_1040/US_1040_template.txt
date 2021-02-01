@@ -192,7 +192,9 @@ S3_12e		;	{ Deferral for certain Schedule H or SE filers. }
    { Your Address }
  Number&Street:	
  Apt#: 		
- TownStateZip:   
+ Town/City:   
+ State:   
+ ZipCode:   
 
    { Your Occupation(s) }
  YourOccupat:	

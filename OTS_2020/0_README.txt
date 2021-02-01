@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-Jan 3, 2021 v18.00 - For 2020 tax-year.
+Jan 25, 2021 v18.00 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -15,8 +15,8 @@ corresponding to a given form.
 This package contains programs and templates for:
 	- US-1040 - which also does the Schedules A, B, D, and forms 8949. 
 	- Schedule C for US-1040.
-	- State Income Taxes for California, Ohio, New Jersey, 
-	  Virginia, Pennsylvania, New York, Massachusetts, and North Carolina.
+	- State Income Taxes for Ohio, New Jersey, 
+	  Virginia, Pennsylvania, Massachusetts, and North Carolina.
 	  All updated for 2020 Tax-Year.
 Also contains an Automatic PDF Form-Fillout function:
 	- Supports all Federal Forms and State Forms.
@@ -32,7 +32,10 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v18.00 (1/3/2020) - Initial Release for Tax-Year 2020.
+    * v18.00 (1/25/2021) - Initial Release for Tax-Year 2020.
+		CA and NY state taxes are not included in this version because
+		the states have not yet released their form instructions
+		information.  Please check back for updates.
 
 Usage:
  RPLCSTRNG_03
@@ -69,7 +72,7 @@ Re-compiling:
  Unix/Linux/Mac:
   Pre-compiled executables for Unix/Linux are normally in bin directory.
   However to build the binaries in the bin/ directory:
-     cd OpenTaxSolver2020_17.xx	      ( cd into top directory. )
+     cd OpenTaxSolver2020_18.xx	      ( cd into top directory. )
      rm ./bin/* Run_taxsolve_GUI      ( Clears executables. )
      src/Build_taxsolve_packages.sh   ( Creates executables. )
 
@@ -77,7 +80,7 @@ Re-compiling:
    Pre-compiled executables are normally in bin directory.
    For compiling OTS on MSwindows, MinGW with Msys is recommended.
    From Msys terminal window:
-      cd OpenTaxSolver2020_17.xx       ( cd into top directory. )
+      cd OpenTaxSolver2020_18.xx       ( cd into top directory. )
       rm ./bin/* Run_taxsolve_GUI.exe  ( Clears executables. )
       src/Build_taxsolve_packages.sh   ( Creates executables. )
 

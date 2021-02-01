@@ -863,7 +863,7 @@ void dispose_instuctions()
 
 void attach_instruction2line( struct instruct_rec *newinstr )
 {
- struct taxline_record *txline, *closest_line=0;
+ struct taxline_record *txline;
 
  txline = taxlines_hd;
  while (txline!=0)

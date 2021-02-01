@@ -43,8 +43,8 @@ float thisversion=18.00;
 int status=0;	/* Value for filing status. */
 double 	sched540part2[MAX_LINES], sched540part2_sub[MAX_LINES], sched540part2_add[MAX_LINES],
 	sched540part2_5a=0.0, sched540part2_5b=0.0, sched540part2_5c=0.0, sched540part2_5d=0.0,
-	sched540part2_8a=0.0, sched540part2_8b=0.0, sched540part2_8c=0.0,
-	sched540part2_add8a=0.0, sched540part2_add8b=0.0, sched540part2_add8c=0.0;
+	sched540part2_8a=0.0, sched540part2_8b=0.0, sched540part2_8c=0.0, sched540part2_8d=0.0,
+	sched540part2_add8a=0.0, sched540part2_add8b=0.0, sched540part2_add8c=0.0, sched540part2_sub8d=0.0;
 
 
 double TaxRateFormula( double income, int status )
@@ -177,7 +177,7 @@ struct FedReturnData
   double fedline[MAX_LINES], schedA[MAX_LINES], fed_L2a, fed_L3a,
 	fed_L4a, fed_L4b, fed_L4c, fed_L4d, fed_L5a, fed_L5b,
 	schedA5a, schedA5b, schedA5c,
-	schedA8a, schedA8b, schedA8c,
+	schedA8a, schedA8b, schedA8c, schedA8d,
 	sched1[MAX_LINES],
 	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
   int Exception, Itemized;
@@ -253,6 +253,7 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
  fed_data->schedA8a = 0.0;
  fed_data->schedA8b = 0.0;
  fed_data->schedA8c = 0.0;
+ fed_data->schedA8d = 0.0;
 
  fed_data->fedl8b = 0.0;
  fed_data->fedl9b = 0.0;
@@ -372,6 +373,9 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
      else
      if (strcmp(word,"A8c") == 0)
       grab_line_value( word, fline, &(fed_data->schedA8c) );
+     else
+     if (strcmp(word,"A8d") == 0)
+      grab_line_value( word, fline, &(fed_data->schedA8d) );
      else
       {
        if (sscanf(&word[1],"%d",&linenum)!=1)
@@ -887,8 +891,9 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
 
  /* -- Sched540 Part II -- */
 
- GetLine("CA540_P2_1", &(sched540part2[1]) );	/* Medical and dental expenses */
- sched540part2[2] = PrelimFedReturn.fedline[7];
+ // GetLine("CA540_P2_1", &(sched540part2[1]) );	/* Medical and dental expenses */
+ sched540part2[1] = PrelimFedReturn.schedA[1];
+ sched540part2[2] = PrelimFedReturn.fedline[11];
  sched540part2[3] = 0.075 * sched540part2[2];
  sched540part2[4] = NotLessThanZero( sched540part2[1] - sched540part2[3] );
  sched540part2_5a = PrelimFedReturn.schedA5a;
@@ -915,13 +920,16 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  GetLine("CA540_P2_Add_8b", &sched540part2_add8b );
  sched540part2_8c = PrelimFedReturn.schedA8c;
  GetLine("CA540_P2_Add_8c", &sched540part2_add8c );
- sched540part2[8] = sched540part2_8a + sched540part2_8b + sched540part2_8c;
+ sched540part2_8d = PrelimFedReturn.schedA8d;
+ GetLine("CA540_P2_Sub_8d", &sched540part2_sub8d );
+ sched540part2[8] = sched540part2_8a + sched540part2_8b + sched540part2_8c + sched540part2_8d;
+ sched540part2_sub[8] = sched540part2_sub8d; 
  sched540part2_add[8] = sched540part2_add8a + sched540part2_add8b + sched540part2_add8c;
  sched540part2[9] = PrelimFedReturn.schedA[9];
  GetLine("CA540_P2_Sub_9", &(sched540part2_sub[9]) );
  GetLine("CA540_P2_Add_9", &(sched540part2_add[9]) );
  sched540part2[10] = sched540part2[8] + sched540part2[9];
- sched540part2_sub[10] = sched540part2_sub[9];
+ sched540part2_sub[10] = sched540part2_sub[8] + sched540part2_sub[9];
  sched540part2_add[10] = sched540part2_add[8] + sched540part2_add[9];
  sched540part2[11] = PrelimFedReturn.schedA[11];
  GetLine("CA540_P2_Sub_11", &(sched540part2_sub[11]) );
@@ -938,7 +946,7 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  sched540part2[15] = PrelimFedReturn.schedA[15];
  GetLine("CA540_P2_Sub_15", &(sched540part2_sub[15]) );
  GetLine("CA540_P2_Add_15", &(sched540part2_add[15]) );
- sched540part2[16] = PrelimFedReturn.schedA[13];
+ sched540part2[16] = PrelimFedReturn.schedA[16];
  GetLine("CA540_P2_Sub_16", &(sched540part2_sub[16]) );
  GetLine("CA540_P2_Add_16", &(sched540part2_add[16]) );
 
@@ -1043,8 +1051,14 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
   fprintf(outfile," SchedCA540_Part2_8ca = %6.2f\n", sched540part2_8c );
  if (sched540part2_add8c != 0.0)
   fprintf(outfile," SchedCA540_Part2_8cc = %6.2f\n", sched540part2_add8c );
+ if (sched540part2_8d != 0.0)
+  fprintf(outfile," SchedCA540_Part2_8da = %6.2f\n", sched540part2_8d );
+ if (sched540part2_sub8d != 0.0)
+  fprintf(outfile," SchedCA540_Part2_8db = %6.2f\n", sched540part2_sub8d );
  if (sched540part2[8] != 0.0)
   fprintf(outfile," SchedCA540_Part2_8ea = %6.2f\n", sched540part2[8] );
+ if (sched540part2_sub[8] != 0.0)
+  fprintf(outfile," SchedCA540_Part2_8eb = %6.2f\n", sched540part2_sub[8] );
  if (sched540part2_add[8] != 0.0)
   fprintf(outfile," SchedCA540_Part2_8ec = %6.2f\n", sched540part2_add[8] );
  

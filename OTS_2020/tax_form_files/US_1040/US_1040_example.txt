@@ -238,7 +238,9 @@ S3_12e  	; 	{ Deferral for certain Schedule H or SE filers. }
  	{ Your Address }
  Number&Street:  1567 W. Hamptonshire
  Apt#:		 
- TownStateZip:   Springfield, IL 62722
+ Town/City:	Springfield
+ State:   	IL
+ ZipCode:	62722
 
 	{ Your Occupation(s) }
  YourOccupat:	Merchant

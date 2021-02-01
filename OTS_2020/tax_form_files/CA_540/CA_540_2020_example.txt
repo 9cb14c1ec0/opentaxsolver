@@ -64,12 +64,12 @@ CA540_Addit_C20		; { Additions for Student loan interest }
 CA540_Subtr_C21         ; { Subtractions for Tuition and fees }
 
 {--Part-II of California Adjustments--}
-CA540_P2_1		; { Medical and dental expenses }
 CA540_P2_Sub_5a		; { Subtractions for State and local income tax or general sales taxes }
 CA540_P2_Sub_6		; { Subtractions for Other taxes }
 CA540_P2_Add_8a		; { Additions for home mortgage interest & points reported on Form 1098 }
 CA540_P2_Add_8b		; { Additions for home mortgage interest not reported on Form 1098 }
 CA540_P2_Add_8c		; { Additions for points not reported on Form 1098 }
+CA540_P2_Sub_8d		; { Subtractions for mortgage insurance premiums }
 CA540_P2_Sub_9		; { Subtractions for investment interest }
 CA540_P2_Add_9		; { Additions for investment interest }
 CA540_P2_Sub_11		; { Subtractions for Gifts by cash or check }

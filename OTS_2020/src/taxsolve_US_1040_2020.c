@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.01;
+float thisversion=18.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -2126,7 +2126,11 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
   }
  GetTextLineF( "Number&Street:" );
  GetTextLineF( "Apt#:" );
- GetTextLineF( "TownStateZip:" );
+
+ // GetTextLineF( "TownStateZip:" );
+ GetTextLineF( "Town/City:" );
+ GetTextLineF( "State:" );
+ GetTextLineF( "ZipCode:" );
 
  get_word(infile, labelx );	/* Look for optional occupation fields. */
  if (!feof(infile))

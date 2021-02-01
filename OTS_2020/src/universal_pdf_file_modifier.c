@@ -892,7 +892,8 @@ void place_overlay_text( char *streambuf, int page )
       else
        { /*normal*/
 	 float xadj=0.0;
-	 if (add_commas && (strstr( item->label, "SocSec" ) == 0) && (strstr( item->label, "Zipcode" ) == 0) &&
+	 if (add_commas && (strstr( item->label, "SocSec" ) == 0) && 
+	     (strstr( item->label, "Zipcode" ) == 0) && (strstr( item->label, "ZipCode" ) == 0) &&
 	     (strstr( item->label, "Street" ) == 0) && (strstr( item->label, "Birth" ) == 0) &&
 	     (strstr( item->label, "Check_") == 0) && (value[0] != '"'))
 	  { /*number*/

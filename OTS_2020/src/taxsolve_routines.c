@@ -565,17 +565,17 @@ int Round( double x )
 /* Get a line value, or sum.  Must be terminated by ";". */
 void GetLine( char *linename, double *value )
 {
- char word[1024];
- get_parameter( infile, 's', word, linename);
- get_parameters( infile, 'f', value, linename);
+ char word[2048];
+ get_parameter( infile, 's', word, linename );
+ get_parameters( infile, 'f', value, linename );
 }
 
 /* Get a single line value. (No ";") */
 void GetLine1( char *linename, double *value )
 {
- char word[1024];
- get_parameter( infile, 's', word, linename);
- get_parameter( infile, 'f', value, linename);
+ char word[2048];
+ get_parameter( infile, 's', word, linename );
+ get_parameter( infile, 'f', value, linename );
 }
 
 /* Get a line value, or sum, and print it to file. */
@@ -595,8 +595,8 @@ void GetLineFnz( char *linename, double *value )
 /* Get optional line with label. */
 void GetOptionalLine( char *linename, char *label, double *value )
 {
- get_parameter( infile, 'l', label, linename);
- get_parameters( infile, 'f', value, linename);
+ get_parameter( infile, 'l', label, linename );
+ get_parameters( infile, 'f', value, linename );
 }
 
 void GetYesNo( char *linename, int *answer )	/* Get a boolean Yes/No, or True/False value, followed by ';'. */
