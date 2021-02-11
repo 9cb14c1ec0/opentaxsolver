@@ -179,6 +179,7 @@ S1_21             ;       { Tuition and fees. }
  A13            ;       { Carryover from prior year}
  A15            ;       { Casualty or theft loss(es).}
  A16            ;       { Other expenses}
+ A18       N    ;       { Elect to itemize, even when less than standard deduction. (answer: Yes, No) }
 
 { -- Schedule B: Part III -- }
  B7a	N	;	{ Financial account in foreign country ? (answer: Yes, No) }

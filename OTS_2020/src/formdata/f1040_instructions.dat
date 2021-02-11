@@ -486,3 +486,11 @@ IRS.gov/TEOS to see if an organization
 is eligible to receive tax-deductible con-
 tributions (Publication 78 data).
 
+[A18] Elect to Itemize Check-Box
+
+Normally leave this as "No".
+
+Only select "Y" if you want to force itemzation
+even when it will be less than your standard deduction.
+There are certain rare situations when this is beneficial
+due to state taxes, etc.

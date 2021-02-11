@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-Jan 25, 2021 v18.00 - For 2020 tax-year.
+February 11, 2021 v18.02 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -17,6 +17,7 @@ This package contains programs and templates for:
 	- Schedule C for US-1040.
 	- State Income Taxes for Ohio, New Jersey, 
 	  Virginia, Pennsylvania, Massachusetts, and North Carolina.
+	  A beta-version version of the updated California taxes was added.
 	  All updated for 2020 Tax-Year.
 Also contains an Automatic PDF Form-Fillout function:
 	- Supports all Federal Forms and State Forms.
@@ -32,6 +33,19 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * 18.02 (2/11/2021) - Additional validation was added to test that numeric 
+		entries are valid numbers for all forms.
+		For the Fed 1040:
+		  1. The Social Security worksheet lines 3+6 calculations were fixed.
+		  2. The circular dependency introduced in this year's taxes on Schedule-A
+		     and 1040 Lines 10b, 10c, and 11 -- which affects the itemization 
+		     decision and amounts -- was addressed and cleaned up.
+		  3. A check-box option was added on Fed 1040 Schedule-A (line-18) to
+		     elect to itemize, even when less than standard deduction.
+		Fixed comment on Massachusetts template line 15.
+		A beta-version version of the updated California taxes was added.
+    * v18.01 (2/5/2021) - On Fed 1040, fixed line 10c sign, and Updates to the
+		new separated Town/State/zip entries.
     * v18.00 (1/25/2021) - Initial Release for Tax-Year 2020.
 		CA and NY state taxes are not included in this version because
 		the states have not yet released their form instructions

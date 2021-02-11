@@ -166,6 +166,113 @@ char *mystrcasestr( char *haystack, char *needle )
 }
 
 
+int valid_int( char *word )	/* Check for a valid integer in string, and nothing else following it. */
+{	/* Returns 1 if valid, 0 if invalid. */
+ int j=0, state=0;
+ while (word[j] != '\0')
+  {
+   switch( state )
+    {
+     case 0: if ((word[j] == '-') || (word[j] == '+'))
+		state = 1;
+	     else
+	     if ((word[j] >= '0') && (word[j] <= '9'))
+		state = 2;
+	     else
+		return 0;
+	break;
+      case 1: if ((word[j] >= '0') && (word[j] <= '9'))
+                state = 2;
+             else
+		return 0;
+	break;
+      case 2: if ((word[j] >= '0') && (word[j] <= '9'))
+		state = 2;
+	      else
+	      if (word[j] == '.')
+		state = 3;
+	      else
+		return 0;
+	break;
+      case 3:  return 0;
+	break;
+      default:  return 0;
+    }
+   j++;
+  }
+ if (j != 0)
+  return 1;
+ else
+  return 0;
+}
+
+
+int valid_float( char *word )	/* Check for a valid decimal value in string, and nothing else following it. */
+{	/* Returns 1 if valid, 0 if invalid. */
+ int j=0, state=0;
+ while (word[j] != '\0')
+  {
+   switch( state )
+    {
+     case 0: if ((word[j] == '-') || (word[j] == '+'))
+		state = 1;
+	     else
+	     if ((word[j] >= '0') && (word[j] <= '9'))
+		state = 2;
+	     else
+	     if (word[j] == '.')
+		state = 3;
+	     else
+		return 0;
+	break;
+      case 1: if ((word[j] >= '0') && (word[j] <= '9'))
+                state = 2;
+             else
+		return 0;
+	break;
+      case 2: if ((word[j] >= '0') && (word[j] <= '9'))
+		state = 2;
+	      else
+	      if (word[j] == '.')
+		state = 3;
+	      else
+	      if ((word[j] == 'e') || (word[j] == 'E'))
+		state = 4;
+	      else
+		return 0;
+	break;
+      case 3: if ((word[j] >= '0') && (word[j] <= '9'))
+		state = 3;
+	      else
+	      if ((word[j] == 'e') || (word[j] == 'E'))
+		state = 4;
+	      else
+		return 0;
+	break;
+      case 4: if ((word[j] >= '0') && (word[j] <= '9'))
+		state = 5;
+	      else
+      	      if ((word[j] == '-') || (word[j] == '+'))
+		state = 5;
+	      else
+		return 0;
+        break;
+      case 5:  if ((word[j] >= '0') && (word[j] <= '9'))
+                state = 5;
+              else
+		return 0;
+	break;
+      default:  return 0;
+    }
+   j++;
+  }
+ if (j != 0)
+  return 1;
+ else
+  return 0;
+}
+
+
 /*------------------------------------------------------------------------------*/
 /* Get Parameter - Get a single value.						*/
 /*   Expect value kinds:  'i'=integer, 'f'=float, 's'=string, 'b'=boolean.	*/
@@ -189,7 +296,7 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
   }
  if (kind=='i')
   {
-   if (sscanf(word,"%d",&i)!=1)
+   if ((!valid_int(word)) || (sscanf(word,"%d",&i)!=1))
     {printf("ERROR: Bad integer '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad integer '%s', reading %s.\n", word, emssg); exit(1); }
    ii = (int *)x;
    *ii = i;
@@ -197,7 +304,7 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
  else
  if (kind=='f')
   {
-   if (sscanf(word,"%lf",&y)!=1) 
+   if ((!valid_float(word)) || (sscanf(word,"%lf",&y)!=1)) 
     {printf("ERROR: Bad float '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad float '%s', reading %s.\n", word, emssg); exit(1); }
    yy = (double *)x;
    *yy = y;
@@ -275,7 +382,7 @@ void get_parameters( FILE *infile, char kind, void *x, char *emssg )
   {printf("ERROR: Unexpected EOF on '%s'\n",emssg); fprintf(outfile,"ERROR: Unexpected EOF on '%s'\n",emssg); exit(1);}
  if (kind=='i')
   {
-   if (sscanf(word,"%d",&j)!=1)
+   if ((!valid_int(word)) || (sscanf(word,"%d",&j)!=1))
     {printf("ERROR: Bad integer '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad integer '%s', reading %s.\n", word, emssg); exit(1); }
    ii = (int *)x;
    *ii = j;
@@ -283,7 +390,7 @@ void get_parameters( FILE *infile, char kind, void *x, char *emssg )
  else
  if (kind=='f')
   {
-   if (sscanf(word,"%lf",&y)!=1) 
+   if ((!valid_float(word)) || ((sscanf(word,"%lf",&y))!=1))
     {printf("ERROR: Bad float '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad float '%s', reading %s.\n", word, emssg); exit(1); }
    yy = (double *)x;
    *yy = *yy + y;

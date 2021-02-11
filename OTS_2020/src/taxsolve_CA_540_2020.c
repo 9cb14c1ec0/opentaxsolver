@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -48,44 +48,44 @@ double 	sched540part2[MAX_LINES], sched540part2_sub[MAX_LINES], sched540part2_ad
 
 
 double TaxRateFormula( double income, int status )
-{											/* Not updated for 2020. */
+{											/* Updated for 2020. */
  double tax;
  if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
   {
-   if (income <   8809.00)  tax =             0.01 * income;                else
-   if (income <  20883.00)  tax =    88.09 +  0.02 * (income -   8809.00);  else
-   if (income <  32960.00)  tax =   329.57 +  0.04 * (income -  20833.00);  else
-   if (income <  45753.00)  tax =   812.65 +  0.06 * (income -  32960.00);  else
-   if (income <  57824.00)  tax =  1580.23 +  0.08 * (income -  45753.00);  else
-   if (income < 295373.00)  tax =  2545.91 + 0.093 * (income -  57824.00);  else
-   if (income < 354445.00)  tax = 24637.97 + 0.103 * (income - 295373.00);  else
-   if (income < 590742.00)  tax = 30722.39 + 0.113 * (income - 354445.00);
-   else                     tax = 57423.95 + 0.123 * (income - 590742.00);
+   if (income <   8932.00)  tax =             0.01 * income;                else
+   if (income <  21175.00)  tax =    89.32 +  0.02 * (income -   8832.00);  else
+   if (income <  33421.00)  tax =   334.18 +  0.04 * (income -  21175.00);  else
+   if (income <  46394.00)  tax =   824.02 +  0.06 * (income -  33421.00);  else
+   if (income <  58634.00)  tax =  1602.40 +  0.08 * (income -  46394.00);  else
+   if (income < 299508.00)  tax =  2581.60 + 0.093 * (income -  58634.00);  else
+   if (income < 359407.00)  tax = 24982.88 + 0.103 * (income - 299508.00);  else
+   if (income < 599012.00)  tax = 31152.48 + 0.113 * (income - 359407.00);
+   else                     tax = 58227.85 + 0.123 * (income - 599012.00);
   }
  else
  if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
   {
-   if (income <   17618.00)  tax =              0.01 * income;                 else
-   if (income <   41766.00)  tax =    176.18 +  0.02 * (income -   17618.00);  else
-   if (income <   65920.00)  tax =    659.14 +  0.04 * (income -   41766.00);  else
-   if (income <   91506.00)  tax =   1625.30 +  0.06 * (income -   65920.00);  else
-   if (income <  115648.00)  tax =   3160.46 +  0.08 * (income -   91506.00);  else
-   if (income <  590746.00)  tax =   5091.82 + 0.093 * (income -  115648.00);  else
-   if (income <  708890.00)  tax =  49275.93 + 0.103 * (income -  590746.00);  else
-   if (income < 1181484.00)  tax =  61444.76 + 0.113 * (income -  708890.00);
-   else                      tax = 114847.88 + 0.123 * (income - 1181484.00);
+   if (income <   17864.00)  tax =              0.01 * income;                 else
+   if (income <   42350.00)  tax =    178.64 +  0.02 * (income -   17864.00);  else
+   if (income <   66842.00)  tax =    668.36 +  0.04 * (income -   42350.00);  else
+   if (income <   92788.00)  tax =   1648.04 +  0.06 * (income -   66842.00);  else
+   if (income <  117268.00)  tax =   3204.80 +  0.08 * (income -   92788.00);  else
+   if (income <  599016.00)  tax =   5163.20 + 0.093 * (income -  117268.00);  else
+   if (income <  718814.00)  tax =  49965.76 + 0.103 * (income -  599016.00);  else
+   if (income < 1198024.00)  tax =  62304.95 + 0.113 * (income -  718814.00);
+   else                      tax = 116455.68 + 0.123 * (income - 1198024.00);
   }
  else
   {
-   if (income <  17629.00)  tax =             0.01 * income;                else
-   if (income <  41768.00)  tax =   176.29 +  0.02 * (income -  17629.00);  else
-   if (income <  53848.00)  tax =   659.07 +  0.04 * (income -  41768.00);  else
-   if (income <  66636.00)  tax =  1142.07 +  0.06 * (income -  53848.00);  else
-   if (income <  78710.00)  tax =  1909.65 +  0.08 * (income -  66636.00);  else
-   if (income < 401705.00)  tax =  2875.57 + 0.093 * (income -  78710.00);  else
-   if (income < 482047.00)  tax = 32914.11 + 0.103 * (income - 401705.00);  else
-   if (income < 803410.00)  tax = 41189.34 + 0.113 * (income - 482047.00); 
-   else                     tax = 77503.36 + 0.123 * (income - 803410.00);
+   if (income <  17876.00)  tax =             0.01 * income;                else
+   if (income <  42353.00)  tax =   178.76 +  0.02 * (income -  17876.00);  else
+   if (income <  54597.00)  tax =   668.30 +  0.04 * (income -  42353.00);  else
+   if (income <  67569.00)  tax =  1158.06 +  0.06 * (income -  54597.00);  else
+   if (income <  79812.00)  tax =  1936.38 +  0.08 * (income -  67569.00);  else
+   if (income < 407329.00)  tax =  2915.82 + 0.093 * (income -  79812.00);  else
+   if (income < 488796.00)  tax = 33374.90 + 0.103 * (income - 407329.00);  else
+   if (income < 814658.00)  tax = 41766.00 + 0.113 * (income - 488796.00); 
+   else                     tax = 78588.41 + 0.123 * (income - 814658.00);
   }
  return (int)(tax+0.5);
 }
@@ -97,37 +97,37 @@ void Report_bracket_info( double income, int status )
  tx = TaxRateFormula( income, status );
  if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
   {
-   if (income <    8809.00)  rate = 0.01;  else
-   if (income <   20883.00)  rate = 0.02;  else
-   if (income <   32960.00)  rate = 0.04;  else
-   if (income <   45753.00)  rate = 0.06;  else
-   if (income <   57824.00)  rate = 0.08;  else
-   if (income <  295373.00)  rate = 0.093;  else
-   if (income <  354445.00)  rate = 0.103;  else
-   if (income <  590742.00)  rate = 0.113;  else  rate = 0.123;
+   if (income <    8832.00)  rate = 0.01;  else
+   if (income <   21175.00)  rate = 0.02;  else
+   if (income <   33421.00)  rate = 0.04;  else
+   if (income <   46394.00)  rate = 0.06;  else
+   if (income <   58634.00)  rate = 0.08;  else
+   if (income <  299508.00)  rate = 0.093;  else
+   if (income <  359407.00)  rate = 0.103;  else
+   if (income <  599012.00)  rate = 0.113;  else  rate = 0.123;
   }
  else
  if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
   {
-   if (income <   17618.00)  rate = 0.01;  else
-   if (income <   41766.00)  rate = 0.02;  else
-   if (income <   65920.00)  rate = 0.04;  else
-   if (income <   91506.00)  rate = 0.06;  else
-   if (income <  115648.00)  rate = 0.08;  else
-   if (income <  590746.00)  rate = 0.093;  else
-   if (income <  708890.00)  rate = 0.103;  else
-   if (income < 1181484.00)  rate = 0.113;  else  rate = 0.123;
+   if (income <   17864.00)  rate = 0.01;  else
+   if (income <   42350.00)  rate = 0.02;  else
+   if (income <   66842.00)  rate = 0.04;  else
+   if (income <   92788.00)  rate = 0.06;  else
+   if (income <  117268.00)  rate = 0.08;  else
+   if (income <  599016.00)  rate = 0.093;  else
+   if (income <  718814.00)  rate = 0.103;  else
+   if (income < 1198024.00)  rate = 0.113;  else  rate = 0.123;
   }
  else
   {
-   if (income <  17629.00)  rate = 0.01;  else
-   if (income <  41768.00)  rate = 0.02;  else
-   if (income <  53848.00)  rate = 0.04;  else
-   if (income <  66636.00)  rate = 0.06;  else
-   if (income <  78710.00)  rate = 0.08;  else
-   if (income < 401705.00)  rate = 0.093;  else
-   if (income < 482047.00)  rate = 0.103;  else
-   if (income < 803410.00)  rate = 0.113;  else  rate = 0.123;
+   if (income <  17876.00)  rate = 0.01;  else
+   if (income <  42353.00)  rate = 0.02;  else
+   if (income <  54597.00)  rate = 0.04;  else
+   if (income <  67569.00)  rate = 0.06;  else
+   if (income <  79812.00)  rate = 0.08;  else
+   if (income < 407329.00)  rate = 0.093;  else
+   if (income < 488796.00)  rate = 0.103;  else
+   if (income < 804658.00)  rate = 0.113;  else  rate = 0.123;
   }
  printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
 	  100.0 * rate, 100.0 * tx / income );
@@ -556,15 +556,15 @@ int main( int argc, char *argv[] )
 	L12	34900.0  {Wages}
  */
 
- printf("CA-540 2020 - v%3.2f - PROTO - PRE-RELEASE\n", thisversion);
+ printf("CA-540 2020 - v%3.2f - BETA Version\n", thisversion);
 
  /* Accept Form's "Title" line, and put out with date-stamp for your records. */
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
-printf("\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT USE\n\n");
-fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT USE\n\n");
+printf("\nBETA Version\n\n");
+fprintf(outfile,"--- BETA Version ---\n\n");
 
  get_parameter( infile, 's', word, "FileName" );      /* Preliminary Fed Return Output File-name. */
  get_word(infile, prelim_1040_outfilename );
@@ -593,24 +593,24 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT) || (status==HEAD_OF_HOUSEHOLD))
   iline7 = 1;  else  iline7 = 2;
  if (L[6] != 0.0) iline7 = 0; /* <-- Possible exceptions here. */
- L[7] = 122.0 * iline7;
+ L[7] = 124.0 * iline7;							/* Updated for 2020. */
  showline(7);
 
  get_parameter( infile, 's', word, "L8" );	/* Blind?, 1 if you or spouse, 2 if both. */
  get_parameter( infile, 'i', &iline8, "L8" );
- L[8] = iline8 * 122.0;
+ L[8] = iline8 * 124.0;							/* Updated for 2020. */
  showline(8);
  if (iline8 > 0) fprintf(outfile,"  L8a = %d\n", iline8 );
 
  get_parameter( infile, 's', word, "L9" );	/* Senior?, 1 if you or spouse, 2 if both. */
  get_parameter( infile, 'i', &iline9, "L9" );
- L[9] = iline9 * 122.0;
+ L[9] = iline9 * 124.0;							/* Updated for 2020. */
  showline(9);
  if (iline9 > 0) fprintf(outfile,"  L9a = %d\n", iline9 );
 
  get_parameter( infile, 's', word, "L10" );  /* Number of Dependents. */
  get_parameter( infile, 'i', &iline10, "L10"); 
- L[10] = iline10 * 378.0;
+ L[10] = iline10 * 383.0;						/* Updated for 2020. */
  showline(10);
  if (iline10 > 0) fprintf(outfile,"  L10a = %d\n", iline10 );
 
@@ -620,7 +620,7 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  /* Taxable Income. */
  GetLineF( "L12", &L[12] );		/* State Wages (W2 box 16). */
 
- L[13] = PrelimFedReturn.fedl8b;	/* Fed Wages (Fed 1040 line 8b). */
+ L[13] = PrelimFedReturn.fedline[11];	/* Fed Wages (Fed 1040 line 11). */
  showline(13);
 
 
@@ -963,7 +963,7 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  GetLine("CA540_P2_20", &(sched540part2[20]) );
  GetLine("CA540_P2_21", &(sched540part2[21]) );
  sched540part2[22] = sched540part2[19] + sched540part2[20] + sched540part2[21];
- sched540part2[23] = PrelimFedReturn.fedline[7];
+ sched540part2[23] = PrelimFedReturn.fedline[11];
  sched540part2[24] = NotLessThanZero( 0.02 * sched540part2[23] );
  sched540part2[25] = NotLessThanZero( sched540part2[22] - sched540part2[24] );
  sched540part2[26] = sched540part2[18] + sched540part2[25];
@@ -972,13 +972,13 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  switch (status)
   {
    case SINGLE:
-   case MARRIED_FILLING_SEPARAT:  threshA = 200534.0;	std_ded = 4537.0;  break;	/* Not updated for 2020. */
+   case MARRIED_FILLING_SEPARAT:  threshA = 203341.0;	std_ded = 4601.0;  break;	/* Updated for 2020. */
    case MARRIED_FILLING_JOINTLY:
-   case WIDOW:                    threshA = 401072.0;	std_ded = 9074.0;  break;
-   case HEAD_OF_HOUSEHOLD:        threshA = 300805.0;	std_ded = 9074.0;  break;
+   case WIDOW:                    threshA = 406687.0;	std_ded = 9202.0;  break;
+   case HEAD_OF_HOUSEHOLD:        threshA = 305016.0;	std_ded = 9202.0;  break;
   }
  if (L[13] > threshA)
-  { /*Itemized Deductions Worksheet*/
+  { /*Itemized Deductions Worksheet*/	/* Page 47. */
     double ws[40];
     // printf("Yes, Fed AGI (%6.2f) is more than threshold (%6.2f).\n", L[13], threshA );
     for (j=1; j <= 10; j++) ws[j] = 0.0;    
@@ -1088,46 +1088,46 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
  showline(17);
 
  switch (status)
-  {		/* Minimum AGI (Line 17) required to file. */		/* Not updated for 2020. */
+  {		/* Minimum AGI (Line 17) required to file. */		/* Updated for 2020. */
     case SINGLE:
     case HEAD_OF_HOUSEHOLD:
 		if (iline9 == 0)		/*Under65*/
 		   switch (iline10)		  /*Dependents*/
 		    {
-		     case 0:  min2file = 18241.0;	break;
-		     case 1:  min2file = 30841.0;	break;
-		     default: min2file = 40291.0;	break;
+		     case 0:  min2file = 18496.0;	break;
+		     case 1:  min2file = 31263.0;	break;
+		     default: min2file = 40838.0;	break;
 		    }
 		else			 	/*Over65*/
 		   switch (iline10)		  /*Dependents*/
 		    {
-		     case 0:  min2file = 24341.0;	break;
-		     case 1:  min2file = 33791.0;	break;
-		     default: min2file = 41351.0;	break;
+		     case 0:  min2file = 24696.0;	break;
+		     case 1:  min2file = 34271.0;	break;
+		     default: min2file = 41931.0;	break;
 		    }
 	  break;
    case MARRIED_FILLING_JOINTLY: 
 		if (iline9 == 0)		 /*Both Under65*/
 		   switch (iline10)
 		    {
-		     case 0:  min2file = 36485.0;	break;
-		     case 1:  min2file = 49085.0;	break;
-		     default: min2file = 58535.0;	break;
+		     case 0:  min2file = 36996.0;	break;
+		     case 1:  min2file = 49763.0;	break;
+		     default: min2file = 59338.0;	break;
 		    }
 		else
 		if (iline9 == 1)		 /*One Over65*/
 		   switch (iline10)
 		    {
-		     case 0:  min2file = 42585.0;	break;
-		     case 1:  min2file = 52035.0;	break;
-		     default: min2file = 59595.0;	break;
+		     case 0:  min2file = 43196.0;	break;
+		     case 1:  min2file = 52771.0;	break;
+		     default: min2file = 60631.0;	break;
 		    }
 		else
 		   switch (iline10)		 /*Both Over65*/
 		    {
-		     case 0:  min2file = 48685.0;	break;
-		     case 1:  min2file = 58135.0;	break;
-		     default: min2file = 65695.0;	break;
+		     case 0:  min2file = 49396.0;	break;
+		     case 1:  min2file = 58971.0;	break;
+		     default: min2file = 66631.0;	break;
 		    }
 	  break;
    case WIDOW:
@@ -1135,15 +1135,15 @@ fprintf(outfile,"\nTHIS PROGRAM IS STILL UNDER DEVELOPMENT + UPDATING - DO NOT U
 		   switch (iline10)		  /*Dependents*/
 		    {
 		     case 0:  min2file = 0.0;		break;	/* N/A */
-		     case 1:  min2file = 30841.0;	break;
-		     default: min2file = 40291.0;	break;
+		     case 1:  min2file = 31263.0;	break;
+		     default: min2file = 40838.0;	break;
 		    }
 		else			 	/*Over65*/
 		   switch (iline10)		  /*Dependents*/
 		    {
 		     case 0:  min2file = 0.0;		break;	/* N/A */
-		     case 1:  min2file = 33791.0;	break;
-		     default: min2file = 41351.0;	break;
+		     case 1:  min2file = 34271.0;	break;
+		     default: min2file = 41931.0;	break;
 		    }
 	  break;
   }

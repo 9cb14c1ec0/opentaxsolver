@@ -44,7 +44,7 @@ L11b	 1,200.00;	{ Amount spouse paid to SS, Medicare, RR, US, or Mass retirement
 L12		;	{ Child under 13, or disabled dependent/spouse }
 L13		0	{ Number of dependents < 12, or deps >= 65, or disabled deps, not more than 2 }
 L14a		;	{ Rental Paid }
-L15		;	{ Other - Sched Y, L17 }
+L15		;	{ Other - Sched Y, L19 }
   
 L20             0       {Interest and Dividends -- Sched B}
                 ;

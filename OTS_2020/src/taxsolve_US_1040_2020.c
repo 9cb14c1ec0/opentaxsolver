@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.02;
+float thisversion=18.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -64,6 +64,8 @@ double amtws2c=0.0;		/* Investment interest expense (difference between regular 
 double amtws2g=0.0;		/* Specified private activity bond interest exempt from regular tax - AMT entry */
 int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No;
 int status, under65=Yes, over65=No, dependent=No, force_print_all_pdf_forms=0;
+int ForceItemize=0;
+double localtax[10], loctaxlimit, homemort[10];
 double  collectibles_gains=0.0, ws_sched_D[MAX_LINES];
 
 
@@ -1168,10 +1170,10 @@ void SocSec_Worksheet()							/* Updated for 2020. */
  for (k = 0; k < 100; k++) ws[k] = 0.0;
  ws[1] = L6a;
  ws[2] = 0.5 * ws[1];
- ws[3] = L[1] + L[2] + L[3] + L[4] + L[6] + Sched1[9];
+ ws[3] = L[1] + L[2] + L[3] + L[4] + L[5] + L[7] + L[8];
  ws[4] = L2a;
  ws[5] = ws[2] + ws[3] + ws[4];
- ws[6] = L10b + Sched1[22];
+ ws[6] = L10b;
  for (k = 10; k <= 19; k++)
   ws[6] = ws[6] + Sched1[k];
  for (k = 0; k <= 6; k++)
@@ -1209,7 +1211,7 @@ void SocSec_Worksheet()							/* Updated for 2020. */
  ws[12] = smallerof( ws[9], ws[10] );
  ws[13] = ws[12] / 2.0;
  ws[14] = smallerof( ws[2], ws[13] );
- ws[15] = 0.85 * ws[11];
+ ws[15] = NotLessThanZero( 0.85 * ws[11] );
  ws[16] = ws[14] + ws[15];
  ws[17] = 0.85 * ws[1];
  ws[18] = smallerof( ws[16], ws[17] );
@@ -1373,6 +1375,21 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 }
 
 
+void Calculate_Schedule_A( )
+{
+ SchedA[2] = L[11];
+ SchedA[3] = 0.075 * SchedA[2];
+ SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
+ localtax[4] =  localtax[1] +  localtax[2] +  localtax[3];
+ localtax[5] = smallerof( localtax[4], loctaxlimit );
+ SchedA[7] = localtax[5] + SchedA[6];
+ homemort[5] = homemort[0] + homemort[1] + homemort[2] + homemort[3];
+ SchedA[10] = homemort[5] + SchedA[9];
+ SchedA[14] = SchedA[11] + SchedA[12] + SchedA[13];
+ SchedA[17] = SchedA[4] + SchedA[7] + SchedA[10] + SchedA[14] + SchedA[15] + SchedA[16];
+}
+
+
 
 /*----------------------------------------------------------------------*/
 /* Main									*/
@@ -1386,9 +1403,8 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
  double S_STD_DEDUC, MFS_STD_DEDUC, MFJ_STD_DEDUC, HH_STD_DEDUC, std_deduc;
  char *Your1stName, *YourLastName, *Spouse1stName, *SpouseLastName, *socsec, socsectmp[100];
  double NumDependents=0.0;
- double localtax[10], loctaxlimit, homemort[10];
  int StdDedChart_NumBoxesChecked=0;
- int SchedB7a=0, SchedB7aa=-1, SchedB8=0;
+ int SchedB7a=0, SchedB7aa=-1, SchedB8=0, gotB7a=0;
  char SchedB7b[1024]="";
  double S2_7b=0.0;
 
@@ -1635,21 +1651,15 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
  showline_wlabel( "L10a", L10a );
 
 
-
- /* Schedule A */
+ /* -- Schedule A - Input -- */
  GetLine( "A1", &SchedA[1] );	/* Unreimbursed medical expenses. */
-  showschedA(1);
- SchedA[2] = L[11];
-  showschedA(2);
- SchedA[3] = 0.075 * SchedA[2];
-  showschedA(3);
- SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
-  showschedA(4);
  for (j=0; j<10; j++)
-  localtax[j] = 0.0;
+   localtax[j] = 0.0;
+ if (status != MARRIED_FILLING_SEPARAT)
+  loctaxlimit = 10000.0;
+ else
+  loctaxlimit = 5000.0;
  GetLine( "A5a", &localtax[1] );	/* State and local income taxes. Or sales taxes. */
-  showline_wlabel( "A5a", localtax[1] );
-
  get_parameter( infile, 'l', labelx, "CheckBoxA5a or A5b" );
  if (strcmp( labelx, "CheckBoxA5a" ) == 0)
   {
@@ -1669,31 +1679,12 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
    fprintf(outfile,"Error: Found '%s' when expecteding CheckBoxA5a or A5b,\n", labelx );
    exit(1);
   }
-
  // GetLine( "A5b", &localtax[2] );	/* State and local real estate taxes. */	/* Optionally read-in just above. */
-  showline_wlabel( "A5b", localtax[2] );
  GetLine( "A5c", &localtax[3] );	/* State and local personal property (eg. automobile) taxes. */
-  showline_wlabel( "A5c", localtax[3] );
- localtax[4] =  localtax[1] +  localtax[2] +  localtax[3];
-  showline_wlabel( "A5d", localtax[4] );
- if (status != MARRIED_FILLING_SEPARAT)
-  loctaxlimit = 10000.0;
- else
-  loctaxlimit = 5000.0;
- localtax[5] = smallerof( localtax[4], loctaxlimit );
-  showline_wlabel( "A5e", localtax[5] );
- GetLine( "A6", &SchedA[6] );	/* Other taxes. */
-  showschedA(6);
- SchedA[7] = localtax[5] + SchedA[6];
-  showschedA(7);
-
+ GetLine( "A6", &SchedA[6] );		/* Other taxes. */
  GetLine( "A8a", &homemort[0] );	/* Home mortgage interest and points reported to you on Form 1098.*/
-  showline_wlabel( "A8a", homemort[0] );
  GetLine( "A8b", &homemort[1] );	/* Home mortgage interest not reported to you on Form 1098.*/
-  showline_wlabel( "A8b", homemort[1] );
  GetLine( "A8c", &homemort[2] );	/* Points not reported to you on Form 1098.*/
-  showline_wlabel( "A8c", homemort[2] );
-
  // GetLine( "A8d", &homemort[3] );	/* Mortgage insurance premiums. */
  GetOptionalLine( "A8d or A9", labelx, &tmpval );
  if (strcmp( labelx, "A9" ) == 0)
@@ -1713,42 +1704,36 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
    fprintf(outfile,"Error: Found '%s' when expecteding A8d,\n", labelx );
    exit(1);
   }
-
-  showline_wlabel( "A8d", homemort[3] );
- homemort[5] = homemort[0] + homemort[1] + homemort[2] + homemort[3];
-  showline_wlabel( "A8e", homemort[5] );
-
  // GetLine( "A9", &SchedA[9] );	/* Investment interest. Attach Form 4952*/	/* Optionally read-in just above. */
-
-  showschedA(9);
- SchedA[10] = homemort[5] + SchedA[9];
-  showschedA(10);
-
  GetLine( "A11", &SchedA[11] );	/* Charity contributions by cash or check.*/
-  showschedA(11);
  GetLine( "A12", &SchedA[12] );	/* Contributions other than cash or check.*/
-  showschedA(12);
  GetLine( "A13", &SchedA[13] );	/* Carryover from prior year*/
-  showschedA_wMsg(13, "Carryover from prior year" );
- SchedA[14] = SchedA[11] + SchedA[12] + SchedA[13];
-  showschedA(14);
  GetLine( "A15", &SchedA[15] );	/* Casualty or theft loss(es).*/
-  showschedA(15);
  GetLine( "A16", &SchedA[16] );	/* Other expenses*/
-  showschedA(16);
- SchedA[17] = SchedA[4] + SchedA[7] + SchedA[10] + SchedA[14] + SchedA[15] + SchedA[16];
-  showschedA(17);
- L[12] = SchedA[17];	/* Tentative setting. */
- if (L[12] > 0.0)  itemize = Yes;  else  itemize = No;
 
- if ((L[2] != 0.0) || (L[3] != 0.0))
+ /* Look for optional Force-Itemize line.  (Remove *optional* logic for 2021, once A18 is on ALL templates.) */
+ get_parameter( infile, 'l', labelx, "A18 or B7a");
+ if (strcmp( labelx, "A18" ) == 0)
   {
-   fprintf(outfile," Schedule-B:\n");
-   fprintf(outfile,"  B2 = %6.2f\n", L[2] );
-   fprintf(outfile,"  B4 = %6.2f\n", L[2] );
-   fprintf(outfile,"  B6 = %6.2f\n", L[3] );
+   // GetYesNo( "A18", &ForceItemize );
+   get_parameters( infile, 'b', &ForceItemize, labelx );
+  }
+ else
+ if (strcmp( labelx, "B7a" ) == 0)
+  {
+   // GetYesNo( "B7a", &SchedB7a );
+   get_parameters( infile, 'b', &SchedB7a, labelx );
+   gotB7a = 1;
+  }
+ else
+  {
+   printf("Error: Found '%s' when expecteding A18 or B7a.\n", labelx );
+   fprintf(outfile,"Error: Found '%s' when expecteding A18 or B7a\n", labelx );
+   exit(1);
   }
 
+
+ /* Determine your Std. Deduction value. */
  fprintf(outfile, "StdDedChart_NumBoxesChecked = %d\n", StdDedChart_NumBoxesChecked ); 
  if (StdDedChart_NumBoxesChecked == 0)
   {
@@ -1789,7 +1774,7 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
 		printf("Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
 		exit(1); 
      }
-    fprintf(outfile,"(Assuming no one is claiming your or your joint-spouse as a dependent.)\n");
+    fprintf(outfile,"  (Assuming no one is claiming you, or your joint-spouse, as a dependent.)\n");
   }
 
  switch (status)
@@ -1806,41 +1791,104 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
    default:  printf("Case (Line 12) not handled.\n"); fprintf(outfile,"Case (Line 12) not handled.\n"); exit(1);
   }
 
- if (L[12] <= std_deduc)
-  {
-   printf("	(Itemizations < Std-Deduction, %6.2f < %6.2f)\n", L[12], std_deduc );
-   fprintf(outfile,"	(Itemizations < Std-Deduction, %6.2f < %6.2f)\n", L[12], std_deduc );
-   L[12] = std_deduc;
-   fprintf(outfile,"Use standard deduction.\n");
-   itemize = 0;
-  }
- else
-  {
-   printf("	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[12], std_deduc );
-   fprintf(outfile,"	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[12], std_deduc );
-   fprintf(outfile,"Itemizing.\n");
-  }
 
 
+ /* -- Calculate Schedule A -- */
 
- if (itemize)
-  {
-   L10b = 0.0;		/* Charity contribs is handled in Sched-A above. */
-  }
- else
-  {						/* If not itemizing ... */
-   if (status != MARRIED_FILLING_SEPARAT)
-    L10b = smallerof( SchedA[11], 300.0 );	/*  Then you can deducted limited amount of charity contribs. */
-   else
-    L10b = smallerof( SchedA[11], 150.0 );
-  }
- showline_wlabel( "L10b", L10b );
+  /*** Due to the new option to deduct charity donations without itemizing,
+     (which creates a circular dependency on Sched-A-Line-2, from 1040-Line-11,
+      which depends on Lines 10b and 10c, which depend on whether you itemize ...)
+     we must now do the Schedule-A calculations twice, with & without itemizing,
+     to find which results in the lowest taxable income (L15).
+     (To put simply, Sched-A uses the value of Line-11. But Line-11 depends on Sched-A. )
+  ***/
 
+ L10b = 0.0;		/* Initial estimate assumes itemizing, so no charity deduction in L10b. */
  L[10] = L10a + L10b;
- showline_wlabelmsg( "L10c", L[10], "Total Adjustments to Income" );
-
  L[11] = L[9] - L[10];
+ Calculate_Schedule_A();
+
+ if (status != MARRIED_FILLING_SEPARAT)		/* Now, Tentatively set 10b value, assuming NOT-itemizing. */
+  L10b = smallerof( SchedA[11], 300.0 );
+ else
+  L10b = smallerof( SchedA[11], 150.0 );
+
+ if ((L10b + std_deduc < SchedA[17]) || (ForceItemize))
+  { /*Select_to_Itemize*/
+   itemize = Yes;
+   L10b = 0.0;		/* Charity contribs are handled in Sched-A above. And L11 stays as above. */
+   L[12] = SchedA[17];	/* Use itemized value. */
+   if (ForceItemize)
+    {
+     printf(" You elected to itemize deductions, even though they may be less than your Standard Deduction.\n");
+     fprintf(outfile," You elected to itemize deductions, even though they may be less than your Standard Deduction.\n");
+     printf("  (Itemizations = %6.2f, Std-Deduction = %6.2f)\n", L[12], std_deduc );
+     fprintf(outfile,"  (Itemizations = %6.2f, Std-Deduction = %6.2f)\n", L[12], std_deduc );
+    }
+   else
+    {
+     printf("  (Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[12], std_deduc );
+     fprintf(outfile,"	(Itemizations > Std-Deduction, %6.2f > %6.2f)\n", L[12], std_deduc );
+    }
+   fprintf(outfile,"Itemizing.\n");
+  } /*Select_to_Itemize*/
+ else
+  { /*Select_to_use_StdDeduction*/
+   itemize = No;
+   /* Leave the above tentative L10b deduction of charity contribs here when not itemizing. */
+   L[10] = L10a + L10b;		/* L[10] is L10c. */
+   L[11] = L[9] - L[10];
+   L[12] = std_deduc;		/* Take the Std.Deduction. */
+   Calculate_Schedule_A();	/* Recalculate Sched-A, due to different L11 value. */
+   printf("  (Itemizations < Std-Deduction + Charity-Deduction, %6.2f < %6.2f)\n", SchedA[17], std_deduc );
+   fprintf(outfile,"  (Itemizations < Std-Deduction + Charity-Deduction, %6.2f < %6.2f)\n", SchedA[17], std_deduc + L10b);
+   fprintf(outfile,"Use standard deduction.\n");
+  } /*Select_to_use_StdDeduction*/
+
+
+ /* -- Display Schedule A -- */
+  showschedA(1);
+  showschedA(2);
+  showschedA(3);
+  showschedA(4);
+  showline_wlabel( "A5a", localtax[1] );
+  showline_wlabel( "A5b", localtax[2] );
+  showline_wlabel( "A5c", localtax[3] );
+  showline_wlabel( "A5d", localtax[4] );
+  showline_wlabel( "A5e", localtax[5] );
+  showschedA(6);
+  showschedA(7);
+  showline_wlabel( "A8a", homemort[0] );
+  showline_wlabel( "A8b", homemort[1] );
+  showline_wlabel( "A8c", homemort[2] );
+  showline_wlabel( "A8d", homemort[3] );
+  showline_wlabel( "A8e", homemort[5] );
+  showschedA(9);
+  showschedA(10);
+  showschedA(11);
+  showschedA(12);
+  showschedA_wMsg(13, "Carryover from prior year" );
+  showschedA(14);
+  showschedA(15);
+  showschedA(16);
+  showschedA(17);
+  if (ForceItemize)
+   fprintf(outfile,"CheckBoxA18 = X\n");
+
+ showline_wlabel( "L10b", L10b );
+ showline_wlabelmsg( "L10c", L[10], "Total Adjustments to Income" );
  showline_wlabelmsg( "L11", L[11], "Adjusted Gross Income" );
+
+
+ if ((L[2] != 0.0) || (L[3] != 0.0))
+  {
+   fprintf(outfile," Schedule-B:\n");
+   fprintf(outfile,"  B2 = %6.2f\n", L[2] );
+   fprintf(outfile,"  B4 = %6.2f\n", L[2] );
+   fprintf(outfile,"  B6 = %6.2f\n", L[3] );
+  }
+
+
 
  if (under65 == 0) over65 = 1; 
  switch (status)	/* Check for minimum income to file. (min2file) */		/* Updated for 2020. */
@@ -1869,7 +1917,10 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
    fprintf(outfile,"You may not need to file a return, due to your income level.\n\n");
   }
 
- showline_wlabelmsg( "L12", L[12], "Standard deduction or itemized deductions" );
+ if (itemize)
+  showline_wlabelmsg( "L12", L[12], "Itemized Deductions" );
+ else
+  showline_wlabelmsg( "L12", L[12], "Standard Deduction" );
 
  showline( 13 );		/* Qualified business income ded., read-in above. */
 
@@ -1904,7 +1955,8 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
 
  showline_wlabelmsg( "L16", L[16], "Tax" );
 
- GetYesNo( "B7a", &SchedB7a );
+ if (!gotB7a)
+  GetYesNo( "B7a", &SchedB7a );
  GetYesNo( "B7aa", &SchedB7aa );
  GetString( "B7b", SchedB7b );
  GetYesNo( "B8", &SchedB8 );

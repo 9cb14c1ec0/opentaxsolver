@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <time.h>
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #include "taxsolve_routines.c"
 
@@ -312,7 +312,7 @@ int main( int argc, char *argv[] )
   L[14] = smallerof( L[14] , 3000.0 );
  ShowLineNonZero(14);
 
- GetLine( "L15", &L[15] );	/* Other Deductions (sched Y, L17) */
+ GetLine( "L15", &L[15] );	/* Other Deductions (sched Y, L19) */
  ShowLineNonZero(15);
 
  L[16] = Sum( L, 11, 15 );
