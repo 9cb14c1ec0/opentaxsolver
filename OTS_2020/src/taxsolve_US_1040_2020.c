@@ -407,7 +407,8 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2020. 
     amtws[9] = amtws[7] - amtws[8];
   } 
  amtws[10] = L[16] + Sched2[2] - Sched3[1];
- amtws[11] = NotLessThanZero( amtws[9] - amtws[10] );
+ if (amtws[6] > 0.0) 
+  amtws[11] = NotLessThanZero( amtws[9] - amtws[10] );
  printf("	AMTws[11] = Abs( %6.2f - %6.2f ) = Abs( %6.2f )\n", amtws[9], amtws[10], amtws[9] - amtws[10] );
  // Sched2[1] = amtws[11];	/* Redundant.  Is assigned by return value below. */
 
@@ -626,6 +627,8 @@ void new_capgain( struct capgain_record **list, char *comment, double buy_amnt,
 
   new_item = (struct capgain_record *)malloc( sizeof(struct capgain_record) );
   new_item->comment = strdup( comment );	/* Make new list item and fill-in its fields. */
+  if (strlen( new_item->comment ) > 31)
+   new_item->comment[31] = '\0'; /* Limit comment length to avoid over-running column boundary. */
   new_item->buy_amnt = buy_amnt;
   new_item->buy_date = strdup( buy_date );
   new_item->sell_amnt = sell_amnt;
@@ -1417,6 +1420,8 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
   else
   if (strcmp(argv[argk],"-allforms")==0)  { force_print_all_pdf_forms = 1; }
   else
+  if (strcmp(argv[argk],"-round_to_whole_dollars")==0)  { round_to_whole_dollars = 1; }
+  else
   if (k==1)
    {
     infname = strdup( argv[argk] );
@@ -2029,7 +2034,7 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
  L[17] = Sched2[3];
  showline( 17 );
 
- Report_bracket_info( L[16], Sched2[3], status );
+ Report_bracket_info( L[15], Sched2[3], status );
 
  L[18] = L[16] + L[17];
  showline( 18 );

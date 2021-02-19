@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.37;
-char package_date[]="Feb. 11, 2021";
-char ots_release_package[]="18.02";
+float version=2.39;
+char package_date[]="Feb. 17, 2021";
+char ots_release_package[]="18.03";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -108,6 +108,7 @@ char *yourfilename=0;
 char toolpath[MaxFname]="", *start_cmd;
 int pending_compute=0, supported_pdf_form=1;
 int filingstatus_mfj=1;
+int round_to_whole_nums=0;
 
 void pick_file( GtkWidget *wdg, void *data );	/* Prototype */
 void consume_leading_trailing_whitespace( char *line );
@@ -384,6 +385,20 @@ void dump_any_markup_commands( FILE *outfile )
 }
 
 
+int intercept_any_pragmas( char *word )  /* Intercept any special command pragmas. */
+{
+ if (strncmp( word, "Round_to_Whole_Dollars", 21 ) == 0)     /* Intercept any mode-setting commands. */
+  {
+   printf("Setting Round_to_Whole_Dollars mode.\n");
+   round_to_whole_nums = 1;
+   return 1;
+  }
+ else
+  return 0;
+}
+
+
+
 /*--------------------------------------------------------------*/
 /* Get_Next_Entry - Reads next item from input file.		*/
 /* Returns 0=VALUE_LABEL if reads data value or line-label. 	*/
@@ -456,7 +471,11 @@ int get_next_entry( char *word, int maxn, int *column, int *linenum, FILE *infil
        ots_column = 0;
        ots_line++;
        add_markup_command( word );
-         return NOTHING;
+       return NOTHING;
+     }
+    if (intercept_any_pragmas( word ))
+     {
+	return NOTHING;
      }
     if (word[k-1]==';')
      { 
@@ -1197,21 +1216,37 @@ void Read_Tax_File( char *fname )
 
 GtkWidget *options_window=0, *allforms_button;
 int allforms_toggle=0;
+double winopentime;
+
 
 void set_pdf_option( GtkWidget *wdg, void *data )
 {
+ if (Report_Time() - winopentime < 0.2) return;
  allforms_toggle = !allforms_toggle;
  printf("Allforms = %d\n", allforms_toggle );
+}
+
+void set_r2wn_option( GtkWidget *wdg, void *data )
+{
+ // printf("dT = %g\n", Report_Time() - winopentime );
+ if (Report_Time() - winopentime < 0.2) return;
+ round_to_whole_nums = !round_to_whole_nums;
+ printf("Round_to_Whole_Nums = %d\n", round_to_whole_nums );
+ save_needed++;  compute_needed = 1; 
 }
 
 void options_pdf_diaglog( GtkWidget *wdg, void *data )
 {
  GtkWidget *panel;
- int wd=400, ht=140;
+ int wd=400, ht=170, xpos=10, ypos=30;
  panel = new_window( wd, ht, "Options Menu", &options_window );
  make_sized_label( panel, 5, 1, "Options Menu:", 12 );
- allforms_button = make_toggle_button( panel, 10, 30, "Force production of All PDF Form Pages", allforms_toggle, set_pdf_option, "allforms" );
- make_button( panel, 10, 60, "Set PDF-Viewer", set_pdfviewer, 0 ); 
+ winopentime = Report_Time();
+ allforms_button = make_toggle_button( panel, xpos, ypos, "Force production of All PDF Form Pages", allforms_toggle, set_pdf_option, "allforms" );
+ ypos = ypos + 30;
+ make_toggle_button( panel, xpos, ypos, "Round calculations to Whole Numbers", round_to_whole_nums, set_r2wn_option, 0 );
+ ypos = ypos + 30;
+ make_button( panel, xpos, ypos, "Set PDF-Viewer", set_pdfviewer, 0 ); 
  make_button( panel, wd/2 - 30, ht - 35, " Close ", close_any_window, &options_window ); 
  show_wind( options_window );
 }
@@ -1538,7 +1573,6 @@ char *mystrcasestr( char *haystack, char *needle )
  free( hs );
  return pt;
 }
-
 
 
 /*************************************************************************/
@@ -1958,6 +1992,10 @@ void Save_Tax_File( char *fname )
  if (yourfilename != 0) free( yourfilename );
  yourfilename = strdup( current_working_filename );
  fprintf(outfile,"%s", title_line);
+
+ if (round_to_whole_nums)
+  fprintf(outfile,"\nRound_to_Whole_Dollars\n");
+
  txline = taxlines_hd;
  while (txline!=0)
   { /*txline*/
@@ -2227,6 +2265,9 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
   strcpy( run_options, "-allforms" );
  else
   strcpy( run_options, "" );
+
+ if (round_to_whole_nums)
+  strcat( run_options, " -round_to_whole_dollars" );
 
  #if (PLATFORM_KIND == Posix_Platform)
   sprintf(cmd,"'%s' %s '%s' &", taxsolvecmd, run_options, current_working_filename );
@@ -3706,7 +3747,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_NY_IT201 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NY State IT201", slcttxprog, formid );
- gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_MA_1 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "MA State 1", slcttxprog, formid );

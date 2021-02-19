@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 11, 2021 v18.02 - For 2020 tax-year.
+February 19, 2021 v18.03 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,6 +33,13 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * 18.03 (2/19/2021) - Added option to calculate taxes in whole dollars.
+		 (Select under the GUI's 'Options' button,
+		   or use run-time option '-round_to_whole_dollars'.)
+		Added updated NY State taxes.
+		Fixed California CA540 lines A5 through A7, SocSec payments.
+		Now overly long comments are truncated on form 8849 PDF output.
+		Tax-bracket information reporting was fixed on Fed-1040.
     * 18.02 (2/11/2021) - Additional validation was added to test that numeric 
 		entries are valid numbers for all forms.
 		For the Fed 1040:

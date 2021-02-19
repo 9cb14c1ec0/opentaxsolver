@@ -23,12 +23,13 @@ CA540_Subtr_A2		; { Subtractions for Taxable interest }
 CA540_Addit_A2		; { Additions for Taxable interest }
 CA540_Subtr_A3		; { Subtractions for Ordinary dividends. }
 CA540_Addit_A3		; { Additions for Ordinary dividends. }
-CA540_Subtr_A4b		; { Subtractions for IRAs. }
-CA540_Addit_A4b		; { Additions for IRAs. }
-CA540_Subtr_A4d		; { Subtractions for pensions and annuities. }
-CA540_Addit_A4d		; { Additions for pensions and annuities. }
-CA540_Subtr_A6		; { Capital gain or loss. }
-CA540_Addit_A6		; { Capital gain or loss. }
+CA540_Subtr_A4		; { Subtractions for IRAs. }
+CA540_Addit_A4		; { Additions for IRAs. }
+CA540_Subtr_A5		; { Subtractions for pensions and annuities. }
+CA540_Addit_A5		; { Additions for pensions and annuities. }
+CA540_Addit_A6		; { Additions for Social Sececurity. }
+CA540_Subtr_A7		; { Subtractions for Capital gain or loss. }
+CA540_Addit_A7		; { Additions for Capital gain or loss. }
  { - Section B - }
 CA540_Subtr_B1		; { Subtractions for Taxable refunds, credits, ... }
 CA540_Addit_B2		; { Additions for Alimony received }

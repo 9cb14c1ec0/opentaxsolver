@@ -19,18 +19,19 @@ L12      29,812.34      { State Wages (List all W2's box 16). }
 
 {--California Adjustments--}
  { - Section A - }
-CA540_Subtr_A1		; { Subtractions for Wages, salaries, tips, etc.  }
-CA540_Addit_A1		; { Additions for Wages, salaries, tips, etc. }
-CA540_Subtr_A2		; { Subtractions for Taxable interest }
-CA540_Addit_A2		; { Additions for Taxable interest }
-CA540_Subtr_A3		; { Subtractions for Ordinary dividends. }
-CA540_Addit_A3		; { Additions for Ordinary dividends. }
-CA540_Subtr_A4b		; { Subtractions for IRAs. }
-CA540_Addit_A4b		; { Additions for IRAs. }
-CA540_Subtr_A4d		; { Subtractions for pensions and annuities. }
-CA540_Addit_A4d		; { Additions for pensions and annuities. }
-CA540_Subtr_A6		; { Capital gain or loss. }
-CA540_Addit_A6		; { Capital gain or loss. }
+CA540_Subtr_A1	11	; { Subtractions for Wages, salaries, tips, etc.  }
+CA540_Addit_A1	1	; { Additions for Wages, salaries, tips, etc. }
+CA540_Subtr_A2	22	; { Subtractions for Taxable interest }
+CA540_Addit_A2	2	; { Additions for Taxable interest }
+CA540_Subtr_A3	33	; { Subtractions for Ordinary dividends. }
+CA540_Addit_A3	3	; { Additions for Ordinary dividends. }
+CA540_Subtr_A4	44	; { Subtractions for IRAs. }
+CA540_Addit_A4 	4	; { Additions for IRAs. }
+CA540_Subtr_A5  55	; { Subtractions for pensions and annuities. }
+CA540_Addit_A5	5	; { Additions for pensions and annuities. }
+CA540_Addit_A6	6	; { Additions for Social Sececurity. }
+CA540_Subtr_A7	77	; { Subtractions for Capital gain or loss. }
+CA540_Addit_A7	7	; { Additions for Capital gain or loss. }
  { - Section B - }
 CA540_Subtr_B1		; { Subtractions for Taxable refunds, credits, ... }
 CA540_Addit_B2		; { Additions for Alimony received }

@@ -157,6 +157,8 @@ int main( int argc, char *argv[] )
  {
   if (strcmp(argv[jj],"-verbose")==0)  { verbose = 1; }
   else
+  if (strcmp(argv[jj],"-round_to_whole_dollars")==0)  { round_to_whole_dollars = 1; }
+  else
   if (k==1)
    {
     infname = strdup(argv[jj]);

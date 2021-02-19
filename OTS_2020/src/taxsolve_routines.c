@@ -43,6 +43,7 @@ int verbose=0;	 /* Declare and set the "verbosity" flag. */
 int notappvalue=0;
 int single_line_entry=0;
 int whole_line_entry=0;
+int round_to_whole_dollars=0;	/* Option to use whole-dollars. */
 
 struct date_rec  /* Used by get_gain_and_losses  and  gen_date_rec */
 {
@@ -62,6 +63,14 @@ void show_errmsg( char *emsg )
  if (outfile != 0)
   fprintf(outfile,"%s\n", emsg );
 }
+
+int Round( double x )
+{ int y; if (x<0.0) y = x - 0.5; else y = x + 0.5;  return y; }
+
+
+void intercept_any_pragmas( FILE *infile, char *word );	/* Prototype. */
+
+
 
 /*------------------------------------------------------------------------------*/
 /* Get_Word - Read next word from input file, while ignoring any comments.	*/
@@ -114,6 +123,7 @@ void get_word( FILE *infile, char *word )	/* Absorb comments. */
   }
  word[j] = '\0';	/* Add termination character. */
  if (verbose) printf("Read: '%s'\n", word);
+ intercept_any_pragmas( infile, word );	/* Intercept any pragmas. */
 }
 
 
@@ -163,6 +173,16 @@ char *mystrcasestr( char *haystack, char *needle )
  free( ndl );
  free( hs );
  return pt;
+}
+
+
+void intercept_any_pragmas( FILE *infile, char *word )	/* Intercept any special command pragmas. */
+{
+ if (strcmp( word, "Round_to_Whole_Dollars" ) == 0)	/* Intercept any mode-setting commands. */
+  {
+   round_to_whole_dollars = 1;
+   get_word( infile, word );
+  }
 }
 
 
@@ -306,6 +326,8 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
   {
    if ((!valid_float(word)) || (sscanf(word,"%lf",&y)!=1)) 
     {printf("ERROR: Bad float '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad float '%s', reading %s.\n", word, emssg); exit(1); }
+   if (round_to_whole_dollars)
+    y = Round( y );
    yy = (double *)x;
    *yy = y;
   }
@@ -392,6 +414,8 @@ void get_parameters( FILE *infile, char kind, void *x, char *emssg )
   {
    if ((!valid_float(word)) || ((sscanf(word,"%lf",&y))!=1))
     {printf("ERROR: Bad float '%s', reading %s.\n", word, emssg); fprintf(outfile,"ERROR: Bad float '%s', reading %s.\n", word, emssg); exit(1); }
+   if (round_to_whole_dollars)
+    y = Round( y );
    yy = (double *)x;
    *yy = *yy + y;
    /*  printf("	+ %f = %f\n", y, *yy); */
@@ -665,10 +689,6 @@ void showline_wlabelmsg( char *label, double value, char *msg )
 { fprintf(outfile, "%s = %6.2f\t\t%s\n", label, value, msg ); }
 
 
-int Round( double x )
-{ int y; if (x<0.0) y = x - 0.5; else y = x + 0.5;  return y; }
-
-
 /* Get a line value, or sum.  Must be terminated by ";". */
 void GetLine( char *linename, double *value )
 {
@@ -930,7 +950,7 @@ void substitute_chars( char *line, char *badchars, char replace_char )
 
 
 /* --- PDF Markup Support --- */
-/* This object supports the ability to intercept "MarkupPDF" commands in a Tax Input File,
+/* This class supports the ability to intercept "MarkupPDF" commands in a Tax Input File,
    and to forward them to the Tax Output File, where they can be interpretted by the
    universal_pdf_file_modifer to place the desired markups onto the resulting PDF form pages.
    It gives users the ability to add and maintain their own markups in their tax-input files,

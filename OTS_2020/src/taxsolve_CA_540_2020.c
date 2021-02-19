@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.01;
+float thisversion=18.03;
 
 #include <stdio.h>
 #include <time.h>
@@ -175,8 +175,8 @@ void test_tax_function()
 struct FedReturnData
  {
   double fedline[MAX_LINES], schedA[MAX_LINES], fed_L2a, fed_L3a,
-	fed_L4a, fed_L4b, fed_L4c, fed_L4d, fed_L5a, fed_L5b,
-	schedA5a, schedA5b, schedA5c,
+	fed_L4a, fed_L4b, fed_L5a, fed_L5b, fed_L6a, fed_L6b,
+	schedA5a, schedA5b, schedA5c, schedA5,
 	schedA8a, schedA8b, schedA8c, schedA8d,
 	sched1[MAX_LINES],
 	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
@@ -243,10 +243,10 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
  fed_data->fed_L3a = 0;
  fed_data->fed_L4a = 0;
  fed_data->fed_L4b = 0;
- fed_data->fed_L4c = 0;
- fed_data->fed_L4d = 0;
  fed_data->fed_L5a = 0;
  fed_data->fed_L5b = 0;
+ fed_data->fed_L6a = 0;
+ fed_data->fed_L6b = 0;
  fed_data->schedA5a = 0.0;
  fed_data->schedA5b = 0.0;
  fed_data->schedA5c = 0.0;
@@ -290,17 +290,17 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
      if (strcmp(word,"L4b") == 0)
       grab_line_value( word, fline, &(fed_data->fed_L4b) );
      else
-     if (strcmp(word,"L4c") == 0)
-      grab_line_value( word, fline, &(fed_data->fed_L4c) );
-     else
-     if (strcmp(word,"L4d") == 0)
-      grab_line_value( word, fline, &(fed_data->fed_L4d) );
-     else
      if (strcmp(word,"L5a") == 0)
       grab_line_value( word, fline, &(fed_data->fed_L5a) );
      else
      if (strcmp(word,"L5b") == 0)
       grab_line_value( word, fline, &(fed_data->fed_L5b) );
+     else
+     if (strcmp(word,"L6a") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L6a) );
+     else
+     if (strcmp(word,"L6b") == 0)
+      grab_line_value( word, fline, &(fed_data->fed_L6b) );
      else
      if (strcmp(word,"L8a") == 0)
       grab_line_value( word, fline, &(fed_data->fedline[8]) );
@@ -498,8 +498,7 @@ int main( int argc, char *argv[] )
  char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
 	*YourMidInitial="", *SpouseMidInitial="",
 	*Spouse1stName="", *SpouseLastName="", *socsec;
- double  sched540A4d=0.0, sched540Ab4d=0.0, sched540Ac4d=0.0,
-	 sched540Bb8a=0.0, sched540Bb8b=0.0, sched540Bc8c=0.0, sched540Bb8d=0.0,
+ double  sched540Bb8a=0.0, sched540Bb8b=0.0, sched540Bc8c=0.0, sched540Bb8d=0.0,
 	 sched540Bb8e=0.0, sched540Bb8f=0.0, sched540Bc8f=0.0, sched540Bb8g=0.0;
  time_t now;
 
@@ -508,6 +507,8 @@ int main( int argc, char *argv[] )
  while (argk < argc)
  {
   if (strcmp(argv[argk],"-verbose")==0)  { verbose = 1; }
+  else
+  if (strcmp(argv[argk],"-round_to_whole_dollars")==0)  { round_to_whole_dollars = 1; }
   else
   if (k==1)
    {
@@ -632,14 +633,15 @@ fprintf(outfile,"--- BETA Version ---\n\n");
   GetLine("CA540_Addit_A2", &(sched540Ac[2]) );
   GetLine("CA540_Subtr_A3", &(sched540Ab[3]) );
   GetLine("CA540_Addit_A3", &(sched540Ac[3]) );
-  GetLine("CA540_Subtr_A4b", &(sched540Ab[4]) );
-  GetLine("CA540_Addit_A4b", &(sched540Ac[4]) );
-  GetLine("CA540_Subtr_A4d", &sched540Ab4d );
-  GetLine("CA540_Addit_A4d", &sched540Ac4d );
-  // GetLine("CA540_Subtr_A5", &(sched540Ab[5]) );	/* Soc Sec subtraction handled below. */
-  GetLine("CA540_Subtr_A6", &(sched540Ab[6]) );
+  GetLine("CA540_Subtr_A4", &(sched540Ab[4]) );
+  GetLine("CA540_Addit_A4", &(sched540Ac[4]) );
+  GetLine("CA540_Subtr_A5", &(sched540Ab[5]) );
+  GetLine("CA540_Addit_A5", &(sched540Ac[5]) );
+  // GetLine("CA540_Subtr_A6", &(sched540Ab[6]) );	/* Soc Sec subtraction handled below. */
   GetLine("CA540_Addit_A6", &(sched540Ac[6]) );
-
+  GetLine("CA540_Subtr_A7", &(sched540Ab[7]) );
+  GetLine("CA540_Addit_A7", &(sched540Ac[7]) );
+ 
   GetLine("CA540_Subtr_B1", &(sched540Bb[1]) );
   GetLine("CA540_Addit_B2", &(sched540Bc[2]) );
   GetLine("CA540_Subtr_B3", &(sched540Bb[3]) );
@@ -737,22 +739,6 @@ fprintf(outfile,"--- BETA Version ---\n\n");
    fprintf(outfile," SchedCA540_A4c = %6.2f\n", sched540Ac[4] );
 
 
-  if (PrelimFedReturn.fed_L4c != 0.0)
-   fprintf(outfile," SchedCA540_A4d_ = %6.2f\n", PrelimFedReturn.fed_L4c );
-
-  sched540A4d = PrelimFedReturn.fed_L4d;
-  sched540B[9] = sched540B[9] + sched540A4d;
-  if (sched540A4d != 0.0)
-   fprintf(outfile," SchedCA540_A4d = %6.2f\n", sched540A4d );
-
-  sched540Bb[9] = sched540Bb[9] + sched540Ab4d;
-  if (sched540Ab4d != 0.0)
-   fprintf(outfile," SchedCA540_A4db = %6.2f\n", sched540Ab4d );
-
-  sched540Bc[9] = sched540Bc[9] + sched540Ac4d;
-  if (sched540Ac4d != 0.0)
-   fprintf(outfile," SchedCA540_A4dc = %6.2f\n", sched540Ac4d );
-
   if (PrelimFedReturn.fed_L5a != 0.0)
    fprintf(outfile," SchedCA540_A5a = %6.2f\n", PrelimFedReturn.fed_L5a );
 
@@ -761,24 +747,39 @@ fprintf(outfile,"--- BETA Version ---\n\n");
   if (sched540A[5] != 0.0)
    fprintf(outfile," SchedCA540_A5 = %6.2f\n", sched540A[5] );
 
-  sched540Ab[5] = sched540A[5];			/* Subtract SocSec payments from AGI in CA. */
   sched540Bb[9] = sched540Bb[9] + sched540Ab[5];
   if (sched540Ab[5] != 0.0)
    fprintf(outfile," SchedCA540_A5b = %6.2f\n", sched540Ab[5] );
 
-  sched540A[6] = PrelimFedReturn.fedline[6];
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[5];
+  if (sched540Ac[5] != 0.0)
+   fprintf(outfile," SchedCA540_A5c = %6.2f\n", sched540Ac[5] );
+
+  if (PrelimFedReturn.fed_L6a != 0.0)
+   fprintf(outfile," SchedCA540_A6a = %6.2f\n", PrelimFedReturn.fed_L6a );
+
+  sched540A[6] = PrelimFedReturn.fed_L6b;
   sched540B[9] = sched540B[9] + sched540A[6];
   if (sched540A[6] != 0.0)
    fprintf(outfile," SchedCA540_A6 = %6.2f\n", sched540A[6] );
 
+  sched540Ab[6] = sched540A[6];			/* Subtract SocSec payments from AGI in CA. */
   sched540Bb[9] = sched540Bb[9] + sched540Ab[6];
   if (sched540Ab[6] != 0.0)
    fprintf(outfile," SchedCA540_A6b = %6.2f\n", sched540Ab[6] );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[6];
-  if (sched540Ac[6] != 0.0)
-   fprintf(outfile," SchedCA540_A6c = %6.2f\n", sched540Ac[6] );
+  sched540A[7] = PrelimFedReturn.fedline[7];
+  sched540B[9] = sched540B[9] + sched540A[7];
+  if (sched540A[7] != 0.0)
+   fprintf(outfile," SchedCA540_A7 = %6.2f\n", sched540A[7] );
 
+  sched540Bb[9] = sched540Bb[9] + sched540Ab[7];
+  if (sched540Ab[7] != 0.0)
+   fprintf(outfile," SchedCA540_A7b = %6.2f\n", sched540Ab[7] );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Ac[7];
+  if (sched540Ac[7] != 0.0)
+   fprintf(outfile," SchedCA540_A7c = %6.2f\n", sched540Ac[7] );
 
  for (j=1; j <= 7; j++)
   {

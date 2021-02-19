@@ -2,6 +2,8 @@ Title:  NY State 2020 Tax Form IT-201 - EXAMPLE
 
 { --- EXAMPLE --- }
 
+Round_to_Whole_Dollars
+
 	{ Data for NY Lines 1-19 is collected by scanning Federal return to avoid re-entering it. }
 FileName   tax_form_files/US_1040/US_1040_example_out.txt { File-name of Federal Return output file. }
 
