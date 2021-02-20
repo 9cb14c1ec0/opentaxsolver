@@ -24,10 +24,10 @@
 /* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA		*/
 /* 02111-1307 USA							*/
 /* 									*/
-/* Not updated for 2020 tax year:						*/
+/* Updated for 2020 tax year:						*/
 /************************************************************************/
 
-float thisversion=17.00;
+float thisversion=18.00;
 
 #include <stdio.h>
 #include <time.h>
@@ -48,7 +48,7 @@ int main( int argc, char *argv[] )
  time_t now;
  double L14a=0.0, L14b=0.0, L14c=0.0, L17b=0.0;
 
- printf("Form 8889 HSA, 2020 - v%3.2f\n", thisversion);
+ printf("Form 8889 HSA, 2020 - v%3.2f\n", thisversion );
 
  /* Decode any command-line arguments. */
  i = 1;  k=1;
@@ -122,7 +122,9 @@ int main( int argc, char *argv[] )
  L[12] = NotLessThanZero( L[8] - L[11] );
  showline( 12 );
  L[13] = SmallerOf( L[2], L[12] );
- showline_wmsg( 13, "HSA Deduction.  Enter this on Sched-1 Line 12 on your 1040 Form." );
+ showline_wmsg( 13, "HSA Deduction.  Enter this on Sched-1 Part II, Line 12 on your 1040 Form." );
+ if (L[2] > L[13])
+  fprintf(outfile,"Caution: Since L2 > L13, you may have to pay additional tax. See instructions.\n\n");
 
  GetLineF( "L14a", &L14a );
  GetLineF( "L14b", &L14b );

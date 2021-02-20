@@ -1,0 +1,39 @@
+Title: Form 8606 for tax-year 2019
+
+Complete_Part_One?  {Are you completing Part I of this form? (answer: Y, N)}
+
+L1               ; { Nondeductible contributions }
+L2               ; { Total basis in Trad IRAs }
+
+Dist_or_Conv?      { Did you take a distribution or make a Roth conversion ? (answer: Y, N) }
+
+L4               ; { Contributions from the beginning of 2020 }
+L6               ;
+L7               ;
+L8               ;
+L15b             ;
+
+Complete_Part_Two?  {Are you completing Part II of this form? (answer: Y, N)}
+
+L16     ;
+L17     ;
+
+Complete_Part_Three?  {Are you completing Part III of this form? (answer: Y, N)}
+
+L19       ;
+L20       ;
+L22       ;
+L24       ;
+L25b      ;
+
+
+
+Name:
+SocSec#:
+Number&Street:
+Apt#:
+TownStateZip:
+ForeignCountry:
+ForeignState:
+ForeignPostcode:
+

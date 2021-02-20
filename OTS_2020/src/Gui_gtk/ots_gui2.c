@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.39;
-char package_date[]="Feb. 17, 2021";
-char ots_release_package[]="18.03";
+float version=2.40;
+char package_date[]="Feb. 20, 2021";
+char ots_release_package[]="18.03.01";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -2135,6 +2135,9 @@ void set_tax_solver( char *fname )
 
  if (strstr( taxsolvestrng, "taxsolve_HSA_f8889" ) != 0)
   supported_pdf_form = 1;
+ else
+ if (strstr( taxsolvestrng, "taxsolve_f8606" ) != 0)
+  supported_pdf_form = 1;
 }
 
 
@@ -3162,6 +3165,19 @@ void do_pdf_conversion()
 	  statusw.nfiles = 0;
 	  setpdfoutputname( wrkingfname, ".pdf", outputname );
 	  prepare_universal_pdf_cmd( "", "f8889_meta.dat", wrkingfname, "f8889_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	 }
+	else
+	if (strstr( taxsolvestrng, "taxsolve_f8606" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "f8606_meta.dat", wrkingfname, "f8606_pdf.dat", outputname );
 	  printf("Issuing: %s\n", fillout_pdf_command );
 	  add_status_line( outputname );
 	  execute_cmd( fillout_pdf_command );
