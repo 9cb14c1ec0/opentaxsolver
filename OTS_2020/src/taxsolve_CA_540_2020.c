@@ -557,15 +557,12 @@ int main( int argc, char *argv[] )
 	L12	34900.0  {Wages}
  */
 
- printf("CA-540 2020 - v%3.2f - BETA Version\n", thisversion);
+ printf("CA-540 2020 - v%3.2f\n", thisversion);
 
  /* Accept Form's "Title" line, and put out with date-stamp for your records. */
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
-
-printf("\nBETA Version\n\n");
-fprintf(outfile,"--- BETA Version ---\n\n");
 
  get_parameter( infile, 's', word, "FileName" );      /* Preliminary Fed Return Output File-name. */
  get_word(infile, prelim_1040_outfilename );
@@ -638,7 +635,6 @@ fprintf(outfile,"--- BETA Version ---\n\n");
   GetLine("CA540_Subtr_A5", &(sched540Ab[5]) );
   GetLine("CA540_Addit_A5", &(sched540Ac[5]) );
   // GetLine("CA540_Subtr_A6", &(sched540Ab[6]) );	/* Soc Sec subtraction handled below. */
-  GetLine("CA540_Addit_A6", &(sched540Ac[6]) );
   GetLine("CA540_Subtr_A7", &(sched540Ab[7]) );
   GetLine("CA540_Addit_A7", &(sched540Ac[7]) );
  
@@ -907,14 +903,17 @@ fprintf(outfile,"--- BETA Version ---\n\n");
   sched540part2[5] = smallerof( sched540part2_5d, 5000.0 );
 
  GetLine("CA540_P2_Sub_5a", &(sched540part2_sub[5]) );
-
  sched540part2_sub[5] = sched540part2_5a;
  sched540part2_add[5] = sched540part2_5d - sched540part2[5];
+
  sched540part2[6] = PrelimFedReturn.schedA[6];
  GetLine("CA540_P2_Sub_6", &(sched540part2_sub[6]) );
+ GetLine("CA540_P2_Add_6", &(sched540part2_add[6]) );
+
  sched540part2[7] = sched540part2[5] + sched540part2[6];
  sched540part2_sub[7] = sched540part2_sub[5] + sched540part2_sub[6];
- sched540part2_add[7] = sched540part2_add[5];
+ sched540part2_add[7] = sched540part2_add[5] + sched540part2_add[6];
+
  sched540part2_8a = PrelimFedReturn.schedA8a;
  GetLine("CA540_P2_Add_8a", &sched540part2_add8a );
  sched540part2_8b = PrelimFedReturn.schedA8b;

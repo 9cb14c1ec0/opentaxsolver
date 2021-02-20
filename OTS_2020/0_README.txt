@@ -38,7 +38,7 @@ History:
 		   or use run-time option '-round_to_whole_dollars'.)
 		Added updated NY State taxes.
 		Fixed California CA540 lines A5 through A7, SocSec payments.
-		Now overly long comments are truncated on form 8849 PDF output.
+		Now overly long comments are truncated on form 8949 PDF output.
 		Tax-bracket information reporting was fixed on Fed-1040.
     * 18.02 (2/11/2021) - Additional validation was added to test that numeric 
 		entries are valid numbers for all forms.

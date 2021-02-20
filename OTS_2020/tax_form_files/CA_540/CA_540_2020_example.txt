@@ -29,7 +29,6 @@ CA540_Subtr_A4	44	; { Subtractions for IRAs. }
 CA540_Addit_A4 	4	; { Additions for IRAs. }
 CA540_Subtr_A5  55	; { Subtractions for pensions and annuities. }
 CA540_Addit_A5	5	; { Additions for pensions and annuities. }
-CA540_Addit_A6	6	; { Additions for Social Sececurity. }
 CA540_Subtr_A7	77	; { Subtractions for Capital gain or loss. }
 CA540_Addit_A7	7	; { Additions for Capital gain or loss. }
  { - Section B - }
@@ -67,6 +66,7 @@ CA540_Subtr_C21         ; { Subtractions for Tuition and fees }
 {--Part-II of California Adjustments--}
 CA540_P2_Sub_5a		; { Subtractions for State and local income tax or general sales taxes }
 CA540_P2_Sub_6		; { Subtractions for Other taxes }
+CA540_P2_Add_6		; { Additions for Other taxes }
 CA540_P2_Add_8a		; { Additions for home mortgage interest & points reported on Form 1098 }
 CA540_P2_Add_8b		; { Additions for home mortgage interest not reported on Form 1098 }
 CA540_P2_Add_8c		; { Additions for points not reported on Form 1098 }
