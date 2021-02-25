@@ -68,6 +68,15 @@ int Round( double x )
 { int y; if (x<0.0) y = x - 0.5; else y = x + 0.5;  return y; }
 
 
+double Conditional_Round( double x )	
+{	/* Round only if round_to_whole_dollars flag is set. */
+  if (!round_to_whole_dollars)
+   return x;
+  else
+   return Round( x );
+}
+
+
 void intercept_any_pragmas( FILE *infile, char *word );	/* Prototype. */
 
 

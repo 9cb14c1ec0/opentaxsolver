@@ -29,7 +29,7 @@
 /* Earlier Updates	Robert Heller  heller@deepsoft.com		*/
 /************************************************************************/
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -403,10 +403,10 @@ int main( int argc, char *argv[] )
  if (strcasecmp( L46answ, "No") == 0)
   fprintf(outfile,"Ck46No: X\n");
 
- if (toupper( word[0] ) == 'Y')
+ if (toupper( L47a_answ[0] ) == 'Y')
   fprintf(outfile,"Ck47aYes: X\n");
  else
- if (strcasecmp( word, "No") == 0)
+ if (strcasecmp( L47a_answ, "No") == 0)
   fprintf(outfile,"Ck47aNo: X\n");
 
  if (toupper( L47b_answ[0] ) == 'Y')
@@ -443,7 +443,7 @@ int main( int argc, char *argv[] )
   fprintf(outfile,"L48i_descr: %s\n", L48i_descr );
  showline_wlabelnz( "L48i_amnt", L48i_amnt );
 
- showline_wmsg( 48, "Total other exoenses" );
+ showline_wmsg( 48, "Total other expenses" );
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

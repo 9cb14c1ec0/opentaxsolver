@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.03;
+float thisversion=18.04;
 
 #include <stdio.h>
 #include <time.h>
@@ -200,7 +200,7 @@ void capgains_qualdividends_worksheets( int status )			/* Updated for 2020. */
    if (j == 3) { if (Do_SchedD) fprintf(outfile,"\t\t3: Check Yes.\n"); else fprintf(outfile,"\t\t3: Check No.\n"); }
    fprintf(outfile,"	Qual. Div & Gains WorkSheet %d:  %8.2f\n", j, qcgws[j] );
   }
- L[16] = qcgws[25];
+ L[16] = Conditional_Round( qcgws[25] );
 }
 
 
@@ -1151,7 +1151,7 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2020. */
  ws[45] = ws[31] + ws[34] + ws[40] + ws[43] + ws[44];
  ws[46] = TaxRateFunction( ws[1], status );
  ws[47] = smallerof( ws[45], ws[46] );
- L[16] = ws[47];
+ L[16] = Conditional_Round( ws[47] );
  for (k = 0; k < 100; k++)
   {
    ws_sched_D[k] = ws[k];	/* Save worksheet values for AMT, if needed. */
@@ -1212,11 +1212,11 @@ void SocSec_Worksheet()							/* Updated for 2020. */
   ws[10] = 9000.0;
  ws[11] = NotLessThanZero( ws[9] - ws[10] );
  ws[12] = smallerof( ws[9], ws[10] );
- ws[13] = ws[12] / 2.0;
+ ws[13] = Conditional_Round( ws[12] / 2.0 );
  ws[14] = smallerof( ws[2], ws[13] );
- ws[15] = NotLessThanZero( 0.85 * ws[11] );
+ ws[15] = NotLessThanZero( Conditional_Round( 0.85 * ws[11] ));
  ws[16] = ws[14] + ws[15];
- ws[17] = 0.85 * ws[1];
+ ws[17] = Conditional_Round( 0.85 * ws[1]);
  ws[18] = smallerof( ws[16], ws[17] );
  for (k = 10; k <= 18; k++)
   fprintf(outfile,"\tSocSecWorkSheet[%d] = %6.2f\n", k, ws[k] );
@@ -1381,7 +1381,7 @@ void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 void Calculate_Schedule_A( )
 {
  SchedA[2] = L[11];
- SchedA[3] = 0.075 * SchedA[2];
+ SchedA[3] = Conditional_Round( 0.075 * SchedA[2] );
  SchedA[4] = NotLessThanZero( SchedA[1] - SchedA[3] );
  localtax[4] =  localtax[1] +  localtax[2] +  localtax[3];
  localtax[5] = smallerof( localtax[4], loctaxlimit );
