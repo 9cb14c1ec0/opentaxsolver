@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 19, 2021 v18.03 - For 2020 tax-year.
+February 26, 2021 v18.04 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,6 +33,11 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * 18.04 (2/26/2021) - Added Form 8606 under the 'Other' category.
+		Some minor updates to some 'instructions' files.
+		Fixes to Form 8889 pdf formatting.
+		Fixes to Schedule-C Line 47.
+		Further updates to the new Round-to-whole-dollars feature.
     * 18.03 (2/19/2021) - Added option to calculate taxes in whole dollars.
 		 (Select under the GUI's 'Options' button,
 		   or use run-time option '-round_to_whole_dollars'.)

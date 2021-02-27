@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
       double fractional = modf(L[10], &integral);
       int integral_int, fractional_int;
       integral_int = integral;
-      fractional_int = abs(1000.0 * fractional);
+      fractional_int = abs( (int)(1000.0 * fractional) );
       fprintf(outfile, "L10intpart %d\n", integral_int);
       fprintf(outfile, "L10rest %03d\n", fractional_int);
 

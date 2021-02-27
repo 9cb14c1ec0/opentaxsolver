@@ -45,8 +45,8 @@
 /********************************************************/
 
 float version=2.40;
-char package_date[]="Feb. 20, 2021";
-char ots_release_package[]="18.03.01";
+char package_date[]="Feb. 26, 2021";
+char ots_release_package[]="18.04";
 
 /************************************************************/
 /* Design Notes - 					    */

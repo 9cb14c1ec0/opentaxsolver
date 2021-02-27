@@ -29,7 +29,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -297,8 +297,8 @@ int main( int argc, char *argv[] )
 	break;
   }
 
- if (L[10] != 0.0)
-  L[11] = std_ded;
+ if (L[10] == 0.0)
+   L[11] = std_ded;
  showline(11);
 
  L[12] = 930.0 * exemptionsA + 800.0 * exemptionsB;
