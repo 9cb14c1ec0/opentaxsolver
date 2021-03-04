@@ -10,7 +10,7 @@ You_Blind?	N	{ Are you blind ? (answer: Yes, No) }
 Spouse_65+Over?	 Y	{ Was Spouse born before January 2, 1954 ? (answer: Yes, No) }
 Spouse_Blind?	 N	{ Is Spouse blind ? (answer: Yes, No) }
 
-Dependents       2      { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)
+Dependents       3      { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)
 				self=1, spouse, etc. }
 VirtCurr?       N       { During 2020, did you buy/sell/own and Virtual Currency ? (answer: Yes, No) }
 
@@ -246,6 +246,43 @@ S3_12e  	; 	{ Deferral for certain Schedule H or SE filers. }
 	{ Your Occupation(s) }
  YourOccupat:	Merchant
  SpouseOccupat: Welder
+
+   { - - - - - - - - -- - - - - - - - - }
+   { Dependent-1 Information (optional) }
+ Dep1_FirstName:	Emma
+ Dep1_LastName:		Anderson
+ Dep1_SocSec#:		987-65-4321
+ Dep1_Relation:		Stepdaughter
+ CkDep1_ChildTxCrd:	Yes	{ (answer: Yes, No) }
+ CkDep1_CrdOtherDep:		{ (answer: Yes, No) }
+
+   { Dependent-2 Information (optional) }
+ Dep2_FirstName:	
+ Dep2_LastName:		
+ Dep2_SocSec#:		
+ Dep2_Relation:		
+ CkDep2_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep2_CrdOtherDep:		{ (answer: Yes, No) }
+
+   { Dependent-3 Information (optional) }
+ Dep3_FirstName:	
+ Dep3_LastName:		
+ Dep3_SocSec#:		
+ Dep3_Relation:		
+ CkDep3_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep3_CrdOtherDep:		{ (answer: Yes, No) }
+
+   { Dependent-4 Information (optional) }
+ Dep4_FirstName:	
+ Dep4_LastName:		
+ Dep4_SocSec#:		
+ Dep4_Relation:		
+ CkDep4_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep4_CrdOtherDep:		{ (answer: Yes, No) }
+
+
+   { Other Dependents }
+ CkMoreThan_4_Dependents:	{ (answer: Yes, No) }
 
 {
  --------------------------------------------

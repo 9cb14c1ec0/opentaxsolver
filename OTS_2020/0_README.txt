@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-February 26, 2021 v18.04 - For 2020 tax-year.
+March 4, 2021 v18.05 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,6 +33,10 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * 18.05 (3/4/2021) - For Fed-1040, added ability to specify Dependents information
+		for PDF form output. (Does not affect any calculations.)
+		On North Carolina state form, fixed comments on lines 7+9, now
+		fills Use-Tax check-box when appropriate, and fixed Refund line 34.
     * 18.04 (2/26/2021) - Added Form 8606 under the 'Other' category.
 		Some minor updates to some 'instructions' files.
 		Fixes to Form 8889 pdf formatting.

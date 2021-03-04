@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.04;
+float thisversion=18.05;
 
 #include <stdio.h>
 #include <time.h>
@@ -2189,15 +2189,31 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
  GetTextLineF( "State:" );
  GetTextLineF( "ZipCode:" );
 
- get_word(infile, labelx );	/* Look for optional occupation fields. */
- if (!feof(infile))
-  {
-   fprintf(outfile, "%s ", labelx );
-   read_comment_filtered_line( infile, labelx, 256 );
-   fprintf(outfile, "%s\n", labelx );
-   // GetTextLineF( "YourOccupat:" );
-   GetTextLineF( "SpouseOccupat:" );
-  }
+ GetTextLineF( "YourOccupat:" );
+ GetTextLineF( "SpouseOccupat:" );
+
+ get_word(infile, labelx );	/* Look for optional Dependent fields. */
+ while (!feof(infile))
+  { /*OptionalLine*/
+   read_comment_filtered_line( infile, word, 512 );
+   // printf("\nLine '%s' = '%s'\n", labelx, word );
+   if (word[0] != '\0')
+    { /*valid_entry*/
+     if (strncmp( labelx,"Dep", 3 ) == 0)
+      {
+	if (strstr( labelx,"SocSec" ) != 0)
+	  format_socsec( word, 1 );
+	fprintf(outfile, "%s \"%s\"\n", labelx, word );
+      }
+     else
+     if (strncmp( labelx,"CkDep", 5 ) == 0)
+      {
+	if (toupper(word[0]) == 'Y')
+	 fprintf(outfile, "%s X\n", labelx );
+      }
+    } /*valid_entry*/
+   get_word(infile, labelx );
+  } /*OptionalLine*/
 
  fclose(infile);
  Grab_ScheduleB_Payer_Lines( infname, outfile );

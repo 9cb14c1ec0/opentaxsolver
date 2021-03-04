@@ -36,7 +36,7 @@
 
 #include "taxsolve_routines.c"
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #define SINGLE                  1
 #define MARRIED_FILLING_JOINTLY 2
@@ -266,6 +266,7 @@ int main( int argc, char *argv[] )
  /*-------------------------------*/
 
  L[6] = fed_data.fedline[11];		/* Taxable income from Fed1040 Line 11, AGI. */
+ L[6] = Conditional_Round( L[6] );
 
  switch (status)
   {
@@ -335,6 +336,7 @@ int main( int argc, char *argv[] )
  L[14] = L[13] * L[12];		 /* NC Taxable Income. */
 
  L[15] = flat_tax_rate * L[14];	 /* NC Income Tax. */
+ L[15] = Conditional_Round( L[15] );
 
  L[17] = L[15] - L[16];
 
@@ -374,8 +376,8 @@ int main( int argc, char *argv[] )
  else
   {
    L[28] = L[25] - L[19];
-   L[32] = L[29] + L[30] + L[31];
-   L[33] = L[28] - L[32];	/* REFUND */
+   L[33] = L[29] + L[30] + L[31] + L[32];
+   L[34] = L[28] - L[33];	/* REFUND */
   }
 
 
@@ -402,6 +404,8 @@ int main( int argc, char *argv[] )
  showline_wmsg(15, "North Carolina Income Tax");
  showline(16);
  showline(17);
+ if (L[18] == 0.0)
+  fprintf(outfile,"Check_NoUseTax X\n");
  showline(18);
  showline(19);
  showline_wlabel( "L20a", L20a );
@@ -428,8 +432,12 @@ int main( int argc, char *argv[] )
  else
   {
    showline_wmsg(28, "OVERPAYMENT");
+   showline(29);
+   showline(30);
+   showline(31);
    showline(32);
    showline(33);
+   showline(34);
   }
 
  do_all_caps = 1;

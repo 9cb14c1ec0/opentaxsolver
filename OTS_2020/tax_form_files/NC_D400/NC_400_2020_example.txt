@@ -6,8 +6,8 @@ FedReturn  tax_form_files/US_1040/US_1040_example_out.txt	{ File-name of Federal
 
 Status	 Married/Joint 	{Single, Married/Joint, Married/Sep, Head_of_House, Widow(er)}
 
-L7	0	;	{ Additions to Fed AGI - From Sched-S Part A, Line 6. }
-L9	0	;	{ Deductions from Fed AGI - From Sched-S Part B, Line 14. * }
+L7	0	;	{ Additions to Fed AGI - From Sched-S Part A, Line 17. }
+L9	0	;	{ Deductions from Fed AGI - From Sched-S Part B, Line 34. * }
 L10a    0       ;       { Number of children qualifying for federal deductions. }
 L11	0	;	{ Enter 0 to use Std Deduction; Otherwise Itemized Ded. from Sched-S part C, Line 23. }
 L13	1	;	{ Enter 1 for full-year residents. Otherwise amount from Sched-S part D, Line 26. }

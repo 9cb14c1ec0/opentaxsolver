@@ -187,19 +187,56 @@ S3_12e		;	{ Deferral for certain Schedule H or SE filers. }
 
    { Spouse 1st-Name, Middle-Initial -- If Married-Filing-Jointly, otherwise leave spouse fields blank. }
  Spouse1stName:			{ Leave blank if Single, etc. }
- SpouseLastName:	
+ SpouseLastName: 	
  SpouseSocSec#:		
 
    { Your Address }
  Number&Street:	
  Apt#: 		
  Town/City:   
- State:   
- ZipCode:   
+ State:   	
+ ZipCode:   	
 
    { Your Occupation(s) }
  YourOccupat:	
  SpouseOccupat:	
+
+   { - - - - - - - - -- - - - - - - - - }
+   { Dependent-1 Information (optional) }
+ Dep1_FirstName:		{ First Dependent's first-name. }
+ Dep1_LastName:			{ First Dependent's last-name. }
+ Dep1_SocSec#:			{ First Dependent's Social Security number. }
+ Dep1_Relation:			{ First Dependent's relationship. }
+ CkDep1_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep1_CrdOtherDep:		{ (answer: Yes, No) }
+
+   { Dependent-2 Information (optional) }
+ Dep2_FirstName:	
+ Dep2_LastName:		
+ Dep2_SocSec#:		
+ Dep2_Relation:		
+ CkDep2_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep2_CrdOtherDep:		{ (answer: Yes, No) }
+
+   { Dependent-3 Information (optional) }
+ Dep3_FirstName:	
+ Dep3_LastName:		
+ Dep3_SocSec#:		
+ Dep3_Relation:		
+ CkDep3_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep3_CrdOtherDep:		{ (answer: Yes, No) }
+
+   { Dependent-4 Information (optional) }
+ Dep4_FirstName:	
+ Dep4_LastName:		
+ Dep4_SocSec#:		
+ Dep4_Relation:		
+ CkDep4_ChildTxCrd:		{ (answer: Yes, No) }
+ CkDep4_CrdOtherDep:		{ (answer: Yes, No) }
+
+
+   { Other Dependents }
+ CkMoreThan_4_Dependents:	{ (answer: Yes, No) }
 
 {
  --------------------------------------------

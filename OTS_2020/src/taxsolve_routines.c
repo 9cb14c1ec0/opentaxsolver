@@ -78,7 +78,7 @@ double Conditional_Round( double x )
 
 
 void intercept_any_pragmas( FILE *infile, char *word );	/* Prototype. */
-
+void consume_leading_trailing_whitespace( char *line );
 
 
 /*------------------------------------------------------------------------------*/
@@ -644,13 +644,14 @@ void read_comment_filtered_line( FILE *infile, char *line, int maxlen )
     { 
      do line[j] = getc(infile); 
      while ((line[j] != '}') && (!feof(infile)));
-       line[j] = getc(infile);
      line[j] = ' ';
     }
    j++;
   }
  while ((!feof(infile)) && (line[j-1] != '\n') && (j < maxlen-2));
- line[j-1] = '\0';
+ j--;
+ line[j] = '\0';
+ consume_leading_trailing_whitespace( line );
 }
 
 

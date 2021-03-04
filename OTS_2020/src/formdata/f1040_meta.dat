@@ -36,22 +36,23 @@ Page 1
  CkSpouseOver65	553 425
  CkSpouseBlind	773 425
 
+! Old labels, to be removed in favor of newer labels below.
 Dependent1_1stName	144 482
-Dependent1_LstName	279 482
+Dependent1_LstName	278 482
 Dependent2_1stName	144 501
-Dependent2_LstName	279 501
+Dependent2_LstName	278 501
 Dependent3_1stName	144 518 
-Dependent3_LstName	279 518 
+Dependent3_LstName	278 518 
 Dependent4_1stName	144 536 
-Dependent4_LstName	279 536 
+Dependent4_LstName	278 536 
 Dependent1_SSN	410 482 0 8.7
 Dependent2_SSN	410 501 0 8.7
 Dependent3_SSN	410 518 0 8.7
 Dependent4_SSN	410 536 0 8.7
-Dependent1_Relat 547 482
-Dependent2_Relat 547 501
-Dependent3_Relat 547 518
-Dependent4_Relat 547 536
+Dependent1_Relat 544 482
+Dependent2_Relat 544 501
+Dependent3_Relat 544 518
+Dependent4_Relat 544 536
 CkDep1_ChildTxCrd  692 480
 CkDep1_CrdOtherDep 813 480
 CkDep2_ChildTxCrd  692 500
@@ -61,6 +62,33 @@ CkDep3_CrdOtherDep 813 517
 CkDep4_ChildTxCrd  692 535
 CkDep4_CrdOtherDep 813 535
 CkMoreThan4Dep 100 534
+
+! Newer labels.
+Dep1_FirstName:	144 482
+Dep1_LastName:	278 482
+Dep2_FirstName:	144 501
+Dep2_LastName:	278 501
+Dep3_FirstName:	144 518 
+Dep3_LastName:	278 518 
+Dep4_FirstName:	144 536 
+Dep4_LastName:	278 536 
+Dep1_SocSec#:	410 482 0 8.7
+Dep2_SocSec#:	410 501 0 8.7
+Dep3_SocSec#:	410 518 0 8.7
+Dep4_SocSec#:	410 536 0 8.7
+Dep1_Relatation: 544 482
+Dep2_Relatation: 544 501
+Dep3_Relatation: 544 518
+Dep4_Relatation: 544 536
+CkDep1_ChildTxCrd:  692 480
+CkDep1_CrdOtherDep: 813 480
+CkDep2_ChildTxCrd:  692 500
+CkDep2_CrdOtherDep: 813 500
+CkDep3_ChildTxCrd:  692 517
+CkDep3_CrdOtherDep: 813 517
+CkDep4_ChildTxCrd:  692 535
+CkDep4_CrdOtherDep: 813 535
+CkMoreThan4Dep: 100 534
 
  L1	770 556	12
  L2a	388 574	12
