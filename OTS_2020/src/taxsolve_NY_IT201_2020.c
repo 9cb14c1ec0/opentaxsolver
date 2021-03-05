@@ -25,7 +25,7 @@
 /* Modified for NY 2005-2020 taxes - Skeet Monker			*/
 /************************************************************************/
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #include "taxsolve_routines.c"
 
@@ -172,7 +172,7 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
      if (verbose) printf("FedLin[%d] = %2.2f\n", linenum, fed_data->schedA[linenum]);
     }
    else
-   if ((strstr(word,"D")==word) && (strstr(fline," = ")!=0))
+   if ((strstr(word,"D")==word) && (strstr(fline," = ")!=0) && (strstr(word,"Dep")!=word))
     {
      if (sscanf(&word[1],"%d",&linenum)!=1)
       {
@@ -840,16 +840,16 @@ int main( int argc, char *argv[] )
   }
 
  answ = GetTextLine( "YourDOB" );
- if (interpret_date( answ, &day, &month, &yyyy, "reading 'YourDOB'" ))
-   fprintf(outfile,"YourDOB %s\n", format_mmddyyyy( month, day, yyyy ) );
+ if (interpret_date( answ, &month, &day, &yyyy, "reading 'YourDOB'" ))
+   fprintf(outfile,"YourDOB \"%s\"\n", format_mmddyyyy( month, day, yyyy ) );
  else
-  fprintf(outfile,"YourDOB %s\n", answ );
+  fprintf(outfile,"YourDOB \"%s\"\n", answ );
 
  answ = GetTextLine( "SpouseDOB" );
- if (interpret_date( answ, &day, &month, &yyyy, "reading 'SpouseDOB'" ))
-   fprintf(outfile,"SpouseDOB %s\n", format_mmddyyyy( month, day, yyyy ) );
+ if (interpret_date( answ, &month, &day, &yyyy, "reading 'SpouseDOB'" ))
+   fprintf(outfile,"SpouseDOB \"%s\"\n", format_mmddyyyy( month, day, yyyy ) );
  else
-  fprintf(outfile,"SpouseDOB %s\n", answ );
+  fprintf(outfile,"SpouseDOB \"%s\"\n", answ );
 
  GetTextLineF( "County" );
  GetTextLineF( "SchooldDist" );
