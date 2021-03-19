@@ -36,7 +36,7 @@ History:
     * 18.06 (3/18/2021) - Added Fed-1040 Schedule-SE for Self-Employment taxes
 		(part-I) which can be accessed in GUI under Other-Forms.
 		For Fed-1040, improved Virtual-Currency comment/prompt language
-		in template file, and added ability to adjust Social Security
+		in template file, and added adjustment to Social Security
 		calculations for Charity deductions when not itemizing.
     * 18.05 (3/5/2021) - For Fed-1040, added ability to specify Dependents information
 		for PDF form output. (Does not affect any calculations.)

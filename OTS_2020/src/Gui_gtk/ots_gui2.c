@@ -3310,6 +3310,7 @@ void slcttxprog( GtkWidget *wdg, void *data )
    fb_ban_files( ".txt" );
    fb_ban_files( ".pdf" );
    fb_ban_files( ".dll" );
+   fb_ban_files( ".dylib" );
    fb_ban_files( "convert_results2xfdf" );
    fb_ban_files( "ots_gui" );
    fb_ban_files( "universal_pdf_file_modifier" );
