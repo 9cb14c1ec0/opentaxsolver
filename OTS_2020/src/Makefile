@@ -30,6 +30,7 @@ all: ../bin/taxsolve_US_1040_2020 \
      ../bin/taxsolve_CA_540_2020 \
      ../bin/taxsolve_HSA_f8889 \
      ../bin/taxsolve_f8606 \
+     ../bin/taxsolve_US_1040_Sched_SE_2020 \
      ../bin/universal_pdf_file_modifier \
      ../bin/convert_results2xfdf \
      ../Run_taxsolve_GUI 
@@ -70,6 +71,9 @@ all: ../bin/taxsolve_US_1040_2020 \
 
 ../bin/taxsolve_f8606:            taxsolve_f8606.c             taxsolve_routines.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_f8606		taxsolve_f8606.c		     $(SRCS) $(LIBS)
+
+../bin/taxsolve_US_1040_Sched_SE_2020: taxsolve_US_1040_Sched_SE_2020.c taxsolve_routines.c
+	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_US_1040_Sched_SE_2020 taxsolve_US_1040_Sched_SE_2020.c $(SRCS) $(LIBS)
 
 ../bin/universal_pdf_file_modifier: 	      universal_pdf_file_modifier.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/universal_pdf_file_modifier  universal_pdf_file_modifier.c	$(SRCS) $(LIBS)

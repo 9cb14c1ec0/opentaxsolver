@@ -12,7 +12,7 @@ Spouse_Blind?	 N	{ Is Spouse blind ? (answer: Yes, No) }
 
 Dependents       3      { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)
 				self=1, spouse, etc. }
-VirtCurr?       N       { During 2020, did you buy/sell/own and Virtual Currency ? (answer: Yes, No) }
+VirtCurr?       N       { During 2020, did you buy/sell/exchange/trade any Virtual Currency ? (answer: Yes, No) }
 
 
 { ---- Income ---- }

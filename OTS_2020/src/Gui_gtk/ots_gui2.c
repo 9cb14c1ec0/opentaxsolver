@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.41;
-char package_date[]="March 4, 2021";
-char ots_release_package[]="18.05";
+float version=2.42;
+char package_date[]="March 18, 2021";
+char ots_release_package[]="18.06";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -942,6 +942,9 @@ void read_instructions( int init )
       default:
 	if (strstr( taxsolvestrng, "taxsolve_HSA_f8889" ) != 0)
 	 instructions_filename = strdup( "f8889_instructions.dat" );
+	else
+	if (strstr( taxsolvestrng, "taxsolve_US_1040_Sched_SE" ) != 0)
+	 instructions_filename = strdup( "f1040sse_instructions.dat" );
 	else
 	 return;	
      }
@@ -2138,6 +2141,9 @@ void set_tax_solver( char *fname )
  else
  if (strstr( taxsolvestrng, "taxsolve_f8606" ) != 0)
   supported_pdf_form = 1;
+ else
+ if (strstr( taxsolvestrng, "taxsolve_US_1040_Sched_SE" ) != 0)
+  supported_pdf_form = 1;
 }
 
 
@@ -3186,6 +3192,19 @@ void do_pdf_conversion()
 	  add_view_pdf_button();
 	 }
 	else
+	if (strstr( taxsolvestrng, "taxsolve_US_1040_Sched_SE" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "f1040sse_meta.dat", wrkingfname, "f1040sse_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	 }
+	else
 	 {
 	  printf("Form type not supported.\n");
 	  make_button( status_panel, 30, statusw.ht - 50, " Ok ", dismiss_status_win, &status_win );
@@ -3294,6 +3313,18 @@ void slcttxprog( GtkWidget *wdg, void *data )
    fb_ban_files( "convert_results2xfdf" );
    fb_ban_files( "ots_gui" );
    fb_ban_files( "universal_pdf_file_modifier" );
+
+   fb_ban_files( "taxsolve_CA_540" );
+   fb_ban_files( "taxsolve_MA_1" );
+   fb_ban_files( "taxsolve_NC_D400" );
+   fb_ban_files( "taxsolve_NJ_1040" );
+   fb_ban_files( "taxsolve_NY_IT201" );
+   fb_ban_files( "taxsolve_OH_IT1040" );
+   fb_ban_files( "taxsolve_PA_40_" );
+   fb_ban_files( "taxsolve_US_1040_2020");
+   fb_ban_files( "taxsolve_US_1040_Sched_C_" );
+   fb_ban_files( "taxsolve_VA_760_" );
+
    strcpy( wildcards_fb, "" );
    strcpy( filename_fb, "" );
    // printf("OTS_taxsolve: dir='%s', wc='%s', fname='%s'\n", toolpath, wildcards_fb, filename_fb );
@@ -3619,7 +3650,7 @@ void helpabout2( GtkWidget *wdg, void *data )
 
 int main(int argc, char *argv[] )
 {
- int argn, k, grayed_out=0;
+ int argn, k, grayed_out=0, setwinsz=0;
  char vrsnmssg[256], ots_pkg_mssg[256], tmpstr[MaxFname], *formid;
  float x, y, dy, y1, y2;
  GtkWidget *txprogstog, *button, *tmpwdg;
@@ -3649,6 +3680,7 @@ int main(int argc, char *argv[] )
     printf("OTS GUI v%1.2f, %s:\n", version, package_date );
     printf(" Command-line Options:\n");
     printf("  -verbose          - Show debugging messages.\n");
+    printf("  -winsz wd ht      - Set the window size to wd x ht.\n");
     printf("  -debug            - Set debug mode.\n");
     printf("  -taxsolver xx     - Set path and name of the tax-solver executable.\n");
     printf("  {file-name}.txt   - Set path and name of the tax data input file.\n\n");
@@ -3674,6 +3706,20 @@ int main(int argc, char *argv[] )
     sprintf(directory_dat, "%stax_form_files%c", tmpstr, slashchr);
     selected_form = form_other;
     ok_slcttxprog = 0;
+   }
+  else
+  if (strcmp(argv[argn],"-winsz")==0)
+   { 
+    argn++;
+    if (argn == argc) { printf("Missing entry after '%s'.\n", argv[argn-1] );  exit(1); }
+    if (sscanf(argv[argn],"%d",&winwidth) != 1)
+     { printf("Bad integer window-width after '%s'.\n", argv[argn-1] );  exit(1); }
+    argn++;
+    if (argn == argc) { printf("Missing entry after '%s'.\n", argv[argn-2] );  exit(1); }
+    if (sscanf(argv[argn],"%d",&winht) != 1)
+     { printf("Bad integer window-height after '%s'.\n", argv[argn-2] );  exit(1); }
+    printf(" Setting window size = %d x %d\n", winwidth, winht );
+    setwinsz = 1;
    }
   else
   if (strcmp( argv[argn], "-debug" ) == 0)
@@ -3703,6 +3749,20 @@ int main(int argc, char *argv[] )
  }
 
  mpanel = init_top_outer_window( &argc, &argv, winwidth, winht, "OpenTaxSolver-GUI", 0, 0 );
+ if (!setwinsz)
+  {
+   GdkScreen *scrn;
+   scrn = gtk_window_get_screen( (GtkWindow *)outer_window );
+   if (gdk_screen_get_width( scrn ) > 2500)
+    { /*Hi-DPI Screen*/
+     printf("Screen size = %d x %d\n", gdk_screen_get_width( scrn ), gdk_screen_get_height( scrn ) );
+     winwidth = (int)((float)winwidth * (float)gdk_screen_get_width( scrn ) / 1920.0);
+     winht = (int)((float)winht * (float)gdk_screen_get_height( scrn ) / 1080.0);
+     printf("Detected HiDPI Screen.  Setting window size = %d x %d\n", winwidth, winht );
+     gtk_widget_set_size_request( outer_window, winwidth, winht );
+    }
+  }
+
  gtk_window_set_resizable( GTK_WINDOW( outer_window ), 0 );
  // make_sized_label( mpanel, 180, 10, "Open-Tax-Solver", 20.0 );
 
@@ -3785,7 +3845,7 @@ int main(int argc, char *argv[] )
    button = make_button_wsizedcolor_text( mpanel, 30, winht - 100, "Start New Return", 14.0, "#000000", pick_template, 0 );
    add_tool_tip( button, "Start a fresh new blank return of the selected type." );
 
-   button = make_button_wsizedcolor_text( mpanel, 235, winht - 100, "Open Saved Form", 14.0, "#000000", pick_file, 0 );
+   button = make_button_wsizedcolor_text( mpanel, (int)(0.5222 * (float)winwidth), winht - 100, "Open Saved Form", 14.0, "#000000", pick_file, 0 );
    add_tool_tip( button, "Open a previously saved or existing, tax form or example." );
    make_sized_label( mpanel, winwidth / 2 - 25, winht - 30, vrsnmssg, 8 );
    make_sized_label( mpanel, winwidth / 2 - 45, winht - 14, ots_pkg_mssg, 7 );

@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 4, 2021 v18.05 - For 2020 tax-year.
+March 18, 2021 v18.06 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,10 +33,16 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * 18.05 (3/4/2021) - For Fed-1040, added ability to specify Dependents information
+    * 18.06 (3/18/2021) - Added Fed-1040 Schedule-SE for Self-Employment taxes
+		(part-I) which can be accessed in GUI under Other-Forms.
+		For Fed-1040, improved Virtual-Currency comment/prompt language
+		in template file, and added ability to adjust Social Security
+		calculations for Charity deductions when not itemizing.
+    * 18.05 (3/5/2021) - For Fed-1040, added ability to specify Dependents information
 		for PDF form output. (Does not affect any calculations.)
 		On North Carolina state form, fixed comments on lines 7+9, now
 		fills Use-Tax check-box when appropriate, and fixed Refund line 34.
+		Fixed NY State Form Date-of-Birth format in PDF printouts.
     * 18.04 (2/26/2021) - Added Form 8606 under the 'Other' category.
 		Some minor updates to some 'instructions' files.
 		Fixes to Form 8889 pdf formatting.

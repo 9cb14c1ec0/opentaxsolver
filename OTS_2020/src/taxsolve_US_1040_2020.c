@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.05;
+float thisversion=18.06;
 
 #include <stdio.h>
 #include <time.h>
@@ -1393,6 +1393,44 @@ void Calculate_Schedule_A( )
 }
 
 
+void Calc_SocSec_L9_StudentLoan_Sched1L22_L10a()
+{
+ int j;
+ SocSec_Worksheet();	/* This calc. depends on line L6a and Sched1[9-19].  Calculates L6b, which is L[6]. */
+ L[9] = L[1] + L[2] + L[3] + L[4] + L[5] + L[6] + L[7] + L[8];
+ if (Sched1[20] != 0.0)
+  { /* Student loan interest calculation pg 90. */
+   double ws[20], sum=0.0;
+   ws[1] = smallerof( Sched1[20], 2500.0 );
+   ws[2] = L[9];
+   for (j=10; j <= 19; j++)
+    sum = sum + Sched1[j];
+   ws[3] = sum;
+   ws[4] = ws[2] - ws[3];
+   if (status == MARRIED_FILLING_JOINTLY) ws[5] = 140000.0; else ws[5] = 70000.0;	/* Updated for2020. */
+   if (ws[4] > ws[5])
+    {
+     ws[6] = ws[4] - ws[5];
+     if (status == MARRIED_FILLING_JOINTLY)
+      ws[7] = ws[6] / 30000.0; 
+     else
+      ws[7] = ws[6] / 15000.0;
+     if (ws[7] >= 1.0)
+      ws[7] = 1.0;
+     ws[8] = ws[1] * ws[7];
+    }
+   else ws[8] = 0.0;
+   ws[9] = ws[1] - ws[8];
+   Sched1[20] = ws[9];
+  }
+ Sched1[22] = 0.0;
+ for (j=10; j <= 21; j++)
+  Sched1[22] = Sched1[22] + Sched1[j];
+ L10a = Sched1[22];
+}
+
+
+
 
 /*----------------------------------------------------------------------*/
 /* Main									*/
@@ -1567,6 +1605,67 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
  get_cap_gains();	 /* Capital gains. (Schedule-D). This popuates "schedD[]" and L[7]. */
  
 
+
+ /* Determine your Std. Deduction value. */
+ fprintf(outfile, "StdDedChart_NumBoxesChecked = %d\n", StdDedChart_NumBoxesChecked ); 
+ if (StdDedChart_NumBoxesChecked == 0)
+  {
+   S_STD_DEDUC   = 12400.0;						/* Updated for 2020. */
+   MFJ_STD_DEDUC = 24800.0;
+   MFS_STD_DEDUC = 12400.0;
+   HH_STD_DEDUC  = 18650.0;
+  }
+ else
+  { /* Std. Deduction chart for People who were Born Before January 2, 1956, or Were Blind, pg 32. */
+    switch (StdDedChart_NumBoxesChecked)		/* Does not handle if someone claims you or joint-spouse as dependent. */
+     {				/* (Qualifying Widow/er has same amounts as MFJ, so not broken into separate variable.) */
+      case 1: 
+	S_STD_DEDUC   = 14050.0;					/* Updated for 2020. */
+	MFJ_STD_DEDUC = 26100.0;
+	MFS_STD_DEDUC = 13700.0;
+	HH_STD_DEDUC  = 20300.0;
+	break;
+      case 2: 
+	S_STD_DEDUC   = 15700.0;
+	MFJ_STD_DEDUC = 27400.0;
+	MFS_STD_DEDUC = 15000.0;
+	HH_STD_DEDUC  = 21950.0;
+	break;
+      case 3: 
+	MFJ_STD_DEDUC = 28700.0;
+	MFS_STD_DEDUC = 16300.0;
+	S_STD_DEDUC   = 15700.0;	/* Cannot happen, but set to appease compiler. */
+	HH_STD_DEDUC  = 21950.0;	/* .. */
+	break;
+      case 4: 
+	MFJ_STD_DEDUC = 30000.0;
+	MFS_STD_DEDUC = 17600.0;
+	S_STD_DEDUC   = 15700.0;	/* Cannot happen, but set to appease compiler. */
+	HH_STD_DEDUC  = 21950.0;	/* .. */
+	break;
+      default:  fprintf(outfile,"Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
+		printf("Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
+		exit(1); 
+     }
+    fprintf(outfile,"  (Assuming no one is claiming you, or your joint-spouse, as a dependent.)\n");
+  }
+
+ switch (status)
+  {
+   case SINGLE:
+		std_deduc = S_STD_DEDUC;	break;
+   case MARRIED_FILLING_SEPARAT:  
+		std_deduc = MFS_STD_DEDUC;	break;
+   case WIDOW:
+   case MARRIED_FILLING_JOINTLY:
+		std_deduc = MFJ_STD_DEDUC;	break;
+   case HEAD_OF_HOUSEHOLD:
+		std_deduc = HH_STD_DEDUC;	break;
+   default:  printf("Case (Line 12) not handled.\n"); fprintf(outfile,"Case (Line 12) not handled.\n"); exit(1);
+  }
+
+
+
  /* -- Schedule-1 -- Additional Income and Adjustments */
 
  GetLineF( "S1_1", &Sched1[1] );	/* Taxable refunds. */
@@ -1606,54 +1705,12 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
  GetTextLineF( "AlimRecipName:" );
 
  GetLineFnz( "S1_19", &Sched1[19] );	/* IRA deduction (Done above) */
-
- SocSec_Worksheet();		/* This calc. depends on line L6a and Sched1[9-19].  Calculates L6b, which is L[6]. */
- showline_wlabel( "L6b", L[6] ); 
-
- showline( 7 );
- showline( 8 );
-
- L[9] = L[1] + L[2] + L[3] + L[4] + L[5] + L[6] + L[7] + L[8];
- showline( 9 );
-
  GetLine( "S1_20", &Sched1[20] );	/* Student loan interest deduction - page 94 */
- if (Sched1[20] != 0.0)
-  { /* Student loan interest calculation pg 90. */
-   double ws[20], sum=0.0;
-   ws[1] = smallerof( Sched1[20], 2500.0 );
-   ws[2] = L[9];
-   for (j=10; j <= 19; j++)
-    sum = sum + Sched1[j];
-   ws[3] = sum;
-   ws[4] = ws[2] - ws[3];
-   if (status == MARRIED_FILLING_JOINTLY) ws[5] = 140000.0; else ws[5] = 70000.0;	/* Updated for2020. */
-   if (ws[4] > ws[5])
-    {
-     ws[6] = ws[4] - ws[5];
-     if (status == MARRIED_FILLING_JOINTLY)
-      ws[7] = ws[6] / 30000.0; 
-     else
-      ws[7] = ws[6] / 15000.0;
-     if (ws[7] >= 1.0)
-      ws[7] = 1.0;
-     ws[8] = ws[1] * ws[7];
-    }
-   else ws[8] = 0.0;
-   ws[9] = ws[1] - ws[8];
-   Sched1[20] = ws[9];
-  }
- showline_wlabel( "S1_20", Sched1[20] );
+ GetLine( "S1_21", &Sched1[21] );	/* Tuition and fees. */
 
- GetLineFnz( "S1_21", &Sched1[21] );	/* Tuition and fees. */
-
- for (j=10; j <= 21; j++)
-  Sched1[22] = Sched1[22] + Sched1[j];
- showline_wlabel( "S1_22", Sched1[22] );
+ Calc_SocSec_L9_StudentLoan_Sched1L22_L10a();
 
  /* -- End of Schedule-1 -- */
-
- L10a = Sched1[22];
- showline_wlabel( "L10a", L10a );
 
 
  /* -- Schedule A - Input -- */
@@ -1738,65 +1795,6 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
   }
 
 
- /* Determine your Std. Deduction value. */
- fprintf(outfile, "StdDedChart_NumBoxesChecked = %d\n", StdDedChart_NumBoxesChecked ); 
- if (StdDedChart_NumBoxesChecked == 0)
-  {
-   S_STD_DEDUC   = 12400.0;						/* Updated for 2020. */
-   MFJ_STD_DEDUC = 24800.0;
-   MFS_STD_DEDUC = 12400.0;
-   HH_STD_DEDUC  = 18650.0;
-  }
- else
-  { /* Std. Deduction chart for People who were Born Before January 2, 1956, or Were Blind, pg 32. */
-    switch (StdDedChart_NumBoxesChecked)		/* Does not handle if someone claims you or joint-spouse as dependent. */
-     {				/* (Qualifying Widow/er has same amounts as MFJ, so not broken into separate variable.) */
-      case 1: 
-	S_STD_DEDUC   = 14050.0;					/* Updated for 2020. */
-	MFJ_STD_DEDUC = 26100.0;
-	MFS_STD_DEDUC = 13700.0;
-	HH_STD_DEDUC  = 20300.0;
-	break;
-      case 2: 
-	S_STD_DEDUC   = 15700.0;
-	MFJ_STD_DEDUC = 27400.0;
-	MFS_STD_DEDUC = 15000.0;
-	HH_STD_DEDUC  = 21950.0;
-	break;
-      case 3: 
-	MFJ_STD_DEDUC = 28700.0;
-	MFS_STD_DEDUC = 16300.0;
-	S_STD_DEDUC   = 15700.0;	/* Cannot happen, but set to appease compiler. */
-	HH_STD_DEDUC  = 21950.0;	/* .. */
-	break;
-      case 4: 
-	MFJ_STD_DEDUC = 30000.0;
-	MFS_STD_DEDUC = 17600.0;
-	S_STD_DEDUC   = 15700.0;	/* Cannot happen, but set to appease compiler. */
-	HH_STD_DEDUC  = 21950.0;	/* .. */
-	break;
-      default:  fprintf(outfile,"Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
-		printf("Error: StdDedChart_NumBoxesChecked (%d) not equal to 1, 2, 3, or 4.\n", StdDedChart_NumBoxesChecked );
-		exit(1); 
-     }
-    fprintf(outfile,"  (Assuming no one is claiming you, or your joint-spouse, as a dependent.)\n");
-  }
-
- switch (status)
-  {
-   case SINGLE:
-		std_deduc = S_STD_DEDUC;	break;
-   case MARRIED_FILLING_SEPARAT:  
-		std_deduc = MFS_STD_DEDUC;	break;
-   case WIDOW:
-   case MARRIED_FILLING_JOINTLY:
-		std_deduc = MFJ_STD_DEDUC;	break;
-   case HEAD_OF_HOUSEHOLD:
-		std_deduc = HH_STD_DEDUC;	break;
-   default:  printf("Case (Line 12) not handled.\n"); fprintf(outfile,"Case (Line 12) not handled.\n"); exit(1);
-  }
-
-
 
  /* -- Calculate Schedule A -- */
 
@@ -1841,6 +1839,14 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
   { /*Select_to_use_StdDeduction*/
    itemize = No;
    /* Leave the above tentative L10b deduction of charity contribs here when not itemizing. */
+
+   /* Now need to re-do SocSec calculations, which depended on L10b, and assumed L10b was zero for Itemizing.
+	The SocSec calculations set L[6], which affects L[9], Student Loan, Sched1-L20, and L[11].
+	Then Schedule-A, which depended on L[11] and also L10b.
+   */
+   printf("\nRecalculating SocSec with Std. Deduction ...\n\n");
+   fprintf(outfile,"\nRecalculating SocSec with Std. Deduction ...\n\n");
+   Calc_SocSec_L9_StudentLoan_Sched1L22_L10a();
    L[10] = L10a + L10b;		/* L[10] is L10c. */
    L[11] = L[9] - L[10];
    L[12] = std_deduc;		/* Take the Std.Deduction. */
@@ -1880,6 +1886,14 @@ int main( int argc, char *argv[] )						/* Updated for 2020. */
   if (ForceItemize)
    fprintf(outfile,"CheckBoxA18 = X\n");
 
+ showline_wlabel( "L6b", L[6] ); 
+ showline( 7 );
+ showline( 8 );
+ showline( 9 );
+ showline_wlabel( "S1_20", Sched1[20] );
+ showline_wlabelnz( "S1_21", Sched1[21] );
+ showline_wlabel( "S1_22", Sched1[22] );
+ showline_wlabel( "L10a", L10a );
  showline_wlabel( "L10b", L10b );
  showline_wlabelmsg( "L10c", L[10], "Total Adjustments to Income" );
  showline_wlabelmsg( "L11", L[11], "Adjusted Gross Income" );
