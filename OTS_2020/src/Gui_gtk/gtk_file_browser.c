@@ -5,7 +5,7 @@
 */
 
 #define FB_DEBUG if (0)
-#define MXLEN 4096
+#define MXLEN 8192
 #define SHOWFILESIZE 0
 
 #if (SHOWFILESIZE == 1)
@@ -37,6 +37,17 @@ void fb_clear_word_list( struct fb_word_list_item **list )
     free( item->word );
     free( item );
    }
+}
+
+
+char *strdup_padded( char *instr )
+{
+ int j;
+ char *outstr;
+ j = strlen( instr );
+ outstr = (char *)malloc( j + 64 );
+ strcpy( outstr, instr );
+ return outstr;
 }
 
 
@@ -209,7 +220,7 @@ void fb_unify_slashes( char *name, char oldslash, char newslash )
 void fb_reduce_pathname( char *fname )
 {
  int j, k=0, nsegs=0;
- char *twrd, *dseg[200];
+ char *twrd, *dseg[400];
 
  if (fname[0] == '\0') return;
  FB_DEBUG printf("REDUCING '%s'\n", fname);
@@ -235,7 +246,7 @@ void fb_reduce_pathname( char *fname )
  /* Separate path into segments. */
  twrd = (char *)malloc( MXLEN );
  k = 0;
- while ((fname[k] != '\0') && (nsegs < 200))
+ while ((fname[k] != '\0') && (nsegs < 400))
   {
    j = 0;
    while ((fname[k] != '\0') && (fname[k] != '/') && (j < MXLEN-1))
@@ -466,7 +477,7 @@ struct fb_directory_item *fb_new_dirlist_item( char *fname, int sz, time_t filed
   struct fb_directory_item *newitem;
 
   newitem = (struct fb_directory_item *)malloc( sizeof(struct fb_directory_item) );
-  newitem->filename = strdup( fname );
+  newitem->filename = strdup_padded( fname );
   newitem->sz = sz;
   newitem->file_date = filedate;
   return newitem;
@@ -531,7 +542,7 @@ void renderBrowseFiles0( char *prompt, int maxlength, char *directory, char *wil
  sprintf(line,"Directory:  %s", directory );
  make_label( fbrowser_frame, 5, 5, line );
 
- strcpy(fb_dirname, directory);
+ strcpy_safe( fb_dirname, directory, MXLEN );
 
  /* Filter any '*' from wildcards, and parse into an array. */
  strcpy_safe( line, wildcards, 500 );
@@ -584,14 +595,14 @@ void renderBrowseFiles0( char *prompt, int maxlength, char *directory, char *wil
          dir_entry = readdir(dirpt);
 	 if (dir_entry == 0)
 	  {
-	    strcpy( directory, fb_prior_directory );
+	    strcpy_safe( directory, fb_prior_directory, MXLEN );
 	    dirpt = opendir( directory );
 	    dir_entry = readdir(dirpt);
 	  }
          else
 	  {
 	    if (fb_prior_directory) free(fb_prior_directory);
-	    fb_prior_directory = strdup(directory);
+	    fb_prior_directory = strdup_padded(directory);
 	  }
          while (dir_entry != 0)
           { /*direntry*/
@@ -827,7 +838,7 @@ void BrowseFiles0( char *prompt, int maxlength, char *directory, char *wildcards
   fbwinheight = 450;
  fbdata.prompt = strdup( prompt );
  fbdata.maxlength = maxlength;
- fbdata.directory = strdup( directory );
+ fbdata.directory = strdup_padded( directory );
  fbdata.wildcards = strdup( wildcards );
  fbdata.filename = strdup( filename );
  fbdata.callback = callback;

@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.00;
+float thisversion=18.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -140,7 +140,7 @@ void place_blocked_value( char *phrase, int numpre, int numpost, char *label )
 
 int main( int argc, char *argv[] )
 {
- int i, j, k, status=0, answer=0, HomeOwner=0, Tenant=0;
+ int i, j, k, status=0, answer=0, HomeOwner=0, Tenant=0, eligible_proptax_ded=1;
  char word[1000], *infname=0, outfname[4000];
  time_t now;
  double L16b=0.0, L20b=0.0, L28a=0.0, L28b=0.0;
@@ -438,6 +438,16 @@ int main( int argc, char *argv[] )
  else
   proptxcredit = 25.0;
 
+ if ((L[29] < filing_threshold) && ((L[7] > 0) || (L[8] > 0)))
+  { /* Not eligible for property tax deduction as per right column on p. 23 of instructions. */
+    eligible_proptax_ded = 0;
+    if (L[39] != 0.0)
+     {
+      printf("You are not eligible for property tax deduction as per right column on p. 23 of instructions.\n");
+      fprintf(outfile,"You are not eligible for property tax deduction as per right column on p. 23 of instructions.\n");
+     }
+  }
+
  if (COJ_9a == 0.0)
   { /*Worksheet-H*/
     H[3] = L[38];	 Hb[3] = L[38];
@@ -451,25 +461,35 @@ int main( int argc, char *argv[] )
     fprintf(outfile," H6a = %6.2f	H6b = %6.2f\n", H[6], Hb[6]);
     H[7] = Hb[6] - H[6];
     showline_wrksht('H',7,H);
-    if (H[7] >= proptxcredit)
-     { /*yes*/
-       fprintf(outfile," H8. Yes. (Take Property Tax Deduction.)\n");
-       L[40] = H[4];
-       L[41] = H[5];
-       L[42] = H[6];
-       L[56] = 0.0;
-     } /*yes*/
+    if (eligible_proptax_ded)
+     { /*eligible*/
+      if (H[7] >= proptxcredit)
+       { /*yes*/
+         fprintf(outfile," H8. Yes. (Take Property Tax Deduction.)\n");
+         L[40] = H[4];
+         L[41] = H[5];
+         L[42] = H[6];
+         L[56] = 0.0;
+       } /*yes*/
+      else
+       { /*no*/
+         fprintf(outfile," H8. No. (Take Property Tax Credit.)\n");
+         L[40] = 0.0;
+         L[41] = Hb[5];
+         L[42] = Hb[6];
+         L[56] = proptxcredit;
+       } /*no*/
+     } /*eligible*/
     else
-     { /*no*/
-       fprintf(outfile," H8. No. (Take Property Tax Credit.)\n");
+     { /*not_eligble*/
        L[40] = 0.0;
        L[41] = Hb[5];
        L[42] = Hb[6];
-       L[56] = proptxcredit;
-     } /*no*/
+       L[56] = 0.0;
+     } /*not_eligble*/
   } /*Worksheet-H*/
  else
-  { /*Sched  COJ +Worksheet-I*/
+  { /*Sched COJ +Worksheet-I*/
     fprintf(outfile,"\nSchedule COJ Credit for Income or Wage Taxes Paid to Other Jurisdiction (Previously Sched A):\n");
     showline_wlabel("COJ_1", COJ[1]); 
     COJ[2] = L[29];
@@ -508,36 +528,36 @@ int main( int argc, char *argv[] )
     Ib[4] = Ib[3] - I[3];
     showline_wrksht('I', 4, Ib);
 
-    if (Ib[4] >= proptxcredit)
-     {
-      fprintf(outfile," Sched-I, Yes:  Take PropTax Deduction\n\n");
-      L[40] = COJ[5];	// fprintf(outfile,"L36c = %6.2f\n", L[36]);
-      L[41] = COJ[6];
-      L[42] = COJ[7];
-      L[43] = I[2];
-      L[56] = 0.0;
-     }
+    if (eligible_proptax_ded)
+     { /*eligible*/
+      if (Ib[4] >= proptxcredit)
+       {
+        fprintf(outfile," Sched-I, Yes:  Take PropTax Deduction\n\n");
+        L[40] = COJ[5];	// fprintf(outfile,"L36c = %6.2f\n", L[36]);
+        L[41] = COJ[6];
+        L[42] = COJ[7];
+        L[43] = I[2];
+        L[56] = 0.0;
+       }
+      else
+       {
+        fprintf(outfile," Sched-I, No:  Take PropTax Credit\n\n");
+        L[40] = 0.0;
+        L[41] = COJ_b[6];
+        L[42] = COJ_b[7];
+        L[43] = Ib[2];
+        L[56] = proptxcredit;
+       }
+     } /*eligible*/
     else
-     {
-      fprintf(outfile," Sched-I, No:  Take PropTax Credit\n\n");
+     { /*not_eligible*/
       L[40] = 0.0;
       L[41] = COJ_b[6];
       L[42] = COJ_b[7];
       L[43] = Ib[2];
-      L[56] = proptxcredit;
-     }
+      L[56] = 0.0;
+     } /*not_eligible*/
   } /*SchedA+Worksheet-I*/
-
- if ((L[29] < filing_threshold) || (L[7] > 0) || (L[8] > 0))
-  { /* Not eligible for property tax deduction as per right column on p. 23 of instructions. */
-    if (L[39] != 0.0)
-     {
-      printf("You are not eligible for property tax deduction as per right column on p. 23 of instructions.\n");
-      fprintf(outfile,"You are not eligible for property tax deduction as per right column on p. 23 of instructions.\n");
-     }
-    L[40] = 0.0;
-    L[56] = 0.0;
-  }
 
  if (L[39] > 0.0)
   fprintf(outfile, "L39a = %6.2f\n", L[39]);

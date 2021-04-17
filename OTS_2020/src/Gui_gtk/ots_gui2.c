@@ -44,9 +44,9 @@
 /*							*/
 /********************************************************/
 
-float version=2.42;
-char package_date[]="March 18, 2021";
-char ots_release_package[]="18.06";
+float version=2.43;
+char package_date[]="March 30, 2021";
+char ots_release_package[]="18.07";
 
 /************************************************************/
 /* Design Notes - 					    */
@@ -3752,13 +3752,18 @@ int main(int argc, char *argv[] )
  mpanel = init_top_outer_window( &argc, &argv, winwidth, winht, "OpenTaxSolver-GUI", 0, 0 );
  if (!setwinsz)
   {
+   int swd, sht;
    GdkScreen *scrn;
    scrn = gtk_window_get_screen( (GtkWindow *)outer_window );
-   if (gdk_screen_get_width( scrn ) > 2500)
+   swd = gdk_screen_get_width( scrn );
+   if (swd > 2500)
     { /*Hi-DPI Screen*/
-     printf("Screen size = %d x %d\n", gdk_screen_get_width( scrn ), gdk_screen_get_height( scrn ) );
-     winwidth = (int)((float)winwidth * (float)gdk_screen_get_width( scrn ) / 1920.0);
-     winht = (int)((float)winht * (float)gdk_screen_get_height( scrn ) / 1080.0);
+     sht = gdk_screen_get_height( scrn );
+     printf("Screen size = %d x %d\n", swd, sht);
+     if (swd > 3840) swd = 3840;	/* Limit reported screen size to realistic values. */
+     if (sht > 2160) sht = 2160;
+     winwidth = (int)((float)winwidth * (float)swd / 1920.0);
+     winht = (int)((float)winht * (float)sht / 1080.0);
      printf("Detected HiDPI Screen.  Setting window size = %d x %d\n", winwidth, winht );
      gtk_widget_set_size_request( outer_window, winwidth, winht );
     }

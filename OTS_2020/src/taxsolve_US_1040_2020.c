@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=18.06;
+float thisversion=18.07;
 
 #include <stdio.h>
 #include <time.h>
@@ -1167,13 +1167,15 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2020. */
 /*-------------------------------------------------------*/
 void SocSec_Worksheet()							/* Updated for 2020. */
 {
- double ws[100];
+ double ws[100], negative_amount_sched1_8=0.0;
  int k;
  if (L6a == 0.0) return;
  for (k = 0; k < 100; k++) ws[k] = 0.0;
  ws[1] = L6a;
  ws[2] = 0.5 * ws[1];
- ws[3] = L[1] + L[2] + L[3] + L[4] + L[5] + L[7] + L[8];
+ if (Sched1[8] < 0.0)	/* Do not include any Unemployment Compensation Exclusion (UCE) in SocSec calculations. */
+  negative_amount_sched1_8 = Sched1[8];		/* Remove any UCE from L8 by subtracting it. */
+ ws[3] = L[1] + L[2] + L[3] + L[4] + L[5] + L[7] + L[8] - negative_amount_sched1_8;
  ws[4] = L2a;
  ws[5] = ws[2] + ws[3] + ws[4];
  ws[6] = L10b;

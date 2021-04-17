@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-March 18, 2021 v18.06 - For 2020 tax-year.
+Apr 16, 2021 v18.08 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,6 +33,15 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * 18.08 (4/16/2021) - On Fed-1040 PDF forms, now displays Dependent-Relationship column.
+		On NJ State form, adjustments were made for eligibility of Homestead
+		rebate Property Tax credit when over 65 or blind, and under the income
+		threshold to file.
+    * 18.07 (3/31/2021) - GUI now detects Hi-DPI screens and enlarges window.
+		Fixed file-browser to prevent crash on some MacOS machines.
+		Adjusted Federal 1040 Social Security Worksheet calculation
+		to not include the new Unemployment Compensation Exclusion (UCE)
+		recorded as a negative value on Schedule-1 Line-8.
     * 18.06 (3/18/2021) - Added Fed-1040 Schedule-SE for Self-Employment taxes
 		(part-I) which can be accessed in GUI under Other-Forms.
 		For Fed-1040, improved Virtual-Currency comment/prompt language

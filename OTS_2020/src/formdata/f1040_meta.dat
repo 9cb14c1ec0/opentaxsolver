@@ -76,10 +76,10 @@ Dep1_SocSec#:	410 482 0 8.7
 Dep2_SocSec#:	410 501 0 8.7
 Dep3_SocSec#:	410 518 0 8.7
 Dep4_SocSec#:	410 536 0 8.7
-Dep1_Relatation: 544 482
-Dep2_Relatation: 544 501
-Dep3_Relatation: 544 518
-Dep4_Relatation: 544 536
+Dep1_Relation: 544 482
+Dep2_Relation: 544 501
+Dep3_Relation: 544 518
+Dep4_Relation: 544 536
 CkDep1_ChildTxCrd:  692 480
 CkDep1_CrdOtherDep: 813 480
 CkDep2_ChildTxCrd:  692 500
