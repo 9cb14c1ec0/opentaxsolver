@@ -23,9 +23,10 @@
 /* 									*/
 /* Aston Roberts 1-2-2020	aston_roberts@yahoo.com			*/
 /* Modified for NY 2005-2020 taxes - Skeet Monker			*/
+/* Corrections 2020 taxes - Jason Striegel				*/
 /************************************************************************/
 
-float thisversion=18.01;
+float thisversion=18.02;
 
 #include "taxsolve_routines.c"
 
@@ -46,6 +47,9 @@ char 	*Your1stName="", *YourLastName="", *YourInitial="",
 	*Spouse1stName="", *SpouseLastName="", *SpouseInitial="";
 char	*YourSocSec=0, *SpouseSocSec=0, *MailAddress=0, *AptNumber=0,
 	Town[2048]="", StateName[1024]="", Zipcode[1024]="";
+
+double L47a=0.0;                 /* NYC resident tax on line 47 */
+double L69a=0.0;                 /* NYC school tax credit (rate reduction amount) */
 
 struct FedReturnData
  {
@@ -467,7 +471,7 @@ double NYcityTaxRateFunction( double income, int status )	/* From page 69. */
 			  tax = (income - 50000.00) * 0.03876 + 1813.00;
   }
  else
- if (status==HEAD_OF_HOUSEHOLD) 
+ if (status==HEAD_OF_HOUSEHOLD)
   {
    if (income < 14400.00) tax = income * 0.03078; else
    if (income < 30000.00) tax = (income - 14400.00) * 0.03762 +  443.0;  else
@@ -999,7 +1003,8 @@ int main( int argc, char *argv[] )
   {
    printf(" Warning: L[19] = %6.2f, while Fed-line[11] = %6.2f\n", L[19], PrelimFedReturn.fedline[11] );
    fprintf(outfile," Warning: L[19] = %6.2f, while Fed-line[11] = %6.2f\n", L[19], PrelimFedReturn.fedline[11] );
-  } 
+  }
+ // TODO - L19a recomputed federal agi. (page 16, 19a worksheet)
 
  GetLineF( "L20", &L[20] );	/* Interest income from non-NY state or local bonds */
 
@@ -1179,8 +1184,13 @@ int main( int argc, char *argv[] )
 
  if (nyc_resident)
   { /*NYC*/
-   L[47] = NYcityTaxRateFunction( L[38], status ); 
+
+   /* TODO - see page 23. should adjust for itemized charitable deductions */
+   L[47] = L[38];               /* NYC taxable income */
    showline(47);
+
+   L47a = NYcityTaxRateFunction( L[47], status ); /* NYC resident tax */
+   showline_wlabel( "L47a", L47a );
 
    /* NYC Household credit. */
    if (Dependent) L[48] = 0.0;
@@ -1207,7 +1217,7 @@ int main( int argc, char *argv[] )
     }
    showline_wmsg(48,"NY City household credit");	/* NY City household credit, (pg 34). */
 
-   L[49] = L[47] - L[48];
+   L[49] = L47a - L[48];
    if (L[49] > 0.0)
     showline(49);
    else
@@ -1255,7 +1265,7 @@ int main( int argc, char *argv[] )
   { /*NYC*/
     if (Dependent) L[69] = 0.0;
     else
-    if (L[37] < 250000)
+    if (L[19] < 250000)
      {
       if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT) || (status==HEAD_OF_HOUSEHOLD))  L[69] = 63.0;  else
       if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))  L[69] = 125.0;
@@ -1263,6 +1273,47 @@ int main( int argc, char *argv[] )
     else
      L[69] = 0.0;
     showline(69);
+
+    if (Dependent)
+     {
+      L69a = 0.0;
+     }
+    else
+    if (L[47] > 500000)
+     {
+      L69a = 0.0;
+     }
+    else
+    if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
+     {
+      if (L[47] < 12000)
+        L69a = L[47] * 0.00171;
+      else
+        L69a = (L[47] - 12000) * 0.00228 + 21;
+     }
+    else
+    if (status==HEAD_OF_HOUSEHOLD)
+     {
+      if (L[47] < 14400)
+        L69a = L[47] * 0.00171;
+      else
+        L69a = (L[47] - 14400) * 0.00228 + 25;
+     }
+    else
+    if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
+     {
+      if (L[47] < 21600)
+        L69a = L[47] * 0.00171;
+      else
+        L69a = (L[47] - 21600) * 0.00228 + 37;
+     }
+    else
+     {
+      L69a = 0.0;
+     }
+
+    showline_wlabel( "L69a", L69a );
+
     /* L[70] = earned_income_credit; */
     /* showline(70); */
   } /*NYC*/
@@ -1273,10 +1324,12 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L73", &L[73] );	/* Total City of NY tax withheld. */
  GetLineF( "L74", &L[74] );	/* Yonkers tax withheld. */
- 
+
  GetLineF( "L75", &L[75] );	/* Total estimated tax payments (from IT-370)*/
 
  for (j = 63; j <= 75; j++) L[76] = L[76] + L[j];
+ L[76] += L69a;
+
  showline(76);
 
  if (L[76] > L[62])

@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-Apr 16, 2021 v18.08 - For 2020 tax-year.
+Apr 20, 2021 v18.08 - For 2020 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,10 +33,10 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * 18.08 (4/16/2021) - On Fed-1040 PDF forms, now displays Dependent-Relationship column.
+    * 18.08 (4/20/2021) - On Fed-1040 PDF forms, now displays Dependent-Relationship column.
 		On NJ State form, adjustments were made for eligibility of Homestead
 		rebate Property Tax credit when over 65 or blind, and under the income
-		threshold to file.
+		threshold to file.  Fixes to NY State and 1040 Schedule-C Business Forms.
     * 18.07 (3/31/2021) - GUI now detects Hi-DPI screens and enlarges window.
 		Fixed file-browser to prevent crash on some MacOS machines.
 		Adjusted Federal 1040 Social Security Worksheet calculation

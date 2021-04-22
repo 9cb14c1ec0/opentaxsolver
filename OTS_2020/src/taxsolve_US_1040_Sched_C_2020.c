@@ -29,7 +29,7 @@
 /* Earlier Updates	Robert Heller  heller@deepsoft.com		*/
 /************************************************************************/
 
-float thisversion=18.01;
+float thisversion=18.02;
 
 #include <stdio.h>
 #include <time.h>
@@ -49,7 +49,7 @@ int main( int argc, char *argv[] )
  char word[4000], outfname[4000], *EIN=0, *answ, *infname=0;
  time_t now;
  double L16b=0.0, L20b=0.0, L24b=0.0, Mileage=0.0, L44a=0.0, L44b=0.0, L44c=0.0;
- int L32;
+ int L32=0;
  char veh_mm[1024]="", veh_dd[1024]="", veh_yy[1024]="";
  char Ck45[1024]="", L46answ[1024]="", L47a_answ[1024]="", L47b_answ[1024]="";
  char *L48a_descr="", *L48b_descr="", *L48c_descr="", *L48d_descr="", *L48e_descr="",
@@ -214,8 +214,26 @@ int main( int argc, char *argv[] )
 
  GetLine( "L30", &L[30] );	/* Expenses for business use of home (form 8829) */
 
- get_parameter( infile, 's', word, "L32a" );  /* Yes or No, All investment is at risk */
- get_parameter( infile, 'b', &L32, "L32a");
+ answ = GetTextLine( "L32a" );  /* Yes or No, All investment is at risk */
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+   L32 = Yes;
+ else
+ if (toupper( word[0] ) == 'N')
+  L32 = No;
+ else
+ if (word[0] != '\0')
+  {
+   printf("Error: Unexpected answer for Line-32a (Y/N) = '%s'.  Exiting.\n", word );
+   fprintf(outfile,"Error: Unexpected answer for Line-32a (Y/N) = '%s'.  Exiting.\n", word );
+   exit(1);
+  }
+ else
+  {
+   printf(" No answer for Line-32a (Y/N).\n");
+   fprintf(outfile," No answer for Line-32a (Y/N).\n");
+  }
+
 
  /* Part III */
 
