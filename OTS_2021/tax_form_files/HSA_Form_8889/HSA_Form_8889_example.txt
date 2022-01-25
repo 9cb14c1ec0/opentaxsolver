@@ -1,0 +1,45 @@
+Title: 8889 HSA Form - 2021 --- EXAMPLE ---
+
+{ --- Your Identity --- }
+
+YourName:	Raplh Emerson
+YourSocSec#:	123-45-6789
+
+{ --- Part I --- }
+
+{ Your Coverage }
+L1:      Family       { (answer: Self-Only, Family) }
+
+L2     5,400          { HSA contributions you made for 2021 }
+       1,200
+                ;
+
+L3	3,550	; { If you under 55 and eligible every month, enter 3,550. Or see instructions. }
+
+L4	45	; { Amount you and your employer contributed to your Archer MSAs for 2021 from Form 8853, lines 1 and 2.}
+
+L6	80	; { Only enter amount if your spouse has separate HSA and coverage under an HDHP. }
+
+L7	100	; { Additional contribution amount. }
+
+L9	95	; { Employer contributions made to your HSAs for 2021. }
+
+L10	500	; { Qualified HSA funding distributions. }
+
+
+{ --- Part II --- }
+
+L14a	700	; { Total distributions you received in 2021 from all HSAs} 
+
+L14b	200	; { Distributions included in L14a rolled over to another HSA. }
+
+L15	300	; { Qualified medical expenses paid using HSA distributions }
+
+L17a:	Y	 { Do any distributions in L16 meet Exceptions to Addtl 20% tax ? { (answer: Y, N) }
+
+
+{ --- Part III --- }
+
+L18	400	; { Last-month rule }
+
+L19	500	; { Qualified HSA funding distribution }

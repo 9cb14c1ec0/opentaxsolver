@@ -1,0 +1,196 @@
+Page 1
+
+CoordReference:  40, 750  61, 64
+                550, 50  841, 1134    110-dpi
+MediaBox 594 770
+FontSz 11
+no_zero_entries
+round_to_whole_numbers
+
+YourSocSec#:	 60 206 9 12.3
+Your1stName:     60 261 0 13.7
+YourMidInit:    386 261 
+YourLastName:	420 261 0 13.7
+Spouse1stName:   60 310 0 13.7
+SpouseMidInit:	386 310
+SpouseLastName: 420 310 0 13.7
+SpouseSocSec#: 	403 206 9 13.3
+Number&Street:   60 367 0 13.7
+Town:     	 60 474 0 13.7
+State:		497 474 0 13.7
+Zipcode: 	553 474 0 13.7
+OhioCounty:	671 474 0 13.7
+
+CkFYrRes:   	 59 585
+CkPYrRes:	164 585
+CkFYrResSp:	 59 639
+CkPYrResSp:	164 639
+
+FontSz 12
+ Check_single	505 582
+ Check_mfj	505 622
+ Check_sep	505 658
+ Check_hh	505 582
+ Check_widow	505 582
+FontSz 11
+SpouseSocSec#Sep:  670 655 9 13.3
+
+L1 	658 802 9 13.2
+L2a 	658 838 9 13.2
+L2b	658 875 9 13.2
+L3	658 912 9 13.2
+L4	738 948 5 13.2
+Exemptions 500 972 2 13.2
+L5	658 984 9 13.2
+L6	658 1022 9 13.2
+L7	658 1058 9 13.2
+
+
+Page 2
+
+CoordReference:  40, 750  61, 64
+                550, 50  841, 1134    110-dpi
+
+ YourSocSec#:	107 92 9 10.9
+ L7a	658 121  9 13.2
+ L8a    658 158  9 13.2
+ L8b    658 194  9 13.2
+ L8c    658 230  9 13.2
+ L9     658 267  9 13.2
+ L10    658 304  9 13.2
+ L11    658 342  9 13.2
+ L12    658 377  9 13.2
+ L13    658 413  9 13.2
+ L14    658 451  9 13.2
+ L15    658 487  9 13.2
+ L16    658 525  9 13.2
+ L17    658 562  9 13.2
+ L18    658 600  9 13.2
+ L19    658 636  9 13.2
+ L20	658 671  9 13.2
+ L21	658 710  9 13.2
+ L22	658 747  9 13.2 
+
+ L23	658 782  9 13.2 
+ L24	658 818  9 13.2 
+ L25	658 857  9 13.2 
+
+ L26g	658 931  9 13.2 
+ L27	658 986  9 13.2 
+
+
+Page 3
+
+CoordReference:  40, 750  61, 64
+                550, 50  841, 1134    110-dpi
+
+ YourSocSec#:	379 147 9 10.9
+ SchedA1	658 211  9 13.2
+ SchedA2     	658 250  9 13.2
+ SchedA3     	658 286  9 13.2
+ SchedA4     	658 323  9 13.2
+ SchedA5     	658 358  9 13.2
+ SchedA6	658 395  9 13.2
+ SchedA7	658 451  9 13.2
+ SchedA8     	658 488  9 13.2
+ SchedA9     	658 523  9 13.2
+ SchedA10	658 561  9 13.2
+ SchedA11	658 636  9 13.2
+ SchedA12    	658 671  9 13.2
+ SchedA13    	658 708  9 13.2
+ SchedA14	658 746	 9 13.2
+ SchedA15	658 782	 9 13.2
+ SchedA16	658 818  9 13.2
+ SchedA17	658 855	 9 13.2
+ SchedA18	658 892  9 13.2
+ SchedA19    	658 929  9 13.2
+ SchedA20    	658 985  9 13.2
+ SchedA21    	658 1021  9 13.2
+ SchedA22    	658 1058  9 13.2
+
+
+Page 4
+
+CoordReference:  40, 750  61, 64
+                550, 50  841, 1134    110-dpi
+
+  YourSocSec#:	379 112 9 10.9
+  SchedA23	660 138	9 13.2
+  SchedA24	660 174	9 13.2
+  SchedA25    	660 211  9 13.2
+  SchedA26    	660 266  9 13.2
+  SchedA27    	660 303  9 13.2
+  SchedA28	660 339  9 13.2
+  SchedA29	660 376  9 13.2
+  SchedA30	660 413  9 13.2
+  SchedA31	660 469  9 13.2
+  SchedA32    	660 504  9 13.2
+  SchedA33    	660 546  9 13.2
+  SchedA34    	660 597  9 13.2
+  SchedA35	660 633  9 13.2
+  SchedA36	660 670  9 13.2
+  SchedA37	660 707  9 13.2
+  SchedA38	660 744  9 13.2
+  SchedA39	660 782  9 13.2
+
+Page 5
+
+CoordReference:  40, 750  61, 64
+                550, 50  841, 1134    110-dpi
+
+ YourSocSec#:	379 102 9 10.9
+ Credits1	658 141  9 13.2
+ Credits2	658 175  9 13.2
+ Credits3	658 211  9 13.2
+ Credits4	658 250  9 13.2
+ Credits5	658 285  9 13.2
+ Credits6	658 322  9 13.2
+ Credits7	658 356  9 13.2
+ Credits7a	658 400  9 13.2
+ Credits8	658 432  9 13.2
+ Credits9	658 467  9 13.2
+ Credits10	658 505  9 13.2
+ JFC		315 542
+ Credits11	658 541  9 13.2
+ Credits12	658 577  9 13.2
+ Credits13	658 613  9 13.2
+ Credits14	658 650  9 13.2
+ Credits15	658 685  9 13.2
+ Credits16	658 721  9 13.2
+ Credits17	658 761  9 13.2
+ Credits18	658 797  9 13.2
+ Credits19	658 833  9 13.2
+ Credits20	658 870  9 13.2
+ Credits21	658 908  9 13.2
+ Credits22	658 946  9 13.2
+ Credits23	658 982  9 13.2
+ Credits24	658 1019  9 13.2
+ Credits25	658 1056 9 13.2
+
+
+Page 6
+
+CoordReference:  40, 750  61, 64
+                550, 50  841, 1134    110-dpi
+
+ YourSocSec#:   381 109 9 10.9
+ Credits26      452 211  9 13.2
+ Credits27      452 247  9 13.2
+ Credits28_Factor 473 283 0 13.2
+ Credits28      658 303  9 13.2
+ Credits29      452 394  9 13.2
+ Credits30      452 432  9 13.2
+ Credits31_Factor 473 469 0 13.2
+ Credits31      452 507  9 13.2
+ Credits32      452 563  9 13.2
+ Credits33      658 615  9 13.2
+ Credits34      658 672  9 13.2
+ Credits35    	658 744  9 13.2
+ Credits36    	658 780  9 13.2
+ Credits37    	658 818  9 13.2
+ Credits38    	658 854  9 13.2
+ Credits39    	658 890  9 13.2
+ Credits40      658 927  9 13.2
+
+
+END_OF_INPUT

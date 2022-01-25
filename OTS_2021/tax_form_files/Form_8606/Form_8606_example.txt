@@ -1,0 +1,36 @@
+Title: Form 8606 for tax-year 2021
+
+Complete_Part_One? Y  {Are you completing Part I of this form? (answer: Y, N)}
+
+L1   123             ; { Nondeductible contributions }
+L2   423            ; { Total basis in Trad IRAs }
+
+Dist_or_Conv? Y     { Did you take a distribution or make a Roth conversion ? (answer: Y, N) }
+
+L4      21         ; { Contributions from the beginning of 2021 }
+L6        3       ;
+L7         1      ;
+L8          0     ;
+L15b         3    ;
+
+Complete_Part_Two? Y  {Are you completing Part II of this form? (answer: Y, N)}
+
+L16  234   ;
+L17   08   ;
+
+Complete_Part_Three? Y  {Are you completing Part III of this form? (answer: Y, N)}
+
+L19   97     ;
+L20   10     ;
+L22    8     ;
+L24   10     ;
+L25b  23     ;
+
+Name: Bill
+SocSec#: 123-45-6789
+Number&Street: 123 Oak Ln
+Apt#: Apt 15
+TownStateZip: Tax City, KS 12345
+ForeignCountry: 23
+ForeignState:   123
+ForeignPostcode: 453 827

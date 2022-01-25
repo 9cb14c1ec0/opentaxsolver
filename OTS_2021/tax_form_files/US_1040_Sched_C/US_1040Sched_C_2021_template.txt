@@ -1,0 +1,149 @@
+Title:  1040 Schedule C Tax Form - 2021
+
+{ ---- Your Business Information ---- }
+
+YourName:	
+YourSocSec#:	
+PrincipalBus:			{ Description of Business. }
+BusinessName:	
+Number&Street:	
+TownStateZip:	
+
+{ Activity Code - See Instructions page C17 - C-18. }
+ActivityCode:		
+
+{ Business Tax-ID. }
+BusinessEIN:		 
+
+{ Accounting method: }
+Fmethod:		 { (answer: Cash, Accrual, Other) }
+
+{ Did you materially participate ? }
+GPartic:		 { (answer: Yes, No) }
+
+{ Did you acquire this business in 2021 ? }
+Hacquired:		 { (answer: Yes, No) }
+
+{ Did you make payments requiring 1099's ? }
+Ireq1099s:		 { (answer: Yes, No) }
+
+{ If yes, will you file 1099's ? }
+Jfile1099s:		 { (answer: Yes, No, n/a) }
+
+
+{ ----- Income & Expenses ---- }
+
+L1		 { Gross receipts }
+		;
+L2		 { Returns and Allowances }
+		;
+L6		 { Other income, fed & state fuel credit }
+		;
+L8		 { Advertising }
+		;
+L9		 { Car & truck expenses  (other than mileage entered on Line 44) }
+		;
+L10		 { Commissions & fees }
+		;
+L11		 { Contract labor }
+		;
+L12		 { Depletion }
+		;
+L13		 { Depreciation & Sec 179 expense deduction }
+		;
+L14		 { Employee benefit programs (other than line 19) }
+		;
+L15		 { Insurance (other than health) }
+		;
+L16a		 { Interest (mortgage paid to banks) }
+		;
+L16b		 { Interest (Other) }
+		;
+L17		 { Legal & professional services }
+		;
+L18		 { Office expense }
+		;
+L19		 { Pension & profit sharing plans }
+		;
+L20a		 { Vehicles and equiment Rent or Lease }
+		;
+L20b		 { Rent or lease Other business property }
+		;
+L21		 { Repairs & maintenance }
+		;
+L22		 { Supplies (not in Part III) }
+		;
+L23		 { Taxes & licenses }
+		;
+L24a		 { Travel }
+		;
+L24b		 { Deductible meals & entertainment }
+		;
+L25		 { Utilities }
+		;
+L26		 { Wages (less employment credits) }
+		;
+L30		 { Expenses for business use of home (form 8829) }
+		;
+L32a		 { All investment is at risk ?  (answer: Yes, No) }
+
+
+ { --- Part III --- }
+L33:		 { Method to value closing inventory:  (answer: Cost, Market, Other) }
+L34:		 { Changed method ?  (answer: Yes, No) }
+L35		 { Inventory at beginning of year }
+		;
+L36		 { Purchases minus cost of personel items }
+		;
+L37		 { Cost of labor (not paid to yourself) }
+		;
+L38		 { Materials & supplies }
+		;
+L39		 { Other costs }
+		;
+L41		 { Inventory at year end }
+		;
+
+
+ { --- Part IV - Complete only if claiming business vehicle. --- }
+L43:		 { When was vehicle placed in service for business ?  mm-dd-yyyy }
+L44a		; { Business Miles }
+L44b		; { Commuting Miles }
+L44c		; { Other Miles }
+L45:		 { Vehicle available off-duty for personal use ?  (answer: Yes, No, n/a) }
+L46:		 { Have another personal vehicle ?  (answer: Yes, No, n/a) }
+L47a:		 { Have evidence to support deduction ?  (answer: Yes, No, n/a) }
+L47b:		 { If so, is evidence written ?  (answer: Yes, No, n/a) }
+
+
+ { --- Part V - Other Expenses. List business expenses not included on lines 8-26 or 30. --- }
+L48a_descr:		{ Description of expense. }
+L48a_amnt	;	{ Amount of expense. }
+
+L48b_descr:		{ Description of expense. }
+L48b_amnt	;	{ Amount of expense. }
+
+L48c_descr:		{ Description of expense. }
+L48c_amnt	;	{ Amount of expense. }
+
+L48d_descr:		{ Description of expense. }
+L48d_amnt	;	{ Amount of expense. }
+
+L48e_descr:		{ Description of expense. }
+L48e_amnt	;	{ Amount of expense. }
+
+L48f_descr:		{ Description of expense. }
+L48f_amnt	;	{ Amount of expense. }
+
+L48g_descr:		{ Description of expense. }
+L48g_amnt	;	{ Amount of expense. }
+
+L48h_descr:		{ Description of expense. }
+L48h_amnt	;	{ Amount of expense. }
+
+L48i_descr:		{ Description of expense. }
+L48i_amnt	;	{ Amount of expense. }
+
+{
+ --------------------------
+}

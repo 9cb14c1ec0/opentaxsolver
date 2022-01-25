@@ -1,0 +1,42 @@
+Page 1
+
+ TxtColor: 0 0 0.6
+
+ CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134	110-dpi
+
+ no_zero_entries
+
+ YourName:	103 158
+ YourSocSec#: 	731 158 
+
+ CkSelf-Only:	737 268
+ CkFamily:	821 268
+ L2		775 325 12
+ L3		775 380 12
+ L4		775 435 12
+ showevenifzero L5
+ L5		775 455 12
+ L6		775 491 12
+ L7		775 527 12
+ L8		775 546 12
+ L9		629 564 12
+ L10		629 583 12
+ L11		775 602 12
+ showevenifzero L12
+ L12		775 620 12
+ showevenifzero L13
+ L13		775 638 12
+ L14a		775 712 12
+ L14b		775 765 12
+ L14c		775 785 12
+ L15		775 803 12
+ showevenifzero L16
+ L16		775 856 12
+ Ck17a:		713 895
+ L17b		775 948 12
+ L18		775 1023 12
+ L19		775 1042 12
+ L20		775 1078 12
+ L21		775 1114 12
+ 

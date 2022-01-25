@@ -1,0 +1,23 @@
+Title:  1040 Schedule SE - 2021 
+
+{ ---- Your Information ---- }
+
+YourName:		
+YourSocSec#:		
+
+{ --- Self-Employment Tax --- }
+
+L2		; { Net Profit/Loss }
+
+L5a		; { Church employee income from Form w-2 }
+
+L8a		; { Total social security wages and tips and RR retirement compensation }
+                  { - if >$137,700 skip lines 8b and 8c }	
+
+L8b		; { Unreported tips from Form 4137, line 10 }
+
+L8c		; { Wages from Form 8919, line 10 }
+
+{
+ ---------------
+}

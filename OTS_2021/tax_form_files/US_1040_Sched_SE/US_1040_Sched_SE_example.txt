@@ -1,0 +1,23 @@
+Title:  1040 Schedule SE - 2021 - EXAMPLE
+
+{ ---- Your Information ---- EXAMPLE ---- }
+
+YourName:	Fred Smythe	
+YourSocSec#:	409-31-7804	
+
+{ --- Self-Employment Tax --- }
+
+L2	32775	; { Net Profit/Loss }
+
+L5a	462.76	; { Church employee income from Form w-2 }
+
+L8a	100	; { Total social security wages and tips and RR retirement compensation }
+                  { - if >$137,700 skip lines 8b and 8c }	
+
+L8b	50	; { Unreported tips from Form 4137, line 10 }
+
+L8c	25	; { Wages from Form 8919, line 10 }
+
+{
+ ---------------
+}

@@ -1,0 +1,96 @@
+Page 1
+
+CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+TxtColor: 0 0 0.6
+FontSz 10
+no_zero_entries
+round_to_whole_numbers
+solid_status_check 6 6 20 .
+
+YourSocSec#:	 98 232 0 14.5
+SpouseSocSec#: 	582 232 0 14.5
+Your1stName:	112 285 0 11.7
+YourInitial:	430 285 0
+YourLastName:	500 285 0 11.7
+Spouse1stName:	112 329 0 11.7
+SpouseInitial:	430 329 
+SpouseLastName:	500 329 0 11.7
+SepFullName:	445 706
+SepSocSec:	445 731
+Number&Street: 	112 377 0 11.7
+Apt#:		775 377 0 11.7
+Town:		112 423 0 11.7
+State:		472 423 0 11.7
+Zipcode:	526 423 0 11.7
+Check_single	114 684
+Check_mfj       114 703
+Check_sep       114 723
+Check_hh        114 744
+Check_widow	114 763
+
+Ck_FullYr_Res_Yes 560 585
+Ck_FullYr_Res_No  597 585
+Ck_SpouseFullYr_Res_Yes 560 603
+Ck_SpouseFullYr_Res_No 597 603
+Ck_Vet_Yes	 371 627
+Ck_Vet_No	 414 627
+Ck_SpouseVet_Yes 689 627
+Ck_SpouseVet_No	 732 627
+
+L6	597 788 8 11.7
+L7 	597 824 8 11.7
+L8 	597 861 8 11.7
+L9 	597 899 8 11.7
+L10a	567 938 
+L10	597 938 8 11.7
+L11	597 977 8 11.7
+Check_UsedStdDed:	114 966
+Check_ItemizedDed: 	317 966
+L12a	212 1021 8 11.7
+L12	597 1023 8 11.7
+show_cents
+L13	630 1060 8 5
+round_to_whole_numbers
+L14	597 1103 8 11.7
+L15	597 1141 8 11.7
+
+Page 2
+CoordReference:  40, 750  61, 64
+                  550, 50  841, 1134    110-dpi
+
+YourLastName:	146 86 0 11.7
+YourSocSec#: 	638 86 0 14.5
+L16	701 131 8 11.7
+L17 	701 166 8 11.7
+Check_NoUseTax  576 204
+L18 	701 202 8 11.7
+L19	701 239 8 11.7
+
+L20a	246 280 8 11.7
+L20b	494 280 8 11.7
+L21a	246 330 8 11.7
+L21b	494 330 8 11.7
+L21c	246 380 8 11.7
+L21d	494 380 8 11.7
+
+L22	701 418 8 11.7
+L23 	701 456 8 11.7
+L24 	701 495 8 11.7
+L25 	701 530 8 11.7
+L26a 	701 569 8 11.7
+L26b	118 615 6 11.7
+L26c	291 615 6 11.7
+L26d 	701 615 8 11.7
+L26e	701 652 8 11.7
+FontSz 14
+L27 	701 689 8 11.7
+FontSz 10
+L28 	701 726 8 11.7
+L29 	701 764 8 11.7
+L30 	701 801 8 11.7
+L31 	701 839 8 11.7
+L32 	701 877 8 11.7
+L33	701 916 8 11.7
+L34	701 954 8 11.7
