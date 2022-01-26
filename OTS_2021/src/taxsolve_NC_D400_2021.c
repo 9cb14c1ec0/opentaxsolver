@@ -46,7 +46,7 @@ float thisversion=19.00;
 #define Yes 1
 #define No  0
 
-double flat_tax_rate = 0.0525;		/* Not updated for 2021. */
+double flat_tax_rate = 0.0525;		/* Updated for 2021. */
 
 
 struct FedReturnData
@@ -141,11 +141,12 @@ void ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 int main( int argc, char *argv[] )
 {
  int j, jj, k, status;
- char word[1000], *infname=0, outfname[1000];
+ char word[1000], *infname=0, outfname[1000], *socsec, socsectmp[100];
  time_t now;
  struct FedReturnData fed_data;
+ double stdded, min_payment=0.0, min2file, ChildDeduction=0.0;
  int L10a=0;
- double L20a=0.0, L20b=0.0;
+ double L12a=0.0, L20a=0.0, L20b=0.0, L21a=0.0, L21b=0.0, L21c=0.0, L21d=0.0;
 
  /*-----------------------------------------*/
  /* --- Decode any command line options. -- */
@@ -253,6 +254,222 @@ int main( int argc, char *argv[] )
  GetLine( "L20a", &L20a );	/* North Carolina Income Tax Withheld (yours) */
  GetLine( "L20b", &L20b );	/* North Carolina Income Tax Withheld (spouses) */
  L[20] = L20a + L20b;
+ GetLine( "L21a", &L21a );	/* Other tax payments. 2021 Estimated Tax. */
+ GetLine( "L21b", &L21b );	/* Other tax payments. Paid with Extension. */
+ GetLine( "L21c", &L21c );	/* Other tax payments. Partnership. */
+ GetLine( "L21d", &L21d );	/* Other tax payments. S Corporation. */
+
+
+
+ /*-------------------------------*/
+ /* ---- Do Tax Calculations ---- */
+ /*-------------------------------*/
+
+ L[6] = fed_data.fedline[11];		/* Taxable income from Fed1040 Line 11, AGI. */
+ L[6] = Conditional_Round( L[6] );
+
+ switch (status)
+  {
+   case SINGLE: 		 stdded   = 10750.0; 	/* NC std single deduction. */
+				 min2file = 10750.0;
+	break;
+   case MARRIED_FILLING_JOINTLY: stdded   = 21500.0; 	/* NC std Married/joint deduction. */
+				 min2file = 21500.0;
+	break;
+   case WIDOW:			 stdded   = 21500.0; 	/* NC std widow(er) deduction. */
+				 min2file = 21500.0;
+	break;
+   case MARRIED_FILLING_SEPARAT: stdded   = 10750.0; 	/* NC std Married/sep deduction. */
+				 min2file = 10750.0;
+	break;
+   case HEAD_OF_HOUSEHOLD:	 stdded   = 16125.0; 	/* NC std Head of house deduction. */
+				 min2file = 16125.0;
+	break;
+   default:  
+	stdded = 0;  printf("Unknown status\n");  fprintf(outfile,"Unknown status\n");
+	exit(1); 
+  }
+
+ if (L[6] <= min2file)
+  fprintf(outfile, "You may not need to file NC tax return, due to your income.\n");
+
+ L[8] = L[6] + L[7];
+
+ switch (status)
+  {
+   case MARRIED_FILLING_JOINTLY: 
+   case WIDOW: 
+		if (L[6] <= 40000.0)	ChildDeduction = 2500.0;	else
+		if (L[6] <= 60000.0)	ChildDeduction = 2000.0;	else
+		if (L[6] <= 80000.0)	ChildDeduction = 1500.0;	else
+		if (L[6] <= 100000.0)	ChildDeduction = 1000.0;	else
+		if (L[6] <= 120000.0)	ChildDeduction =  500.0;	else
+		ChildDeduction = 0.0;
+   	break;
+   case HEAD_OF_HOUSEHOLD:
+		if (L[6] <= 30000.0)	ChildDeduction = 2500.0;	else
+		if (L[6] <= 45000.0)	ChildDeduction = 2000.0;	else
+		if (L[6] <= 60000.0)	ChildDeduction = 1500.0;	else
+		if (L[6] <= 75000.0)	ChildDeduction = 1000.0;	else
+		if (L[6] <= 90000.0)	ChildDeduction =  500.0;	else
+		ChildDeduction = 0.0;
+   	break;
+   case SINGLE:	case MARRIED_FILLING_SEPARAT:
+		if (L[6] <= 20000.0)	ChildDeduction = 2500.0;	else
+		if (L[6] <= 30000.0)	ChildDeduction = 2000.0;	else
+		if (L[6] <= 40000.0)	ChildDeduction = 1500.0;	else
+		if (L[6] <= 500000.0)	ChildDeduction = 1000.0;	else
+		if (L[6] <= 60000.0)	ChildDeduction =  500.0;	else
+		ChildDeduction = 0.0;
+   	break;
+   default:	ChildDeduction = 0.0;
+  } 
+ L[10] = (double)L10a * ChildDeduction;
+
+ if (L[11] < stdded)
+  L[11] = stdded;
+
+ L12a = L[9] + L[10] + L[11];
+
+ L[12] = L[8] - L12a;
+
+ L[14] = L[13] * L[12];		 /* NC Taxable Income. */
+
+ L[15] = flat_tax_rate * L[14];	 /* NC Income Tax. */
+ L[15] = Conditional_Round( L[15] );
+
+ L[17] = L[15] - L[16];
+
+ /* Calculate USE tax, if not entered on L18
+  * based on Use Tax Worksheet on page 9.
+  *  Estimate as:   0.000675 * L[14]
+  * If you made purchases greater that $1000 that need
+  * to be reported, or taxes paid to another state, then
+  * fill out the Work Sheet in the instructions and enter
+  * the amount on L18 in data file.
+  */
+
+ printf( "Assuming you have calculated your USE tax (%2.2f) according to instructions pg 9\n", L[18] );
+
+ L[19] = L[17] + L[18];
+
+ L[21] = L21a + L21b + L21c + L21d;
+
+ L[23] = L[20] + L[21] + L[22];
+
+ L[25] = L[23] - L[24];
+
+ if (L[19] > L[25]) 
+  {
+   L[26] = L[19] - L[25];	/* You OWE */
+   printf("         (Which is %2.1f%% of the total amount owed.)\n", 100.0 * L[26] / (L[19] + 1e-9) );
+
+   /* Check for under payment see form D422 Part I */
+   min_payment = 0.9 * L[19]; /* Estimate min required tax payments, form D422 Part I */
+   if ((L[23] < min_payment) && (L[19] > 1000.00)) 
+    {
+     /* We would calculate penalty here... */
+     printf("WARNING: Possible underpayment of est. taxes penalty. Calculation not performed.\n"); 
+    }
+   L[27] = L[26];  /* Assumes no penalties. */
+  }
+ else
+  {
+   L[28] = L[25] - L[19];
+   L[33] = L[29] + L[30] + L[31] + L[32];
+   L[34] = L[28] - L[33];	/* REFUND */
+  }
+
+
+ /*-------------------------*/
+ /* ---- Print Results ---- */
+ /*-------------------------*/
+
+ showline(6);	/* Taxable fed income */
+ showline(7);	/* Additions to fed income */
+ showline(8);	
+ showline(9);	/* Deductions */
+ if (L10a > 0)
+  fprintf(outfile, "L10a	%d\n", L10a );
+ showline(10);
+ showline(11);
+ if (L[11] <= stdded)
+  fprintf(outfile," Check_UsedStdDed: X\n");
+ else
+  fprintf(outfile," Check_ItemizedDed: X\n");
+ showline_wlabel( "L12a", L12a );
+ showline(12);
+ if (L[13] < 1.0) showline(13);	 /* Part-yr */
+ showline_wmsg(14, "North Carolina Taxable Income");
+ showline_wmsg(15, "North Carolina Income Tax");
+ showline(16);
+ showline(17);
+ if (L[18] == 0.0)
+  fprintf(outfile,"Check_NoUseTax X\n");
+ showline(18);
+ showline(19);
+ showline_wlabel( "L20a", L20a );
+ showline_wlabel( "L20b", L20b );
+ showline_wlabelmsg( "L20", L[20], "North Carolina Tax Withheld");
+ showline_wlabel( "L21a", L21a );
+ showline_wlabel( "L21b", L21b );
+ showline_wlabel( "L21c", L21c );
+ showline_wlabel( "L21d", L21d );
+ showline(22);
+ showline(23);
+ showline(25);
+ if (L[19] > L[25])
+  {
+   showline_wlabelmsg( "L26a", L[26], "TAX DUE" );
+   showline_wmsg( 27, "Pay this amount" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[26] / (L[19] + 1e-9) );
+   if ((L[23] < min_payment) && (L[19] > 1000.00))
+    {
+     fprintf(outfile," You may owe underpayment interest and penalties.\n");
+     fprintf(outfile," See page 6+7 instructions to calculate them according to your situation.\n");
+    }
+  }
+ else
+  {
+   showline_wmsg(28, "OVERPAYMENT");
+   showline(29);
+   showline(30);
+   showline(31);
+   showline(32);
+   showline(33);
+   showline(34);
+  }
+
+ do_all_caps = 1;
+ fprintf(outfile,"\n{ --------- }\n");
+ GetTextLineF( "Your1stName:" );
+ GetTextLineF( "YourInitial:" );
+ GetTextLineF( "YourLastName:" );
+
+ writeout_line = 0;
+ socsec = GetTextLineF( "YourSocSec#:" );
+ strcpy( socsectmp, socsec );   /* Copy to buffer, since formatting could add 2-chars. */
+ format_socsec( socsectmp, 0 );
+ fprintf(outfile,"YourSocSec#: %s\n", socsectmp );
+ free( socsec );
+ writeout_line = 1;
+
+   GetTextLineF( "Spouse1stName:" );
+   GetTextLineF( "SpouseInitial:" );
+   GetTextLineF( "SpouseLastName:" );
+   writeout_line = 0;
+   socsec = GetTextLineF( "SpouseSocSec#:" );
+   strcpy( socsectmp, socsec );   /* Copy to buffer, since formatting could add 2-chars. */
+   format_socsec( socsectmp, 0 );
+   fprintf(outfile,"SpouseSocSec#: %s\n", socsectmp );
+   free( socsec );
+   writeout_line = 1;
+
+ GetTextLineF( "Number&Street:" );
+ GetTextLineF( "Apt#:" );
+ GetTextLineF( "Town:" );
+ GetTextLineF( "State:" );
+ GetTextLineF( "Zipcode:" );
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

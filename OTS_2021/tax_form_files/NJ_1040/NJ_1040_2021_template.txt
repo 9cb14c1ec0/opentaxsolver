@@ -55,22 +55,22 @@ L39a	        ;       { Property Tax Paid }
 COJ1            ;       { Income basis for any Out of State taxes paid. Sch COJ (Previously Sch A)}
 COJ9a           ;       { Out of state taxes paid (ex. City income tax), if any. Sch COJ (Previously Sch A)}
 
-L45             ;       { Child and Dependent Care Credit }
-L46	        ;	{ Sheltered Workshop Tax Credit. }
-L47		; 	{ Gold Star Family Counseling Credit }
-L48		; 	{ Credit for Employer of Organ/Bone Marrow Donor }
-L51	        ;	{ Use Tax Due on Out-of-State Purchases (pg 37). }
-L52	        ;	{ Interest on underpayment of estimated tax. }
-L53             ;       { Shared Responsibility (Med. Insurance) Payment. }
-L55                     { Withheld tax, from W-2's, Box 17 }
+L45	        ;	{ Sheltered Workshop Tax Credit. }
+L46		; 	{ Gold Star Family Counseling Credit }
+L47		; 	{ Credit for Employer of Organ/Bone Marrow Donor }
+L50	        ;	{ Use Tax Due on Out-of-State Purchases (pg 37). }
+L51	        ;	{ Interest on underpayment of estimated tax. }
+L52             ;       { Shared Responsibility (Med. Insurance) Payment. }
+L54                     { Withheld tax, from W-2's, Box 17 }
                 ;
-L57             ;       { NJ Estimated Tax Payments + Credit from last year's return. }
-L58             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
-L59             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
-L60             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
-L61             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
-L62		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
-L63		;	{ Pass-Through Business Alternatve Income Tax Credit }
+L56             ;       { NJ Estimated Tax Payments + Credit from last year's return. }
+L57             ;       { NJ Earned Income Tax Credit. (See Sched pg 39.) }
+L58             ;       { Excess NJ UI/HC/WD Withheld, (See pg 39.) }
+L59             ;       { Excess NJ Disability Insurance Withheld, (See pg 39.) }
+L60             ;       { Excess NJ Family Leave Insurance Withheld, (See pg 39.) }
+L61		; 	{ Wounded Warriors Caregivers Credit, (See pg 40.) }
+L62		;	{ Pass-Through Business Alternatve Income Tax Credit }
+L63             ;       { Child and Dependent Care Credit }
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }

@@ -831,6 +831,9 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
+ fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
+ fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
+
  get_parameter( infile, 's', word, "FileName" );      /* Preliminary Return Output File-name. */
  get_word(infile, prelim_1040_outfilename );
  if (ImportFederalReturnData( prelim_1040_outfilename, &PrelimFedReturn ) == 0)

@@ -1551,7 +1551,7 @@ void Calc_StudentLoan_Sched1L21()		/* Page 94 */
 /*----------------------------------------------------------------------*/
 /* Main									*/
 /*----------------------------------------------------------------------*/
-int main( int argc, char *argv[] )						/* Not updated for 2021. */
+int main( int argc, char *argv[] )						/* Updated for 2021. */
 {
  int argk, j, k, itemize=0;
  char word[2000], outfname[2000], *infname="", labelx[1024]="";

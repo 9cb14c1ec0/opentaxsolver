@@ -3748,7 +3748,7 @@ void set_ots_path()
 void helpabout1( GtkWidget *wdg, void *data )
 {
  char msg[4096];
- sprintf( msg, "OpenTaxSolver (OTS) GUI - Version %1.2f,  %s\n", version, package_date );
+ sprintf( msg, "OpenTaxSolver (OTS) GUI - DEVELOPMENT Version %1.2f-PRE-RELEASE,  %s\n", version, package_date );
  strcat( msg, "                For the 2021 Tax Year.    OTS release ");
  strcat( msg, ots_release_package );   strcat( msg, "\n\n" );
  strcat( msg, "Use this GUI to open tax-forms and calculate taxes.\n");
@@ -3945,7 +3945,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_CA_540 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_NC_D400 );
  make_radio_button( mpanel, txprogstog, x, y, "NC State DC400", slcttxprog, formid );
@@ -3966,7 +3966,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_PA_40 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "PA State 40", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_VA_760 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "VA State 760", slcttxprog, formid );
@@ -3974,11 +3974,11 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_NY_IT201 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NY State IT201", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_MA_1 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "MA State 1", slcttxprog, formid );
- // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_other );
  txprogstog = make_radio_button( mpanel, txprogstog, x, y, "Other", slcttxprog, formid );

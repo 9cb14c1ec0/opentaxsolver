@@ -37,25 +37,23 @@ double thisversion=19.00;
 #define HEAD_OF_HOUSEHOLD       1
 
 double TaxRateFunction( double x, int status )
-{							/* Not updated for 2021. */
- if (x <= 22150.0) return    0.0; else
- if (x <  44250.0) return  316.18 + (x-22150.0)  * 0.02850; else
- if (x <  88450.0) return  946.03 + (x-44250.0)  * 0.03326; else
- if (x < 110650.0) return 2416.12 + (x-88450.0)  * 0.03802; else
- if (x < 221300.0) return 3260.16 + (x-110650.0) * 0.04413;
- else 		   return 8143.14 + (x-221300.0) * 0.04797;
+{							/* Updated for 2021. */
+ if (x <= 25000.0) return    0.0; else
+ if (x <  44250.0) return  346.16 + (x-25000.0)  * 0.02765; else
+ if (x <  88450.0) return  878.42 + (x-44250.0)  * 0.03226; else
+ if (x < 110650.0) return 2204.31 + (x-88450.0)  * 0.03688; else
+ 		   return 3123.05 + (x-110650.0) * 0.03990;
 }
 
 
 void Report_bracket_info( double income, double tx, int status )
-{							/* Not updated for 2021. */
+{							/* Updated for 2021. */
  double rate;
- if (income <= 22150.0) rate = 0.0; else
- if (income <  44250.0) rate = 0.02850; else
- if (income <  88450.0) rate = 0.03326; else
- if (income < 110650.0) rate = 0.03802; else
- if (income < 221300.0) rate = 0.04413;
- else 		   	rate = 0.04797;
+ if (income <= 25000.0) rate = 0.0; else
+ if (income <  44250.0) rate = 0.02765; else
+ if (income <  88450.0) rate = 0.03226; else
+ if (income < 110650.0) rate = 0.03688;
+ else 		   	rate = 0.03990;
  printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
 	  100.0 * rate, 100.0 * tx / income );
  fprintf(outfile," You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your total income.\n",
@@ -88,13 +86,14 @@ char *pull_initial( char *name )
 int main( int argc, char *argv[] )
 {
  int j, k, mm;
- char word[4000], *infname=0, outfname[4000];
+ char word[4000], *infname=0, outfname[4000], label[90], *socsec, *pname, *MidInit;
  int status=0, exemptions=0, qualify_jfc=0;
  time_t now;
  double factorA, factorB;
  double L2a, L2b, L7a, L8a, L8b, L8c;
  double jfc=0.0, exemption_amnt;
- double SchedA[MAX_LINES], SchedC[MAX_LINES], SchedC7a=0.0;
+ double SchedA[MAX_LINES], SchedC[MAX_LINES];
+ char *DateBeganResidence, *DateEndResidence, *OtherState;
 
  /* Intercept any command-line arguments. */
  printf("OH IT1040 2021 - v%3.1f\n", thisversion);
@@ -231,34 +230,40 @@ int main( int argc, char *argv[] )
  GetLine( "Credits_6", &SchedC[6] );	/* Child care and dependent care credit */
  GetLine( "Credits_7", &SchedC[7] );	/* Displaced worker training credit */
  SchedC[7] = smallerof( SchedC[7], 500.0 );
- GetLine( "Credits_7a", &SchedC7a );	/* Campaign contribution credit for Ohio General Assembly */
+ GetLine( "Credits_8", &SchedC[8] );	/* Campaign contribution credit for Ohio General Assembly */
  if (status == MARRIED_FILLING_JOINTLY)
-   SchedC7a = smallerof( SchedC7a, 100.0 );
+   SchedC[8] = smallerof( SchedC[8], 100.0 );
  else
-   SchedC7a = smallerof( SchedC7a, 50.0 );
- GetLine( "Credits_12", &SchedC[12] );	/* Earned income credit */
- GetLine( "Credits_13", &SchedC[13] );	/* Ohio adoption credit */
- GetLine( "Credits_14", &SchedC[14] );	/* Job retention credit, nonrefundable portion */
- GetLine( "Credits_15", &SchedC[15] );	/* Credit for eligible new employees in an enterprise zone */
- GetLine( "Credits_16", &SchedC[16] );	/* Credit for purchases of grape production property */
- GetLine( "Credits_17", &SchedC[17] );	/* Invest Ohio credit */
- GetLine( "Credits_18", &SchedC[18] );	/* Lead abatement credit */
- GetLine( "Credits_19", &SchedC[19] );	/* Opportunity zone investment credit */
- GetLine( "Credits_20", &SchedC[20] );	/* Tech investment credit */
- GetLine( "Credits_21", &SchedC[21] );	/* Enterprise zone day care and training credits */
- GetLine( "Credits_22", &SchedC[22] );	/* Research and development credit */
- GetLine( "Credits_23", &SchedC[23] );	/* Nonrefundable Ohio historic preservation credit */
+   SchedC[8] = smallerof( SchedC[8], 50.0 );
+ GetLine( "Credits_13", &SchedC[13] );	/* Earned income credit */
+ GetLine( "Credits_14", &SchedC[14] );	/* Home school expenses credit. */
+ GetLine( "Credits_15", &SchedC[15] );	/* Scholarship donation credit. */
+ GetLine( "Credits_16", &SchedC[16] );	/* Nonchartered, nonpublic school tuition credit. */
+ GetLine( "Credits_17", &SchedC[17] );	/* Ohio adoption credit */
+ GetLine( "Credits_18", &SchedC[18] );	/* Job retention credit, nonrefundable portion */
+ GetLine( "Credits_19", &SchedC[19] );	/* Credit for eligible new employees in an enterprise zone */
+ GetLine( "Credits_20", &SchedC[20] );	/* Credit for purchases of grape production property */
+ GetLine( "Credits_21", &SchedC[21] );	/* Invest Ohio credit */
+ GetLine( "Credits_22", &SchedC[22] );	/* Lead abatement credit */
+ GetLine( "Credits_23", &SchedC[23] );	/* Opportunity zone investment credit */
+ GetLine( "Credits_24", &SchedC[24] );	/* Tech investment credit */
+ GetLine( "Credits_25", &SchedC[25] );	/* Enterprise zone day care and training credits */
+ GetLine( "Credits_26", &SchedC[26] );	/* Research and development credit */
+ GetLine( "Credits_27", &SchedC[27] );	/* Nonrefundable Ohio historic preservation credit */
 
- GetLine( "Credits_26", &SchedC[26] );	/*  Portion L3 was not earned in Ohio. */
+ DateBeganResidence = GetTextLine( "DateBeganResidence:" );
+ DateEndResidence = GetTextLine( "DateEndResidence:" );
+ OtherState = GetTextLine( "OtherState:" );
+ GetLine( "Credits_30", &SchedC[30] );	/*  Portion L3 was not earned in Ohio. */
 
- GetLine( "Credits_29", &SchedC[29] );	/* Portion L3 taxed by other states */
- GetLine( "Credits_32", &SchedC[32] );	/* Income Tax paid to Other States */
+ GetLine( "Credits_33", &SchedC[33] );	/* Portion L3 taxed by other states */
+ GetLine( "Credits_36", &SchedC[36] );	/* Income Tax paid to Other States */
 
- GetLine( "Credits_35", &SchedC[35] );	/* Refundable Historic preservation credit */
- GetLine( "Credits_36", &SchedC[36] );	/* Refundable Business jobs credit */
- GetLine( "Credits_37", &SchedC[37] );	/* Pass-through entity credit */
- GetLine( "Credits_38", &SchedC[38] );	/* Motion picture production credit */
- GetLine( "Credits_39", &SchedC[39] );	/* Venture capital credit */
+ GetLine( "Credits_39", &SchedC[39] );	/* Refundable Historic preservation credit */
+ GetLine( "Credits_40", &SchedC[40] );	/* Refundable Business jobs credit */
+ GetLine( "Credits_41", &SchedC[41] );	/* Pass-through entity credit */
+ GetLine( "Credits_42", &SchedC[42] );	/* Motion picture production credit */
+ GetLine( "Credits_43", &SchedC[43] );	/* Venture capital credit */
 
 
  /* ---- Do Calculations. ---- */
@@ -273,11 +278,11 @@ int main( int argc, char *argv[] )
  L2b = SchedA[39];
  L[3] = L[1] + L2a - L2b;
 
- if (L[3] <= 40000.0)			/* Not updated for 2021. */
+ if (L[3] <= 40000.0)			/* Updated for 2021. */
   exemption_amnt = 2400.0;
  else
  if (L[3] <= 80000.0)
-  exemption_amnt = 2160.0;
+  exemption_amnt = 2150.0;
  else
   exemption_amnt = 1900.0;
  L[4] = exemption_amnt * exemptions;
@@ -290,13 +295,12 @@ int main( int argc, char *argv[] )
  SchedC[1] = L8c;
 
  if (L[5] < 30000.0)
-  SchedC[8] = 20.0 * exemptions;	/* Exemption credtit. */
+  SchedC[9] = 20.0 * exemptions;	/* Exemption credtit. */
  
- for (j=2; j <= 8; j++)
-  SchedC[9] = SchedC[9] + SchedC[j];		
- SchedC[9] = SchedC[9] + SchedC7a;
+ for (j=2; j <= 9; j++)
+  SchedC[10] = SchedC[10] + SchedC[j];		
 
- SchedC[10] = NotLessThanZero( SchedC[1] - SchedC[9] );
+ SchedC[11] = NotLessThanZero( SchedC[1] - SchedC[10] );
 
  if ((status == MARRIED_FILLING_JOINTLY) && (qualify_jfc))
   { /*Joint_Filing_Credit*/
@@ -306,34 +310,38 @@ int main( int argc, char *argv[] )
     else
     if (L[5] < 75000) jfc = 0.10;
     else jfc = 0.05;
-    SchedC[11] = smallerof( jfc * SchedC[10], 650.0 );
+    SchedC[12] = smallerof( jfc * SchedC[11], 650.0 );
   } /*Joint_Filing_Credit*/
 
- for (j=11; j <= 23; j++)
-  SchedC[24] = SchedC[24] + SchedC[j];          
- SchedC[25] = NotLessThanZero( SchedC[10] - SchedC[24] );
+ for (j=12; j <= 27; j++)
+  SchedC[28] = SchedC[28] + SchedC[j];          
+ SchedC[29] = NotLessThanZero( SchedC[11] - SchedC[28] );
 
- SchedC[27] = L[3];
- j = 10000.0 * SchedC[26] / SchedC[27];
+ SchedC[31] = L[3];
+ j = 10000.0 * SchedC[30] / SchedC[31];
  factorA = (double)j / 10000.0;
  // printf(" %4g\n", factorA );
- SchedC[28] = SchedC[25] * factorA;
+ if (factorA > 1.0)
+  factorA = 1.0;
+ SchedC[32] = SchedC[29] * factorA;
 
- SchedC[30] = L[3];
- j = 10000.0 * SchedC[29] / SchedC[30];
+ SchedC[34] = L[3];
+ j = 10000.0 * SchedC[33] / SchedC[34];
  factorB = (double)j / 10000.0;
- // printf(" %4g\n", factorB );			
- SchedC[31] = SchedC[25] * factorB;
- // SchedC[31] = L[13];
- SchedC[33] = smallerof( SchedC[31], SchedC[32] );
+ if (factorB > 1.0)
+  factorB = 1.0;
+ // printf(" %4g\n", factorB );
+ SchedC[35] = SchedC[29] * factorB;
 
- SchedC[34] = SchedC[9] + SchedC[24] + SchedC[28] + SchedC[33];
- L[9] = SchedC[34];
+ SchedC[37] = smallerof( SchedC[35], SchedC[36] );
+
+ SchedC[38] = SchedC[10] + SchedC[28] + SchedC[32] + SchedC[37];
+ L[9] = SchedC[38];
  L[10] = NotLessThanZero( L8c - L[9] );
 
- for (j=35; j <= 39; j++)
-  SchedC[40] = SchedC[40] + SchedC[j];          
- L[16] = SchedC[40];
+ for (j=39; j <= 43; j++)
+  SchedC[44] = SchedC[44] + SchedC[j];          
+ L[16] = SchedC[44];
 
  L[13] = L[10] + L[11] + L[12];			/* Total Ohio tax liability before withholding or estimated payments. */
  L[18] = L[14] + L[15] + L[16] + L[17];		/* Total Ohio tax payments */
@@ -371,6 +379,111 @@ int main( int argc, char *argv[] )
  showline_wlabel( "L8a", L8a );
  showline_wlabel( "L8b", L8b );
  showline_wlabel( "L8c", L8c );
+ for (j = 9; j <= 12; j++)
+  showline(j);
+ showline_wmsg( 13, "Total Ohio tax liability" );
+ Report_bracket_info( L[7], L[13], status );
+ showline_wmsg( 14, "Ohio income tax withheld" );
+ for (j = 15; j <= 17; j++)
+  showline(j);
+ showline_wmsg( 18, "Total Ohio tax payments" );
+ for (j = 19; j <= 20; j++)
+  showline(j);
+ if (L[13] >= L[20])
+  {
+    showline(21);
+    showline(22);
+    showline_wmsg( 23, "TOTAL AMOUNT DUE !!!" );
+    fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[23] / (L[13] + 1e-9) );
+  }
+ else
+  {
+    showline_wmsg( 24, "Overpayment" );
+    showline_wmsg( 27, "YOUR REFUND !!!" );
+  }
+
+ fprintf(outfile,"\n-- 2021 Ohio Schedule A --\n");
+ for (j = 1; j <= 39; j++)
+  {
+   sprintf( label, "SchedA%d", j );
+   showline_wlabel( label, SchedA[j] );
+  }
+
+ fprintf(outfile,"\n-- 2021 Ohio Schedule of Credits --\n");
+ for (j = 1; j <= 11; j++)
+  {
+   sprintf( label, "Credits%d", j );
+   showline_wlabel( label, SchedC[j] );
+  }
+ if (jfc > 0.0)
+  fprintf(outfile,"JFC = %d\n", (int)(100.0 * jfc + 0.25) );
+ for (j = 12; j <= 31; j++)
+  {
+   sprintf( label, "Credits%d", j );
+   showline_wlabel( label, SchedC[j] );
+  }
+
+ if (DateBeganResidence[0] != 0)
+  fprintf(outfile,"   DateBeganResidence: %s\n", DateBeganResidence );
+ if (DateEndResidence[0] != 0)
+  fprintf(outfile,"   DateEndResidence: %s\n", DateEndResidence );
+ if (OtherState[0] != 0)
+  fprintf(outfile,"   OtherState: %s\n", OtherState );
+
+ sprintf(word,"%5.4f", factorA );
+printf("factorA = %g, word = '%s'\n", factorA, word );
+ fprintf(outfile,"   Credits32a \"%s\"\n", word );
+
+ for (j = 32; j <= 34; j++)
+  {
+   sprintf( label, "Credits%d", j );
+   showline_wlabel( label, SchedC[j] );
+  }
+
+ sprintf(word,"%5.4f", factorB );
+printf("factorB = %g, word = '%s'\n", factorB, word );
+ fprintf(outfile,"   Credits35a \"%s\"\n", word );
+
+ for (j = 35; j <= 44; j++)
+  {
+   sprintf( label, "Credits%d", j );
+   showline_wlabel( label, SchedC[j] );
+  }
+
+ fprintf(outfile,"\n{ --------- }\n");
+ pname = GetTextLine( "Your1stName:" );
+ MidInit = pull_initial( pname );
+ fprintf(outfile,"Your1stName: %s\n", pname );
+ fprintf(outfile,"YourMidInit: %s\n", MidInit );
+ GetTextLineF( "YourLastName:" );
+ writeout_line = 0;
+ socsec = GetTextLine( "YourSocSec#:" );
+ format_socsec( socsec, 0 );
+ fprintf(outfile,"YourSocSec#: %s\n", socsec );
+ free( socsec );
+ writeout_line = 1;
+ pname = GetTextLine( "Spouse1stName:" );
+ MidInit = pull_initial( pname );
+ fprintf(outfile,"Spouse1stName: %s\n", pname );
+ fprintf(outfile,"SpouseMidInit: %s\n", MidInit );
+ GetTextLineF( "SpouseLastName:" );
+ writeout_line = 0;
+ socsec = GetTextLine( "SpouseSocSec#:" );
+ format_socsec( socsec, 0 );
+ if (status != MARRIED_FILLING_SEPARAT)
+  fprintf(outfile,"SpouseSocSec#: %s\n", socsec );
+ else
+  fprintf(outfile,"SpouseSocSec#Sep: %s\n", socsec );
+ free( socsec );
+ writeout_line = 1;
+ GetTextLineF( "Number&Street:" );
+ GetTextLineF( "Town:" );
+ fprintf(outfile,"State: OH\n");
+ GetTextLineF( "Zipcode:" );
+
+ fprintf(outfile,"CkFYrRes: X\n");
+ if (status == MARRIED_FILLING_JOINTLY)
+  fprintf(outfile,"CkFYrResSp: X\n");
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

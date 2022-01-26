@@ -36,34 +36,6 @@ Page 1
  CkSpouseOver65	553 425
  CkSpouseBlind	773 425
 
-! Old labels, to be removed in favor of newer labels below.
-Dependent1_1stName	144 482
-Dependent1_LstName	278 482
-Dependent2_1stName	144 501
-Dependent2_LstName	278 501
-Dependent3_1stName	144 518 
-Dependent3_LstName	278 518 
-Dependent4_1stName	144 536 
-Dependent4_LstName	278 536 
-Dependent1_SSN	410 482 0 8.7
-Dependent2_SSN	410 501 0 8.7
-Dependent3_SSN	410 518 0 8.7
-Dependent4_SSN	410 536 0 8.7
-Dependent1_Relat 544 482
-Dependent2_Relat 544 501
-Dependent3_Relat 544 518
-Dependent4_Relat 544 536
-CkDep1_ChildTxCrd  692 480
-CkDep1_CrdOtherDep 813 480
-CkDep2_ChildTxCrd  692 500
-CkDep2_CrdOtherDep 813 500
-CkDep3_ChildTxCrd  692 517
-CkDep3_CrdOtherDep 813 517
-CkDep4_ChildTxCrd  692 535
-CkDep4_CrdOtherDep 813 535
-CkMoreThan4Dep 100 534
-
-! Newer labels.
 Dep1_FirstName:	144 482
 Dep1_LastName:	278 482
 Dep2_FirstName:	144 501

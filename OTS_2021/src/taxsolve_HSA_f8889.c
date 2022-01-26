@@ -92,6 +92,9 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
+ fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
+ fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
+
  GetTextLineF( "YourName:" );
  GetTextLineF( "YourSocSec#:" );
  

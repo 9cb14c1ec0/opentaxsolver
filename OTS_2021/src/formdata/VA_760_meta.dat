@@ -8,56 +8,58 @@ no_zero_entries
 no_commas
 round_to_whole_numbers
 
- Your1stName:	 80 159 0
- YourMI:	273 159 0
- YourLastName:	318 159 0
- YourSocSec#: 	560 164 0 14.6
- Y1st4:		786 164 0 14.6
- YourDOB:	560 252 0 14.6
- YourDrivLic:	490 352 0 14.6
- YourDLdate: 	705 352 0 14.6
+ Your1stName:	 80 149 0
+ YourMI:	273 149 0
+ YourLastName:	318 149 0
+ YourSocSec#: 	560 156 0 14.6
+ Y1st4:		786 156 0 14.6
+ YourDOB:	560 246 0 14.6
+ YourDrivLic:	490 368 0 14.6
+ YourDLdate: 	705 368 0 14.6
 
- Spouse1stName:  80 205 0
- SpouseMI:	273 205 0
- SpouseLastName: 318 205 0
- SpouseSocSec#: 560 199 0 14.6
- S1st4:		786 199 0 14.6
- SpouseDOB:	560 287 0 14.6
- SpouseDrivLic: 490 388 0 14.6
- SpouseDLdate: 	705 388 0 14.6
+ Spouse1stName:  80 193 0
+ SpouseMI:	273 193 0
+ SpouseLastName: 318 193 0
+ SpouseSocSec#: 560 191 0 14.6
+ S1st4:		786 191 0 14.6
+ SpouseDOB:	560 281 0 14.6
+ SpouseDrivLic: 490 402 0 14.6
+ SpouseDLdate: 	705 402 0 14.6
 
- Number&Street:	 80 248 0
- Town:		 80 291 0
- State:		319 291 0
- Zipcode: 	420 291 0 10
+ Number&Street:	 80 238 0
+ Town:		 80 281 0
+ State:		319 281 0
+ Zipcode: 	420 281 0 10
 
- FilingStatus:   75 498 0
- ExmpSpouse:	592 455
- ExmpDeps:	666 455
- NExemptionsA	732 455
- ExemptionsA	820 455
- YouOver65	542 513
- SpouseOver65	595 513
- YouBlind	645 513
- SpouseBlind	689 513
- NExemptionsB	732 513
- ExemptionsB	820 513
+ FilingStatus:   71 516 0
+ ExmpSpouse:	592 475
+ ExmpDeps:	666 475
+ NExemptionsA	732 475
+ ExemptionsA	820 475
+ YouOver65	542 533
+ SpouseOver65	595 533
+ YouBlind	645 533
+ SpouseBlind	689 533
+ NExemptionsB	732 533
+ ExemptionsB	820 533
 
- L1	655 570 9 14.5
- L2	655 608 9 14.5
- L3	655 642 9 14.5
- L4	655 688 9 14.5
- L5	655 724 9 14.5
- L6     655 760 9 14.5
- L7     655 798 9 14.5
- L8     655 835 9 14.5
- L9     655 873 9 14.5
- L10    655 909 9 14.5
- L11    655 945 9 14.5
- L12    655 988 9 14.5
- L13    655 1022 9 14.5
- L14    655 1063 9 14.5
- L15    655 1097 9 14.5
+ L1	655 586 9 14.5
+ L2	655 624 9 14.5
+ L3	655 659 9 14.5
+ L4	655 703 9 14.5
+ YourAgeDed 143 710 5 14.5
+ SpouseAgeDed 400 710 5 14.5
+ L5	655 740 9 14.5
+ L6     655 776 9 14.5
+ L7     655 815 9 14.5
+ L8     655 851 9 14.5
+ L9     655 890 9 14.5
+ L10    655 927 9 14.5
+ L11    655 963 9 14.5
+ L12    655 1005 9 14.5
+ L13    655 1040 9 14.5
+ L14    655 1080 9 14.5
+ L15    655 1115 9 14.5
 
 
 Page 2

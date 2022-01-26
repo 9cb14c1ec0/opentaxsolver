@@ -70,7 +70,7 @@ int main( int argc, char *argv[] )
  char word[1000], outfname[4000], *lnameptr, lastname[1024], *socsec, *datestr, *twrd, *infname=0;
  int status=0, exemptionsA=0, exemptionsB=0, youBlind=0, spouseBlind=0;
  time_t now;
- double min2file=0.0, std_ded=0.0;
+ double L19b=0.0, std_ded=0.0, min2file;
 
  /* Intercept any command-line arguments. */
  printf("VA-760 2021 - v%3.1f\n", thisversion);
@@ -216,7 +216,7 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"NExemptionsA = %d\n", exemptionsA );
  fprintf(outfile,"ExemptionsA = %d\n", 930 * exemptionsA );
 
- if (yourDOB.year < 1956)			/* Not updated for 2021. */
+ if (yourDOB.year < 1957)			/* Updated for 2021. */
   {
    fprintf(outfile,"YouOver65 = 1\n" );		/* You are 65 or over. */
    exemptionsB = 1;
@@ -316,9 +316,88 @@ int main( int argc, char *argv[] )
  showline(16);
  Report_bracket_info( L[15], L[16], status );
 
- printf("min2file = %g\n", min2file );
  GetLine( "L17", &L[17] );	/* Spouse Tax Adjustment. */
  showline(17);
+
+ L[18] = L[16] - L[17];
+ showline_wmsg( 18, "Net Amount of Tax" );	
+
+ GetLineF( "L19a", &L[19] );	/* Virginia tax withheld for 2021. */
+ GetLineF( "L19b", &L19b );	/* Spouse's Virginia tax withheld. */
+
+ GetLineF( "L20", &L[20] );	/* Estimated tax paid for 2021. (form 760ES) */
+
+ GetLineF( "L21", &L[21] );	/* Amount of last year's overpayment applied toward 2021 estimated tax. */
+
+ GetLineF( "L22", &L[22] );	/* Extension payments (form 760E). */
+
+ GetLine( "L23", &L[23] );	/* Tax Credit, Low Income Individuals (Sch. ADJ, line 17) */
+
+ if (L[23] > L[18])
+  L[23] = L[18];	/* Low-Income Credit cannot exceed tax liability. */
+
+ if ((L[23] > 0.0) && (exemptionsB > 0.0))
+  {
+   fprintf(outfile," Cannot claim both Low-Income Credit and Age or Blind Exemptions.\n");
+   L[23] = 0.0;	/* Cannot claim both low-income credit and exemptions. */
+  }
+ showline(23);
+
+ GetLineF( "L24", &L[24] );	/* Credit, Tax Paid to other State (Sched OSC, line 21 ...) */
+ GetLineF( "L25", &L[25] );	/* Credits from enclosed Schedule CR, Section 5, Part 1, Line 1A */
+
+ L[26] = L[19] + L19b + L[20] + L[21] + L[22] + L[23] + L[24] + L[25];
+ showline(26);
+
+ if (L[26] < L[18])
+  {
+   L[27] = L[18] - L[26];
+   showline_wmsg( 27, "Tax You Owe" );
+  }
+ else
+  {
+   L[28] = L[26] - L[18];
+   showline_wmsg( 28, "Your Tax OverPayment" );
+  }
+
+ GetLineF( "L29", &L[29] );	/* Amount of overpayment you want credited to next year's estimated tax. */
+ GetLineF( "L30", &L[30] );	/* Virginia College Savings Plan Contributions from Schedule VAC, Section I, Line 6. */
+ GetLineF( "L31", &L[31] );	/* Other voluntary contribitions. */
+ GetLineF( "L32", &L[32] );	/* Addition to Tax, Penalty and Interest from attached Schedule ADJ, Line 21 */
+ GetLineF( "L33", &L[33] );	/* Consumer's Use Tax. */
+
+ for (j=29; j < 33; j++)
+   L[34] = L[34] + L[j];
+ showline(34);
+
+ if (L[27] > 0.0)
+  {
+   L[35] = L[27] + L[34];
+   showline_wmsg( 35, "AMOUNT DUE" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[35] / (L[18] + 1e-9) );
+  }
+ else
+ if (L[28] < L[34])
+  {
+   L[35] = L[34] - L[28];
+   showline_wmsg( 35, "AMOUNT DUE" );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[35] / (L[19] + 1e-9) );
+  }
+ else
+ if (L[28] > L[34])
+  {
+   L[36] = L[28] - L[34];
+   showline_wmsg( 36, "YOUR REFUND" );
+  }
+
+ if (L[9] < min2file)
+  {
+   fprintf(outfile,"\nYour VAGI is less than the minimum required to file a return.\n");
+   if (L[19] + L19b + L[20] > 0.0)
+    fprintf(outfile," But you need to file return to receive refund of withheld taxes.\n");
+   else
+    fprintf(outfile,"You do not need to file return.  Your VA Tax is zero.\n");
+  }
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

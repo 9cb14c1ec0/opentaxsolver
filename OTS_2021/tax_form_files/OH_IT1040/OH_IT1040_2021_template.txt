@@ -75,34 +75,39 @@ Credits_4	;	{ Senior citizen credit }
 Credits_5	;	{ Lump sum distribution credit }
 Credits_6	;	{ Child care and dependent care credit }
 Credits_7	;	{ Displaced worker training credit }
-Credits_7a	;	{ Campaign contribution credit for Ohio General Assembly }
-
-Credits_12	;	{ Earned income credit }
-Credits_13	;	{ Ohio adoption credit  }
-Credits_14	;	{ Job retention credit, nonrefundable portion }
-Credits_15	;	{ Credit for eligible new employees in enterprise zones }
-Credits_16	;	{ Credit for purchases of grape production property }
-Credits_17	;	{ InvestOhio credit }
-Credits_18	;	{ Lead abatement credit }
-Credits_19	;	{ Opportunity zone investment credit }
-Credits_20	;	{ Tech investment credit }
-Credits_21	;	{ Enterprise zone day care and training credits }
-Credits_22	;	{ Research and development credit }
-Credits_23	;	{ Nonrefundable Ohio historic preservation credit }
+Credits_8	;	{ Campaign contribution credit for Ohio General Assembly }
+Credits_13	;	{ Earned income credit. }
+Credits_14	;	{ Home school expenses credit. }
+Credits_15	;	{ Scholarship donation credit. }
+Credits_16	;	{ Nonchartered, nonpublic school tuition credit. }
+Credits_17	;	{ Ohio adoption credit  }
+Credits_18	;	{ Job retention credit, nonrefundable portion }
+Credits_19	;	{ Credit for eligible new employees in enterprise zones }
+Credits_20	;	{ Credit for purchases of grape production property }
+Credits_21	;	{ InvestOhio credit }
+Credits_22	;	{ Lead abatement credit }
+Credits_23	;	{ Opportunity zone investment credit }
+Credits_24	;	{ Tech investment credit }
+Credits_25	;	{ Enterprise zone day care and training credits }
+Credits_26	;	{ Research and development credit }
+Credits_27	;	{ Nonrefundable Ohio historic preservation credit }
 
 { - Nonresident Credit - }
-Credits_26	;	{  Portion L3 was not earned in Ohio }
+DateBeganResidence:     { Date you began Ohio residence. (mm dd yy) }
+DateEndResidence:       { Date you ended Ohio residence. (mm dd yy) }
+OtherState:             { Other state of residency. (2-letter abrev.) }
+Credits_30	;	{ Portion Line-3 (L3) that was not earned in Ohio }
 
 { - Resident Credit - }
-Credits_29	;	{  Portion of Line-3 (L3) taxed by other states }
-Credits_32	;	{  Income Tax paid to Other States }
+Credits_33	;	{  Portion of Line-3 (L3) taxed by other states }
+Credits_36	;	{  Income Tax paid to Other States }
 
 { - Refundable Credits - }
-Credits_35	;	{ Refundable Historic preservation credit }
-Credits_36	;	{ Refundable Business jobs credit }
-Credits_37	;	{ Pass-through entity credit }
-Credits_38	;	{ Motion picture production credit }
-Credits_39	;	{ Venture capital credit }
+Credits_39	;	{ Refundable Historic preservation credit }
+Credits_40	;	{ Refundable Business jobs credit }
+Credits_41	;	{ Pass-through entity credit }
+Credits_42	;	{ Motion picture production credit }
+Credits_43	;	{ Venture capital credit }
 
 { ------------------------------------------- } 
 { --- Optional info for Auto-PDF-Fillout. --- }

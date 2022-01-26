@@ -55,7 +55,7 @@ CoordReference:  40, 750  61, 64
  L7a	658 121  9 13.2
  L8a    658 158  9 13.2
  L8b    658 194  9 13.2
- L8c    658 230  9 13.2
+ L8c    658 231  9 13.2
  L9     658 267  9 13.2
  L10    658 304  9 13.2
  L11    658 342  9 13.2
@@ -85,28 +85,28 @@ CoordReference:  40, 750  61, 64
                 550, 50  841, 1134    110-dpi
 
  YourSocSec#:	379 147 9 10.9
- SchedA1	658 211  9 13.2
- SchedA2     	658 250  9 13.2
- SchedA3     	658 286  9 13.2
- SchedA4     	658 323  9 13.2
- SchedA5     	658 358  9 13.2
- SchedA6	658 395  9 13.2
- SchedA7	658 451  9 13.2
- SchedA8     	658 488  9 13.2
- SchedA9     	658 523  9 13.2
- SchedA10	658 561  9 13.2
- SchedA11	658 636  9 13.2
- SchedA12    	658 671  9 13.2
- SchedA13    	658 708  9 13.2
- SchedA14	658 746	 9 13.2
- SchedA15	658 782	 9 13.2
- SchedA16	658 818  9 13.2
- SchedA17	658 855	 9 13.2
- SchedA18	658 892  9 13.2
- SchedA19    	658 929  9 13.2
- SchedA20    	658 985  9 13.2
- SchedA21    	658 1021  9 13.2
- SchedA22    	658 1058  9 13.2
+ SchedA1	661 211  9 13.2
+ SchedA2     	661 250  9 13.2
+ SchedA3     	661 286  9 13.2
+ SchedA4     	661 323  9 13.2
+ SchedA5     	661 358  9 13.2
+ SchedA6	661 395  9 13.2
+ SchedA7	661 451  9 13.2
+ SchedA8     	661 488  9 13.2
+ SchedA9     	661 523  9 13.2
+ SchedA10	661 561  9 13.2
+ SchedA11	661 636  9 13.2
+ SchedA12    	661 671  9 13.2
+ SchedA13    	661 708  9 13.2
+ SchedA14	661 746	 9 13.2
+ SchedA15	661 782	 9 13.2
+ SchedA16	661 818  9 13.2
+ SchedA17	661 855	 9 13.2
+ SchedA18	661 892  9 13.2
+ SchedA19    	661 929  9 13.2
+ SchedA20    	661 985  9 13.2
+ SchedA21    	661 1021  9 13.2
+ SchedA22    	661 1058  9 13.2
 
 
 Page 4
@@ -114,13 +114,13 @@ Page 4
 CoordReference:  40, 750  61, 64
                 550, 50  841, 1134    110-dpi
 
-  YourSocSec#:	379 112 9 10.9
+  YourSocSec#:	379 126 9 10.9
   SchedA23	660 138	9 13.2
   SchedA24	660 174	9 13.2
   SchedA25    	660 211  9 13.2
   SchedA26    	660 266  9 13.2
   SchedA27    	660 303  9 13.2
-  SchedA28	660 339  9 13.2
+  SchedA28	660 340  9 13.2
   SchedA29	660 376  9 13.2
   SchedA30	660 413  9 13.2
   SchedA31	660 469  9 13.2
@@ -138,7 +138,7 @@ Page 5
 CoordReference:  40, 750  61, 64
                 550, 50  841, 1134    110-dpi
 
- YourSocSec#:	379 102 9 10.9
+ YourSocSec#:	381 112 9 10.9
  Credits1	658 141  9 13.2
  Credits2	658 175  9 13.2
  Credits3	658 211  9 13.2
@@ -146,26 +146,26 @@ CoordReference:  40, 750  61, 64
  Credits5	658 285  9 13.2
  Credits6	658 322  9 13.2
  Credits7	658 356  9 13.2
- Credits7a	658 400  9 13.2
- Credits8	658 432  9 13.2
- Credits9	658 467  9 13.2
- Credits10	658 505  9 13.2
+ Credits8	658 400  9 13.2
+ Credits9	658 432  9 13.2
+ Credits10	658 467  9 13.2
+ Credits11	658 505  9 13.2
  JFC		315 542
- Credits11	658 541  9 13.2
- Credits12	658 577  9 13.2
- Credits13	658 613  9 13.2
- Credits14	658 650  9 13.2
- Credits15	658 685  9 13.2
- Credits16	658 721  9 13.2
- Credits17	658 761  9 13.2
- Credits18	658 797  9 13.2
- Credits19	658 833  9 13.2
- Credits20	658 870  9 13.2
- Credits21	658 908  9 13.2
- Credits22	658 946  9 13.2
- Credits23	658 982  9 13.2
- Credits24	658 1019  9 13.2
- Credits25	658 1056 9 13.2
+ Credits12	658 541  9 13.2
+ Credits13	658 577  9 13.2
+ Credits14	658 613  9 13.2
+ Credits15	658 650  9 13.2
+ Credits16	658 685  9 13.2
+ Credits17	658 721  9 13.2
+ Credits18	658 761  9 13.2
+ Credits19	658 797  9 13.2
+ Credits20	658 833  9 13.2
+ Credits21	658 870  9 13.2
+ Credits22	658 908  9 13.2
+ Credits23	658 946  9 13.2
+ Credits24	658 982  9 13.2
+ Credits25	658 1019  9 13.2
+ Credits26	658 1056 9 13.2
 
 
 Page 6
@@ -174,23 +174,29 @@ CoordReference:  40, 750  61, 64
                 550, 50  841, 1134    110-dpi
 
  YourSocSec#:   381 109 9 10.9
- Credits26      452 211  9 13.2
- Credits27      452 247  9 13.2
- Credits28_Factor 473 283 0 13.2
- Credits28      658 303  9 13.2
- Credits29      452 394  9 13.2
- Credits30      452 432  9 13.2
- Credits31_Factor 473 469 0 13.2
- Credits31      452 507  9 13.2
- Credits32      452 563  9 13.2
- Credits33      658 615  9 13.2
- Credits34      658 672  9 13.2
- Credits35    	658 744  9 13.2
- Credits36    	658 780  9 13.2
- Credits37    	658 818  9 13.2
- Credits38    	658 854  9 13.2
- Credits39    	658 890  9 13.2
- Credits40      658 927  9 13.2
+ Credits27      658 138  9 13.2
+ Credits28      658 177  9 13.2
+ Credits29      658 215  9 13.2
+ DateBeganResidence: 205 270 0 10.3
+ DateEndResidence:   372 270 0 10.5
+ OtherState: 	     668 270 0 13.2
+ Credits30      452 323  9 13.2
+ Credits31      452 359  9 13.2
+ Credits32a	520 395  0 11
+ Credits32      658 434  9 13.2
+ Credits33      452 507  9 13.2
+ Credits34      452 545  9 13.2
+ Credits35a	520 581  0 11
+ Credits35      452 618  9 13.2
+ Credits36      452 673  9 13.2
+ Credits37    	658 712  9 13.2
+ Credits38    	658 768  9 13.2
+ Credits39    	658 840  9 13.2
+ Credits40    	658 877  9 13.2
+ Credits41    	658 915  9 13.2
+ Credits42      658 951  9 13.2
+ Credits43      658 988  9 13.2
+ Credits44      658 1023  9 13.2
 
 
 END_OF_INPUT

@@ -1,12 +1,12 @@
 Open Tax Solver - Package
 --------------------------
 
-Jan 2, 2021 v19.00 - For 2021 tax-year.
+Jan 2, 2021 v19.00-Pre-Release - For 2021 tax-year.
 
 
 
 
-------- This Version UNDER DEVELOPMENT !! --------
+------- This Version is UNDER DEVELOPMENT !! --------
 
     ------- Not ready for usage.  -------
 
