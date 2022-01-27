@@ -850,6 +850,16 @@ void consume_leading_trailing_whitespace( char *line )
 int do_all_caps=0;
 int writeout_line=1;
 
+void capitalize( char *word )
+{
+ int k=0;
+ while (word[k] != '\0')
+  {
+   word[k] = toupper( word[k] );
+   k++;
+  }
+}
+
 /*------------------------------------------------------------------------------*/
 /* GetTextLineF - Read line with specified label name, and put the contents	*/
 /*  of the remainder of the line to the output file.				*/
@@ -884,14 +894,7 @@ char *GetTextLineF( char *linename )
  line[k] = '\0';
  consume_leading_trailing_whitespace( line );
  if (do_all_caps)
-  {
-   k = 0;
-   while (line[k] != '\0')
-    {
-     line[k] = toupper( line[k] );
-     k++;
-    }
-  }
+  capitalize( line );
  if (writeout_line)
   fprintf(outfile, "%s %s\n", linename, line ); 
  return strdup( line );

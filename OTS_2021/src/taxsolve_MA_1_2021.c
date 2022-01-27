@@ -64,21 +64,33 @@ double ComputeTax(double taxableIncome)
 }
 
 
+void check_if_yes( char *label )
+{
+ char word[999];
+ int flag;
+ get_parameter( infile, 's', word, label );
+ get_param_single_line( infile, 'b', &flag, label );
+ if (flag) 
+  fprintf(outfile,"%s X\n", label );
+}
+
+
 
 /*----------------------------------------------------------------------------*/
 /* ---				Main					  --- */
 /*----------------------------------------------------------------------------*/
 int main( int argc, char *argv[] )
 {
- int i, j, k, status=0, i65, iblind, ndep, dep_deduct;
+ int i, j, k, status=0, i65, iblind, ndep, dep_deduct, ndep12=0;
  int flag, notaxstatus=0;
- char word[4000], *infname=0, outfname[4000];
+ char word[4000], *infname=0, outfname[4000], *answ;
  time_t now;
  double Exemptions[10], L_a=0.0, L_b=0.0;
  double MassBankInterest, Iexempt, AGI;
  double Unemployment, Lottery;
  double MassRetirement[2];
- double L23a=0.0;
+ double L23a=0.0, L33[6], L35a=0.0, L35b=0.0;
+ double L43a=0.0, L43b=0.0;
  
  printf("Massachusetts Form-1 2021 - v%3.2f\n", thisversion);
  
@@ -124,9 +136,6 @@ int main( int argc, char *argv[] )
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
-
- fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
- fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
 
  /* Get status as:  Single, Married/joint, Head house, Married/sep. */
  get_parameter( infile, 's', word, "Status" );
@@ -339,7 +348,7 @@ int main( int argc, char *argv[] )
  L[22] = ComputeTax( L[21] );
  showline_wmsg(22,"5.0% Tax");
 
- GetLine( "L23a", &L23a ); 	/* 12% income */
+ GetLineF( "L23a", &L23a ); 	/* 12% income */
  L[23] = NotLessThanZero( L23a * 0.12 );
  if (L23a > 0.0)
   {
@@ -416,6 +425,140 @@ int main( int argc, char *argv[] )
  ShowLineNonZero(30);
  ShowLineNonZero(31);
 
+ L[32] = NotLessThanZero( L[28] - (L[29] + L[30] + L[31]) );
+ showline_wmsg(32,"Income Tax After Credits");
+
+ GetLine1( "L33a", &L33[0] ); /* Endangered Wildlife */
+ if (L33[0] != 0) showline_wlabel( "L33a", L33[0] );
+ GetLine1( "L33b", &L33[1] ); /* Organ Transplant */
+ if (L33[1] != 0) showline_wlabel( "L33b", L33[1] );
+ GetLine1( "L33c", &L33[2] ); /* Mass AIDS */
+ if (L33[2] != 0) showline_wlabel( "L33c", L33[2] );
+ GetLine1( "L33d", &L33[3] ); /* Mass US Olympic */
+ if (L33[3] != 0) showline_wlabel( "L33d", L33[3] );
+ GetLine1( "L33e", &L33[4] ); /* Mass Military Family Relief */
+ if (L33[4] != 0) showline_wlabel( "L33e", L33[4] );
+ GetLine1( "L33f", &L33[5] ); /* Homeless Animal Prevention And Care */
+ if (L33[5] != 0) showline_wlabel( "L33f", L33[5] );
+ L[33] = Sum( L33, 0, 5 );
+ ShowLineNonZero( 33 );
+
+ GetLine1( "L34", &L[34] ); 	/* Use tax due on out-of-state purchases */
+ showline(34);
+
+ GetLine1( "L35a", &L35a ); 	/* Health Care Penalty (you) */
+ showline_wlabel( "L35a", L35a );
+ GetLine1( "L35b", &L35b ); 	/* Health Care Penalty (spouse) */
+ showline_wlabel( "L35b", L35b );
+ L[35] = L35a + L35b;
+ if (L[35] != 0)
+  showline_wmsg( 35, "Health Care penalty" );
+
+ GetLine1( "L36", &L[36] );	/* AMENDED RETURN ONLY. Overpayment from original return. */
+ L[36] = NotLessThanZero( L[36] );
+ ShowLineNonZero( 36 );	 
+
+ L[37] = Sum( L, 32, 36 );
+ showline_wmsg(37,"Income Tax After Credits Contributions, Use Tax + HC Penalty");
+ 
+ /* Payments section. */
+
+ GetLine( "L38", &L[38] );	/* Mass income tax withheld, Forms W-2, 1099 */
+ ShowLineNonZero(38);
+
+ GetLine( "L39", &L[39] );	/* Last year's overpayment you want applied to 2021 estimated tax */
+ ShowLineNonZero(39);
+
+ GetLine( "L40", &L[40] );	/* 2021 estimated tax payments */
+ ShowLineNonZero(40);
+
+ GetLine( "L41", &L[41] );	/* Payments made with extension */
+ ShowLineNonZero(41);
+
+ GetLine( "L42", &L[42] );	/* Payments w/original return. Use only if amending return. */
+ ShowLineNonZero(42);
+
+ GetLineF( "L43a", &L43a );	/* Earned income credit (EIC): Number of dependent children.  */
+
+ GetLineF( "L43b", &L43b );	/* Earned income credit (EIC): amount from US Return */
+ if (L43b != 0.0) fprintf(outfile, " L43b = %6.2f\n", L43b );
+ L[43] = L43b * 0.30;
+ ShowLineNonZero(43);
+
+ GetLine( "L44", &L[44] );	/* Senior Circuit Breaker Credit, sched CB */
+ ShowLineNonZero(44);
+
+ GetLine( "L45", &L[45] );	/* Child under 13, or disabled dep/spouse credit, from worksheet. */
+ ShowLineNonZero(45);
+
+ get_parameter( infile, 's', word, "L46num" );	/* Number of dependent household members under 13 or over 65. */
+ get_parameters( infile, 'i', &ndep12, "L46num"); 
+ fprintf(outfile,"L46num = %d\n", ndep12 ); 
+ L[46] = ndep12 * 180.0;
+ ShowLineNonZero(46);
+
+ GetLine( "L47", &L[47] );	/* Refundable credits, Sched CMS. */
+ ShowLineNonZero(47);
+
+ GetLine( "L48", &L[48] );	/* Excess Paid Family Leave withholding. */
+ ShowLineNonZero(48);
+
+ L[49] = Sum( L, 38, 48 );
+ showline_wmsg(49,"total payments");
+
+ GetLine( "L51", &L[51] );	/* Overpayment to be applied to next year's estimated tax */
+
+ /* Refund or Owe section. */
+ if (L[37] < L[49]) 
+  {
+   L[50] = L[49] - L[37];
+   fprintf(outfile,"L50 = %6.2f  Overpayment!\n", L[50] );
+   if (L[51] > L[50])
+    L[51] = L[50];
+   showline_wmsg(51, "Overpayment to be applied to next year's estimated tax");
+   L[52] = L[50] - L[51];
+   fprintf(outfile,"L52 = %6.2f  THIS IS YOUR REFUND\n", L[52] );
+  }
+ else 
+  {
+   L[53] = L[37] - L[49];
+   fprintf(outfile,"L53 = %6.2f  TAX DUE !!!\n", L[53] );
+   fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[53] / (L[37] + 1e-9) );
+   if ((L[53] > 400.0) && (L[49] < 0.80 * L[37]))
+    fprintf(outfile," You may owe Underpayment of Estimated Tax penalty.\n");
+  }
+
+ fprintf(outfile,"\n{ --------- }\n");
+ GetTextLineF( "Your1stName:" );
+ GetTextLineF( "YourInitial:" );
+ GetTextLineF( "YourLastName:" );
+ answ = GetTextLine( "YourSocSec#:" );
+ format_socsec( answ , 1 );
+ fprintf(outfile,"YourSocSec#: %s\n", answ );
+ GetTextLineF( "Spouse1stName:" );
+ GetTextLineF( "SpouseInitial:" );
+ GetTextLineF( "SpouseLastName:" );
+ answ = GetTextLine( "SpouseSocSec#:" );
+ format_socsec( answ , 1 );
+ fprintf(outfile,"SpouseSocSec#: %s\n", answ );
+ GetTextLineF( "Number&Street:" );
+ GetTextLineF( "Town:" );
+ GetTextLineF( "State:" );
+ GetTextLineF( "Zipcode:" );
+
+ GetTextLineF( "RoutingNum:" );
+ GetTextLineF( "AccntNum:" );
+ answ = GetTextLine( "AccountType:" ); 
+ if (strcasecmp( answ, "Savings" ) == 0)
+  fprintf(outfile," Check_SavingsAccnt X\n");
+ if (strcasecmp( answ, "Checking" ) == 0)
+  fprintf(outfile," Check_CheckingAccnt X\n");
+ GetTextLineF( "Payment_Interest:" );
+ GetTextLineF( "Payment_Penalty:" );                // Payment penalty you calculated.
+ GetTextLineF( "M2210_Amount:" );                   // M-2210 amount.
+ check_if_yes( "Check_SelfEmployed:" );	// Yes, if Self-Employed. (answer: Yes, No, n/a)
+ check_if_yes( "Check_DORdiscuss:" );	// Yes, if you wish to discuss w/DOR. (answer: Yes, No, n/a)
+ check_if_yes( "Check_DoNotEfile:" );	// Yes, if you do not want preparer to e-file. (answer: Yes, No, n/a)
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

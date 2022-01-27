@@ -73,17 +73,20 @@ L36             0       { AMENDED RETURN ONLY. Overpayment from original return.
 
 {---- Taxes Paid ----}
 
-L38	 6,000.00;	{ Mass Income Tax withheld (from W-2's, ...) }
+L38	6,000.00;	{ Mass Income Tax withheld (from W-2's, ...) }
 L39		;	{ 2020 overpayment applied to 2021 estimated tax }
 L40		;	{ 2021 estimated tax payments }
 L41		;	{ Payments made with extension }
-L42             ;       { Payments with original return. Only if amending return.}
-L43a		;	{ EIC: amount from US Return }
+L42 		; 	{ Payments with original return. Only if amending return.}
+L43a		;	{ Earned Income Credit: Number of dependent children.  }
+L43b		;	{ EIC: amount from US Return }
 L44		;	{ Senior Circuit Breaker Credit, sched CB }
-L45		;	{ Other refundable credits, Sched RF, line 4. }
-L46		;	{ Excess Paid Family Leave withholding. }
+L45		;	{ Child under 13, or disabled dep/spouse credit, from worksheet. }
+L46num		;	{ Number of dependent household members under 13 or over 65. }
+L47		;	{ Other refundable credits, Sched CMS. }
+L48             ;       { Excess Paid Family Leave withholding. }
+L51	1,000	;	{ Overpayment you want applied to next year's estimated tax. }
 
-L49	   1,000 ;	{Overpayment you want applied to next year's estimated tax}
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }
@@ -99,6 +102,18 @@ L49	   1,000 ;	{Overpayment you want applied to next year's estimated tax}
  Town:		 Worcestor
  State:          MA
  Zipcode:   	 01605
+
+
+{ -- Optional -- }
+ RoutingNum:			{ Routing Number to receive refund. }
+ AccntNum:			{ Account Number to receive refund. }
+ AccountType:	 		{ Account type: (answer: Checking, Savings, N/A) }
+ Payment_Interest:    		{ Interest due to under-withholding. }
+ Payment_Penalty:     		{ Payment penalty you calculated. }
+ M2210_Amount:        		{ M-2210 amount. }
+ Check_SelfEmployed:   		{ Yes, if Self-Employed. (answer: Yes, No, n/a) }
+ Check_DORdiscuss:     		{ Yes, if you wish to discuss w/DOR. (answer: Yes, No, n/a) }
+ Check_DoNotEfile:     		{ Yes, if you do not want preparer to e-file. (answer: Yes, No, n/a) }
 
 {
  ------------------------------------------

@@ -35,7 +35,7 @@
 #define Yes 1
 #define No  0
 
-double Tax_Rate = 0.0307;		/* Not updated for 2021 tax-year. */
+double Tax_Rate = 0.0307;		/* Updated for 2021 tax-year. */
 
 
 double pos( double x )
@@ -50,7 +50,7 @@ double pos( double x )
 int main( int argc, char *argv[] )
 {
  int i, j, k, status=0;
- char word[2000], *infname=0, outfname[1500];
+ char word[2500], *infname=0, outfname[2500];
  time_t now;
  double oneA, oneB;
  char *Your1stName=0, *YourLastName=0, *Spouse1stName=0, *SpouseLastName, *YourNames;
@@ -98,9 +98,6 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
- fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
- fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
-
  /* get_parameter(infile, kind, x, emssg ) */
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
@@ -115,6 +112,7 @@ int main( int argc, char *argv[] )
    exit(1);
   }
  fprintf(outfile,"Status = %s (%d)\n", word, status);
+ fprintf(outfile," Check_R_PennResident X\n");
 
  GetLineF( "L1a", &oneA );	/* Gross compensation. */
 
@@ -173,8 +171,43 @@ int main( int argc, char *argv[] )
  L[18] = L[14] + L[15] + L[16] + L[17];
  showline_wmsg(18,"Total Estimated Payments and Credits");
 
+ GetLine( "L21", &L[21] );	/* Tax Forgiveness Credit from Part D, Line 16, PA Schedule SP. */
+ showline_wmsg(21,"Tax Back/Tax Foregiveness Credit");
+
+ GetLineF( "L22", &L[22] );	/* Resident credit (Scheds G/RK-1). */
+
+ GetLineF( "L23", &L[23] );	/* Other credits (Sched OC). */
+
+ L[24] = L[13] + L[18] + L[21] + L[22] + L[23];
+ showline_wmsg(24,"Total Payments and Credits");
+
+ GetLineF( "L25", &L[25] );	/* Use Tax. */
+ GetLine( "L27", &L[27] );	/* Penalties and interest. */
+
+ if (L[12] + L[25] > L[24])
+  {
+   L[26] = L[12] + L[25] - L[24];
+   showline_wmsg(26,"TAX DUE");
+   showline(27);
+   L[28] = L[26] + L[27];
+   if (L[28] > 0.0)
+    {
+     showline_wmsg( 28, "Total Payment Due" );
+     fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[28] / (L[12] + L[25] + 1e-9) );
+    }
+  }
+ else
+ if (L[24] > L[12] + L[25] + L[27])
+  {
+   showline(27);
+   L[29] = L[24] - (L[12] + L[25] + L[27]);
+   showline_wmsg(29,"OVERPAYMENT");
+   L[30] = L[29];
+   showline_wmsg(30,"REFUND");
+  }
  
  fprintf(outfile,"\n{ --------- }\n");
+ do_all_caps = 1;
  Your1stName = GetTextLineF( "Your1stName:" );
  GetTextLineF( "MidInitial:" );
  YourLastName = GetTextLineF( "YourLastName:" );
