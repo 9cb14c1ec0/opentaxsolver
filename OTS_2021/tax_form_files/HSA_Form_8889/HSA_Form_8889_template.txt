@@ -13,7 +13,7 @@ L1:                 { (answer: Self-Only, Family) }
 L2               { HSA contributions you made for 2021 }
                 ;
 
-L3		; { If you under 55 and eligible every month, enter 3,550. Or see instructions. }
+L3		; { If you under 55 and eligible every month, enter 3,600. Or see instructions. }
 
 L4		; { Amount you and your employer contributed to your Archer MSAs for 2021 from Form 8853, lines 1 and 2.}
 
@@ -34,7 +34,7 @@ L14b		; { Distributions included in L14a rolled over to another HSA. }
 
 L15		; { Qualified medical expenses paid using HSA distributions }
 
-L17a:		 { Do any distributions in L16 meet Exceptions to Addtl 20% tax ? { (answer: Y, N) }
+L17a:	N	 { Do any distributions in L16 meet Exceptions to Addtl 20% tax ? { (answer: Y, N) }
 
 
 { --- Part III --- }

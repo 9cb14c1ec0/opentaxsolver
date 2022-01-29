@@ -2282,13 +2282,25 @@ void set_tax_solver( char *fname )
  strcpy( taxsolvestrng, taxsolvecmd );
 
  if (strstr( taxsolvestrng, "taxsolve_HSA_f8889" ) != 0)
-  supported_pdf_form = 1;
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "HSA_Form_8889" );
+  }
  else
  if (strstr( taxsolvestrng, "taxsolve_f8606" ) != 0)
-  supported_pdf_form = 1;
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "Form_8606" );
+  }
  else
  if (strstr( taxsolvestrng, "taxsolve_US_1040_Sched_SE" ) != 0)
-  supported_pdf_form = 1;
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "US_1040_Sched_SE" );
+  }
 }
 
 
@@ -3748,7 +3760,7 @@ void set_ots_path()
 void helpabout1( GtkWidget *wdg, void *data )
 {
  char msg[4096];
- sprintf( msg, "OpenTaxSolver (OTS) GUI - DEVELOPMENT Version %1.2f-PRE-RELEASE,  %s\n", version, package_date );
+ sprintf( msg, "OpenTaxSolver (OTS) GUI - Version %1.2f,  %s\n", version, package_date );
  strcat( msg, "                For the 2021 Tax Year.    OTS release ");
  strcat( msg, ots_release_package );   strcat( msg, "\n\n" );
  strcat( msg, "Use this GUI to open tax-forms and calculate taxes.\n");
@@ -3974,7 +3986,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_NY_IT201 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "NY State IT201", slcttxprog, formid );
- gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_MA_1 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "MA State 1", slcttxprog, formid );

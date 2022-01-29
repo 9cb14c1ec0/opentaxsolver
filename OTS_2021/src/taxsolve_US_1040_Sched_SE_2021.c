@@ -97,10 +97,6 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"\n%s,  v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
 
- fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
- fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
-
-
  /* ----- Accept form data and process the numbers.         ------ */
  /* ----- Place all your form-specific code below here .... ------ */
 
@@ -109,10 +105,39 @@ int main( int argc, char *argv[] )
 
  GetLine( "L2", &L[2] );	/* Net Profit/Loss */	
  GetLine( "L5a", &L5a );	/* Church employee income from Form W-2 */	
- L[7] = 137700.0;           	/* Fixed value for tax year 2021 */			/* Not updated for 2021. */
+ L[7] = 142800.0;           	/* Fixed value for tax year 2021 */			/* Updated for 2021. */
  GetLine( "L8a", &L8a );	/* Wages & Tips */
  GetLine( "L8b", &L8b );	/* Unreported tips from Form 4137, line 10 */
  GetLine( "L8c", &L8c );	/* Wages from Form 8919, line 10 */
+
+ /* -- Compute the tax form  -- */
+ showline(2);
+ L4a = L[2] * 0.9235;									/* Updated for 2021. */
+ showline_wlabel( "L4a", L4a );
+ L4c = NotLessThanZero( L4a );
+ showline_wlabel( "L4c", L4c );
+ showline_wlabel( "L5a", L5a );
+ L5b = NotLessThanZero( L5a * 0.9235 );
+ showline_wlabel( "L5b", L5b );
+ L[6] = L4c + L5b;
+ showline(6);
+ showline_wlabel("L8a", L8a);
+ showline_wlabel("L8b", L8b);
+ showline_wlabel("L8c", L8c);
+ L8d = L8a + L8b + L8c;
+ showline_wlabel("L8d", L8d);
+ L[9] = NotLessThanZero( L[7] - L8d );
+ showline(9);
+ L[10] = 0.124 * SmallerOf( L[6], L[9]);
+ showline(10);
+ L[11] = L[6] * 0.029;									/* Updated for 2021. */
+ showline(11);
+ L[12] = L[10] + L[11];
+ showline_wmsg( 12, "Also enter this number on Schedule-2, line 4." );
+ L[13] = L[12] * 0.5;
+ showline_wmsg( 13, "Also enter this number on Schedule-1, line 4." );
+
+ L[14] = 5880.0;									/* Updated for 2021. */
 
  /* ----- .... Until here.  ----- */
 

@@ -27,7 +27,7 @@
 /* Not updated for 2021 tax year:						*/
 /************************************************************************/
 
-float thisversion=18.00;
+float thisversion=19.00;
 
 #include <stdio.h>
 #include <time.h>
@@ -46,6 +46,7 @@ int main( int argc, char *argv[] )
  int i, j, k;
  char word[4000], outfname[4000], *answ, *infname=0;
  time_t now;
+ double L14a=0.0, L14b=0.0, L14c=0.0, L17b=0.0;
 
  printf("Form 8889 HSA, 2021 - v%3.2f\n", thisversion );
 
@@ -92,9 +93,6 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,	 v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
- fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
- fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
-
  GetTextLineF( "YourName:" );
  GetTextLineF( "YourSocSec#:" );
  
@@ -124,10 +122,38 @@ int main( int argc, char *argv[] )
  L[12] = NotLessThanZero( L[8] - L[11] );
  showline( 12 );
  L[13] = SmallerOf( L[2], L[12] );
- showline_wmsg( 13, "HSA Deduction.  Enter this on Sched-1 Part II, Line 12 on your 1040 Form." );
+ showline_wmsg( 13, "HSA Deduction.  Enter this on Sched-1 Part II, Line 13 on your 1040 Form." );
  if (L[2] > L[13])
   fprintf(outfile,"Caution: Since L2 > L13, you may have to pay additional tax. See instructions.\n\n");
 
+ GetLineF( "L14a", &L14a );
+ GetLineF( "L14b", &L14b );
+ L14c = L14a - L14b;
+ showline_wlabel( "L14c", L14c ); 
+ GetLineF( "L15", &L[15] );
+ L[16] = NotLessThanZero( L14c - L[15] );
+ showline_wmsg( 16, "Taxable HSA distributions. Include this on Sched-1 Line 8e on your 1040 Form." );
+
+ writeout_line = 0;     /* Suppress GetLineF's from immediately writing to outfile. */
+ answ = GetTextLineF( "L17a:" );
+ next_word( answ, word, " \t;" );
+ if (toupper( word[0] ) == 'Y')
+  fprintf(outfile,"Ck17a: X\n");
+ writeout_line = 1;
+
+ if (toupper( word[0] ) != 'Y')
+  {
+   L17b = 0.20 * L[16];
+   showline_wlabel( "L17b", L17b );
+  }
+
+ GetLineF( "L18", &L[18] );
+ GetLineF( "L19", &L[19] );
+ L[20] = L[18] + L[19];
+ showline_wmsg( 20, "Total income. Include this on Sched-1 Line 8z on your 1040 Form." );
+
+ L[21] = 0.10 * L[20];
+ showline_wmsg( 21, "Additional tax. Include this on Sched-2 Line 17d on your 1040 Form." );
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

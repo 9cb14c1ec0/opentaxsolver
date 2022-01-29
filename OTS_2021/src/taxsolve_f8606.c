@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
   char word[4000], outfname[4000], *infname = 0;
   time_t now;
   double L15a = 0.0, L15b = 0.0, L15c = 0.0;
-  double L25b = 0.0;
+  double L25a = 0.0, L25b = 0.0, L25c = 0.0;
 
   printf("Form 8606, 2021 - v%3.2f\n", thisversion);
 
@@ -87,9 +87,6 @@ int main(int argc, char *argv[])
   read_line(infile, word);
   now = time(0);
   fprintf(outfile, "\n%s,  v%2.2f, %s\n", word, thisversion, ctime(&now));
-
-  fprintf(outfile,"\n\nTHIS VERSION IS STILL BEING UPDATED FOR 2021 TAXES.\n");
-  fprintf(outfile,"NOT READY FOR USAGE.  CHECK BACK FOR UPDATES.\n\n\n"):
 
   // Begin form-specific code
 
@@ -207,6 +204,61 @@ int main(int argc, char *argv[])
   GetLine("L24", &L[24]);
   GetLine("L25b", &L25b);
 
+  if (complete_part_three) {
+    showline(19);
+    showline(20);
+
+    L[21] = NotLessThanZero(L[19] - L[20]);
+    showline(21);
+
+    showline(22);
+
+    if (L[21] > 0.0) {
+      L[23] = NotLessThanZero(L[21] - L[22]);
+
+      if (L[23] == 0) {
+        showline(23);
+      } else {
+        showline_wmsg(
+            23, "you may be subject to an additional tax (see instructions)");
+      }
+    }
+
+    if (L[21] > 0 && L[23] > 0) {
+      showline(24);
+
+      L25a = NotLessThanZero(L[23] - L[24]);
+      showline_wlabel("L25a", L25a);
+
+      if (L25a > 0) {
+        showline_wlabelmsg("L25b", L25b,
+                           "Also, enter this amount on 2021 Form 8915-C, line "
+                           "23, or 2021 Form 8915-D, line 14, as applicable");
+
+        L25c = L25a - L25b;
+        if (L25c > 0) {
+          showline_wlabelmsg(
+              "L25c", L25c,
+              "Also include this amount on 2021 Form 1040 or 1040-SR, line 4b; "
+              "or 2021 Form 1040-NR, line 16b.");
+
+        } else {
+          showline_wlabel("L25c", L25c);
+        }
+      }
+    }
+  }
+
+  fprintf(outfile, "------------------------------\n");
+  fprintf(outfile, "\n{ --------- Identity-Information:  --------- }\n");
+  GetTextLineF("Name:");
+  GetTextLineF("SocSec#:");
+  GetTextLineF("Number&Street:");
+  GetTextLineF("Apt#:");
+  GetTextLineF("TownStateZip:");
+  GetTextLineF("ForeignCountry:");
+  GetTextLineF("ForeignState:");
+  GetTextLineF("ForeignPostcode:");
 
   // End form-specific code
 

@@ -14,7 +14,7 @@ L2     5,400          { HSA contributions you made for 2021 }
        1,200
                 ;
 
-L3	3,550	; { If you under 55 and eligible every month, enter 3,550. Or see instructions. }
+L3	3,600	; { If you under 55 and eligible every month, enter 3,600. Or see instructions. }
 
 L4	45	; { Amount you and your employer contributed to your Archer MSAs for 2021 from Form 8853, lines 1 and 2.}
 

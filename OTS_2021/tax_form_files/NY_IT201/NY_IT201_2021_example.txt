@@ -45,7 +45,7 @@ LTcare%	    10   ;	{ Percent of long-term care premiums in Fed-Sched-A line 1, i
 AddAdj	    20   ;	{ Any additional itemization adjustments (worksheet line k pg 26) }
 CollegeDed  30   ;	{ College tuition itemized deduction (Form IT-272 ) }
 
-L36	    36	;	{ Number of Dependent Exemptions (Pg 21) }
+L36	    1	;	{ Number of Dependent Exemptions (Pg 21) }
 Exemptions  1		{ Number of NY dependent exemptions, Pg 21. }
 
 L41	    41	;	{ Resident credit, Form IT-112-R or IT-112-C, pg 23 }

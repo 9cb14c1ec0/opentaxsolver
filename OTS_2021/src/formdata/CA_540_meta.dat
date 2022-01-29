@@ -116,9 +116,9 @@ L91	598 805		14
 FontSz 16
 CkNoUseTaxOwed 	   282 841
 CkPayedUseTaxCDTFA 457  841
+CkFYHealthCoverage 629 898 
 FontSz 10
-L92	598 898		14
-CkFYHealthCoverage 140 932 
+L92	598 932		14
 L93     715 990		14
 L94     715 1025	14
 L95     715 1062	14

@@ -683,6 +683,10 @@ void ShowLineNonZero_wMsg( int j, char *msg )
 void showline_wrksht( char wrksht, int j, double *x )
 { fprintf(outfile," %c%d = %6.2f\n", wrksht, j, x[j]); }
 
+/* For worksheet calculations, indent and show special line character, if not zero. */
+void showline_wrksht_nz( char *wrksht, int j, double *x )
+{ if (x[j] != 0.0) fprintf(outfile," %s%d = %6.2f\n", wrksht, j, x[j] ); }
+
 /* Show-line with specified label and value. */
 void showline_wlabel( char *label, double value )
 { fprintf(outfile, "%s = %6.2f\n", label, value ); }

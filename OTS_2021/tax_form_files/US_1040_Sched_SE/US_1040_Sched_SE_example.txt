@@ -12,7 +12,7 @@ L2	32775	; { Net Profit/Loss }
 L5a	462.76	; { Church employee income from Form w-2 }
 
 L8a	100	; { Total social security wages and tips and RR retirement compensation }
-                  { - if >$137,700 skip lines 8b and 8c }	
+                  { - if > $142,800 skip lines 8b and 8c }	
 
 L8b	50	; { Unreported tips from Form 4137, line 10 }
 

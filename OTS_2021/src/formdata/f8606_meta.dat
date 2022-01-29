@@ -5,14 +5,14 @@ Page 1
  CoordReference:  40, 750  61, 64
                   550, 50  841, 1134    110-dpi
 
-Name:	 85 160
-SocSec#: 727 160
-Number&Street: 246 195
-Apt#:	770 194
-TownStateZip:   246 233
-ForeignCountry: 246 269
-ForeignState:	  482 269
-ForeignPostcode: 727 269
+Name:	 	 85 159
+SocSec#: 	 727 159
+Number&Street: 	 246 195
+Apt#:		 770 194
+TownStateZip:    246 232
+ForeignCountry:  246 268
+ForeignState:	 482 268
+ForeignPostcode: 727 268
 
 L1	777 471
 L2	777 490
