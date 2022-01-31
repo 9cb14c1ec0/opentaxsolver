@@ -40,7 +40,7 @@
 #define MaxPages 100
 #define MAXLINE 2048
 
-float version=1.09;
+float version=1.10;
 int verbose=0;
 int testmode=0;
 int no_zero_entries=0;
@@ -321,7 +321,7 @@ void read_replacement_text( char *fname )
  if (infile == 0) { printf("Cannot open '%s'\n", fname );  exit(1); }
  fgets( line, MAXLINE, infile );
  while (!feof(infile))
-  {
+  { /*not_eof*/
    idinfo = 0;
    next_word( line, word1, " \t=\n\r" );
    if (strcmp( word1, "PDFpage:" ) == 0)
@@ -361,26 +361,47 @@ void read_replacement_text( char *fname )
      idinfo = 1;
     }
    else
-   if (strcmp( word1, "NewPDFMarkup(" ) == 0)
-    { int pg=0;  float xpos, ypos;
-     next_word( line, word2, " \t," );
+   if (strcmp( word1, "NewPDFMarkup(" ) == 0)	/* Expect:  NewPDFMarkup( pg, x, y ) label_name	 */
+    { int pg=0, txtcol=0, font=FontSz;
+      float xpos, ypos, tred=txtred, tgrn=txtgrn, tblu=txtblu;
+     next_word( line, word1, ")" );		/*  Or:     NewPDFMarkup( pg, x, y, fontsz, r, g, b ) label_name  */
+     next_word( word1, word2, " \t,(" );
      if (sscanf( word2, "%d", &pg ) != 1)
 	printf("Error reading PDFMarkup page '%s'\n", word2 );
-     next_word( line, word2, " \t," );
+     next_word( word1, word2, " \t," );
      if (sscanf( word2, "%f", &xpos ) != 1)
 	printf("Error reading PDFMarkup Xpos '%s'\n", word2 );
-     next_word( line, word2, " \t,)" );
+     next_word( word1, word2, " \t,)" );
      if (sscanf( word2, "%f", &ypos ) != 1)
 	printf("Error reading PDFMarkup Ypos '%s'\n", word2 );
-     next_word( line, word2, " \t,)\r\n" );
-     new_metadata_item( pg - 1, word2, xpos, ypos, FontSz, txtcolor, txtred, txtgrn, txtblu, add_commas, 0, 0.0 );
+     next_word( word1, word2, " \t,)" );
+     if ((word2[0] != '\0') && (sscanf( word2, "%d", &font ) != 1))
+	printf("Error reading PDFMarkup FontSz '%s'\n", word2 );
+     next_word( word1, word2, " \t,)" );
+     if ((word2[0] != '\0') && (sscanf( word2, "%d", &txtcol ) != 1))
+	printf("Error reading PDFMarkup setcol '%s'\n", word2 );
+     next_word( word1, word2, " \t,)" );
+     if ((word2[0] != '\0') && (sscanf( word2, "%g", &tred ) != 1))
+	printf("Error reading PDFMarkup TxtRed '%s'\n", word2 );
+     else
+      txtcol = 1;
+     next_word( word1, word2, " \t,)" );
+     if ((word2[0] != '\0') && (sscanf( word2, "%g", &tgrn ) != 1))
+	printf("Error reading PDFMarkup TxtGreen '%s'\n", word2 );
+     next_word( word1, word2, " \t,)" );
+     if ((word2[0] != '\0') && (sscanf( word2, "%g", &tblu ) != 1))
+	printf("Error reading PDFMarkup TxtBlue '%s'\n", word2 );
+     next_word( line, word2, " \t)\r\n" );
+     new_metadata_item( pg - 1, word2, xpos, ypos, font, txtcol, tred, tgrn, tblu, add_commas, 0, 0.0 );
      word2[0] = '\0';
     }
    else
-   if (word2[0] == '!')		/* Comment character. Lines beginning with '!" are ignored. */
-    word2[0] = '\0';
-   else
-    next_word( line, word2, " \t=\n\r" );
+    {
+     if (word2[0] == '!')		/* Comment character. Lines beginning with '!" are ignored. */
+      word2[0] = '\0';
+     else
+      next_word( line, word2, " \t=\n\r" );
+    }
    if (word2[0] != '\0')
     {
      if (strcmp( word1, "Status" ) == 0)
@@ -427,7 +448,7 @@ void read_replacement_text( char *fname )
       }
     }
    fgets( line, MAXLINE, infile );
-  }
+  } /*not_eof*/
  fclose(infile);
  append_global_results_to_optional_pages();
 }
@@ -456,7 +477,9 @@ void lookup_label( char *label, char *rplcstr, int len, int nspc )
 struct metadata_rec
  {
    char *label;
-   int x, y, fsz, padlen, txtcolor, add_commas;
+   int x, y, fsz, padlen, 
+	txtcolor, 	// 0=B&W, 1=color as defined by txtred, ... below.
+	add_commas;
    float txtred, txtgrn, txtblu;
    float dx;
    struct metadata_rec *nxt;

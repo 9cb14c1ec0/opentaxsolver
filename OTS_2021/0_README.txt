@@ -1,17 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-Jan 2, 2021 v19.00-Pre-Release - For 2021 tax-year.
-
-
-
-
-------- This Version is UNDER DEVELOPMENT !! --------
-
-    ------- Not ready for usage.  -------
-
-
-
+Jan 29, 2022 v19.00 - For 2021 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -43,7 +33,7 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
-    * v19.00 (1/2/2021) - Initial Release for Tax-Year 2021.
+    * v19.00 (1/29/2022) - Initial Release for Tax-Year 2021.
 		Please check back for updates.
 
 Usage:

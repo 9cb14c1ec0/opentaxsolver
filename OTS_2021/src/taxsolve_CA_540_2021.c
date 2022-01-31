@@ -559,6 +559,17 @@ int main( int argc, char *argv[] )
 
  printf("CA-540 2021 - v%3.2f\n", thisversion);
 
+ // MarkupPDF( 1, 240, 40, 17, 1.0, 0, 0 ) NotReady "This program is NOT updated for 2021."
+ add_pdf_markup( "NotReady", 1, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 2, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 3, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 4, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 5, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 6, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 7, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 8, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+
+
  /* Accept Form's "Title" line, and put out with date-stamp for your records. */
  read_line( infile, word );
  now = time(0);

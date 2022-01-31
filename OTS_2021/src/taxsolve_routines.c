@@ -993,12 +993,13 @@ void substitute_chars( char *line, char *badchars, char replace_char )
 struct pdf_markup_record
  {
   char *tagname, *value;
-  int page;
-  float xpos, ypos;
+  int page, fontsz, setcol;
+  float xpos, ypos, txtred, txtgrn, txtblu;
   struct pdf_markup_record *next;
  } *pdf_markup_list=0;
 
-void add_pdf_markup( char *tagname, int page, float xpos, float ypos, char *value )
+void add_pdf_markup( char *tagname, int page, float xpos, float ypos, 
+			int fontsz, int setcol, float txtred, float txtgrn, float txtblu, char *value )
 {
  struct pdf_markup_record *new;
  new = (struct pdf_markup_record *)calloc( 1, sizeof( struct pdf_markup_record ) );
@@ -1009,34 +1010,62 @@ void add_pdf_markup( char *tagname, int page, float xpos, float ypos, char *valu
  new->page = page;
  new->xpos = xpos;
  new->ypos = ypos;
+ new->fontsz = fontsz;
+ new->setcol = setcol;
+ new->txtred = txtred;
+ new->txtgrn = txtgrn;
+ new->txtblu = txtblu;
 }
 
 void process_pdf_markup_command( char *line )
 {
- char word[4096], tagname[4096], value[4096];
- int pgnum=-1;
- float xpos=0.0, ypos=0.0;
+ char word[4096], word2[4096], tagname[4096], value[4096];
+ int pgnum=-1, fsz=10, setcol=0;
+ float xpos=0.0, ypos=0.0, txtred=0.0, txtgrn=0.0, txtblu=0.0;
  if (mystrcasestr( line, "MarkupPDF" ) == 0) return;
  if (mystrcasestr( line, "MarkupPDF(" ) != 0)
   {
-   next_word( line, word, " \t(" );
-   next_word( line, word, " \t(," );
+   next_word( line, word2, "(" );
+   next_word( line, word2, "()" );
+   next_word( word2, word, " \t(," );
    if (sscanf( word, "%d", &pgnum ) != 1)
     { printf("Error reading MarkupPDF page-num '%s'\n", word );
       fprintf(outfile,"Error reading MarkupPDF page-num '%s'\n", word );
       return;
     }
-   next_word( line, word, " \t," );
+   next_word( word2, word, " \t," );
    if (sscanf( word, "%f", &xpos ) != 1)
     { printf("Error reading MarkupPDF Xposition '%s'\n", word );
       fprintf(outfile,"Error reading MarkupPDF Xposition '%s'\n", word );
       return;
     }
-   next_word( line, word, " \t,)" );
+   next_word( word2, word, " \t,)" );
    if (sscanf( word, "%f", &ypos ) != 1)
     { printf("Error reading MarkupPDF Yposition '%s'\n", word );
       fprintf(outfile,"Error reading MarkupPDF Yposition '%s'\n", word );
       return;
+    }
+   next_word( word2, word, " \t,)" );
+   if ((word[0] != '\0') && (sscanf( word, "%d", &fsz ) != 1))
+    { printf("Error reading MarkupPDF fontsz '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF fontsz '%s'\n", word );
+    }
+   next_word( word2, word, " \t,)" );
+   if ((word[0] != '\0') && (sscanf( word, "%g", &txtred ) != 1))
+    { printf("Error reading MarkupPDF txtred '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF textred '%s'\n", word );
+    }
+   else
+    setcol = 1;
+   next_word( word2, word, " \t,)" );
+   if ((word[0] != '\0') && (sscanf( word, "%g", &txtgrn ) != 1))
+    { printf("Error reading MarkupPDF txtgrn '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF txtgrn '%s'\n", word );
+    }
+   next_word( word2, word, " \t,)" );
+   if ((word[0] != '\0') && (sscanf( word, "%g", &txtblu ) != 1))
+    { printf("Error reading MarkupPDF txtblue '%s'\n", word );
+      fprintf(outfile,"Error reading MarkupPDF txtblue '%s'\n", word );
     }
    next_word( line, word, " \t,)=" );
   }
@@ -1049,7 +1078,7 @@ void process_pdf_markup_command( char *line )
  next_word( line, value, " \t=" );	/* Grab 1st word of value after '=', if any. */
  // strcat( value, " " );			/* Add white-space in case other words on line. */
  strcat( value, line );			/* Add any following words on the remainder of the line. */
- add_pdf_markup( tagname, pgnum, xpos, ypos, value );
+ add_pdf_markup( tagname, pgnum, xpos, ypos, fsz, setcol, txtred, txtgrn, txtblu, value );
 }
 
 void intercept_any_pdf_markups( FILE *infile )
@@ -1072,9 +1101,22 @@ void exude_pdf_markups( FILE *outfile )
   while (pdf_markup_list)
    {
     if (pdf_markup_list->page > 0)
-     fprintf(outfile,"NewPDFMarkup( %d, %g, %g ) %s\n", pdf_markup_list->page, 
+     {
+      if ((pdf_markup_list->fontsz == 10) && (pdf_markup_list->setcol == 0))
+       fprintf(outfile,"NewPDFMarkup( %d, %g, %g ) %s\n", pdf_markup_list->page, 
 		pdf_markup_list->xpos, pdf_markup_list->ypos, pdf_markup_list->tagname );
-    fprintf(outfile,"%s = %s\n", pdf_markup_list->tagname, pdf_markup_list->value );
+      else
+       fprintf(outfile,"NewPDFMarkup( %d, %g, %g, %d, %d, %g, %g, %g ) %s\n", 
+		pdf_markup_list->page, 
+		pdf_markup_list->xpos, pdf_markup_list->ypos,
+		pdf_markup_list->fontsz, pdf_markup_list->setcol, 
+		pdf_markup_list->txtred, pdf_markup_list->txtgrn, pdf_markup_list->txtblu,
+		pdf_markup_list->tagname );
+     }
+    if (strstr( pdf_markup_list->tagname, ":" ) == 0)
+     fprintf(outfile,"%s = %s\n", pdf_markup_list->tagname, pdf_markup_list->value );
+    else
+     fprintf(outfile,"%s \t%s\n", pdf_markup_list->tagname, pdf_markup_list->value );
     old = pdf_markup_list;
     pdf_markup_list = pdf_markup_list->next;
     free( old->tagname );

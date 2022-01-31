@@ -43,8 +43,8 @@ L5	85000		; { Enter the tax shown on your 2019 tax return. See
 CA_AGI	500000		; { Enter your California Adusted Gross Income (AGI) }
  {--- Short Method --- }
  { Caution: See the instructions to find out if you can use the short
- method. If you answered “Yes" to Question 2 in Part I, skip this part and
- go to Part III.  If you answered “No" to Question 2 in Part I and you
+ method. If you answered XXXYes" to Question 2 in Part I, skip this part and
+ go to Part III.  If you answered XXXNo" to Question 2 in Part I and you
  cannot use the short method, see page 4 of the instructions and go to
  Worksheet II below.  }
 L8	1000		; { Enter the total amount, if any, of estimated tax
@@ -69,19 +69,19 @@ Num_Days		 { Number of days }
   The periods all begin January 1.  They are not calendar quarters!  Fiscal
  year filers must adjust dates accordingly. }
 SchdAI_1a	50000		; { Enter your California adjusted gross income (AGI) for
- the period 1/1/20–3/31/20.  Form 540NR filers, see
+ the period 1/1/20XXX3/31/20.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/20-2/29/20). }
 SchdAI_1b	80000		; { Enter your California adjusted gross income (AGI) for
- the period 1/1/20–5/31/20.  Form 540NR filers, see
+ the period 1/1/20XXX5/31/20.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/20-4/30/20). }
 SchdAI_1c	90000		; { Enter your California adjusted gross income (AGI) for
- the period 1/1/20–8/31/20.  Form 540NR filers, see
+ the period 1/1/20XXX8/31/20.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/20-7/31/20). }
 SchdAI_1d	480000		; { Enter your California adjusted gross income (AGI) for
- the period 1/1/20–12/31/20.  Form 540NR filers, see
+ the period 1/1/20XXX12/31/20.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/20-11/30/20). }
 SchdAI_2a	4.0	 { Annualization amounts.  Estates or Trusts, see instructions. }
@@ -89,16 +89,16 @@ SchdAI_2b	2.4	 { Annualization amounts.  Estates or Trusts, see instructions. }
 SchdAI_2c	1.5	 { Annualization amounts.  Estates or Trusts, see instructions. }
 SchdAI_2d	1.0	 { Annualization amounts.  Estates or Trusts, see instructions. }
 SchdAI_4a	7000		; { If you itemize, enter itemized deductions for the period
- 1/1/20–3/31/20; otherwise, enter -0-.  Estates and trusts:
+ 1/1/20XXX3/31/20; otherwise, enter -0-.  Estates and trusts:
  enter "0". }
 SchdAI_4b	9000		; { If you itemize, enter itemized deductions for the period
- 1/1/20–5/31/20; otherwise, enter -0-.  Estates and trusts:
+ 1/1/20XXX5/31/20; otherwise, enter -0-.  Estates and trusts:
  enter "0". }
 SchdAI_4c	10000		; { If you itemize, enter itemized deductions for the period
- 1/1/20–8/31/20; otherwise, enter -0-.  Estates and trusts:
+ 1/1/20XXX8/31/20; otherwise, enter -0-.  Estates and trusts:
  enter "0". }
 SchdAI_4d	20000		; { If you itemize, enter itemized deductions for the period
- 1/1/20–12/31/20; otherwise, enter -0-.    Estates and
+ 1/1/20XXX12/31/20; otherwise, enter -0-.    Estates and
  trusts: enter "0". }
 SchdAI_6a			; { Itemized deductions are limited for high-income
  taxpayers (see instructions for line 6).  Others should make
@@ -176,17 +176,17 @@ SchdAI_13d	7500		; { Enter the total credit amount from your 2021 Form 540,
  line 47; or Form 541, line 23. Form 540NR filers, see
  instructions. }
 SchdAI_14ba	0		; { Enter the alternative minimum tax and mental health tax
- for the period 1/1/20–3/31/20.  Estates and trusts: for the
+ for the period 1/1/20XXX3/31/20.  Estates and trusts: for the
  period 1/1/20-2/29/20. Figure the alternative minimum tax
  and mental health services tax you owe based on income
  earned during the period. }
 SchdAI_14bb	0		; { Enter the alternative minimum tax and mental health tax
- for the period 1/1/20–5/31/20.  Estates and trusts: for the
+ for the period 1/1/20XXX5/31/20.  Estates and trusts: for the
  period 1/1/20-4/30/20. Figure the alternative minimum tax
  and mental health services tax you owe based on income
  earned during the period. }
 SchdAI_14bc	0		; { Enter the alternative minimum tax and mental health tax
- for the period 1/1/20–8/31/20.  Estates and trusts: for the
+ for the period 1/1/20XXX8/31/20.  Estates and trusts: for the
  period 1/1/20-7/31/20. Figure the alternative minimum tax
  and mental health services tax you owe based on income
  earned during the period. }
@@ -205,43 +205,43 @@ SchdAI_14dd			; { Enter the excess SDI from Form 540, line 74 or Form
  { NOTE:  If you are a nonresident military servicemember domiciled outside
  of California, subtract your military pay from your federal AGI. }
 FAIWS_1a	50000		; { Enter your federal adjusted gross income for the period
- 1/1/20–3/31/20.  See instructions for federal Form 2210,
+ 1/1/20XXX3/31/20.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/20-2/29/20), }
 FAIWS_1b	80000		; { Enter your federal adjusted gross income for the period
- 1/1/20–5/31/20.  See instructions for federal Form 2210,
+ 1/1/20XXX5/31/20.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/20-4/30/20), }
 FAIWS_1c	100000		; { Enter your federal adjusted gross income for the period
- 1/1/20–8/31/20.  See instructions for federal Form 2210,
+ 1/1/20XXX8/31/20.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/20-7/31/20), }
 FAIWS_1d	500000		; { Enter your federal adjusted gross income for the period
- 1/1/20–12/31/20.  See instructions for federal Form 2210,
+ 1/1/20XXX12/31/20.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/20-11/30/20), }
  {--- Line 6 Worksheet (for high-income filers who itemize deductions ---}
 L6WS_2a			; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
- included on line 16 for  the period 1/1/20–3/31/20 (Estates
+ included on line 16 for  the period 1/1/20XXX3/31/20 (Estates
  and trusts:  for the period 1/1/20-2/29/20). }
 L6WS_2b			; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
- included on line 16 for  the period 1/1/20–5/31/20. 
+ included on line 16 for  the period 1/1/20XXX5/31/20. 
  (Estates and trusts:  for the period 1/1/20-4/30/20). }
 L6WS_2c			; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
- included on line 16 for  the period 1/1/20–8/31/20. 
+ included on line 16 for  the period 1/1/20XXX8/31/20. 
  (Estates and trusts:  for the period 1/1/20-7/31/20), }
 L6WS_2d			; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
- included on line 16 for  the period 1/1/20–12/31/20. 
+ included on line 16 for  the period 1/1/20XXX12/31/20. 
  (Estates and trusts:  for the period 1/1/20-11/30/20). }
- {--- Worksheet II – Regular Method to Figure Your Underpayment and Penalty---}
+ {--- Worksheet II XXX Regular Method to Figure Your Underpayment and Penalty---}
  { NOTE:  The entries below are NOT CUMULATIVE.  Enter the amount that was
  paid each period by that period's due date. }
 WSII_2a			; { Enter the estimated tax payments for the period
@@ -249,11 +249,11 @@ WSII_2a			; { Enter the estimated tax payments for the period
  overpayment of tax from your 2019 tax return that you
  elected to apply to the 2021 estimated tax. }
 WSII_2b			; { Enter the estimated tax payments for the period
- 1/1/20–5/31/20 that were made by 6/15/20. }
+ 1/1/20XXX5/31/20 that were made by 6/15/20. }
 WSII_2c			; { Enter the estimated tax payments for the period
- 1/1/20–8/31/20 that were made by 915/20. }
+ 1/1/20XXX8/31/20 that were made by 915/20. }
 WSII_2d			; { Enter the estimated tax payments for the period
- 1/1/20–12/31/20 that were made by 1/15/21 }
+ 1/1/20XXX12/31/20 that were made by 1/15/21 }
  { After you make the above entries, click "Save" and then click "Calculate
  Tax" to see if you have an underpayment for any period.  If so, you may owe
  a penalty.   Read the instructions for how to calculate the penalty, make
