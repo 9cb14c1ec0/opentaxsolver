@@ -34,15 +34,15 @@ float thisversion=19.00;
 double COJ[MAX_LINES], S[MAX_LINES], F[MAX_LINES];
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 
 
 double TaxRateFormula( double x, int status )
 {
- if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))	/* Single, Married/sep */
+ if ((status==SINGLE) || (status==MARRIED_FILING_SEPARAT))	/* Single, Married/sep */
   {
    if (x < 20000.0)   return x * 0.014;               else
    if (x < 35000.0)   return x * 0.0175  -     70.0;  else
@@ -53,7 +53,7 @@ double TaxRateFormula( double x, int status )
    else		      return x * 0.1075  -  32926.25;
   }
  else
- if ((status==MARRIED_FILLING_JOINTLY) || (status==HEAD_OF_HOUSEHOLD) || (status==WIDOW))
+ if ((status==MARRIED_FILING_JOINTLY) || (status==HEAD_OF_HOUSEHOLD) || (status==WIDOW))
   {								/* Married/Joint, HouseHead, widower. */
    if (x < 20000.0)   return x * 0.014;              else
    if (x < 50000.0)   return x * 0.0175  -     70.0; else
@@ -72,7 +72,7 @@ void Report_bracket_info( double x, int status )
 {
  double tx, rate;
  tx = TaxRateFormula( x, status );
- if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))	/* Single, Married/sep */
+ if ((status==SINGLE) || (status==MARRIED_FILING_SEPARAT))	/* Single, Married/sep */
   {
    if (x < 20000.0)   rate = 0.014;	else
    if (x < 35000.0)   rate = 0.0175;	else
@@ -209,8 +209,8 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
  if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
  else
@@ -224,11 +224,11 @@ int main( int argc, char *argv[] )
   case SINGLE: 			fprintf(outfile,"Status = Single (%d)\n", status); 
 				L[6] = 1;
 				break;
-  case MARRIED_FILLING_JOINTLY: fprintf(outfile,"Status = Married/Joint (%d)\n", status); 
+  case MARRIED_FILING_JOINTLY: fprintf(outfile,"Status = Married/Joint (%d)\n", status); 
 				fprintf(outfile," Check_Spouse = X\n"); 
 				L[6] = 2;
 				break;
-  case MARRIED_FILLING_SEPARAT: fprintf(outfile,"Status = Married/Sep (%d)\n", status);
+  case MARRIED_FILING_SEPARAT: fprintf(outfile,"Status = Married/Sep (%d)\n", status);
 				L[6] = 1;
 				break;
   case HEAD_OF_HOUSEHOLD: 	fprintf(outfile,"Status = Head_of_Household (%d)\n", status); 
@@ -248,7 +248,7 @@ int main( int argc, char *argv[] )
  if (answer) fprintf(outfile," Check_Over65 = X\n");
 
  GetYesNoSL( "SpouseOver65", &answer );			/* Exemptions, Spouse Over 65. */
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   {
    L[7] = L[7] + answer;
    if (answer) fprintf(outfile," Check_SpOver65 = X\n");
@@ -262,7 +262,7 @@ int main( int argc, char *argv[] )
  if (answer) fprintf(outfile," Check_Blind = X\n");
 
  GetYesNoSL( "SpouseBlindDisa", &answer );		/* Exemptions, Spouse Blind/disabled. */
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   {
    L[8] = L[8] + answer;
    if (answer) fprintf(outfile," Check_SpBlind = X\n");
@@ -276,7 +276,7 @@ int main( int argc, char *argv[] )
  if (answer) fprintf(outfile," Check_Vet = X\n");
 
  GetYesNoSL( "SpouseVeteran", &answer );		/* Exemptions, Spouse Veteran */
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   {
    L[9] = L[9] + answer;
    if (answer) fprintf(outfile," Check_SpVet = X\n");
@@ -352,7 +352,7 @@ int main( int argc, char *argv[] )
  L[29] = L[27] - L[28];
  showline_wmsg(29,"NJ Gross Income");
 
- if ((status == SINGLE) || (status == MARRIED_FILLING_SEPARAT))		/* Min2File */
+ if ((status == SINGLE) || (status == MARRIED_FILING_SEPARAT))		/* Min2File */
   filing_threshold = 10000.0;
  else
   filing_threshold = 20000.0;
@@ -427,13 +427,13 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"\n");  /* Property Tax Deduction Worksheet H (pg 30). */
  H[1] = L[39];
  showline_wrksht('H',1,H);
- if (status != MARRIED_FILLING_SEPARAT)
+ if (status != MARRIED_FILING_SEPARAT)
   H[2] = smallerof( H[1], 15000.0 );
  else
   H[2] = smallerof( H[1],  7500.0 );
  showline_wrksht( 'H', 2, H );
 
- if (status != MARRIED_FILLING_SEPARAT)
+ if (status != MARRIED_FILING_SEPARAT)
   proptxcredit = 50.0;
  else
   proptxcredit = 25.0;

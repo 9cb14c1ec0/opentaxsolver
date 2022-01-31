@@ -1,0 +1,28 @@
+Title: 2021 Form 8959 Additional Medicare Tax
+
+ {--- Your Identity --- }
+YourName:	George Washington	
+YourSocSec#:	123-45-6789	
+ {--- Filing Status ---}
+Status	Married/Joint	 { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
+ {--- Part I   Additional Medicare Tax on Medicare Wages --- }
+L1	450000		; { Medicare wages and tips from Form W-2, box 5. If you
+ have more than one Form W-2, enter the total of the amounts
+ from box 5}
+L2	0		; { Unreported tips from Form 4137, line 6}
+L3	0		; { Wages from Form 8919, line 6}
+ {--- Part II   Additional Medicare Tax on Self-Employment Income ---}
+L8	100000		; { Self-employment income from Schedule SE (Form 1040),
+ Part I, line 6. If you  had a loss, enter -0- (Form 1040-PR
+ or 1040-SS filers, see instructions.)}
+ {--- Part III   Additional Medicare Tax on Railroad Retirement Tax Act (RRTA) Compensation --- }
+L14	50000		; { Railroad retirement (RRTA) compensation and tips from
+ Form(s) W-2, box 14  (see instructions)}
+ {--- Part V   Withholding Reconciliation --- }
+L19	25		; { Medicare tax withheld from Form W-2, box 6. If you have
+ more than one Form  W-2, enter the total of the amounts from
+ box 6}
+L23	45		; { Additional Medicare Tax withholding on railroad
+ retirement (RRTA)  compensation from Form W-2, box  14 (see
+ instructions)}
+ {--------------------------------------------- }

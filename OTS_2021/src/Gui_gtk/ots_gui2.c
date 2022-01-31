@@ -171,7 +171,7 @@ int selected_form=form_other;
 
 char *setform( int formnum )
 {
- char twrd[100];
+ char twrd[500];
  sprintf( twrd, "%d", formnum );
  return strdup( twrd );
 }
@@ -1013,6 +1013,18 @@ void read_instructions( int init )
 	if (strstr( taxsolvestrng, "taxsolve_US_1040_Sched_SE" ) != 0)
 	 instructions_filename = strdup( "f1040sse_instructions.dat" );
 	else
+	if (strstr( taxsolvestrng, "taxsolve_f8959" ) != 0)
+	 instructions_filename = strdup( "f8959_instructions.dat" );
+	else
+	if (strstr( taxsolvestrng, "taxsolve_f8960" ) != 0)
+	 instructions_filename = strdup( "f8961_instructions.dat" );
+	else
+	if (strstr( taxsolvestrng, "taxsolve_f2210" ) != 0)
+	 instructions_filename = strdup( "f2210_instructions.dat" );
+	else
+	if (strstr( taxsolvestrng, "taxsolve_CA_5805" ) != 0)
+	 instructions_filename = strdup( "CA_5805_instructions.dat" );	 
+	else
 	 return;	
      }
     if (verbose) printf("Instruction file = '%s'\n", instructions_filename );
@@ -1141,7 +1153,7 @@ void Read_Tax_File( char *fname )
 	linecnt=0, 	/* Line number of gui display. */
 	lastline=0, newentry=0, entrycnt=0;
  int lastlinenum=-1;
- char word[10000], *tmpstr, tmpstr2[200], tmpstr3[200];
+ char word[15000], *tmpstr, tmpstr2[900], tmpstr3[900];
  struct taxline_record *txline=0;
  struct value_list *tmppt, *newitem, *oldtail;
 
@@ -2301,6 +2313,34 @@ void set_tax_solver( char *fname )
    strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
    strcat( directory_dat, "US_1040_Sched_SE" );
   }
+ else
+ if (strstr( taxsolvestrng, "taxsolve_f8959" ) != 0)
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "Form_8959" );
+  }
+ else
+ if (strstr( taxsolvestrng, "taxsolve_f8960" ) != 0)
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "Form_8960" );
+  }
+ else
+ if (strstr( taxsolvestrng, "taxsolve_f2210" ) != 0)
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "Form_2210" );
+  }
+ else
+ if (strstr( taxsolvestrng, "taxsolve_CA_5805" ) != 0)
+  {
+   supported_pdf_form = 1;
+   strcat( directory_dat, slashstr );		/* Set the directory name for the form template & example files. */
+   strcat( directory_dat, "Form_CA_5805" );
+  }
 }
 
 
@@ -3361,6 +3401,58 @@ void do_pdf_conversion()
 	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
 	  add_view_pdf_button();
 	 }
+	else
+	if (strstr( taxsolvestrng, "taxsolve_f8959" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "f8959_meta.dat", wrkingfname, "f8959_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	  }
+	else
+	if (strstr( taxsolvestrng, "taxsolve_f8960" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "f8960_meta.dat", wrkingfname, "f8960_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	  }
+	else
+	if (strstr( taxsolvestrng, "taxsolve_f2210" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "f2210_meta.dat", wrkingfname, "f2210_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	  }
+	else
+	if (strstr( taxsolvestrng, "taxsolve_CA_5805" ) != 0)
+	 {
+	  statusw.nfiles = 0;
+	  setpdfoutputname( wrkingfname, ".pdf", outputname );
+	  prepare_universal_pdf_cmd( "", "CA_5805_meta.dat", wrkingfname, "CA_5805_pdf.dat", outputname );
+	  printf("Issuing: %s\n", fillout_pdf_command );
+	  add_status_line( outputname );
+	  execute_cmd( fillout_pdf_command );
+	  update_status_label( "Completed Filling-out PDF Form:" );
+	  statusw.fnames[ statusw.nfiles ] = strdup( outputname );	statusw.nfiles = statusw.nfiles + 1;
+	  add_view_pdf_button();
+	  }
 	else
 	 {
 	  printf("Form type not supported.\n");

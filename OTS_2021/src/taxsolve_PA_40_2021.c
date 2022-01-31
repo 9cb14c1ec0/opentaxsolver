@@ -29,8 +29,8 @@
 #include "taxsolve_routines.c"
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define WIDOW		        1
 #define Yes 1
 #define No  0
@@ -102,8 +102,8 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
  else
   { 
@@ -227,7 +227,7 @@ int main( int argc, char *argv[] )
  GetTextLineF( "SpouseOccupat:" );
  if (YourLastName[0] != '\0')
   {
-   if (status == MARRIED_FILLING_JOINTLY)
+   if (status == MARRIED_FILING_JOINTLY)
     {
      YourNames = (char *)malloc( strlen(YourLastName) + strlen( Your1stName ) + 
 				  strlen( SpouseLastName ) + strlen( Spouse1stName ) + 20 );

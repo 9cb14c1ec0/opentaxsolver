@@ -32,8 +32,8 @@
 double thisversion=19.00;
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       1
 
 double TaxRateFunction( double x, int status )
@@ -147,8 +147,8 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",11)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",11)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD;
  else
   { 
@@ -231,7 +231,7 @@ int main( int argc, char *argv[] )
  GetLine( "Credits_7", &SchedC[7] );	/* Displaced worker training credit */
  SchedC[7] = smallerof( SchedC[7], 500.0 );
  GetLine( "Credits_8", &SchedC[8] );	/* Campaign contribution credit for Ohio General Assembly */
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
    SchedC[8] = smallerof( SchedC[8], 100.0 );
  else
    SchedC[8] = smallerof( SchedC[8], 50.0 );
@@ -302,7 +302,7 @@ int main( int argc, char *argv[] )
 
  SchedC[11] = NotLessThanZero( SchedC[1] - SchedC[10] );
 
- if ((status == MARRIED_FILLING_JOINTLY) && (qualify_jfc))
+ if ((status == MARRIED_FILING_JOINTLY) && (qualify_jfc))
   { /*Joint_Filing_Credit*/
     if (L[5] < 25000) jfc = 0.20;
     else
@@ -470,7 +470,7 @@ printf("factorB = %g, word = '%s'\n", factorB, word );
  writeout_line = 0;
  socsec = GetTextLine( "SpouseSocSec#:" );
  format_socsec( socsec, 0 );
- if (status != MARRIED_FILLING_SEPARAT)
+ if (status != MARRIED_FILING_SEPARAT)
   fprintf(outfile,"SpouseSocSec#: %s\n", socsec );
  else
   fprintf(outfile,"SpouseSocSec#Sep: %s\n", socsec );
@@ -482,7 +482,7 @@ printf("factorB = %g, word = '%s'\n", factorB, word );
  GetTextLineF( "Zipcode:" );
 
  fprintf(outfile,"CkFYrRes: X\n");
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   fprintf(outfile,"CkFYrResSp: X\n");
 
  fclose(infile);

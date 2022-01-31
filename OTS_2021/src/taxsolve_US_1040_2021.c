@@ -43,8 +43,8 @@ float thisversion=19.00;
 #define MAXADJERRCNT 25     /* Max number of adj_code errors to print to terminal */ 
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 #define Yes 1
@@ -94,7 +94,7 @@ double TaxRateFormula( double x, int status )  /* Returns tax due. */
 {		
   double sum=0.0;
   int   bracket=0;
-  if (status == WIDOW) status = MARRIED_FILLING_JOINTLY;  /* Handle case of widow(er). */
+  if (status == WIDOW) status = MARRIED_FILING_JOINTLY;  /* Handle case of widow(er). */
   status = status - 1;  /* Arrays start at zero; not one. */
   while (brkpt[status][bracket+1] < x)
    {
@@ -110,7 +110,7 @@ void Report_bracket_info( double income, double addedtx, int status )
   double tx;
   int  bracket=0;
   tx = TaxRateFormula( income, status );  
-  if (status == WIDOW) status = MARRIED_FILLING_JOINTLY;  /* Handle case of widow(er). */
+  if (status == WIDOW) status = MARRIED_FILING_JOINTLY;  /* Handle case of widow(er). */
   status = status - 1;  /* Arrays start at zero; not one. */
   while (brkpt[status][bracket+1] < income) bracket++;
   printf(" You are in the %2.1f%% marginal tax bracket,\n and you are paying an effective %2.1f%% tax on your income.\n",
@@ -171,8 +171,8 @@ void capgains_qualdividends_worksheets( int status )			/* Updated for 2021. */
  qcgws[5] = NotLessThanZero( qcgws[1] - qcgws[4] );
  switch (status)
   {
-   case SINGLE: case MARRIED_FILLING_SEPARAT: qcgws[6] = 40400.0; break;
-   case MARRIED_FILLING_JOINTLY: case WIDOW:  qcgws[6] = 80800.0; break;
+   case SINGLE: case MARRIED_FILING_SEPARAT: qcgws[6] = 40400.0; break;
+   case MARRIED_FILING_JOINTLY: case WIDOW:  qcgws[6] = 80800.0; break;
    case HEAD_OF_HOUSEHOLD: 		      qcgws[6] = 54100.0; break;
   }
  qcgws[7] = smallerof( qcgws[1], qcgws[6] );
@@ -184,8 +184,8 @@ void capgains_qualdividends_worksheets( int status )			/* Updated for 2021. */
  switch (status)
   {
    case SINGLE:  			      qcgws[13] = 445850.0;  break;
-   case MARRIED_FILLING_SEPARAT:	      qcgws[13] = 250800.0;  break;
-   case MARRIED_FILLING_JOINTLY: case WIDOW:  qcgws[13] = 501600.0;  break;
+   case MARRIED_FILING_SEPARAT:	      qcgws[13] = 250800.0;  break;
+   case MARRIED_FILING_JOINTLY: case WIDOW:  qcgws[13] = 501600.0;  break;
    case HEAD_OF_HOUSEHOLD: 		      qcgws[13] = 473750.0;  break;
   }
  qcgws[14] = smallerof( qcgws[1], qcgws[13] );
@@ -268,7 +268,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2021. 
  for (j = 1; j <= 3; j++)
   amtws[4] = amtws[4] + amtws[j];
 
- if ((status == MARRIED_FILLING_SEPARAT) && (amtws[4] > 752800.0))
+ if ((status == MARRIED_FILING_SEPARAT) && (amtws[4] > 752800.0))
   {
    if (amtws[4] > 982000.0)
     amtws[4] = amtws[4] + 57300.0;
@@ -286,14 +286,14 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2021. 
 	offsetA = 3998.0;
 	amtexmption = 73600.0;
 	break;
-     case MARRIED_FILLING_JOINTLY: case WIDOW: 
+     case MARRIED_FILING_JOINTLY: case WIDOW: 
 	thresholdA = 1047200.0;
 	thresholdB = 1505600.0;
 	thresholdC = 199900.0;
 	offsetA = 3998.0;
 	amtexmption = 114600.0;
 	break;
-     case MARRIED_FILLING_SEPARAT: 
+     case MARRIED_FILING_SEPARAT: 
 	thresholdA = 523600.0;
 	thresholdB = 752800.0;
 	thresholdC = 99950.0;
@@ -343,10 +343,10 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2021. 
         amtws[18] = 0.28 * amtws[17] - offsetA;
        switch (status)
         {
-           case MARRIED_FILLING_JOINTLY:  case WIDOW: 
+           case MARRIED_FILING_JOINTLY:  case WIDOW: 
 	     amtws[19] = 80800.0;
 	   break;
-           case SINGLE:  case MARRIED_FILLING_SEPARAT: 
+           case SINGLE:  case MARRIED_FILING_SEPARAT: 
    	     amtws[19] = 40400.0;
    	   break;
            case HEAD_OF_HOUSEHOLD:
@@ -366,8 +366,8 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2021. 
        switch (status)
 	{
 	   case SINGLE:  			      amtws[25] = 445850.0;  break;
-	   case MARRIED_FILLING_SEPARAT:	      amtws[25] = 250800.0;  break;
-	   case MARRIED_FILLING_JOINTLY: case WIDOW:  amtws[25] = 501600.0;  break;
+	   case MARRIED_FILING_SEPARAT:	      amtws[25] = 250800.0;  break;
+	   case MARRIED_FILING_JOINTLY: case WIDOW:  amtws[25] = 501600.0;  break;
 	   case HEAD_OF_HOUSEHOLD: 		      amtws[25] = 473750.0;  break;
 	   default:  printf("Status %d not handled.\n", status);  exit(1); 
 	}
@@ -1168,7 +1168,7 @@ void get_cap_gains()		/* This is Schedule-D. */			/* Updated for 2021. */
     { /*loss*/	/* Schedule-D line 21. Skip to here from line 16 if a loss. */
      double maxloss;
 
-     if (status == MARRIED_FILLING_SEPARAT) maxloss = -1500.0; else maxloss = -3000.0;
+     if (status == MARRIED_FILING_SEPARAT) maxloss = -1500.0; else maxloss = -3000.0;
      if (SchedD[16] < maxloss) SchedD[21] = maxloss; else SchedD[21] = SchedD[16];
      fprintf(outfile," D21 = %6.2f\n", SchedD[21]);
      L[7] = SchedD[21];
@@ -1225,16 +1225,16 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2021. */
  ws[13] = ws[10] - ws[12];
  ws[14] = NotLessThanZero( ws[1] - ws[13] );
  switch (status) 
-  { case SINGLE: case MARRIED_FILLING_SEPARAT: ws[15] = 40400.0; break;
-    case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[15] = 80800.0; break;
+  { case SINGLE: case MARRIED_FILING_SEPARAT: ws[15] = 40400.0; break;
+    case MARRIED_FILING_JOINTLY: case WIDOW:  ws[15] = 80800.0; break;
     case HEAD_OF_HOUSEHOLD:      	       ws[15] = 54100.0; break;
   }
  ws[16] = smallerof( ws[1], ws[15] );
  ws[17] = smallerof( ws[14], ws[16] );
  ws[18] = NotLessThanZero( ws[1] - ws[10] );
  switch (status) 
-  { case SINGLE: case MARRIED_FILLING_SEPARAT: ws[19] = smallerof( ws[1], 164925.0 );  break;
-    case MARRIED_FILLING_JOINTLY: case WIDOW:  ws[19] = smallerof( ws[1], 329850.0 );  break;
+  { case SINGLE: case MARRIED_FILING_SEPARAT: ws[19] = smallerof( ws[1], 164925.0 );  break;
+    case MARRIED_FILING_JOINTLY: case WIDOW:  ws[19] = smallerof( ws[1], 329850.0 );  break;
     case HEAD_OF_HOUSEHOLD:      	       ws[19] = smallerof( ws[1], 164900.0 );  break;
   }
  ws[20] = smallerof( ws[14], ws[19] );
@@ -1247,8 +1247,8 @@ void sched_D_tax_worksheet( int status )			/* Updated for 2021. */
    ws[25] = NotLessThanZero( ws[23] - ws[24] );
    switch (status) 
     { case SINGLE: 			ws[26] = 445850.0;  break;
-      case MARRIED_FILLING_SEPARAT: 	ws[26] = 250800.0;  break;
-      case MARRIED_FILLING_JOINTLY: 
+      case MARRIED_FILING_SEPARAT: 	ws[26] = 250800.0;  break;
+      case MARRIED_FILING_JOINTLY: 
       case WIDOW:  			ws[26] = 501600.0;  break;
       case HEAD_OF_HOUSEHOLD:		ws[26] = 473750.0;  break;
     }
@@ -1326,7 +1326,7 @@ void SocSec_Worksheet()							/* Updated for 2021. */
   }
  ws[7] = ws[5] - ws[6];
  fprintf(outfile,"\tSocSecWorkSheet[7] = %6.2f  (Check 'Yes')\n", ws[7] );
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   ws[8] = 32000.0;      						/* Updated for 2021. */
  else
   ws[8] = 25000.0;
@@ -1341,7 +1341,7 @@ void SocSec_Worksheet()							/* Updated for 2021. */
   }
  ws[9] = ws[7] - ws[8];
  fprintf(outfile,"\tSocSecWorkSheet[9] = %6.2f  (Check 'Yes')\n", ws[9] );
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   ws[10] = 12000.0;      						/* Updated for 2021. */
  else
   ws[10] = 9000.0;
@@ -1378,7 +1378,7 @@ void pull_comment( char *line, char *word )
 
 void Grab_ScheduleB_Payer_Lines( char *infname, FILE *outfile )
 { /* Copy Schedule-B Line entries from input file, to output file -- only. Does not process data read. */
-  /* Used for PDF form-filling only.  Not used by tax-calculations. */
+  /* Used for PDF form-FILING only.  Not used by tax-calculations. */
  int state=0, cnt=0, pg=0, ncnt=15, newentry=0;
  double value;
  double total=0.0;
@@ -1526,11 +1526,11 @@ void Calc_StudentLoan_Sched1L21()		/* Page 94 */
    sum = sum + Sched1[23] + Sched1[25];
    ws[3] = sum;
    ws[4] = ws[2] - ws[3];
-   if (status == MARRIED_FILLING_JOINTLY) ws[5] = 140000.0; else ws[5] = 70000.0;	/* Updated for2021. */
+   if (status == MARRIED_FILING_JOINTLY) ws[5] = 140000.0; else ws[5] = 70000.0;	/* Updated for2021. */
    if (ws[4] > ws[5])
     {
      ws[6] = ws[4] - ws[5];
-     if (status == MARRIED_FILLING_JOINTLY)
+     if (status == MARRIED_FILING_JOINTLY)
       ws[7] = ws[6] / 30000.0; 
      else
       ws[7] = ws[6] / 15000.0;
@@ -1631,8 +1631,8 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
  if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
  else
@@ -1677,8 +1677,8 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
  switch (status)
   {
    case SINGLE: fprintf(outfile,"CkSingle X\nCkYourself X\nL6ab = 1\n");  break;
-   case MARRIED_FILLING_JOINTLY: fprintf(outfile,"CkMFJ X\nCkYourself X\nCkSpouse X\nL6ab = 2\n");  break;
-   case MARRIED_FILLING_SEPARAT: fprintf(outfile,"CkMFS X\nCkYourself X\nL6ab = 1\n");  break;
+   case MARRIED_FILING_JOINTLY: fprintf(outfile,"CkMFJ X\nCkYourself X\nCkSpouse X\nL6ab = 2\n");  break;
+   case MARRIED_FILING_SEPARAT: fprintf(outfile,"CkMFS X\nCkYourself X\nL6ab = 1\n");  break;
    case HEAD_OF_HOUSEHOLD: fprintf(outfile,"CkHH X\nCkYourself X\nL6ab = 1\n");  break;
    case WIDOW: fprintf(outfile,"CkQW X\nCkYourself X\nL6ab = 1\n");  break;
    default: printf("Error: Unknown filing status %d.\n", status );
@@ -1775,10 +1775,10 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
   {
    case SINGLE:
 		std_deduc = S_STD_DEDUC;	break;
-   case MARRIED_FILLING_SEPARAT:  
+   case MARRIED_FILING_SEPARAT:  
 		std_deduc = MFS_STD_DEDUC;	break;
    case WIDOW:
-   case MARRIED_FILLING_JOINTLY:
+   case MARRIED_FILING_JOINTLY:
 		std_deduc = MFJ_STD_DEDUC;	break;
    case HEAD_OF_HOUSEHOLD:
 		std_deduc = HH_STD_DEDUC;	break;
@@ -1910,7 +1910,7 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
  GetLine( "A1", &SchedA[1] );	/* Unreimbursed medical expenses. */
  for (j=0; j<10; j++)
    localtax[j] = 0.0;
- if (status != MARRIED_FILLING_SEPARAT)
+ if (status != MARRIED_FILING_SEPARAT)
   loctaxlimit = 10000.0;
  else
   loctaxlimit = 5000.0;
@@ -2001,7 +2001,7 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
  SchedA[14] = SchedA[11] + SchedA[12] + SchedA[13];
  SchedA[17] = SchedA[4] + SchedA[7] + SchedA[10] + SchedA[14] + SchedA[15] + SchedA[16];
 
- if (status != MARRIED_FILLING_SEPARAT)		/* Now, Tentatively set 12b value, assuming NOT-itemizing. */
+ if (status != MARRIED_FILING_SEPARAT)		/* Now, Tentatively set 12b value, assuming NOT-itemizing. */
   L12b = smallerof( SchedA[14], 300.0 );
  else
   L12b = smallerof( SchedA[14], 150.0 );
@@ -2093,13 +2093,13 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
    case SINGLE:  		  if (under65) exemption_threshold = 12550.0;
 				  else  exemption_threshold = 14250.0;
 	break;
-   case MARRIED_FILLING_JOINTLY:  if (under65==2) exemption_threshold = 25100.0;
+   case MARRIED_FILING_JOINTLY:  if (under65==2) exemption_threshold = 25100.0;
 				  else 
 				  if (under65==1) exemption_threshold = 26450.0;  
 				  else  exemption_threshold = 27800.0;
 				  if (under65 != 2) over65 = 1;
 	break;
-   case MARRIED_FILLING_SEPARAT:  exemption_threshold = 5.0;
+   case MARRIED_FILING_SEPARAT:  exemption_threshold = 5.0;
 	break;
    case HEAD_OF_HOUSEHOLD: 	  if (under65) exemption_threshold = 18800.0;  
 				  else  exemption_threshold = 20500.0;

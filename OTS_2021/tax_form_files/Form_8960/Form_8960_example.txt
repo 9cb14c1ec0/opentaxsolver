@@ -1,0 +1,46 @@
+Title: 2021 Form 8960 Net Investment Income Tax—Individuals, Estates, and Trusts
+
+ {--- Your Identity --- }
+YourName:	Thomas Jefferson	
+YourSocSec#:	987-65-4321	
+ {--- Filing Status ---}
+Status	Single	 { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
+Entity	Individual	 { Filing For?  (answer: Individual, Estate/Trust) }
+ {--- Part I   Investment Income --- }
+Sec6013g	No	 { Section 6013(g) election (see instructions)  (answer: Yes No ) }
+Sec6013h	No	 { Section 6013(h) election (see instructions)  (answer: Yes No ) }
+Sec1141_10g	No	 { Regulations section 1.1411-10(g) election (see instructions)
+ (answer: Yes No ) }
+L1	100000		; { Taxable interest (see instructions)}
+L2	200000		; { Ordinary dividends (see instructions)}
+L3	50000		; { Annuities (see instructions)}
+L4a	150000		; { Rental real estate, royalties, partnerships, S
+ corporations, trusts, etc. (see  instructions))}
+L4b	0		; { Adjustment for net income or loss derived in the
+ ordinary course of a non- section 1411 trade or business
+ (see instructions)}
+L5a	250000		; { Net gain or loss from disposition of property (see
+ instructions)}
+L5b	300000		; { Net gain or loss from disposition of property that is
+ not subject to net investment income tax (see instructions)}
+L5c	20000		; { Adjustment from disposition of partnership interest or S
+ corporation stock (see instructions)}
+L6	10000		; { Adjustments to investment income for certain CFCs and
+ PFICs (see instructions)}
+L7	40000		; { Other modifications to investment income (see
+ instructions)}
+ {--- Part II   Investment Expenses Allocable to Investment Income and Modifications ---}
+L9a	100000		; { Investment interest expenses (see instructions)}
+L9b	250000		; { State, local, and foreign income tax (see instructions)}
+L9c	2500		; { Miscellaneous investment expenses (see instructions)}
+L10	5000		; { Additional modifications (see instructions)}
+ {--- Part III   Tax Computation --- }
+ {	--- Individuals ---}
+L13			; { Modified adjusted gross income (see instructions)}
+ {	--- Estates and Trusts ---}
+L18b			; { Deductions for distributions of net investment income
+ and deductions under section 642(c) (see instructions)}
+L19a			; { Adjusted Gross Income (see instructions)}
+L19b			; { Highest tax bracket for estates and trusts for the year
+ (see instructions)}
+ {--------------------------------------------- }

@@ -38,8 +38,8 @@ float thisversion=19.00;
 #include "taxsolve_routines.c"
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 #define Yes 1
@@ -141,8 +141,8 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
  if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
  else 
@@ -161,7 +161,7 @@ int main( int argc, char *argv[] )
 	Exemptions[0] = 4400.0;
 	fprintf(outfile," Check_single x\n");
    	break;
-   case MARRIED_FILLING_SEPARAT:
+   case MARRIED_FILING_SEPARAT:
 	Exemptions[0] = 4400.0;
 	fprintf(outfile," Check_sep x\n");
    	break;
@@ -169,7 +169,7 @@ int main( int argc, char *argv[] )
 	Exemptions[0] = 6800.0;
 	fprintf(outfile," Check_hh x\n");
 	break;
-   case MARRIED_FILLING_JOINTLY: 
+   case MARRIED_FILING_JOINTLY: 
 	Exemptions[0] = 8800.0;
 	fprintf(outfile," Check_mfj x\n");
 	break;
@@ -249,7 +249,7 @@ int main( int argc, char *argv[] )
  ShowLineNonZero(4);
 
  GetLineF( "L5a", &MassBankInterest );
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   Iexempt = 200;
  else
   Iexempt = 100;
@@ -306,7 +306,7 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "L13"); /* Dependent under 12. */
  get_parameter( infile, 'i', &dep_deduct, "L13");
  if (dep_deduct > 2) dep_deduct = 2;
- if ((L[12] == 0) && ((status == MARRIED_FILLING_JOINTLY) || (status == HEAD_OF_HOUSEHOLD))
+ if ((L[12] == 0) && ((status == MARRIED_FILING_JOINTLY) || (status == HEAD_OF_HOUSEHOLD))
      && (dep_deduct > 0))
   {
    L[13] = dep_deduct * 3600.0;
@@ -317,7 +317,7 @@ int main( int argc, char *argv[] )
  GetLine( "L14a", &L[14] );	/* Rental Paid */
  showline_wlabel( "L14a", L[14] );
  L[14] = L[14] / 2.0;
- if (status == MARRIED_FILLING_SEPARAT)
+ if (status == MARRIED_FILING_SEPARAT)
   L[14] = smallerof( L[14] , 1500.0 );
  else
   L[14] = smallerof( L[14] , 3000.0 );
@@ -367,7 +367,7 @@ int main( int argc, char *argv[] )
 
  L[28] = Sum( L, 22, 26 );
 
- if ((status == SINGLE) || (status == HEAD_OF_HOUSEHOLD) || (status == MARRIED_FILLING_JOINTLY))
+ if ((status == SINGLE) || (status == HEAD_OF_HOUSEHOLD) || (status == MARRIED_FILING_JOINTLY))
  { /* AGI Worksheet pg 14. */
    double ws[20], threshA, threshB;
    for (j=0; j<20; j++) ws[j] = 0.0;
@@ -384,7 +384,7 @@ int main( int argc, char *argv[] )
    for (j=1; j<=7; j++)
     fprintf(outfile,"     AGI_Worksheet[%d] = %6.2f\n", j, ws[j] );
    fprintf(outfile,"   AGI = %6.2f\n", AGI );
-   if (status != MARRIED_FILLING_SEPARAT)
+   if (status != MARRIED_FILING_SEPARAT)
     { /*not_sep*/
      switch (status)
       {
@@ -396,7 +396,7 @@ int main( int argc, char *argv[] )
 		threshA = 14400.0 + 1000.0 * ndep;
 		threshB = 25200.0 + 1750.0 * ndep;
 		break;
-       case MARRIED_FILLING_JOINTLY: 
+       case MARRIED_FILING_JOINTLY: 
 		threshA = 16400.0 + 1000.0 * ndep;
 		threshB = 28700.0 + 1750.0 * ndep;
 		break;

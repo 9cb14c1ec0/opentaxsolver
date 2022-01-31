@@ -32,8 +32,8 @@
 float thisversion=19.00;
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 
@@ -122,8 +122,8 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD;
  else
   { 
@@ -176,7 +176,7 @@ int main( int argc, char *argv[] )
  format_socsec( socsec, 1 );
  fprintf(outfile,"SpouseSocSec#: %s\n", socsec );
  datestr = GetTextLineF( "SpouseDOB:" );
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   {
    if (datestr[0] == '\0')
     {
@@ -209,7 +209,7 @@ int main( int argc, char *argv[] )
  get_parameters( infile, 'i', &exemptionsA, "OtherDependents");
  if (exemptionsA > 0) 
   fprintf(outfile,"ExmpDeps: %d\n", exemptionsA );
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   exemptionsA = 2 + exemptionsA;
  else
   exemptionsA = 1 + exemptionsA; 
@@ -236,7 +236,7 @@ int main( int argc, char *argv[] )
 
  get_parameter( infile, 's', word, "SpouseBlind" );
  get_param_single_line( infile, 'b', &spouseBlind, "SpouseBlind"); 
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   {
    if (spouseDOB.year < 1956)			/* Not updated for 2021. */
     {
@@ -253,7 +253,7 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"NExemptionsB = %d\n", exemptionsB );
  fprintf(outfile,"ExemptionsB = %d\n", 800 * exemptionsB );
 
- if (status == MARRIED_FILLING_JOINTLY)
+ if (status == MARRIED_FILING_JOINTLY)
   {
    fprintf(outfile,"ExmpSpouse:  1\n");
    if (exemptionsA > 2)
@@ -289,8 +289,8 @@ int main( int argc, char *argv[] )
  switch (status)
   {
    case SINGLE:  		  std_ded = 4500.0;  min2file = 11950.0;  break;
-   case MARRIED_FILLING_JOINTLY:  std_ded = 9000.0;  min2file = 23900.0;  break;
-   case MARRIED_FILLING_SEPARAT:  std_ded = 4500.0;  min2file = 11950.0;  break;
+   case MARRIED_FILING_JOINTLY:  std_ded = 9000.0;  min2file = 23900.0;  break;
+   case MARRIED_FILING_SEPARAT:  std_ded = 4500.0;  min2file = 11950.0;  break;
    default:  printf("Unexpected status.\n");
 	     fprintf(outfile,"Unexpected status.\n");
 	     exit(1);  

@@ -35,7 +35,7 @@
 #define MAX_LINES 1000
 
 double L[MAX_LINES];	/* Declare the Line entry variables. */
-char errmsg[10000];
+char errmsg[15000];
 
 FILE *infile=0,	 /* Main input file to be used for reading tax input data. */
      *outfile=0; /* Main output file. */

@@ -39,8 +39,8 @@
 float thisversion=19.00;
 
 #define SINGLE                  1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW                   5
 #define Yes 1
@@ -230,8 +230,8 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 'l', word, "Status ?");
  if ((word[0]>'0') && (word[0]<'6')) status = word[0]-48; else
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+ if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+ if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
  if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
  if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
  else
@@ -273,13 +273,13 @@ int main( int argc, char *argv[] )
    case SINGLE: 		 stdded   = 10750.0; 	/* NC std single deduction. */
 				 min2file = 10750.0;
 	break;
-   case MARRIED_FILLING_JOINTLY: stdded   = 21500.0; 	/* NC std Married/joint deduction. */
+   case MARRIED_FILING_JOINTLY: stdded   = 21500.0; 	/* NC std Married/joint deduction. */
 				 min2file = 21500.0;
 	break;
    case WIDOW:			 stdded   = 21500.0; 	/* NC std widow(er) deduction. */
 				 min2file = 21500.0;
 	break;
-   case MARRIED_FILLING_SEPARAT: stdded   = 10750.0; 	/* NC std Married/sep deduction. */
+   case MARRIED_FILING_SEPARAT: stdded   = 10750.0; 	/* NC std Married/sep deduction. */
 				 min2file = 10750.0;
 	break;
    case HEAD_OF_HOUSEHOLD:	 stdded   = 16125.0; 	/* NC std Head of house deduction. */
@@ -297,7 +297,7 @@ int main( int argc, char *argv[] )
 
  switch (status)
   {
-   case MARRIED_FILLING_JOINTLY: 
+   case MARRIED_FILING_JOINTLY: 
    case WIDOW: 
 		if (L[6] <= 40000.0)	ChildDeduction = 2500.0;	else
 		if (L[6] <= 60000.0)	ChildDeduction = 2000.0;	else
@@ -314,7 +314,7 @@ int main( int argc, char *argv[] )
 		if (L[6] <= 90000.0)	ChildDeduction =  500.0;	else
 		ChildDeduction = 0.0;
    	break;
-   case SINGLE:	case MARRIED_FILLING_SEPARAT:
+   case SINGLE:	case MARRIED_FILING_SEPARAT:
 		if (L[6] <= 20000.0)	ChildDeduction = 2500.0;	else
 		if (L[6] <= 30000.0)	ChildDeduction = 2000.0;	else
 		if (L[6] <= 40000.0)	ChildDeduction = 1500.0;	else

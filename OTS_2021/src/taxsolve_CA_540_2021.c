@@ -35,8 +35,8 @@ float thisversion=19.00;
 #include "taxsolve_routines.c"
 
 #define SINGLE 		        1
-#define MARRIED_FILLING_JOINTLY 2
-#define MARRIED_FILLING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 
@@ -48,9 +48,9 @@ double 	sched540part2[MAX_LINES], sched540part2_sub[MAX_LINES], sched540part2_ad
 
 
 double TaxRateFormula( double income, int status )
-{											/* Not updated for 2021. */
+{											/* Updated for 2021. */
  double tax;
- if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
+ if ((status==SINGLE) || (status==MARRIED_FILING_SEPARAT))
   {
    if (income <   9325.00)  tax =             0.01 * income;                else
    if (income <  22107.00)  tax =    93.25 +  0.02 * (income -   9325.00);  else
@@ -63,7 +63,7 @@ double TaxRateFormula( double income, int status )
    else                     tax = 60789.92 + 0.123 * (income - 625369.00);
   }
  else
- if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
+ if ((status==MARRIED_FILING_JOINTLY) || (status==WIDOW))
   {
    if (income <   18650.00)  tax =              0.01 * income;                 else
    if (income <   44214.00)  tax =    186.50 +  0.02 * (income -   18650.00);  else
@@ -95,7 +95,7 @@ void Report_bracket_info( double income, int status )
 {
  double tx, rate;
  tx = TaxRateFormula( income, status );
- if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT))
+ if ((status==SINGLE) || (status==MARRIED_FILING_SEPARAT))
   {
    if (income <    9325.00)  rate = 0.01;  else
    if (income <   22107.00)  rate = 0.02;  else
@@ -107,7 +107,7 @@ void Report_bracket_info( double income, int status )
    if (income <  625369.00)  rate = 0.113;  else  rate = 0.123;
   }
  else
- if ((status==MARRIED_FILLING_JOINTLY) || (status==WIDOW))
+ if ((status==MARRIED_FILING_JOINTLY) || (status==WIDOW))
   {
    if (income <   18650.00)  rate = 0.01;  else
    if (income <   44214.00)  rate = 0.02;  else
@@ -163,7 +163,7 @@ void test_tax_function()
  for (income=50.0; income < 100000.0; income = income + 100.0)
   printf("%g: %8g %8g %8g\n", income,
 		TaxRateFunction( income, SINGLE ),
-		TaxRateFunction( income, MARRIED_FILLING_JOINTLY ), 
+		TaxRateFunction( income, MARRIED_FILING_JOINTLY ), 
 		TaxRateFunction( income, HEAD_OF_HOUSEHOLD ) );
  exit(0);
 }
@@ -415,8 +415,8 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
     {
      next_word(fline, word, " \t=");
      if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
-     if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
-     if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
+     if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
+     if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILING_SEPARAT; else
      if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
      if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
      else 
@@ -572,8 +572,8 @@ int main( int argc, char *argv[] )
  switch (status)
  {
   case SINGLE: 			fprintf(outfile,"Status = Single (%d)\nCkSingle: X\nL7a = 1\n", status); break;
-  case MARRIED_FILLING_JOINTLY: fprintf(outfile,"Status = Married/Joint (%d)\nCkMFJ: X\nL7a = 2\n", status); break;
-  case MARRIED_FILLING_SEPARAT: fprintf(outfile,"Status = Married/Sep (%d)\nCkMFS: X\nL7a = 1\n", status); break;
+  case MARRIED_FILING_JOINTLY: fprintf(outfile,"Status = Married/Joint (%d)\nCkMFJ: X\nL7a = 2\n", status); break;
+  case MARRIED_FILING_SEPARAT: fprintf(outfile,"Status = Married/Sep (%d)\nCkMFS: X\nL7a = 1\n", status); break;
   case HEAD_OF_HOUSEHOLD: 	fprintf(outfile,"Status = Head_of_Household (%d)\nCkHH: X\nL7a = 1\n", status); break;
   case WIDOW: 		  	fprintf(outfile,"Status = Widow(er) (%d)\nCkQW: X\nL7a = 1\n", status); break;
  }
@@ -588,7 +588,7 @@ int main( int argc, char *argv[] )
  else
   fprintf(outfile," L6 = yes, (check box on line 6).\n  CkDep: X\n");
 
- if ((status==SINGLE) || (status==MARRIED_FILLING_SEPARAT) || (status==HEAD_OF_HOUSEHOLD))
+ if ((status==SINGLE) || (status==MARRIED_FILING_SEPARAT) || (status==HEAD_OF_HOUSEHOLD))
   iline7 = 1;  else  iline7 = 2;
  if (L[6] != 0.0) iline7 = 0; /* <-- Possible exceptions here. */
  L[7] = 129.0 * iline7;							/* Updated for 2021. */
@@ -897,7 +897,7 @@ int main( int argc, char *argv[] )
  sched540part2_5b = PrelimFedReturn.schedA5b;
  sched540part2_5c = PrelimFedReturn.schedA5c;
  sched540part2_5d = sched540part2_5a + sched540part2_5b + sched540part2_5c;
- if (status != MARRIED_FILLING_SEPARAT)
+ if (status != MARRIED_FILING_SEPARAT)
   sched540part2[5] = smallerof( sched540part2_5d, 10000.0 );	/* Will be Line 5e. */
  else
   sched540part2[5] = smallerof( sched540part2_5d, 5000.0 );
@@ -972,8 +972,8 @@ int main( int argc, char *argv[] )
  switch (status)
   {
    case SINGLE:
-   case MARRIED_FILLING_SEPARAT:  threshA = 212288.0;	std_ded = 4803.0;  break;	/* Updated for 2021. */
-   case MARRIED_FILLING_JOINTLY:
+   case MARRIED_FILING_SEPARAT:  threshA = 212288.0;	std_ded = 4803.0;  break;	/* Updated for 2021. */
+   case MARRIED_FILING_JOINTLY:
    case WIDOW:                    threshA = 424581.0;	std_ded = 9606.0;  break;
    case HEAD_OF_HOUSEHOLD:        threshA = 318437.0;	std_ded = 9606.0;  break;
   }
@@ -1106,7 +1106,7 @@ int main( int argc, char *argv[] )
 		     default: min2file = 41931.0;	break;
 		    }
 	  break;
-   case MARRIED_FILLING_JOINTLY: 
+   case MARRIED_FILING_JOINTLY: 
 		if (iline9 == 0)		 /*Both Under65*/
 		   switch (iline10)
 		    {
@@ -1172,7 +1172,7 @@ int main( int argc, char *argv[] )
     ws_a = L[13];
     ws_b = threshA;
     ws_c = ws_a - ws_b;
-    if (status != MARRIED_FILLING_SEPARAT)
+    if (status != MARRIED_FILING_SEPARAT)
 	ws_d = Round(ws_c / 2500.0);  
     else 
 	ws_d = Round(ws_c / 1250.0);
