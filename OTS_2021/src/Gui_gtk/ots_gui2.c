@@ -2115,7 +2115,7 @@ void Save_Tax_File( char *fname )
  while (txline!=0)
   { /*txline*/
    int numvals=0, numcoms=0, iscapgains, capgain_ready_flg=0, ReadyErrFlg=0, tilde_flg=0;
-   char ready_val[6][1024], ready_comment[3][1024]={0}; /* Used by capgain_ready_warning */
+   char ready_val[6][1024], ready_comment[3][1024]={{0}}; /* Used by capgain_ready_warning */
    int valcnt=0, comcnt=0; /* Counters for an individual gain */
    // printf("\nNewTaxLine: '%s' (linenum = %d)\n", txline->linename, txline->linenum );
    fprintf(outfile,"\n%s", txline->linename );		/* Write line-label, if any. */

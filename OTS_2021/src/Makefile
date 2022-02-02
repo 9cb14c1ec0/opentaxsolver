@@ -86,10 +86,10 @@ all: ../bin/taxsolve_US_1040_2021 \
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_f8960_2021    taxsolve_f8960_2021.c	$(SRCS) $(LIBS)
 
 ../bin/taxsolve_f2210_2021:            taxsolve_f2210_2021.c  taxsolve_routines.c
-	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_f2210_2021    taxsolve_f2210_2021.c  -lm $(SRCS) $(LIBS)
+	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_f2210_2021    taxsolve_f2210_2021.c	$(SRCS) $(LIBS)
 
 ../bin/taxsolve_CA_5805_2021:            taxsolve_CA_5805_2021.c  taxsolve_routines.c
-	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_CA_5805_2021   taxsolve_CA_5805_2021.c  -lm	$(SRCS) $(LIBS)	
+	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_CA_5805_2021   taxsolve_CA_5805_2021.c  	$(SRCS) $(LIBS)	
 
 ../bin/universal_pdf_file_modifier: 	      universal_pdf_file_modifier.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/universal_pdf_file_modifier  universal_pdf_file_modifier.c	$(SRCS) $(LIBS)

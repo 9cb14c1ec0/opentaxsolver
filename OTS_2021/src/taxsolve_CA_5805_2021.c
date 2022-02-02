@@ -3,20 +3,19 @@
 /*  User contributed.							*/
 /************************************************************************/
 
-float thisversion=2.00;
+float thisversion=3.00;
 
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
-#include <math.h>
 
 #include "taxsolve_routines.c"
 
 #define SINGLE 		        1
-#define MARRIED_FILING_JOINTLY  2
-#define MARRIED_FILING_SEPARAT  3
+#define MARRIED_FILING_JOINTLY 2
+#define MARRIED_FILING_SEPARAT 3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 #define Yes 1
@@ -28,7 +27,7 @@ float thisversion=2.00;
 /* The following two tax functions copied from taxsolve_CA_540_2021.c. */
 
 double TaxRateFormula( double income, int status )
-{											/* Updated for 2021. */
+{									/* Updated for 2021. */
  double tax;
  if ((status==SINGLE) || (status==MARRIED_FILING_SEPARAT))
   {
@@ -91,6 +90,7 @@ double TaxRateFunction( double income, int status )     /* Emulates table lookup
  return tx;
 }
 
+
 double L6WS(int column, double IIIL4, double ScdA, double IIIL5, double FAIWSL3, int status){
 
 	double L[14];
@@ -108,18 +108,18 @@ double L6WS(int column, double IIIL4, double ScdA, double IIIL5, double FAIWSL3,
 		return(L[5]);
 	}
 	L[6] = L[3] * L[4];
-	L[7] = L[6] * 0.80;
+	L[7] = Round(L[6] * 0.80);
 	L[8] = FAIWSL3;
 	if((status == MARRIED_FILING_JOINTLY) || (status == WIDOW))
-		L[9] = 406687;
+		L[9] = 424581;
 	else if((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) 
-		L[9] = 203341;
+		L[9] = 212288;
 	else if(status == HEAD_OF_HOUSEHOLD)
-		L[9] = 305016;
+		L[9] = 318437;
 	L[10] = L[8] - L[9];
-	L[11] = L[10] * 0.06;
+	L[11] = Round(L[10] * 0.06);
 	L[12] = SmallerOf(L[7], L[11]);
-	L[13] = L[5] - L[12];
+	L[13] = Round(L[5] - L[12]);
 	
 	fprintf(outfile, " Line 6 Worksheet - Column (%c),\n", column);
 	for(i = 1; i <= 13; i++)
@@ -132,16 +132,16 @@ double L6WS(int column, double IIIL4, double ScdA, double IIIL5, double FAIWSL3,
 int main( int argc, char *argv[] )
 {
   int i, j, k, status, individual = Yes;
- char word[6000], outfname[6000], *infname=0;
+ char word[4000], outfname[4000], *infname=0;
  time_t now;
 
- int Quest1=0, Quest2=0, Quest3=0, Quest4=0, Num_Days = 0;
+ int Quest2, Num_Days = -1;		/* negative Num_Days used as a flag below */
  double Wthd_Per_1, Wthd_Per_2, Wthd_Per_3, Wthd_Per_4, CA_AGI;
  
 
  /* line entry variables L[n] are declared in taxsolve_routines.c */
 
- double a[54], b[54], c[54], d[54];	/* cells in grid of Part III Annualizd Income Installment Method Schedule */
+ double a[24], b[24], c[24], d[24];	/* cells in grid of Part III Annualizd Income Installment Method Schedule */
 					/* comprised of lines 1-13 and 15-23; e.g., cell 1(a) will be in variable a[1] */
 					/*  lines 14a-14e declared individually */
 
@@ -151,12 +151,12 @@ int main( int argc, char *argv[] )
  double L14da = 0, L14db = 0, L14dc = 0, L14dd = 0;
  double L14ea = 0, L14eb = 0, L14ec = 0, L14ed = 0;
 
- double FAIWS_a[9], FAIWS_b[9], FAIWS_c[9], FAIWS_d[9];		/* cells in grid for Federal Annualized Income Worksheet */
+ double FAIWS_a[4], FAIWS_b[4], FAIWS_c[4], FAIWS_d[4];		/* cells in grid for Federal Annualized Income Worksheet */
 
- double L6WS_a[24], L6WS_b[24], L6WS_c[24], L6WS_d[24]; 	/* cells in grid for Line 6 Worksheet */
+ double L6WS_a[14], L6WS_b[14], L6WS_c[14], L6WS_d[14]; 	/* cells in grid for Line 6 Worksheet */
 
- double A[25], B[25], C[25], D[25];	/* cells in grid of Worksheet II */
-					/* e.g., cell 1(a) will be be variable A[1] */
+ double A[15], B[15], C[15], D[15];	/* cells in grid of Worksheet II */
+					/* e.g., cell 1(a) will be in variable A[1] */
 
   printf("Form 5805, 2021 - v%3.2f\n", thisversion);
 
@@ -231,19 +231,16 @@ for(i = 0; i <= 13; i++){
  fprintf(outfile,"\n%s,  v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
 
- /* ----- Accept form data and process the numbers.         ------ */
- /* ----- Place all your form-specific code below here .... ------ */
-
  fprintf(outfile,"\n--- THIS IS PRELIMINARY USER-CONTRIBUTED FORM ---\n");
  fprintf(outfile,"--- NOT YET FULLY UPDATED FOR 2021. ---\n\n");
 
  // MarkupPDF( 1, 240, 40, 17, 1.0, 0, 0 ) NotReady "This program is NOT updated for 2021."
  add_pdf_markup( "NotReady", 1, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 2, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 3, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 4, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
 
 
+
+ /* ----- Accept form data and process the numbers.         ------ */
+ /* ----- Place all your form-specific code below here .... ------ */
 
  // Example:
  //  GetLineF( "L2", &L[2] );
@@ -259,7 +256,7 @@ for(i = 0; i <= 13; i++){
  if (strncasecmp(word,"Individual",3)==0) individual = Yes;
  fprintf(outfile,"Entity = %s (%d)\n", word, individual);
 
- get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
+get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
  if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
  if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILING_JOINTLY; else
@@ -277,7 +274,7 @@ for(i = 0; i <= 13; i++){
  get_parameter( infile, 's', word, "Quest1" );
  get_parameter( infile, 'w', word, "Quest1?");
  if (strncasecmp(word,"Yes",1)==0){
-	Quest1 = Yes;
+	// Quest1 = Yes;
 	fprintf(outfile,"CkQuest1Yes X\n");
 }
 else {
@@ -298,33 +295,33 @@ else {
   get_parameter( infile, 's', word, "Quest3" );
  get_parameter( infile, 'w', word, "Quest3?");
  if (strncasecmp(word,"Yes",1)==0){
-	Quest3 = Yes;
+	// Quest3 = Yes;
 	fprintf(outfile,"CkQuest3Yes X\n");
 }
 else if (strncasecmp(word,"No",2)==0){
-	Quest3 = No;
+	// Quest3 = No;
 	fprintf(outfile,"CkQuest3No X\n");
 }
 else {
-	Quest3 = NotApplicable;
+	// Quest3 = NotApplicable;
 	fprintf(outfile,"CkQuest3NA X\n");
 }
 
  GetLineF( "Wthd_Per_1", &Wthd_Per_1 );
  GetLineF( "Wthd_Per_2", &Wthd_Per_2 );
- GetLineF( "Wthd_Per_3", &Wthd_Per_3 );
+GetLineF( "Wthd_Per_3", &Wthd_Per_3 );
  GetLineF( "Wthd_Per_4", &Wthd_Per_4 );
 
  get_parameter( infile, 's', word, "Quest4" );
  get_parameter( infile, 'w', word, "Quest4?");
  if (strncasecmp(word,"Yes",1)==0){
-	 Quest4 = Yes;
+	 // Quest4 = Yes;
 	fprintf(outfile,"CkQuest4Yes X\n");
 }
-else {
-		fprintf(outfile,"CkQuest4No X\n");
+else if (strncasecmp(word,"No",2)==0){
+	// Quest4 = No;
+	fprintf(outfile,"CkQuest4No X\n");
 }
- fprintf(outfile," Quest_summary: %d %d %d %d\n", Quest1, Quest2, Quest3, Quest4 );
 
 /* Part II - Required Annual Payment */
 
@@ -340,6 +337,9 @@ else {
  }
   GetLineF( "L5", &L[5] );
  showline( 5 );
+
+ GetLineF( "CA_AGI", &CA_AGI );
+
  if((CA_AGI >= 1000000) || (status == MARRIED_FILING_SEPARAT && CA_AGI >= 500000))
 	L[6] = L[2];
 else
@@ -351,14 +351,9 @@ showline( 6 );
 /* Need to read these Short Method inputs even if Short Method is not used; */
 /* otherwise, error message re: unexpected input item is thrown */
 
- GetLineF( "CA_AGI", &CA_AGI );
-  
   GetLineF( "L8", &L[8] );
  
-  get_parameter( infile, 's', word, "Num_Days" );
- get_parameter( infile, 'w', word, "Num_Days?");
- if(valid_int(word))
-   Num_Days = atoi(word);
+  GetInteger( "Num_Days", &Num_Days);
 
 	if(Quest2 == No){			/* Not using Annualized Income Installment Method */
 
@@ -369,17 +364,24 @@ showline( 6 );
 			fprintf(outfile, "Stop here.  You do not owe the penalty. Do not file form FTB 5805.\n");
 			exit(0);
 		}
-		L[11] = L[10] * 0.02442148;
-		L[12] = L[10] * Num_Days * 0.00008;
-		L[13] = L[11] - L[12];
 
-		for(i = 7; i <= 12; i++)
+		for(i = 7; i <= 10; i++)
 			showline( i );
-	
-		showline_wmsg(13, "PENALTY.  Enter this amount on Form 540, line 113;\n \
-Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 5805.\n");
 
+		L[11] = L[10] * 0.02121370;
+
+		if(Num_Days > -1){
+
+			L[12] = L[10] * Num_Days * 0.00008;
+			L[13] = L[11] - L[12];
+	
+			showline( 11 );
+			showline( 12 );
+		
+			showline_wmsg(13, "PENALTY.  Enter this amount on Form 540, line 113; Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for FTB 5805.\n");
+		}
 	}
+	else{					/* Using the Annualized Income Installment Method */
 
 	/* Annualized Income Installment Method */
 
@@ -456,11 +458,6 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	   GetLine( "WSII_10c", &C[10]);
 	   GetLine( "WSII_10d", &D[10]);	   
 
-	    GetLine( "WSII_12a", &A[12]);
-	   GetLine( "WSII_12b", &B[12]);
-	   GetLine( "WSII_12c", &C[12]);
-	   GetLine( "WSII_12d", &D[12]);
-	
 	a[3] = a[1] * a[2];
 	b[3] = b[1] * b[2];
 	c[3] = c[1] * c[2];
@@ -480,9 +477,9 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	fprintf(outfile, "FAIWS_1a\t%0.2lf\n", FAIWS_a[1]);
 	fprintf(outfile, "FAIWS_2a\t%0.2lf\n", a[5]);
 	fprintf(outfile, "FAIWS_3a\t%0.2lf\n", FAIWS_a[3]);
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_a[3] > 406687)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_a[3] > 203341)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_a[3] > 305016))){
+	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_a[3] > 424581)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_a[3] > 212288)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_a[3] > 318437))){
 		a[6] = L6WS('a', a[4], L6WS_a[2], a[5], FAIWS_a[3], status);
 	}
 	
@@ -490,9 +487,9 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	fprintf(outfile, "FAIWS_1b\t%0.2lf\n", FAIWS_b[1]);
 	fprintf(outfile, "FAIWS_2b\t%0.2lf\n", b[5]);
 	fprintf(outfile, "FAIWS_3b\t%0.2lf\n", FAIWS_b[3]);
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_b[3] > 406687)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_b[3] > 203341)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_b[3] > 305016))){
+	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_b[3] > 424581)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_b[3] > 212288)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_b[3] > 318437))){
 		b[6] = L6WS('b', b[4], L6WS_b[2], b[5], FAIWS_b[3], status);	
 	}
 
@@ -501,9 +498,9 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	fprintf(outfile, "FAIWS_2c\t%0.2lf\n", c[5]);
 	fprintf(outfile, "FAIWS_3c\t%0.2lf\n", FAIWS_c[3]);
 
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_c[3] > 406687)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_c[3] > 203341)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_c[3] > 305016))){
+	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_c[3] > 424581)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_c[3] > 212288)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_c[3] > 318437))){
 		c[6] = L6WS('c', c[4], L6WS_c[2], c[5], FAIWS_c[3], status);
 	}
 
@@ -511,9 +508,9 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
  	fprintf(outfile, "FAIWS_1d\t%0.2lf\n", FAIWS_d[1]);
 	fprintf(outfile, "FAIWS_2d\t%0.2lf\n", d[5]);
 	fprintf(outfile, "FAIWS_3d\t%0.2lf\n", FAIWS_d[3]);
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_d[3] > 406687)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_d[3] > 203341)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_d[3] > 305016))){
+	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_d[3] > 424581)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_d[3] > 212288)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_d[3] > 318437))){
 		d[6] = L6WS('d', d[4], L6WS_d[2], d[5], FAIWS_d[3], status);
 	}
 
@@ -552,13 +549,13 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	L14ec = L14cc - L14dc;
 	L14ed = L14cd - L14dd;
 
-	a[16] = round(L14ea * 0.27);
-	b[16] = round(L14eb * 0.63);
-	c[16] = round(L14ec * 0.63);
-	d[16] = round(L14ed * 0.90);
+	a[16] = Round(L14ea * 0.27);
+	b[16] = Round(L14eb * 0.63);
+	c[16] = Round(L14ec * 0.63);
+	d[16] = Round(L14ed * 0.90);
 
 	a[18] = NotLessThanZero(a[16] - a[17]);
-	a[19] = round(L[6] * 0.30);
+	a[19] = Round(L[6] * 0.30);
 	a[21] = a[19];
 	a[22] = NotLessThanZero(a[21] - a[18]);
 	a[23] = SmallerOf(a[18], a[21]);
@@ -566,7 +563,7 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 
 	b[17] = a[23];
 	b[18] = NotLessThanZero(b[16] - b[17]);
-	b[19] = round(L[6] * 0.40);
+	b[19] = Round(L[6] * 0.40);
 	b[20] = a[22];
 	b[21] = b[19] + b[20];
 	b[22] = NotLessThanZero(b[21] - b[18]);
@@ -584,14 +581,14 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	
 	d[17] = a[23] + b[23] + c[23];
 	d[18] = NotLessThanZero(d[16] - d[17]);
-	d[19] = round(L[6] * 0.30);
+	d[19] = Round(L[6] * 0.30);
 	d[20] = c[22];
 	d[21] = d[19] + d[20];
 	d[22] = NotLessThanZero(d[21] - d[18]);
 	d[23] = SmallerOf(d[18], d[21]);
 	D[1] = d[23];
 
-	
+	}	
 		/* WORKSHEET II */
 	
 	A[6] = A[2];
@@ -601,8 +598,7 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	else
 		A[9] = A[6] - A[1];
 
-	A[11] = A[8] * A[10]/366 * 0.05;
-	A[13] = A[8] * A[12]/365 * 0.03;
+	A[11] = A[8] * A[10]/365 * 0.03;
 		
 	B[3] = A[9];
 	B[4] = B[2] + B[3];
@@ -617,8 +613,7 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	else
 		B[9] = B[6] - B[1];
 
-	B[11] = B[8] * B[10]/366 * 0.05;
-	B[13] = B[8] * B[12]/365 * 0.03;
+	B[11] = B[8] * B[10]/365 * 0.03;
 
 	C[3] = B[9];
 	C[4] = C[2] + C[3];
@@ -633,8 +628,7 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	else
 		C[9] = C[6] - C[1];
 
-	C[11] = C[8] * C[10]/366 * 0.05;
-	C[13] = C[8] * C[12]/365 * 0.03;		
+	C[11] = C[8] * C[10]/365 * 0.03;
 
 	D[3] = C[9];
 	D[4] = D[2] + D[3];
@@ -646,10 +640,9 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 	else
 		D[9] = D[6] - D[1];
 
-	D[11] = D[8] * D[10]/366 * 0.05;
-	D[13] = D[8] * D[12]/365 * 0.03;
+	D[11] = D[8] * D[10]/365 * 0.03;
 
-	A[0] = A[11] + B[11] + C[11] + D[11] + A[13] + B[13] + C[13] + D[13];	/* line 14 of WSII */
+	A[0] = A[11] + B[11] + C[11] + D[11];	/* line 12 of WSII */
 
 	if(Quest2 == Yes){
 	
@@ -695,20 +688,18 @@ Form 540NR, line 123; or Form 541, line 44.\n Also, check the box for “FTB 580
 			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "d", d[i]);
 		}
 
-		for(i = 1; i <= 13; i++){
+		for(i = 1; i <= 11; i++){
 			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "a", A[i]);
 			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "b", B[i]);
 			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "c", C[i]);
 			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "d", D[i]);
 		}
-		fprintf(outfile, "WSII_%d %0.2lf\n", 14, A[0]);
+		fprintf(outfile, "WSII_%d %0.2lf     %s\n", 12, A[0], "PENALTY");
 	
 		if((A[8] == 0) && (B[8] == 0) && (C[8] == 0) && (D[8] == 0))
 			fprintf(outfile, "As line 8 on WSII is zero for all payment periods, you don't owe a penalty.\n");
 		else
-			fprintf(outfile, "There is an underpayment for one or more periods.  See the\n \
-			the instructions and if you have not already done so, enter the number of days\n \
-			the payment was late into the GUI so this program can calculate the penalty\n");
+			fprintf(outfile, "%s\n%s\n%s\n", "There is an underpayment for one or more periods.  See the  instructions and if", "you have not already done so, enter the number of days the payment was late", "into the GUI so this program can calculate the penalty.");
 	}
 
   /*** 

@@ -3,14 +3,13 @@
 /*  User contributed.							*/
 /************************************************************************/
 
-float thisversion=2.00;
+float thisversion=3.00;
 
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
-#include <math.h>
 
 #include "taxsolve_routines.c"
 
@@ -25,7 +24,7 @@ float thisversion=2.00;
 #define Short 1
 #define Regular 2
 
-int Quest1, Quest2, Quest3, Quest4, Quest5, Method, BoxA, BoxB, BoxC, BoxD, BoxE, Num_Days = 0;
+int BoxA, BoxB, BoxC, BoxD, BoxE, Num_Days = 0;
 
 /*-----------Tax Routines Copied From taxsolve_US_1040_2021.c ----------------*/
 
@@ -75,6 +74,7 @@ double TaxRateFunction( double income, int status )     /* Emulates table lookup
  return tx;
 }
 
+
 /*----------------------------------------------------------------------------*/
 
 int main( int argc, char *argv[] )
@@ -85,10 +85,10 @@ int main( int argc, char *argv[] )
 
  /* line entry variables L[n] are declared in taxsolve_routines.c */
 
- double A[47], B[47], C[47], D[47];	/* cells in grid of Part IV, Section A, comprised of lines 18 through 26 */
+ double A[19], B[19], C[19], D[19];	/* cells in grid of Part III, Section A, comprised of lines 10 through 18 */
 					/* e.g., cell 18(a) will be be variable A[18] */
 
- double a[57], b[57], c[57], d[57];	/* cells in grid of Part IV, Schedule AI comprised of lines 1 through 36 */
+ double a[37], b[37], c[37], d[37];	/* cells in grid of Schedule AI comprised of lines 1 through 36 */
 					/* e.g., cell 1(a) will be in variable a[1] */
 
  printf("Form 2210, 2021 - v%3.2f\n", thisversion);
@@ -124,7 +124,7 @@ int main( int argc, char *argv[] )
 
  for (i=0; i<MAX_LINES; i++) { L[i] = 0.0; }
 
- for(i = 0; i <= 26; i++){
+ for(i = 0; i <= 18; i++){
 	A[i] = 0.0;
 	B[i] = 0.0;
 	C[i] = 0.0;
@@ -150,11 +150,7 @@ int main( int argc, char *argv[] )
  now = time(0);
  fprintf(outfile,"\n%s,  v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
-
- /* ----- Accept form data and process the numbers.         ------ */
- /* ----- Place all your form-specific code below here .... ------ */
-
- fprintf(outfile,"\n--- THIS IS PRELIMINARY USER-CONTRIBUTED FORM ---\n");
+fprintf(outfile,"\n--- THIS IS PRELIMINARY USER-CONTRIBUTED FORM ---\n");
  fprintf(outfile,"--- NOT YET FULLY UPDATED FOR 2021. ---\n\n");
 
  // MarkupPDF( 1, 240, 40, 17, 1.0, 0, 0 ) NotReady "This program is NOT updated for 2021."
@@ -162,6 +158,13 @@ int main( int argc, char *argv[] )
  add_pdf_markup( "NotReady", 2, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
  add_pdf_markup( "NotReady", 3, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
 
+
+ fprintf(outfile, "%s\n", "==================================================");
+ fprintf(outfile, "%s\n", "                                                            CAUTION\nThis program fills out Form 2210 to determine WHETHER OR NOT you owe a penalty\nfor underpayment of estimated tax.  It does NOT calculate the AMOUNT of any\npenalty you may owe.  If you owe a penalty, you may need to fill out the Penalty\nWorksheet in the Form 2210 instructions to calculate the amount of your penalty.\nDO NOT INTERPRET the default zero value shown on page 2, line 19, of the filled\nPDF to indicate that you do not owe a penalty.  Scroll down about 1/3 of the way in\nthis results file (to BELOW the SecA results lines) to see if you might owe a penalty.");
+ fprintf(outfile, "%s\n\n", "==================================================");
+
+ /* ----- Accept form data and process the numbers.         ------ */
+ /* ----- Place all your form-specific code below here .... ------ */
 
  // Example:
  //  GetLineF( "L2", &L[2] );
@@ -210,34 +213,6 @@ get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/
  else
  	fprintf(outfile,  "CkL9No X\n");	/* No, don't owe penalty */
 
- get_parameter( infile, 's', word, "Quest1" );
- get_parameter( infile, 'w', word, "Quest1?");
- if (strncasecmp(word,"Yes",1)==0){
-	Quest1 = Yes;
-	fprintf(outfile,"CkQuest1 X\n");
-}
-
- get_parameter( infile, 's', word, "Quest2" );
- get_parameter( infile, 'w', word, "Quest2?");
- if (strncasecmp(word,"Yes",1)==0){
-	 Quest2 = Yes;
-	fprintf(outfile,"CkQuest2 X\n");
-}
-
-  get_parameter( infile, 's', word, "Quest3" );
- get_parameter( infile, 'w', word, "Quest3?");
- if (strncasecmp(word,"Yes",1)==0){
-	Quest3 = Yes;
-	fprintf(outfile,"CkQuest3 X\n");
-}
-
- get_parameter( infile, 's', word, "Quest4" );
- get_parameter( infile, 'w', word, "Quest4?");
- if (strncasecmp(word,"Yes",1)==0){
-	Quest4 = Yes;
-	fprintf(outfile,"CkQuest4 X\n");
-}
-
  get_parameter( infile, 's', word, "BoxA" );
  get_parameter( infile, 'w', word, "BoxA?");
  if (strncasecmp(word,"Yes",1)==0){
@@ -274,113 +249,31 @@ get_parameter( infile, 's', word, "BoxE" );
 }
 
 if((L[4] < 1000) || (L[7] < 1000))
-	fprintf(outfile, "Line 4 or Line 7 less than $1,000.  Don’t file Form 2210. You don’t owe a penalty.\n");
+	fprintf(outfile, "Line 4 or Line 7 less than $1,000.  Don't file Form 2210. You don't owe a penalty.\n");
 
 else if(L[6] >= L[9]){
 	if(BoxE == Yes)
-		fprintf(outfile, "You don’t owe a penalty.  Because Box E in Part II applies, file page 1 of Form 2210.\n");
+		fprintf(outfile, "You don't owe a penalty.  Because Box E in Part II applies, file page 1 of Form 2210.\n");
 	else
-		fprintf(outfile, "You don’t owe a penalty.  Don’t file Form 2210.\n");
+		fprintf(outfile, "You don't owe a penalty.  Don't file Form 2210.\n");
 }
 else if((BoxA == Yes) || (BoxB == Yes) || (BoxC == Yes) || (BoxD == Yes) || (BoxE == Yes)){
 	fprintf(outfile, "You MUST file Form 2210.\n");
 	if((BoxB == Yes) || (BoxC == Yes) || (BoxD == Yes))
 		fprintf(outfile, "You must figure your penalty.\n");
 	else
-		fprintf(outfile, "You aren’t required to figure your penalty because the IRS\n \
-will figure it and send you a bill for any unpaid amount. If you\n \
-want to figure it, you may use Part III or Part IV as a\n \
-worksheet and enter your penalty amount on your tax return,\n \
-but FILE ONLY PAGE 1 OF FORM 2210.\n");
+		fprintf(outfile, "%s", "You aren't required to figure your penalty because the IRS\nwill figure it and send you a bill for any unpaid amount.\nIf you want to figure it, you may use Part III as a\nworksheet and enter your penalty amount on your tax return,\nbut FILE ONLY PAGE 1 OF FORM 2210.\n");
 }
 else
-	fprintf(outfile, "Don’t file Form 2210. You aren’t required to figure\n \
-your penalty because the IRS will figure it and send\n \
-you a bill for any unpaid amount. If you want to figure\n \
-it, you may use Part III or Part IV as a worksheet and\n \
-enter your penalty amount on your tax return, but\n \
-don’t file Form 2210.\n");
+	fprintf(outfile, "%s", "Don't file Form 2210. You aren't required to figure\nyour penalty because the IRS will figure it and send\nyou a bill for any unpaid amount. If you want to figure\nit, you may use Part III as a worksheet and\nenter your penalty amount on your tax return, but\ndon't file Form 2210.\n");
 
-if((Quest1 == No) || (Quest2 == Yes)){
-	fprintf(outfile, "You can use the SHORT METHOD.\n");
-	fprintf(outfile, "Note: If any payment was made earlier than the due date,\n \
-you can use the short method, but using it may cause you to pay a\n \
-larger penalty than the regular method. If the payment was only a few\n \
-days early, the difference is likely to be small.\n");
-}
-
-else if((Quest3 == Yes) || (Quest4 == Yes) || (BoxC == Yes) || (BoxD == Yes))
-	fprintf(outfile, "You must use the REGULAR METHOD (Part IV) instead of the short method.\n");
-
- get_parameter( infile, 's', word, "Method" );
- get_parameter( infile, 'w', word, "Method?");
- if (strncasecmp(word,"Neither",5)==0){
-	Method = Neither;
-	fprintf(outfile,"You are not using either the Short Method or the Regular Method\n");
- }
- else if (strncasecmp(word,"Short",5)==0){
-	Method = Short;
-	fprintf(outfile,"You are using the Short Method\n");
- }
- else if (strncasecmp(word,"Regular",7)==0){
-	Method = Regular;
-	fprintf(outfile,"You are using the Regular Method\n");
- }
-
-/* Short Method */
-
-	/* Need to read these Short Method inputs even if Short Method not selected */
-	/* Otherwise, error message re: unexpected input item is thrown */
-
-	GetLine( "L12", &L[12] );
-
-	 get_parameter( infile, 's', word, "Quest5" );
-	 get_parameter( infile, 'w', word, "Quest5?");
-	 if (strncasecmp(word,"Yes",1)==0)
-		Quest5 = Yes;
-
-	 get_parameter( infile, 's', word, "Num_Days" );
-	 get_parameter( infile, 'w', word, "Num_Days?");
-	 Num_Days = atoi(word);
-
-	if(Method == Short){
-
-		L[10] = L[9];
-		L[11] = L[6];
-		L[13] = L[11] + L[12];
-		L[14] = L[10] - L[13];
-		if(L[14] <= 0){
-			fprintf(outfile, "Stop.  You don't owe a penalty.\n");
-			fprintf(outfile, " If the amount on line 14 was paid on or before 1/15/21,\n \
-			do not use the short method.\n \
-			Don’t file Form 2210 unless you checked box E in Part II\n");
-		}
-		L[15] = L[14] * 0.01744;
-		
-		if(Quest5 == Yes){
-			fprintf(outfile,"Penalty was paid after 1/15/21 and before 4/15/21\n");
-			fprintf(outfile, "Penalty was paid %d days before 4/15/21\n", Num_Days);
-		}
-		
-		L[16] = L[14]  * Num_Days * 0.00008;
-		L[17] = L[15] - L[16];
-	
-		for(i = 10; i <= 16; i++)
-			showline( i );
-	
-		showline_wmsg(17, "Enter this amount on Form 1040, 1040-SR, or\n \
-		1040-NR, line 38; or Form 1041, line 27.\n");
-	}
-
-	/* Regular Method */
-
-	/* Inputs must be read even if Regular Method was not selected; */
+	/* Inputs must be read; */
 	/* otherwise, error message re: unexpected input is thrown */
 	
-	   GetLine( "SecA_19a", &A[19] );
-	   GetLine( "SecA_19b", &B[19] );
-	   GetLine( "SecA_19c", &C[19] );
-	   GetLine( "SecA_19d", &D[19] );
+	   GetLine( "SecA_11a", &A[11] );
+	   GetLine( "SecA_11b", &B[11] );
+	   GetLine( "SecA_11c", &C[11] );
+	   GetLine( "SecA_11d", &D[11] );
 	
 	   GetLine( "SchdAI_1a", &a[1] );
 	   GetLine( "SchdAI_1b", &b[1] );
@@ -437,9 +330,9 @@ else if((Quest3 == Yes) || (Quest4 == Yes) || (BoxC == Yes) || (BoxD == Yes))
 	   GetLine( "SchdAI_32c", &c[32] );
 	   GetLine( "SchdAI_32d", &d[32] );
 	
-	 GetLine( "L27", &L[27] );
+	 GetLine( "L19", &L[19] );
 	
-	  /* Regular Method - Schedule AI - PART 1 */
+	  /* Schedule AI - PART 1 */
 
 	if(individual == Yes){
 	
@@ -506,17 +399,22 @@ else if((Quest3 == Yes) || (Quest4 == Yes) || (BoxC == Yes) || (BoxD == Yes))
 	
 		/* Interrupt Part I to Calculate Line 15 */
 	
-		/* Regular Method - Part II - Annualized Self-Employment Tax */
+		/* Schedule AI - Part II - Annualized Self-Employment Tax */
 	
-		a[29] = 34425;
-		b[29] = 57375;
-		c[29] = 91800;
-		d[29] = 127700;
+		a[29] = 35700;
+		b[29] = 59500;
+		c[29] = 95200;
+		d[29] = 142800;
 	
 		a[31] = NotLessThanZero(a[29] - a[30]);
 		b[31] = NotLessThanZero(b[29] - b[30]);	
 		c[31] = NotLessThanZero(c[29] - c[30]);
 		d[31] = NotLessThanZero(d[29] - d[30]);
+
+		a[32] = 0.496;
+		b[32] = 0.2976;
+		c[32] = 0.186;
+		d[32] = 0.124;
 	
 		a[33] = a[32] * SmallerOf(a[28], a[31]);
 		b[33] = b[32] * SmallerOf(b[28], b[31]);
@@ -528,10 +426,10 @@ else if((Quest3 == Yes) || (Quest4 == Yes) || (BoxC == Yes) || (BoxD == Yes))
 		c[34] = 0.0435;
 		d[34] = 0.029;
 	
-		a[35] = round(a[28] * a[34]);
-		b[35] = round(b[28] * b[34]);	
-		c[35] = round(c[28] * c[34]);
-		d[35] = round(d[28] * d[34]);
+		a[35] = Round(a[28] * a[34]);
+		b[35] = Round(b[28] * b[34]);	
+		c[35] = Round(c[28] * c[34]);
+		d[35] = Round(d[28] * d[34]);
 	
 		a[36] = a[33] + a[35];
 		b[36] = b[33] + b[35];	
@@ -561,134 +459,117 @@ else if((Quest3 == Yes) || (Quest4 == Yes) || (BoxC == Yes) || (BoxD == Yes))
 		c[20] = 0.675;
 		d[20] = 0.90;
 	
-		a[21] = round(a[19] * a[20]);
-		b[21] = round(b[19] * b[20]);
-		c[21] = round(c[19] * c[20]);
-		d[21] = round(d[19] * d[20]);
+		a[21] = Round(a[19] * a[20]);
+		b[21] = Round(b[19] * b[20]);
+		c[21] = Round(c[19] * c[20]);
+		d[21] = Round(d[19] * d[20]);
 	
 		a[23] = NotLessThanZero(a[21]);
-		a[24] = round(L[9] * 0.25);
+		a[24] = Round(L[9] * 0.25);
 		a[26] = a[24];
 		a[27] = SmallerOf(a[23], a[26]);
-		A[18] = a[27];
+		A[10] = a[27];
 	
 		b[22] = a[27];
 		b[23] = NotLessThanZero(b[21] - b[22]);
-		b[24] = round(L[9] * 0.25);
+		b[24] = Round(L[9] * 0.25);
 		b[25] = a[26] - a[27];
 		b[26] = b[24] + b[25];
 		b[27] = SmallerOf(b[23], b[26]);
-		B[18] = b[27];
+		B[10] = b[27];
 	
 		c[22] = a[27] + b[27];
 		c[23] = NotLessThanZero(c[21] - c[22]);
-		c[24] = round(L[9] * 0.25);
+		c[24] = Round(L[9] * 0.25);
 		c[25] = b[26] - b[27];
 		c[26] = c[24] + c[25];
 		c[27] = SmallerOf(c[23], c[26]);
-		C[18] = c[27];
+		C[10] = c[27];
 	
 		d[22] = a[27] + b[27] + c[27];
 		d[23] = NotLessThanZero(d[21] - d[22]);
-		d[24] = round(L[9] * 0.25);
+		d[24] = Round(L[9] * 0.25);
 		d[25] = c[26] - c[27];
 		d[26] = d[24] + d[25];
 		d[27] = SmallerOf(d[23], d[26]);
-		D[18] = d[27];
+		D[10] = d[27];
 	
-		/* REGULAR METHOD - PART IV */
+		/* Penalty Computation - PART III */
 	
-		A[23] = A[19];
-		if(A[18] >= A[23])
-			A[25] = A[18] - A[23];
+		A[15] = A[11];
+		if(A[10] >= A[15])
+			A[17] = A[10] - A[15];
 		else
-			A[26] = A[23] - A[18];
+			A[18] = A[15] - A[10];
 	
-		B[20] = A[26];
-		B[21] = B[19] + B[20];
-		B[22] = A[24] + A[25];
-		B[23] = NotLessThanZero(B[21] - B[22]);
-		if(B[23] == 0)
-			B[24] = B[22] - B[21];
+		B[12] = A[18];
+		B[13] = B[11] + B[12];
+		B[14] = A[16] + A[17];
+		B[15] = NotLessThanZero(B[13] - B[14]);
+		if(B[15] == 0)
+			B[16] = B[14] - B[13];
 		else
-			B[24] = 0;
-		if(B[18] >= B[23])
-			B[25] = B[18] - B[23];
+			B[16] = 0;
+		if(B[10] >= B[15])
+			B[17] = B[10] - B[15];
 		else
-			B[26] = B[23] - B[18];
+			B[18] = B[15] - B[10];
 	
-		C[20] = B[26];
-		C[21] = C[19] + C[20];
-		C[22] = B[24] + B[25];
-		C[23] = NotLessThanZero(C[21] - C[22]);
-		if(C[23] == 0)
-			C[24] = C[22] - C[21];
+		C[12] = B[18];
+		C[13] = C[11] + C[12];
+		C[14] = B[16] + B[17];
+		C[15] = NotLessThanZero(C[13] - C[14]);
+		if(C[15] == 0)
+			C[16] = C[14] - C[13];
 		else
-			C[24] = 0;
-		if(C[18] >= C[23])
-			C[25] = C[18] - C[23];
+			C[16] = 0;
+		if(C[10] >= C[15])
+			C[17] = C[10] - C[15];
 		else
-			C[26] = C[23] - C[18];
+			C[18] = C[15] - C[10];
 	
-		D[20] = C[26];
-		D[21] = D[19] + D[20];
-		D[22] = C[24] + C[25];
-		D[23] = NotLessThanZero(D[21] - D[22]);
-		if(D[18] >= D[23])
-			D[25] = D[18] - D[23];
+		D[12] = C[18];
+		D[13] = D[11] + D[12];
+		D[14] = C[16] + C[17];
+		D[15] = NotLessThanZero(D[13] - D[14]);
+		if(D[10] >= D[15])
+			D[17] = D[10] - D[15];
 		else
-			D[26] = D[23] - D[18];
+			D[18] = D[15] - D[10];
 
-	if(Method == Regular){
-	
-		for(i = 18; i <= 26; i++){
+		for(i = 10; i <= 18; i++){
 			fprintf(outfile, "SecA_%d%s %0.2lf\n", i, "a", A[i]);
 			fprintf(outfile, "SecA_%d%s %0.2lf\n", i, "b", B[i]);
 			fprintf(outfile, "SecA_%d%s %0.2lf\n", i, "c", C[i]);
 			fprintf(outfile, "SecA_%d%s %0.2lf\n", i, "d", D[i]);
 		}
 
-		for(i = 1; i <= 36; i++){
+		if((A[17] == 0) && (B[17] == 0) && (C[17] == 0) && (D[17] == 0)){
+			fprintf(outfile, "\n%s\n", "If line 17 on page 2 is zero for all payment periods, you don't owe a penalty.\nBut if you checked box C or D in Part II, you must file Form 2210 with your return.\nIf you checked box E, you must file page 1 of Form 2210 with your return.\nIn certain circumstances, the IRS will waive all or part of the underpayment\npenalty.  See Waiver of Penalty in the instructions.\n");
+
+		fprintf(outfile, "L19 %0.2lf\n", 0.0);
+		}
+		else{
+			fprintf(outfile, "\n%s\n", "There is an underpayment for one or more periods.\nUse the 	Worksheet for Form 2210, Part III, Section B-Figure the Penalty\n(Penalty Worksheet), in the instructions to figure your penalty.\nEnter the penalty amount in the OTS GUI for Form 2210 (last line).\n");
+
+		fprintf(outfile, "L19 %0.2lf     %s\n\n", L[19], "This is the penalty amount YOU HAVE ENTERED.  It defaults to zero\nuntil you enter your penalty.  DO NOT INTERPRET THE DEFAULT ZERO VALUE TO\nINDICATE YOU DO NOT OWE A PENALTY.  See above instructions and the form 2210\ninstructions to determine if you need to calculate a penalty.");
+
+		fprintf(outfile, "%s\n", "In certain circumstances, the IRS will waive all or part of the underpayment\npenalty.  See Waiver of Penalty in the form 2210 instructions.\n");
+		}
+
+		for(i = 1; i <= 31; i++){
 			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "a", a[i]);
 			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "b", b[i]);
 			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "c", c[i]);
 			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "d", d[i]);
 		}
-	
-		if((A[25] == 0) && (B[25] == 0) && (C[25] == 0) && (D[25] == 0))
-			fprintf(outfile, "If line 25 on page 3 is zero for all payment periods, you don't owe a penalty.\n \
-			But if you checked box C or D in Part II, you must file Form 2210 with your\n \
-			return. If you checked box E, you must file page 1 of Form 2210 with your\n \
-			return. In certain circumstances, the IRS will waive all or part of the\n \
-			underpayment penalty. See Waiver of Penalty in the instructions.\n");
-		else
-			fprintf(outfile, "There is an underpayment for one or more periods.  Use the\n \
-			Worksheet for Form 2210, Part IV, Section B—Figure the Penalty in the instructions\n \
-			and enter the penalty amount in the OTS GUI for Form 2210.\n");
-	}
 
-  /*** 
-    Summary of useful functions:
-	GetLine( "label", &variable )	- Looks for "label" in input file, and places the corresponding sum of 
-					  values following that label (until ";") into variable.
-	GetLineF( "label", &variable )	- Like GetLine() above, but also writes the result to the output file.
-	GetLineFnz(( "label", &variable ) - Like GetLine(), but only writes non-zero values to the output file.
-	GetLine1( "label", &variable )  - Like GetLine() above, but expects single value (no sum, no ";" in input file).
-
-	c = SmallerOf( a, b );		- Selects smaller of two values.
-	c = LargerOf( a, b );		- Selects larger of two values.
-	c = NotLessThanZero( a );	- Selects positive value or zero. Prevents negative values.
-
-	showline( j )			- Writes currency value of L[j] to output file with label in nice format.
-	shownum( j )			- Writes integer value of L[j] to output file with label in nice format.
-	showline_wmsg( j, "msg" )	- Like showline, but adds the provided message to the output line.
-	ShowLineNonZero( j )		- Like showline, but only writes non-zero values.
-	ShowLineNonZero_wMsg( j, "msg" ) - Like showline_wmsg, but only writes non-zero values.
-	showline_wlabel( "label", value ) - For custom line names and variables not in the default L[] array.
-	showline_wlabelnz( "label", value ) - Like showline_wlabel, but only writes non-zero values.
-	showline_wlabelmsg( "label", value, "msg" ) - Like showline_wlabel,but adds the provided message to the output line.
-	
-  ***/
+		for(i = 33; i <= 36; i++){
+			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "a", a[i]);
+			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "b", b[i]);
+			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "c", c[i]);
+			fprintf(outfile, "SchdAI_%d%s %0.2lf\n", i, "d", d[i]);
+		}
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

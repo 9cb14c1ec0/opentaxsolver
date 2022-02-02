@@ -158,7 +158,7 @@ int main( int argc, char *argv[] )
  L[17] = L[16] * 0.009;
  showline( 17 );
  L[18] = L[7] + L[13] + L[17];
- showline_wmsg( 18, "include this amount on Schedule 2 (Form 1040), line 8 (check box a) \
+ showline_wmsg( 18, "include this amount on Schedule 2 (Form 1040), line 11 \
 (Form 1040-PR or 1040-SS filers, see instructions)" );
  GetLineF( "L19", &L[19] );
  L[20] = L[1];

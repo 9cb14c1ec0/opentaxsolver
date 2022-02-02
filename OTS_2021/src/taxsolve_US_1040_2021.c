@@ -29,7 +29,7 @@
 /* Aston Roberts 1-2-2021	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=19.00;
+float thisversion=19.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -2002,9 +2002,9 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
  SchedA[17] = SchedA[4] + SchedA[7] + SchedA[10] + SchedA[14] + SchedA[15] + SchedA[16];
 
  if (status != MARRIED_FILING_SEPARAT)		/* Now, Tentatively set 12b value, assuming NOT-itemizing. */
-  L12b = smallerof( SchedA[14], 300.0 );
+  L12b = smallerof( SchedA[14], 600.0 );
  else
-  L12b = smallerof( SchedA[14], 150.0 );
+  L12b = smallerof( SchedA[14], 300.0 );
 
  if ((L12b + std_deduc < SchedA[17]) || (ForceItemize))
   { /*Select_to_Itemize*/
