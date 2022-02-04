@@ -230,15 +230,15 @@ void GeneralWarning( char *mesg )       /* Used for one-line warning messages. *
 
 void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for multi-line informational messages. */
 {
- int xpos=20, ypos=20, winwdth, winhght, orig_winhght, j=0, k=0, maxcols=0, nlines=0;
+ int xpos=20, ypos=10, winwdth, winhght, orig_winhght, j=0, k=0, maxcols=0, nlines=0;
  GtkWidget *winframe;
  if (to_text_win)
   printf("%s\n", mesg);
  while (mesg[k] != '\0')	/* Determine max line width and number of rows. */
   {
+   if (j > maxcols) maxcols = j;
    if ((mesg[k] == '\n') || (mesg[k] == '\0'))
     {
-     if (j > maxcols) maxcols = j;
      j = 0;
      nlines++;
     }
@@ -247,7 +247,7 @@ void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for 
    k++;
   }
  winwdth = 40 + maxcols * 7;
- winhght = 60 + 18 * nlines + 5;
+ winhght = 70 + 18 * nlines + 5;
  orig_winhght = winhght;
  if (winhght < 500) 
   {
@@ -271,7 +271,7 @@ void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for 
     }
   }
  make_label( winframe, xpos, ypos, mesg );
- make_button( winframe, winwdth/2 - 30, orig_winhght - 40, "  Ok  ", dismiss_general_warning, &warnwin );
+ make_button( winframe, winwdth/2 - 30, orig_winhght - 38, "  Ok  ", dismiss_general_warning, &warnwin );
  gtk_window_set_keep_above( (GtkWindow *)warnwin, 1 );
  show_wind( warnwin );
 }
@@ -2439,7 +2439,7 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
  GtkTreeStore *mylist;
  GtkTreeIter iter;
  FILE *viewfile;
- char vline[5000];
+ char vline[9000], *errmsg=0;
  int wd, ht, valid_results=1, linesread=0;
 
  if (current_working_filename == 0) 
@@ -2531,11 +2531,19 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
      filter_tabs( vline );
      append_selection_list( mylist, &iter, vline );
      linesread++;
+
+     if (my_strcasestr( vline, "Error" ) != 0) 
+      {
+       if ((errmsg == 0) && (strncasecmp( vline, "Error", 5 ) == 0))
+	{ /* Any line starting with "Error" is considered to indicate an error-problem. */
+	 valid_results = 0;
+	 errmsg = strdup( vline );
+	}
+      }
+
      fgets( vline, 256, viewfile );
      if (strstr( vline, "Identity-Information:" ) != 0) 
       valid = 0;
-     if (strstr( vline, "Error" ) != 0) 
-      valid_results = 0;
     }
    fclose(viewfile);
   }
@@ -2544,6 +2552,8 @@ void taxsolve()				/* "Compute" the taxes. Run_TaxSolver. */
  show_wind( resultswindow );
  computed = 1;
  compute_needed = 0;
+ if (errmsg)
+  GeneralPopup( "Error", errmsg, 1 );
 }
 
 
@@ -2558,7 +2568,7 @@ void Run_TaxSolver( GtkWidget *wdg, void *x )
    GeneralWarning( "Change(s) not saved.  You must save before computing." );
    return;
   }
- taxsolve();
+ taxsolve();	/* Compute Taxes. */
 }
 
 
@@ -4049,7 +4059,7 @@ int main(int argc, char *argv[] )
  y = y + dy;
  formid = setform( form_CA_540 );
  tmpwdg = make_radio_button( mpanel, txprogstog, x, y, "CA State 540", slcttxprog, formid );
- gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
+ // gtk_widget_set_sensitive( tmpwdg, grayed_out );  /* Gray-out for this version - Not Ready. */
  y = y + dy;
  formid = setform( form_NC_D400 );
  make_radio_button( mpanel, txprogstog, x, y, "NC State DC400", slcttxprog, formid );

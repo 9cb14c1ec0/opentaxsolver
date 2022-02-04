@@ -4,9 +4,9 @@ Title:  US Federal 1040 Tax Form - 2021
 
 Status        Single    { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
 
-You_65+Over?	N	{ Were you born before January 2, 1956 ? (answer: Yes, No) }
+You_65+Over?	N	{ Were you born before January 2, 1957 ? (answer: Yes, No) }
 You_Blind?	N	{ Are you blind ? (answer: Yes, No) }
-Spouse_65+Over?	N	{ Was Spouse born before January 2, 1956 ? (answer: Yes, No) }
+Spouse_65+Over?	N	{ Was Spouse born before January 2, 1957 ? (answer: Yes, No) }
 Spouse_Blind?	N	{ Is Spouse blind ? (answer: Yes, No) }
 
 Dependents      1       { Number of Dependents, (answer: 1, 2, 3, 4, 5, 6, 7, 8, 9, ...)

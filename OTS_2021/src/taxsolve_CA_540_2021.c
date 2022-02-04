@@ -568,6 +568,14 @@ int main( int argc, char *argv[] )
  add_pdf_markup( "NotReady", 6, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
  add_pdf_markup( "NotReady", 7, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
  add_pdf_markup( "NotReady", 8, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 9, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ add_pdf_markup( "NotReady", 10, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+
+#ifdef microsoft
+ system( "start bin\\notify_popup \"Warning: This program is NOT ready for 2021.\"" );
+#else
+ system( "bin/notify_popup \"Warning: This program is NOT ready for 2021.\" &" );
+#endif
 
 
  /* Accept Form's "Title" line, and put out with date-stamp for your records. */
@@ -1099,64 +1107,35 @@ int main( int argc, char *argv[] )
  showline(17);
 
  switch (status)
-  {		/* Minimum AGI (Line 17) required to file. */		/* Not updated for 2021. */
+  {		/* Minimum AGI (Line 17) required to file. */		/* Updated for 2021. */
     case SINGLE:
+		if (iline9 == 0)		
+		  min2file = 12550.0;		/*Under65*/
+		else
+		  min2file = 14250.0;		/*65over*/
+	  break;
     case HEAD_OF_HOUSEHOLD:
-		if (iline9 == 0)		/*Under65*/
-		   switch (iline10)		  /*Dependents*/
-		    {
-		     case 0:  min2file = 18496.0;	break;
-		     case 1:  min2file = 31263.0;	break;
-		     default: min2file = 40838.0;	break;
-		    }
-		else			 	/*Over65*/
-		   switch (iline10)		  /*Dependents*/
-		    {
-		     case 0:  min2file = 24696.0;	break;
-		     case 1:  min2file = 34271.0;	break;
-		     default: min2file = 41931.0;	break;
-		    }
+		if (iline9 == 0)		
+		  min2file = 18800.0;		/*Under65*/
+		else
+		  min2file = 20500.0;		/*65over*/
 	  break;
    case MARRIED_FILING_JOINTLY: 
-		if (iline9 == 0)		 /*Both Under65*/
-		   switch (iline10)
-		    {
-		     case 0:  min2file = 36996.0;	break;
-		     case 1:  min2file = 49763.0;	break;
-		     default: min2file = 59338.0;	break;
-		    }
+		if (iline9 == 0)		
+		  min2file = 25100.0;		/*BothUnder65*/
 		else
-		if (iline9 == 1)		 /*One Over65*/
-		   switch (iline10)
-		    {
-		     case 0:  min2file = 43196.0;	break;
-		     case 1:  min2file = 52771.0;	break;
-		     default: min2file = 60631.0;	break;
-		    }
+		if (iline9 == 1)		
+		  min2file = 26450.0;		/*OneUnder65*/
 		else
-		   switch (iline10)		 /*Both Over65*/
-		    {
-		     case 0:  min2file = 49396.0;	break;
-		     case 1:  min2file = 58971.0;	break;
-		     default: min2file = 66631.0;	break;
-		    }
+		  min2file = 27800.0;		/*Both65over*/
 	  break;
    case WIDOW:
-		if (iline9 == 0)		/*Under65*/
-		   switch (iline10)		  /*Dependents*/
-		    {
-		     case 0:  min2file = 0.0;		break;	/* N/A */
-		     case 1:  min2file = 31263.0;	break;
-		     default: min2file = 40838.0;	break;
-		    }
-		else			 	/*Over65*/
-		   switch (iline10)		  /*Dependents*/
-		    {
-		     case 0:  min2file = 0.0;		break;	/* N/A */
-		     case 1:  min2file = 34271.0;	break;
-		     default: min2file = 41931.0;	break;
-		    }
+		if (iline9 == 0)		
+		  min2file = 25100.0;		/*Under65*/
+		else
+		  min2file = 26450.0;		/*65over*/
 	  break;
+   default:	min2file = 5.0;
   }
  if (L[17] <= min2file)
   fprintf(outfile,"You may not need to file CA Taxes, due to your California Adjusted Gross Income (%6.2f <= %6.2f).\n", 
@@ -1384,6 +1363,22 @@ int main( int argc, char *argv[] )
  GetTextLineF( "Zipcode:" );
  GetTextLineF( "YourDOB:" );
  GetTextLineF( "SpouseDOB:" );
+
+ GetTextLineF( "L10Dep1FrstName:" );
+ GetTextLineF( "L10Dep1LastName:" );
+ GetTextLineF( "L10Dep1SSN:" );
+ GetTextLineF( "L10Dep1Relation:" );
+
+ GetTextLineF( "L10Dep2FrstName:" );
+ GetTextLineF( "L10Dep2LastName:" );
+ GetTextLineF( "L10Dep2SSN:" );
+ GetTextLineF( "L10Dep2Relation:" );
+
+ GetTextLineF( "L10Dep3FrstName:" );
+ GetTextLineF( "L10Dep3LastName:" );
+ GetTextLineF( "L10Dep3SSN:" );
+ GetTextLineF( "L10Dep3Relation:" );
+
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );
  fclose(outfile);

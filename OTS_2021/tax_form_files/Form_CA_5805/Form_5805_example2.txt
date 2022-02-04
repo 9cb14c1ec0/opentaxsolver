@@ -1,297 +1,257 @@
 Title:  Form 5805 for Tax Year 2021
 
-{--- Your Identity ---}
-
-YourName:
-YourSocSec#:
-
-{--- Filing Status ---}
-
-Entity { Filing For?  (answer: Individual, Estate/Trust) }
-
-Status { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
-
-{Are you requesting a waiver of the penalty? }
-Quest1		{  (answer: Yes, No) }
-{Did you use the annualized income installment method? }
-Quest2		{  (answer: Yes, No) }
-{Was your California withholding not withheld in equal installments and
+ {--- Your Identity ---}
+YourName:	Scenario Two	
+YourSocSec#:	222-22-2222	
+	 {--- Filing Status ---}
+Entity	Individual	 { Filing For?  (answer: Individual, Estate/Trust) }
+Status	Married/Joint	 { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
+ {Are you requesting a waiver of the penalty? }
+Quest1	Yes	 {  (answer: Yes, No) }
+ {Did you use the annualized income installment method? }
+Quest2	Yes	 {  (answer: Yes, No) }
+ {Was your California withholding not withheld in equal installments and
  are you able to show the actual amounts withheld per period and the actual
  dates withheld?}
-Quest3		{  (answer: Yes, No, N/A) }
-{If "Yes," enter the actual uneven amounts withheld on the spaces provided
+Quest3	Yes	 {  (answer: Yes, No, N/A) }
+ {If "Yes," enter the actual uneven amounts withheld on the spaces provided
  below. The total of the four amounts must equal the total withholding
  reported on Form 540, line 71 and line 73; Form 540NR, line 81 and line 83;
  or Form 541, line 29 and line 31. }
-
-Wthd_Per_1 ;{ Amount Withheld for period with estimated tax due date
+Wthd_Per_1	3000		; { Amount Withheld for period with estimated tax due date
  4/15/21 }
-Wthd_Per_2 ;{ Amount Withheld for period with estimated tax due date
+Wthd_Per_2	16000		; { Amount Withheld for period with estimated tax due date
  6/15/21 }
-Wthd_Per_3 ;{ Amount Withheld for period with estimated tax due date
+Wthd_Per_3	8000		; { Amount Withheld for period with estimated tax due date
  9/15/21 }
-Wthd_Per_4 ;{ Amount Withheld for period with estimated tax due date
+Wthd_Per_4	1000		; { Amount Withheld for period with estimated tax due date
  1/15/22 }
-
-{For estates and trusts: Was the date of death less than two years from
+ {For estates and trusts: Was the date of death less than two years from
  the end of the taxable year? }
-Quest4		{  (answer: Yes, No) }
-
-
-{--- Part II Required Annual Payment. All filers must complete this part. ---}
-
-L1	;{ Current year tax. Enter your 2021 tax after credits. See
- instructions.} 
-L3	;{ Withholding taxes. Do not include any estimated tax
+Quest4		 {  (answer: Yes, No) }
+ {--- Part II Required Annual Payment. All filers must complete this part. ---}
+L1	153872		; { Current year tax. Enter your 2021 tax after credits. See
+ instructions.}
+L3			; { Withholding taxes. Do not include any estimated tax
  payments on this line. See instructions.}
-L5	;{ Enter the tax shown on your 2020 tax return. See
+L5	172839		; { Enter the tax shown on your 2020 tax return. See
  instructions. (110% (1.10) of that amount if the adjusted
  gross income shown on that return is more than $150,000, or
  if married/RDP filing a separate return for 2020, more than
  $75,000}
-
-CA_AGI	;{ Enter your California Adusted Gross Income (AGI) }
-
-{--- Short Method - Skip this part if using the Annualized Income Installment Method ---}
-{Caution: See the instructions to find out if you can use the short method.
+CA_AGI	864923		; { Enter your California Adusted Gross Income (AGI) }
+ {--- Short Method - Skip this part if using the Annualized Income Installment Method ---}
+ {Caution: See the instructions to find out if you can use the short method.
  If you answered "Yes'' to Question 2 in Part I, skip this part and go to
  Part III.  If you answered "No'' to Question 2 in Part I and you cannot use
  the short method, see page 4 of the instructions and go to Worksheet II
  below. }
-
-L8	;{ Enter the total amount, if any, of estimated tax
+L8			; { Enter the total amount, if any, of estimated tax
  payments you made }
-
-{Click "Save" to save this form and then click "Compute Tax".  Look for
+ {Click "Save" to save this form and then click "Compute Tax".  Look for
  the amount on line 10.  If zero or less, stop.  You do not owe the penalty.
  Do not file form FTB 5805.  Otherwise, return to the form and complete the
  next entry (Num_Days).  Again click "Save" amd "Compute Tax" to calculate your
  penalty. }
-
-{If the amount on line 10 was paid ON OR AFTER 4/15/22, enter -0-. 
+ {If the amount on line 10 was paid ON OR AFTER 4/15/22, enter -0-. 
  Otherwise, enter number of days the amount on line 10 was paid BEFORE
  4/15/22. }
-
-Num_Days 	;{ Number of days }
-
-{--- Part III Annualized Income Installment Method Schedule. ---}
-
-{Use this schedule ONLY if you earned taxable income at an UNEVEN RATE
+Num_Days			; { Number of days }
+ {--- Part III Annualized Income Installment Method Schedule. ---}
+ {Use this schedule ONLY if you earned taxable income at an UNEVEN RATE
  during 2021. If you earned your income at approximately the same rate each
  month, then you should not complete this schedule. If you choose to figure
  the penalty, see Worksheet II, Regular Method to Figure Your Underpayment
  and Penalty, on page 4 of the instructions.  Worksheet II is available
  below. }
-
-{IMPORTANT:  NOTE CAREFULLY THE STARTING AND ENDING DATES FOR EACH PERIOD. 
+ {IMPORTANT:  NOTE CAREFULLY THE STARTING AND ENDING DATES FOR EACH PERIOD. 
  THE PERIODS ALL BEGIN JANUARY 1.  THEY ARE NOT CALENDAR QUARTERS!  Fiscal
  year filers must adjust dates accordingly.}
-
-SchdAI_1a	;{ Enter your California adjusted gross income (AGI) for
+SchdAI_1a	488934		; { Enter your California adjusted gross income (AGI) for
  the period 1/1/21-3/31/21.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/21-2/28/21).}
-SchdAI_1b	;{ Enter your California adjusted gross income (AGI) for
+SchdAI_1b	687944		; { Enter your California adjusted gross income (AGI) for
  the period 1/1/21-5/31/21.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/21-4/30/21)}
-SchdAI_1c	;{ Enter your California adjusted gross income (AGI) for
+SchdAI_1c	839201		; { Enter your California adjusted gross income (AGI) for
  the period 1/1/21-8/31/21.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/21-7/31/21)}
-SchdAI_1d	;{ Enter your California adjusted gross income (AGI) for
+SchdAI_1d	1287933		; { Enter your California adjusted gross income (AGI) for
  the period 1/1/21-12/31/21.  Form 540NR filers, see
  instructions. Estates or Trusts, enter the amount from Form
  541, line 20 attributable to the period 1/1/21-11/30/21)}
-
-SchdAI_2a	4 { Annualization amounts.  Estates or Trusts, see instructions.}
-SchdAI_2b	2.4 { Annualization amounts.  Estates or Trusts, see instructions.}
-SchdAI_2c	1.5 { Annualization amounts.  Estates or Trusts, see instructions.}
-SchdAI_2d	1 { Annualization amounts.  Estates or Trusts, see instructions.}
-
-SchdAI_4a	;{ If you itemize, enter itemized deductions for the period
+SchdAI_2a	4	 { Annualization amounts.  Estates or Trusts, see instructions.}
+SchdAI_2b	2.4	 { Annualization amounts.  Estates or Trusts, see instructions.}
+SchdAI_2c	1.5	 { Annualization amounts.  Estates or Trusts, see instructions.}
+SchdAI_2d	1	 { Annualization amounts.  Estates or Trusts, see instructions.}
+SchdAI_4a	18573		; { If you itemize, enter itemized deductions for the period
  1/1/21-3/31/21; otherwise, enter -0-.  Estates and trusts:
  enter "0". }
-SchdAI_4b	;{ If you itemize, enter itemized deductions for the period
+SchdAI_4b	77284		; { If you itemize, enter itemized deductions for the period
  1/1/21-5/31/21; otherwise, enter -0-.  Estates and trusts:
  enter "0". }
-SchdAI_4c	;{ If you itemize, enter itemized deductions for the period
+SchdAI_4c	86936		; { If you itemize, enter itemized deductions for the period
  1/1/21-8/31/21; otherwise, enter -0-.  Estates and trusts:
- enter "0". } 	
-SchdAI_4d	;{ If you itemize, enter itemized deductions for the period
+ enter "0". }
+SchdAI_4d	128534		; { If you itemize, enter itemized deductions for the period
  1/1/21-12/31/21; otherwise, enter -0-.    Estates and
  trusts: enter "0". }
-
-SchdAI_7a	;{ Enter the full amount of your standard deduction from
+SchdAI_7a	9606		; { Enter the full amount of your standard deduction from
  your 2021 Form 540 or Form 540NR,, line 18, even if you itemized.  See
  instructions.}
-
-SchdAI_10a_add	;{ For individuals, this program will automatically
+SchdAI_10a_add	5844		; { For individuals, this program will automatically
  calculate the tax on the amount on lime 9.  Enter certain
  additional taxes for the period here, such as tax from form
  FTB 3803 (see instructions).  NOTE:  AMT and mental health
  services tax are entered below on line 14b.  Estates or
  Trusts, see instructions and enter all taxes, including tax
  on the amount on line 9, here.  }
-SchdAI_10b_add	;{ For individuals, this program will automatically
+SchdAI_10b_add	8321		; { For individuals, this program will automatically
  calculate the tax on the amount on lime 9.  Enter certain
  additional taxes for the period here, such as tax from form
  FTB 3803 (see instructions).  NOTE:  AMT and mental health
  services tax are entered below on line 14b.  Estates or
  Trusts, see instructions and enter all taxes, including tax
  on the amount on line 9, here.}
-SchdAI_10c_add	;{ For individuals, this program will automatically
+SchdAI_10c_add	9643		; { For individuals, this program will automatically
  calculate the tax on the amount on lime 9.  Enter certain
  additional taxes for the period here, such as tax from form
  FTB 3803 (see instructions).  NOTE:  AMT and mental health
  services tax are entered below on line 14b.  Estates or
  Trusts, see instructions and enter all taxes, including tax
  on the amount on line 9, here.}
-SchdAI_10d_add	;{ For individuals, this program will automatically
+SchdAI_10d_add	10888		; { For individuals, this program will automatically
  calculate the tax on the amount on lime 9.  Enter certain
  additional taxes for the period here, such as tax from form
  FTB 3803 (see instructions).  NOTE:  AMT and mental health
  services tax are entered below on line 14b.  Estates or
  Trusts, see instructions and enter all taxes, including tax
  on the amount on line 9, here. }
-
-SchdAI_11a	;{ Enter the total amount of exemption credits from your
+SchdAI_11a			; { Enter the total amount of exemption credits from your
  2021 Form 540, line 32 or Form 541, line 22.  See
  instructions.  If you filed a Form 540NR, see instructions.}
-SchdAI_11b	;{ Enter the total amount of exemption credits from your
+SchdAI_11b	0		; { Enter the total amount of exemption credits from your
  2021 Form 540, line 32 or Form 541, line 22. See
  instructions.  If you filed a Form 540NR, see instructions.}
-SchdAI_11c	;{ Enter the total amount of exemption credits from your
+SchdAI_11c	0		; { Enter the total amount of exemption credits from your
  2021 Form 540, line 32 or Form 541, line 22. See
  instructions.  If you filed a Form 540NR, see instructions.}
-SchdAI_11d	;{ Enter the total amount of exemption credits from your
+SchdAI_11d	0		; { Enter the total amount of exemption credits from your
  2021 Form 540, line 32 or Form 541, line 22. See
  instructions.  If you filed a Form 540NR, see instructions.}
-
-SchdAI_13a	;{ Enter the total credit amount from your 2021 Form 540,
+SchdAI_13a	3876		; { Enter the total credit amount from your 2021 Form 540,
  line 47; or Form 541, line 23. Form 540NR filers, see
  instructions.}
-SchdAI_13b	;{ Enter the total credit amount from your 2021 Form 540,
+SchdAI_13b	4777		; { Enter the total credit amount from your 2021 Form 540,
  line 47; or Form 541, line 23. Form 540NR filers, see
  instructions.}
-SchdAI_13c	;{ Enter the total credit amount from your 2021 Form 540,
+SchdAI_13c	6398		; { Enter the total credit amount from your 2021 Form 540,
  line 47; or Form 541, line 23. Form 540NR filers, see
  instructions.}
-SchdAI_13d	;{ Enter the total credit amount from your 2021 Form 540,
+SchdAI_13d	9217		; { Enter the total credit amount from your 2021 Form 540,
  line 47; or Form 541, line 23. Form 540NR filers, see
  instructions.}
-
-SchdAI_14ba	;{ Enter the alternative minimum tax and mental health tax
+SchdAI_14ba	15346		; { Enter the alternative minimum tax and mental health tax
  for the period 1/1/21-3/31/21.  Estates and trusts: for the
  period 1/1/21-2/29/21. Figure the alternative minimum tax
  and mental health services tax you owe based on income
  earned during the period. }
-SchdAI_14bb	;{ Enter the alternative minimum tax and mental health tax
+SchdAI_14bb	18386		; { Enter the alternative minimum tax and mental health tax
  for the period 1/1/21-5/31/21.  Estates and trusts: for the
  period 1/1/21-4/30/21. Figure the alternative minimum tax
  and mental health services tax you owe based on income
  earned during the period. }
-SchdAI_14bc	;{ Enter the alternative minimum tax and mental health tax
+SchdAI_14bc	20860		; { Enter the alternative minimum tax and mental health tax
  for the period 1/1/21-8/31/21.  Estates and trusts: for the
  period 1/1/21-7/31/21. Figure the alternative minimum tax
  and mental health services tax you owe based on income
  earned during the period. }
-SchdAI_14bd	;{ Enter the amounts from your 2021 Form 540, line 61 and
+SchdAI_14bd	23976		; { Enter the amounts from your 2021 Form 540, line 61 and
  line 62; 2020 Form 540NR, line 71 and line 72; or 2020 Form
  541, line 26 and line 27.}
-
-SchdAI_14da	;{ Enter the excess SDI from Form 540, line 74 or Form
+SchdAI_14da	438		; { Enter the excess SDI from Form 540, line 74 or Form
  540NR, line 84. }
-SchdAI_14db	;{ Enter the excess SDI from Form 540, line 74 or Form
+SchdAI_14db	578		; { Enter the excess SDI from Form 540, line 74 or Form
  540NR, line 84.}
-SchdAI_14dc	;{ Enter the excess SDI from Form 540, line 74 or Form
+SchdAI_14dc	732		; { Enter the excess SDI from Form 540, line 74 or Form
  540NR, line 84.}
-SchdAI_14dd	;{ Enter the excess SDI from Form 540, line 74 or Form
+SchdAI_14dd	844		; { Enter the excess SDI from Form 540, line 74 or Form
  540NR, line 84.}
-
-{--- Federal Annualized Income Worksheet ---}
-
-{NOTE:  If you are a nonresident military servicemember domiciled outside
+ {--- Federal Annualized Income Worksheet ---}
+ {NOTE:  If you are a nonresident military servicemember domiciled outside
  of California, subtract your military pay from your federal AGI. }
-
-FAIWS_1a	;{ Enter your federal adjusted gross income for the period
+FAIWS_1a	340932		; { Enter your federal adjusted gross income for the period
  1/1/21-3/31/21.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/21-2/28/21),}
-FAIWS_1b	;{ Enter your federal adjusted gross income for the period
+FAIWS_1b	588234		; { Enter your federal adjusted gross income for the period
  1/1/21-5/31/21.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/21-4/30/21),}
-FAIWS_1c	;{ Enter your federal adjusted gross income for the period
+FAIWS_1c	722122		; { Enter your federal adjusted gross income for the period
  1/1/21-8/31/21.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/21-7/31/21),}
-FAIWS_1d	;{ Enter your federal adjusted gross income for the period
+FAIWS_1d	1007325		; { Enter your federal adjusted gross income for the period
  1/1/21-12/31/21.  See instructions for federal Form 2210,
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/21-11/30/21),}
-
-{--- Line 6 Worksheet (for high-income filers who itemize deductions) ---}
-
-L6WS_2a	;{ Enter the sum of the amounts on federal Schedule A (Form
+ {--- Line 6 Worksheet (for high-income filers who itemize deductions) ---}
+L6WS_2a	17655		; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
  included on line 16 for  the period 1/1/21-3/31/21 (Estates
  and trusts:  for the period 1/1/21-2/28/21). }
-L6WS_2b	;{ Enter the sum of the amounts on federal Schedule A (Form
+L6WS_2b	65999		; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
  included on line 16 for  the period 1/1/21-5/31/21. 
  (Estates and trusts:  for the period 1/1/21-4/30/21)..}
-L6WS_2c	;{ Enter the sum of the amounts on federal Schedule A (Form
+L6WS_2c	80005		; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
  included on line 16 for  the period 1/1/21-8/31/21. 
  (Estates and trusts:  for the period 1/1/21-7/31/21),}
-L6WS_2d	;{ Enter the sum of the amounts on federal Schedule A (Form
+L6WS_2d	118434		; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
  included on line 16 for  the period 1/1/21-12/31/21. 
  (Estates and trusts:  for the period 1/1/21-11/30/21).}
-
-{--- Worksheet II - Regular Method to Figure Your Underpayment and Penalty ---}
-
-{NOTE:  The entries below are NOT CUMULATIVE.  Enter the amount that was
+ {--- Worksheet II - Regular Method to Figure Your Underpayment and Penalty ---}
+ {NOTE:  The entries below are NOT CUMULATIVE.  Enter the amount that was
  paid each period by that period's due date. }
-
-WSII_2a	;{ Enter the estimated tax payments for the period
+WSII_2a	47000		; { Enter the estimated tax payments for the period
  1/1/21-3/31/21 that were made by 4/15/21, including any
  overpayment of tax from your 2019 tax return that you
  elected to apply to the 2020 estimated tax.}
-WSII_2b	;{ Enter the estimated tax payments for the period
+WSII_2b	30000		; { Enter the estimated tax payments for the period
  1/1/21-5/31/21 that were made by 6/15/21.}
-WSII_2c	;{ Enter the estimated tax payments for the period
+WSII_2c	10000		; { Enter the estimated tax payments for the period
  1/1/21-8/31/21 that were made by 9/15/21.}
-WSII_2d	;{ Enter the estimated tax payments for the period
+WSII_2d	50000		; { Enter the estimated tax payments for the period
  1/1/21-12/31/21 that were made by 1/15/22}
-
-{After you make the above entries, click "Save" and then click "Calculate
+ {After you make the above entries, click "Save" and then click "Calculate
  Tex" to see if you have an underpayment for any period.  If so, you may owe
  a penalty.   Read the instructions for how to calculate the penalty, make
  the following entires, and again click "Save" and "Calculate Tax".  Because
  calculating the penalty can be complex, carefully check the results to
  ensure that they are correct for your particular tax situation.}
-
-WSII_10a	;{ Number of days from 4/15/21 to the date the amount on
+WSII_10a	10		; { Number of days from 4/15/21 to the date the amount on
  line 8 was paid or 4/15/22, whichever is earlier  (see
  instructions).}
-WSII_10b	;{ Number of days from 4/15/21 to the date the amount on
+WSII_10b	92		; { Number of days from 4/15/21 to the date the amount on
  line 8 was paid or 4/15/22, whichever is earlier  (see
  instructions).}
-WSII_10c	;{ Number of days from 4/15/21 to the date the amount on
+WSII_10c	0		; { Number of days from 4/15/21 to the date the amount on
  line 8 was paid or 4/15/22, whichever is earlier  (see
  instructions).}
-WSII_10d	;{ Number of days from 4/15/21 to the date the amount on
+WSII_10d	0		; { Number of days from 4/15/21 to the date the amount on
  line 8 was paid or 4/15/22, whichever is earlier  (see
  instructions).}
-
-{After you have filled out all of the applicable fields above, click
+ {After you have filled out all of the applicable fields above, click
  "Save" to save this form and  then click "Compute Tax" to see if you owe a
  penalty. }
-
-{--------------------------------------------} 
+ {--------------------------------------------}

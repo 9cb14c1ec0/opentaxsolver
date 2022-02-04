@@ -132,3 +132,19 @@ CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
  Zipcode:	12345678	
  YourDOB:	11/3/1978
  SpouseDOB:	2/8/1975
+
+ { -- Optional Dependent Information -- }
+ L10Dep1FrstName:  Myra		{ Dependent-1 first-name }
+ L10Dep1LastName:  Cirallo	{ Dependent-1 last-name }
+ L10Dep1SSN:	   123456789	{ Dependent-1 SocSec# }
+ L10Dep1Relation:  stepchild	{ Dependent-1 relation to you }
+
+ L10Dep2FrstName:		{ Dependent-1 first-name }
+ L10Dep2LastName:		{ Dependent-1 last-name }
+ L10Dep2SSN:			{ Dependent-1 SocSec# }
+ L10Dep2Relation:		{ Dependent-1 relation to you }
+
+ L10Dep3FrstName:		{ Dependent-1 first-name }
+ L10Dep3LastName:		{ Dependent-1 last-name }
+ L10Dep3SSN:			{ Dependent-1 SocSec# }
+ L10Dep3Relation:		{ Dependent-1 relation to you }

@@ -135,7 +135,7 @@ int main( int argc, char *argv[] )
  char word[4000], outfname[4000], *infname=0;
  time_t now;
 
- int Quest2, Num_Days = -1;		/* negative Num_Days used as a flag below */
+ int Quest2, Quest3 = 0, Num_Days = -1;		/* negative Num_Days used as a flag below */
  double Wthd_Per_1, Wthd_Per_2, Wthd_Per_3, Wthd_Per_4, CA_AGI;
  
 
@@ -218,6 +218,12 @@ for(i = 0; i <= 13; i++){
 	L6WS_c[i] = 0.0;
 	L6WS_d[i] = 0.0;
  }
+
+ Wthd_Per_1 = 0.0;
+ Wthd_Per_2 = 0.0;
+ Wthd_Per_3 = 0.0;
+ Wthd_Per_4 = 0.0;
+
  /* Accept parameters from input file. */
  /* Expect lines, something like:
         Title:  Form XXXX Return
@@ -230,19 +236,15 @@ for(i = 0; i <= 13; i++){
  now = time(0);
  fprintf(outfile,"\n%s,  v%2.2f, %s\n", word, thisversion, ctime( &now ));
 
+ // add_pdf_markup( "NotReady", 1, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 20xx.\"" );
 
- fprintf(outfile,"\n--- THIS IS PRELIMINARY USER-CONTRIBUTED FORM ---\n");
- fprintf(outfile,"--- NOT YET FULLY UPDATED FOR 2021. ---\n\n");
-
- // MarkupPDF( 1, 240, 40, 17, 1.0, 0, 0 ) NotReady "This program is NOT updated for 2021."
- add_pdf_markup( "NotReady", 1, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
-
-
-
- /* ----- Accept form data and process the numbers.         ------ */
+ fprintf(outfile, "%s\n", "==================================================");
+ fprintf(outfile, "%s\n", "                                                            CAUTION\nThis program fills out Form 5805 to determine WHETHER OR NOT you owe a penalty\nfor underpayment of estimated tax.  It calculates the AMOUNT of any penalty you\nmay owe for the MOST LIKELY CASE in which up to four estimated tax payments have\n been made.  You should carefully review the instructions for Form 5805 to see if the\ncalculations are correct for your particular tax situation.  DO NOT INTERPRET a\ndefault zero value for the penalty on the filled PDF to indicate that you do not owe\na penalty, especially if you have not input all required information, including the\nactual dates on which you made your payments. Scroll down to the end of this\nresults file to see if you had an underpayment for any period.  If so, you may owe\na penalty.\n\nItemized deductions are limited for high-income taxpayers.  When you are\nchecking calculations, values on line 6 of Part III may appear to be in error due to\nthese limitations.  See this results file and the last page of the output PDF for the\nlimitation calculations.  Also note that the annualization factor values on lines 4\nof the last page of the output PDF round by default to the nearest integer.  Use\nthe values in this results file for lines L6WS_4a, L6WS_4b, L6WS_4c, and L6WS_4d,\n which for most individual taxpayers will be 4.0, 2.4, 1.5, and 1.0, respectively.\n\nThis program does not calculate the phase-out of exemption credits for high-income\ntaxpayers as collection of the necessary information for each period would\nunnecessarily complicate this program for most users and the impact of exemption\nlimitations on the tax estimates would be negligible.  See instructions for line 11.");
+ fprintf(outfile, "%s\n\n", "==================================================");
+ 
  /* ----- Place all your form-specific code below here .... ------ */
 
- // Example:
+ // Exam
  //  GetLineF( "L2", &L[2] );
  //  GetLineF( "L3", &L[3] );
  //  L[4] = L[2] - L[3];
@@ -292,14 +294,14 @@ else {
 	fprintf(outfile,"CkQuest2No X\n");
 }
 
-  get_parameter( infile, 's', word, "Quest3" );
+ get_parameter( infile, 's', word, "Quest3" );
  get_parameter( infile, 'w', word, "Quest3?");
  if (strncasecmp(word,"Yes",1)==0){
-	// Quest3 = Yes;
+	Quest3 = Yes;
 	fprintf(outfile,"CkQuest3Yes X\n");
 }
 else if (strncasecmp(word,"No",2)==0){
-	// Quest3 = No;
+	Quest3 = No;
 	fprintf(outfile,"CkQuest3No X\n");
 }
 else {
@@ -309,7 +311,7 @@ else {
 
  GetLineF( "Wthd_Per_1", &Wthd_Per_1 );
  GetLineF( "Wthd_Per_2", &Wthd_Per_2 );
-GetLineF( "Wthd_Per_3", &Wthd_Per_3 );
+ GetLineF( "Wthd_Per_3", &Wthd_Per_3 );
  GetLineF( "Wthd_Per_4", &Wthd_Per_4 );
 
  get_parameter( infile, 's', word, "Quest4" );
@@ -328,19 +330,26 @@ else if (strncasecmp(word,"No",2)==0){
  GetLineF( "L1", &L[1] );
   L[2] = L[1] * 0.90;
   showline( 2 );
- GetLineF( "L3", &L[3] );
+ GetLine( "L3", &L[3] );
+	if(Quest3 == Yes){
+		L[3] = Wthd_Per_1 + Wthd_Per_2 + Wthd_Per_3 + Wthd_Per_4;
+	}
+ showline( 3 );
  L[4] = L[1]  -  L[3];
  showline( 4 );
- if((L[4] < 500) || ( status == MARRIED_FILING_SEPARAT && L[4] < 250)){
-	fprintf(outfile, "Stop Here.  You do not owe the penalty. Do not file form FTB 5805.\n");
-	exit(0);
+ if((L[4] < 250.00) && (status == MARRIED_FILING_SEPARAT)){
+		fprintf(outfile, "Status is \"Married Filing Separately\" and line 4 is less than $250.  Stop here.\nYou do not owe the penalty. Do not file form FTB 5805.\n");
+		exit(0);
+ }
+ else if((L[4] < 500.00) && (status != MARRIED_FILING_SEPARAT)){
+		fprintf(outfile, "Status is not \"Married Filing Separately\" and line 4 is less than $500.  Stop here.\nYou do not owe the penalty. Do not file form FTB 5805.\n");
+		exit(0);
  }
   GetLineF( "L5", &L[5] );
- showline( 5 );
 
  GetLineF( "CA_AGI", &CA_AGI );
 
- if((CA_AGI >= 1000000) || (status == MARRIED_FILING_SEPARAT && CA_AGI >= 500000))
+ if((CA_AGI >= 1000000.00) || (status == MARRIED_FILING_SEPARAT && CA_AGI >= 500000.00))
 	L[6] = L[2];
 else
 	L[6] = SmallerOf(L[2], L[5]);
@@ -360,13 +369,14 @@ showline( 6 );
 		L[7] = L[3];
 		L[9] = L[7 ]+ L[8];
 		L[10] = L[6] - L[9];
-		if(L[10] <= 0){
-			fprintf(outfile, "Stop here.  You do not owe the penalty. Do not file form FTB 5805.\n");
-			exit(0);
-		}
 
 		for(i = 7; i <= 10; i++)
 			showline( i );
+
+		if(L[10] <= 0){
+			fprintf(outfile, "Line 10 is zero or less.  Stop here.  You do not owe the penalty.\nDo not file form FTB 5805.\n");
+			exit(0);
+		}
 
 		L[11] = L[10] * 0.02121370;
 
@@ -403,60 +413,60 @@ showline( 6 );
 	   GetLine( "SchdAI_4c", &c[4] );
 	   GetLine( "SchdAI_4d", &d[4] );
 
-	   GetLine( "SchdAI_6a", &a[6] );
-	   GetLine( "SchdAI_6b", &b[6] );
-	   GetLine( "SchdAI_6c", &c[6] );
-	   GetLine( "SchdAI_6d", &d[6] );	   
+//	   GetLine( "SchdAI_6a", &a[6] );
+//	   GetLine( "SchdAI_6b", &b[6] );
+//	   GetLine( "SchdAI_6c", &c[6] );
+//	   GetLine( "SchdAI_6d", &d[6] );	   
 	
-	    GetLine( "SchdAI_7a", &a[7] );
-	    b[7] = a[7];
-	    c[7] = a[7];
-	    d[7] = a[7];
+	   GetLine( "SchdAI_7a", &a[7] );
+	   b[7] = a[7];
+	   c[7] = a[7];
+	   d[7] = a[7];
 	
-	    GetLine( "SchdAI_10a_add", &a[10] );
+	   GetLine( "SchdAI_10a_add", &a[10] );
 	   GetLine( "SchdAI_10b_add", &b[10] );
 	   GetLine( "SchdAI_10c_add", &c[10] );
 	   GetLine( "SchdAI_10d_add", &d[10] ); 
 
-	    GetLine( "SchdAI_11a", &a[11] );
+	   GetLine( "SchdAI_11a", &a[11] );
 	   GetLine( "SchdAI_11b", &b[11] );
 	   GetLine( "SchdAI_11c", &c[11] );
 	   GetLine( "SchdAI_11d", &d[11] );
 
-	    GetLine( "SchdAI_13a", &a[13] );
+	   GetLine( "SchdAI_13a", &a[13] );
 	   GetLine( "SchdAI_13b", &b[13] );
 	   GetLine( "SchdAI_13c", &c[13] );
 	   GetLine( "SchdAI_13d", &d[13] ); 	   
 	
-	    GetLine( "SchdAI_14ba", &L14ba );
+	   GetLine( "SchdAI_14ba", &L14ba );
 	   GetLine( "SchdAI_14bb", &L14bb );
 	   GetLine( "SchdAI_14bc", &L14bc );
 	   GetLine( "SchdAI_14bd", &L14bd );
 
-	    GetLine( "SchdAI_14da", &L14da );
+	   GetLine( "SchdAI_14da", &L14da );
 	   GetLine( "SchdAI_14db", &L14db );
 	   GetLine( "SchdAI_14dc", &L14dc );
 	   GetLine( "SchdAI_14dd", &L14dd );
 	
-	    GetLine( "FAIWS_1a", &FAIWS_a[1]);
+	   GetLine( "FAIWS_1a", &FAIWS_a[1]);
 	   GetLine( "FAIWS_1b", &FAIWS_b[1]);
 	   GetLine( "FAIWS_1c", &FAIWS_c[1]);
 	   GetLine( "FAIWS_1d", &FAIWS_d[1]);
 
-	    GetLine( "L6WS_2a", &L6WS_a[2]);
+	   GetLine( "L6WS_2a", &L6WS_a[2]);
 	   GetLine( "L6WS_2b", &L6WS_b[2]);
 	   GetLine( "L6WS_2c", &L6WS_c[2]);
 	   GetLine( "L6WS_2d", &L6WS_d[2]);	   
 
-	    GetLine( "WSII_2a", &A[2]);
-	   GetLine( "WSII_2b", &B[2]);
-	   GetLine( "WSII_2c", &C[2]);
-	   GetLine( "WSII_2d", &D[2]);
+        GetLine( "WSII_2a", &A[2]);
+	GetLine( "WSII_2b", &B[2]);
+	GetLine( "WSII_2c", &C[2]);
+	GetLine( "WSII_2d", &D[2]);
 
-	    GetLine( "WSII_10a", &A[10]);
-	   GetLine( "WSII_10b", &B[10]);
-	   GetLine( "WSII_10c", &C[10]);
-	   GetLine( "WSII_10d", &D[10]);	   
+	GetLine( "WSII_10a", &A[10]);
+	GetLine( "WSII_10b", &B[10]);
+	GetLine( "WSII_10c", &C[10]);
+	GetLine( "WSII_10d", &D[10]);	   
 
 	a[3] = a[1] * a[2];
 	b[3] = b[1] * b[2];
@@ -477,20 +487,26 @@ showline( 6 );
 	fprintf(outfile, "FAIWS_1a\t%0.2lf\n", FAIWS_a[1]);
 	fprintf(outfile, "FAIWS_2a\t%0.2lf\n", a[5]);
 	fprintf(outfile, "FAIWS_3a\t%0.2lf\n", FAIWS_a[3]);
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_a[3] > 424581)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_a[3] > 212288)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_a[3] > 318437))){
-		a[6] = L6WS('a', a[4], L6WS_a[2], a[5], FAIWS_a[3], status);
+
+	if(a[4] > 0){
+		if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_a[3] > 424581.00)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_a[3] > 212288.00)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_a[3] > 318437.00))){
+			a[6] = L6WS('a', a[4], L6WS_a[2], a[5], FAIWS_a[3], status);
+		}
 	}
 	
 	FAIWS_b[3] = FAIWS_b[1] * b[5];
 	fprintf(outfile, "FAIWS_1b\t%0.2lf\n", FAIWS_b[1]);
 	fprintf(outfile, "FAIWS_2b\t%0.2lf\n", b[5]);
 	fprintf(outfile, "FAIWS_3b\t%0.2lf\n", FAIWS_b[3]);
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_b[3] > 424581)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_b[3] > 212288)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_b[3] > 318437))){
-		b[6] = L6WS('b', b[4], L6WS_b[2], b[5], FAIWS_b[3], status);	
+
+	if(b[4] > 0){
+		if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_b[3] > 424581.00)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_b[3] > 212288.00)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_b[3] > 318437.00))){
+			b[6] = L6WS('b', b[4], L6WS_b[2], b[5], FAIWS_b[3], status);
+		}	
 	}
 
 	FAIWS_c[3] = FAIWS_c[1] * c[5];
@@ -498,20 +514,25 @@ showline( 6 );
 	fprintf(outfile, "FAIWS_2c\t%0.2lf\n", c[5]);
 	fprintf(outfile, "FAIWS_3c\t%0.2lf\n", FAIWS_c[3]);
 
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_c[3] > 424581)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_c[3] > 212288)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_c[3] > 318437))){
-		c[6] = L6WS('c', c[4], L6WS_c[2], c[5], FAIWS_c[3], status);
+	if(c[4] > 0){
+		if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_c[3] > 424581.00)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_c[3] > 212288.00)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_c[3] > 318437.00))){
+			c[6] = L6WS('c', c[4], L6WS_c[2], c[5], FAIWS_c[3], status);
+		}
 	}
 
 	FAIWS_d[3] = FAIWS_d[1] * d[5];
  	fprintf(outfile, "FAIWS_1d\t%0.2lf\n", FAIWS_d[1]);
 	fprintf(outfile, "FAIWS_2d\t%0.2lf\n", d[5]);
 	fprintf(outfile, "FAIWS_3d\t%0.2lf\n", FAIWS_d[3]);
-	if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_d[3] > 424581)) || \
-	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_d[3] > 212288)) || \
-	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_d[3] > 318437))){
-		d[6] = L6WS('d', d[4], L6WS_d[2], d[5], FAIWS_d[3], status);
+
+	if(d[4] > 0){
+		if((((status == MARRIED_FILING_JOINTLY) || (status == WIDOW)) && (FAIWS_d[3] > 424581.00)) || \
+	(((status == SINGLE) || (status == MARRIED_FILING_SEPARAT)) && (FAIWS_d[3] > 212288.00)) || \
+	((status == HEAD_OF_HOUSEHOLD) && (FAIWS_d[3] > 318437.00))){
+			d[6] = L6WS('d', d[4], L6WS_d[2], d[5], FAIWS_d[3], status);
+		}
 	}
 
 	a[8] = LargerOf(a[6], a[7]);
@@ -539,7 +560,7 @@ showline( 6 );
 	L14ac = NotLessThanZero(c[12] - c[13]);
 	L14ad = NotLessThanZero(d[12] - d[13]);
 
-	L14ca =  L14aa + L14ba;			/* first lower case letter is row; second lower case letter is column */
+	L14ca =  L14aa + L14ba;		/* first lower case letter is row; second lower case letter is column */
 	L14cb = L14ab + L14bb;
 	L14cc = L14ac + L14bc;
 	L14cd = L14ad + L14bd;
@@ -590,6 +611,24 @@ showline( 6 );
 
 	}	
 		/* WORKSHEET II */
+
+	/* A[2], B[2], C[2], D[2] contain estimated taxes paid each period.  Add uneven withholding in period */
+	/* or total of evenly withheld amounts allocated to each period based on number of days in period */
+	/* Withholding is either uneven or even (in which case Wthd_Per_1, Wthd_Per_2, Wthd_Per_3, and */
+	/* Wthd_Per_4 should all be blank or zero. */
+
+	if(Quest3 == Yes){
+		A[2] = A[2] + Wthd_Per_1;
+		B[2] = B[2] + Wthd_Per_2;
+		C[2] = C[2] + Wthd_Per_3;
+		D[2] = D[2] + Wthd_Per_4;
+	}
+	else{
+		A[2] = A[2] + L[3] * (90.0 / 365.0);
+		B[2] = B[2] + L[3] * (61.0 / 365.0);
+		C[2] = C[2] + L[3] * (92.0 / 365.0);
+		D[2] = D[2] + L[3] * (122.0 / 365.0);
+	}
 	
 	A[6] = A[2];
 
@@ -689,17 +728,19 @@ showline( 6 );
 		}
 
 		for(i = 1; i <= 11; i++){
-			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "a", A[i]);
+			if((i != 3) && (i != 4) && (i != 5) && (i != 7))
+				fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "a", A[i]);
 			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "b", B[i]);
 			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "c", C[i]);
-			fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "d", D[i]);
+			if((i != 7) && (i != 9))
+				fprintf(outfile, "WSII_%d%s %0.2lf\n", i, "d", D[i]);
 		}
 		fprintf(outfile, "WSII_%d %0.2lf     %s\n", 12, A[0], "PENALTY");
 	
 		if((A[8] == 0) && (B[8] == 0) && (C[8] == 0) && (D[8] == 0))
 			fprintf(outfile, "As line 8 on WSII is zero for all payment periods, you don't owe a penalty.\n");
 		else
-			fprintf(outfile, "%s\n%s\n%s\n", "There is an underpayment for one or more periods.  See the  instructions and if", "you have not already done so, enter the number of days the payment was late", "into the GUI so this program can calculate the penalty.");
+			fprintf(outfile, "%s\n%s\n%s\n", "There is an underpayment for one or more periods.  See the  instructions and if", "you have not already done so, enter the number of days any payment was late", "into the GUI so this program can calculate the penalty.");
 	}
 
   /*** 

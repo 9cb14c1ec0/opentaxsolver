@@ -1,11 +1,11 @@
 Title:  Form 5805 for Tax Year 2021
 
- {--- Your Identity --- }
+ {--- Your Identity ---}
 YourName:	John Jay	
 YourSocSec#:	333-33-3333	
-	 {--- Filing Status --- }
+	 {--- Filing Status ---}
 Entity	Individual	 { Filing For?  (answer: Individual, Estate/Trust) }
-Status	Married/Joint	 { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
+Status	Single	 { Single, Married/Joint, Head_of_House, Married/Sep, Widow(er) }
  {Are you requesting a waiver of the penalty? }
 Quest1	No	 {  (answer: Yes, No) }
  {Did you use the annualized income installment method? }
@@ -13,7 +13,7 @@ Quest2	No	 {  (answer: Yes, No) }
  {Was your California withholding not withheld in equal installments and
  are you able to show the actual amounts withheld per period and the actual
  dates withheld?}
-Quest3	N/A	 {  (answer: Yes, No, N/A) }
+Quest3	No	 {  (answer: Yes, No, N/A) }
  {If "Yes," enter the actual uneven amounts withheld on the spaces provided
  below. The total of the four amounts must equal the total withholding
  reported on Form 540, line 71 and line 73; Form 540NR, line 81 and line 83;
@@ -29,25 +29,24 @@ Wthd_Per_4			; { Amount Withheld for period with estimated tax due date
  {For estates and trusts: Was the date of death less than two years from
  the end of the taxable year? }
 Quest4		 {  (answer: Yes, No) }
- {--- Part II Required Annual Payment. All filers must complete this part.
- --- }
-L1	75000		; { Current year tax. Enter your 2021 tax after credits. See
+ {--- Part II Required Annual Payment. All filers must complete this part. ---}
+L1	3500		; { Current year tax. Enter your 2021 tax after credits. See
  instructions.}
-L3			; { Withholding taxes. Do not include any estimated tax
+L3	3000.00		; { Withholding taxes. Do not include any estimated tax
  payments on this line. See instructions.}
-L5	65000		; { Enter the tax shown on your 2020 tax return. See
+L5	5000		; { Enter the tax shown on your 2020 tax return. See
  instructions. (110% (1.10) of that amount if the adjusted
  gross income shown on that return is more than $150,000, or
  if married/RDP filing a separate return for 2020, more than
  $75,000}
-CA_AGI	875000		; { Enter your California Adusted Gross Income (AGI) }
- {--- Short Method ---}
+CA_AGI	87500		; { Enter your California Adusted Gross Income (AGI) }
+ {--- Short Method - Skip this part if using the Annualized Income Installment Method ---}
  {Caution: See the instructions to find out if you can use the short method.
  If you answered "Yes'' to Question 2 in Part I, skip this part and go to
  Part III.  If you answered "No'' to Question 2 in Part I and you cannot use
  the short method, see page 4 of the instructions and go to Worksheet II
  below. }
-L8	5900		; { Enter the total amount, if any, of estimated tax
+L8	0		; { Enter the total amount, if any, of estimated tax
  payments you made }
  {Click "Save" to save this form and then click "Compute Tax".  Look for
  the amount on line 10.  If zero or less, stop.  You do not owe the penalty.
@@ -57,7 +56,7 @@ L8	5900		; { Enter the total amount, if any, of estimated tax
  {If the amount on line 10 was paid ON OR AFTER 4/15/22, enter -0-. 
  Otherwise, enter number of days the amount on line 10 was paid BEFORE
  4/15/22. }
-Num_Days	100		; { Number of days }
+Num_Days			; { Number of days }
  {--- Part III Annualized Income Installment Method Schedule. ---}
  {Use this schedule ONLY if you earned taxable income at an UNEVEN RATE
  during 2021. If you earned your income at approximately the same rate each
@@ -100,24 +99,8 @@ SchdAI_4c			; { If you itemize, enter itemized deductions for the period
 SchdAI_4d			; { If you itemize, enter itemized deductions for the period
  1/1/21-12/31/21; otherwise, enter -0-.    Estates and
  trusts: enter "0". }
-SchdAI_6a			; { Itemized deductions are limited for high-income
- taxpayers (see instructions for line 6).  Others should make
- no entries on this line; the program will calculate the
- correct entry. }
-SchdAI_6b			; { Itemized deductions are limited for high-income
- taxpayers (see instructions for line 6).  Others should make
- no entries on this line; the program will calculate the
- correct entry. }
-SchdAI_6c			; { Itemized deductions are limited for high-income
- taxpayers (see instructions for line 6).  Others should make
- no entries on this line; the program will calculate the
- correct entry. }
-SchdAI_6d			; { Itemized deductions are limited for high-income
- taxpayers (see instructions for line 6).  Others should make
- no entries on this line; the program will calculate the
- correct entry. }
 SchdAI_7a			; { Enter the full amount of your standard deduction from
- your 2021 Form 540 or Form 540NR,, line 18.  See
+ your 2021 Form 540 or Form 540NR,, line 18, even if you itemized.  See
  instructions.}
 SchdAI_10a_add			; { For individuals, this program will automatically
  calculate the tax on the amount on lime 9.  Enter certain
@@ -220,7 +203,7 @@ FAIWS_1d			; { Enter your federal adjusted gross income for the period
  Schedule AI, Part I, line 1.  (Estates and trusts: enter
  your taxable income without your exemption for the period
  1/1/21-11/30/21),}
- {--- Line 6 Worksheet (for high-income filers who itemize deductions ---}
+ {--- Line 6 Worksheet (for high-income filers who itemize deductions) ---}
 L6WS_2a			; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
  included on line 16 for  the period 1/1/21-3/31/21 (Estates
@@ -237,8 +220,7 @@ L6WS_2d			; { Enter the sum of the amounts on federal Schedule A (Form
  1040), line 4, line 9, and line 15 plus any gambling losses
  included on line 16 for  the period 1/1/21-12/31/21. 
  (Estates and trusts:  for the period 1/1/21-11/30/21).}
- {--- Worksheet II - Regular Method to Figure Your Underpayment and Penalty
- ---}
+ {--- Worksheet II - Regular Method to Figure Your Underpayment and Penalty ---}
  {NOTE:  The entries below are NOT CUMULATIVE.  Enter the amount that was
  paid each period by that period's due date. }
 WSII_2a			; { Enter the estimated tax payments for the period
@@ -272,4 +254,4 @@ WSII_10d			; { Number of days from 4/15/21 to the date the amount on
  {After you have filled out all of the applicable fields above, click
  "Save" to save this form and  then click "Compute Tax" to see if you owe a
  penalty. }
- {-------------------------------------------- }
+ {--------------------------------------------}

@@ -1643,7 +1643,7 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
   }
  fprintf(outfile,"Status = %s (%d)\n", word, status);
 
- get_parameter( infile, 's', word, "You_65+Over?" );	/* Were you born before January 2, 1954 ? (Y/N) */
+ get_parameter( infile, 's', word, "You_65+Over?" );	/* Were you born before January 2, 1957 ? (Y/N) */
  get_parameter( infile, 'b', &j, "You_65+Over?" );
  StdDedChart_NumBoxesChecked = j;
  if (j == 0)
@@ -1660,7 +1660,7 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
  if (j)
   fprintf(outfile,"CkYouBlind X\n");
 
- get_parameter( infile, 's', word, "Spouse_65+Over?" );	/* Was Spouse born before January 2, 1954 ? (Y/N) */
+ get_parameter( infile, 's', word, "Spouse_65+Over?" );	/* Was Spouse born before January 2, 1957 ? (Y/N) */
  get_param_single_line( infile, 'b', &j, "Spouse_65+Over?" );
  StdDedChart_NumBoxesChecked = StdDedChart_NumBoxesChecked + j;
  if (j == 0)
@@ -1737,7 +1737,7 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
    HH_STD_DEDUC  = 18800.0;
   }
  else
-  { /* Std. Deduction chart for People who were Born Before January 2, 1956, or Were Blind, pg 33. */
+  { /* Std. Deduction chart for People who were Born Before January 2, 1957, or Were Blind, pg 33. */
     switch (StdDedChart_NumBoxesChecked)		/* Does not handle if someone claims you or joint-spouse as dependent. */
      {				/* (Qualifying Widow/er has same amounts as MFJ, so not broken into separate variable.) */
       case 1: 
