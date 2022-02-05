@@ -24,7 +24,7 @@
 /* Aston Roberts 1-2-2021	aston_roberts@yahoo.com			*/
 /************************************************************************/
 
-float thisversion=19.00;
+float thisversion=19.01;
 
 #include <stdio.h>
 #include <time.h>
@@ -35,8 +35,8 @@ float thisversion=19.00;
 #include "taxsolve_routines.c"
 
 #define SINGLE 		        1
-#define MARRIED_FILING_JOINTLY 2
-#define MARRIED_FILING_SEPARAT 3
+#define MARRIED_FILING_JOINTLY  2
+#define MARRIED_FILING_SEPARAT  3
 #define HEAD_OF_HOUSEHOLD       4
 #define WIDOW		        5
 
@@ -45,6 +45,9 @@ double 	sched540part2[MAX_LINES], sched540part2_sub[MAX_LINES], sched540part2_ad
 	sched540part2_5a=0.0, sched540part2_5b=0.0, sched540part2_5c=0.0, sched540part2_5d=0.0,
 	sched540part2_8a=0.0, sched540part2_8b=0.0, sched540part2_8c=0.0, sched540part2_8d=0.0,
 	sched540part2_add8a=0.0, sched540part2_add8b=0.0, sched540part2_add8c=0.0, sched540part2_sub8d=0.0;
+ char 	*Your1stName="", *YourLastName="", *your_socsec="", 
+	*Spouse1stName="", *SpouseLastName="", *spouse_socsec="",
+	*street_address="", *apartment="", *town="", *zipcode="";
 
 
 double TaxRateFormula( double income, int status )
@@ -178,10 +181,13 @@ struct FedReturnData
 	fed_L4a, fed_L4b, fed_L5a, fed_L5b, fed_L6a, fed_L6b,
 	schedA5a, schedA5b, schedA5c, schedA5,
 	schedA8a, schedA8b, schedA8c, schedA8d,
-	sched1[MAX_LINES],
+	sched1[MAX_LINES], s1_8[30], s1_24[30], s2_17[30], s3_6[30], s3_13[30],
 	fedl8b, fedl9b, fedl15a, fedl16a, fedl20a;
   int Exception, Itemized;
-  char AlimRecipSSN[512], AlimRecipName[2048];
+  char AlimRecipSSN[512], *AlimRecipName, OtherIncomeType[512], 
+	OtherAdjustmentsType[512], OtherTaxesType[512],
+	Dep1stName[10][512], DepLastName[10][512], 
+	DepSocSec[10][512], DepRelation[10][512];
  } PrelimFedReturn;
 
 
@@ -213,8 +219,9 @@ void grab_line_value( char *label, char *fline, double *value )
   }
 }
 
+
 void grab_line_string( char *fline, char *strng )
-{
+{ /* Grab a string and copy it into pre-allocated character array. */
  char twrd[2048];
  strng[0] = '\0';
  do
@@ -227,11 +234,20 @@ void grab_line_string( char *fline, char *strng )
 }
 
 
+void grab_line_alloc( char *fline, char **strng )
+{ /* Grab a string and allocate space for it. */
+ char twrd[4096];
+ grab_line_string( fline, twrd );
+ if (twrd[0] != '\0')
+  *strng = strdup( twrd );
+}
+
+
 int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 {
  FILE *infile;
  char fline[2000], word[2000], tword[2000];
- int linenum;
+ int linenum, j;
 
  for (linenum=0; linenum<MAX_LINES; linenum++) 
   { 
@@ -260,8 +276,26 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
  fed_data->fedl15a = 0.0;
  fed_data->fedl16a = 0.0;
  fed_data->fedl20a = 0.0;
+ for (j=0; j < 30; j++)
+  {
+   fed_data->s1_8[j] = 0.0;
+   fed_data->s1_24[j] = 0.0;
+   fed_data->s2_17[j] = 0.0;
+   fed_data->s3_6[j] = 0.0;
+   fed_data->s3_13[j] = 0.0;
+  }
  strcpy( fed_data->AlimRecipSSN, "" );
- strcpy( fed_data->AlimRecipName, "" );
+ fed_data->AlimRecipName = strdup( "" );
+ strcpy( fed_data->OtherIncomeType, "" );
+ strcpy( fed_data->OtherAdjustmentsType, "" );
+ strcpy( fed_data->OtherTaxesType, "" );
+ for (j=0; j < 5; j++)
+  {
+   strcpy( fed_data->Dep1stName[j], "" );
+   strcpy( fed_data->DepLastName[j], "" );
+   strcpy( fed_data->DepSocSec[j], "" );
+   strcpy( fed_data->DepRelation[j], "" );
+  }
  convert_slashes( fedlogfile );
  infile = fopen(fedlogfile, "r");
  if (infile==0)
@@ -348,12 +382,90 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
       }
     } /*L*/
    else
+
+   if (strcmp(word, "Your1stName:" ) == 0)
+    grab_line_alloc( fline, &Your1stName );
+   else
+   if (strcmp(word, "YourLastName:" ) == 0)
+    grab_line_alloc( fline, &YourLastName );
+   else
+   if (strcmp(word, "YourSocSec#:" ) == 0)
+    grab_line_alloc( fline, &your_socsec );
+   else
+   if (strcmp(word, "Spouse1stName:" ) == 0)
+    grab_line_alloc( fline, &Spouse1stName );
+   else
+   if (strcmp(word, "SpouseLastName:" ) == 0)
+    grab_line_alloc( fline, &SpouseLastName );
+   else
+   if (strcmp(word, "SpouseSocSec#:" ) == 0)
+    grab_line_alloc( fline, &spouse_socsec );
+   else
+   if (strcmp(word, "Number&Street:" ) == 0)
+    grab_line_alloc( fline, &street_address );
+   else
+   if (strcmp(word, "Apt#:" ) == 0)
+    grab_line_alloc( fline, &apartment );
+   else
+   if (strcmp(word, "Town/City:" ) == 0)
+    grab_line_alloc( fline, &town );
+   else
+   if (strcmp(word, "ZipCode:" ) == 0)
+    grab_line_alloc( fline, &zipcode );
+   else
+
    if (strncmp(word, "AlimRecipSSN", 12) == 0)
     grab_line_string( fline, fed_data->AlimRecipSSN );
    else
-   if (strncmp(word, "AlimRecipName", 13) == 0)
-    grab_line_string( fline, fed_data->AlimRecipName );
+   if (strcmp( word, "S1_8z_Type:" ) == 0)
+    grab_line_string( fline, fed_data->OtherIncomeType );
    else
+   if (strcmp( word, "S1_24z_Type:" ) == 0)
+    grab_line_string( fline, fed_data->OtherAdjustmentsType );
+   else
+   if (strcmp( word, "S2_17z_Type:" ) == 0)
+    grab_line_string( fline, fed_data->OtherTaxesType );
+   else
+
+   if (strcmp(word, "Dep1_FirstName:") == 0)
+    grab_line_string( fline, fed_data->Dep1stName[1] );
+   else
+   if (strcmp(word, "Dep1_LastName:") == 0)
+    grab_line_string( fline, fed_data->DepLastName[1] );
+   else
+   if (strcmp(word, "Dep1_SocSec#:") == 0)
+    grab_line_string( fline, fed_data->DepSocSec[1] );
+   else
+   if (strcmp(word, "Dep1_Relation:") == 0)
+    grab_line_string( fline, fed_data->DepRelation[1] );
+   else
+
+   if (strcmp(word, "Dep2_FirstName:") == 0)
+    grab_line_string( fline, fed_data->Dep1stName[2] );
+   else
+   if (strcmp(word, "Dep2_LastName:") == 0)
+    grab_line_string( fline, fed_data->DepLastName[2] );
+   else
+   if (strcmp(word, "Dep2_SocSec#:") == 0)
+    grab_line_string( fline, fed_data->DepSocSec[2] );
+   else
+   if (strcmp(word, "Dep2_Relation:") == 0)
+    grab_line_string( fline, fed_data->DepRelation[2] );
+   else
+
+   if (strcmp(word, "Dep3_FirstName:") == 0)
+    grab_line_string( fline, fed_data->Dep1stName[3] );
+   else
+   if (strcmp(word, "Dep3_LastName:") == 0)
+    grab_line_string( fline, fed_data->DepLastName[3] );
+   else
+   if (strcmp(word, "Dep3_SocSec#:") == 0)
+    grab_line_string( fline, fed_data->DepSocSec[3] );
+   else
+   if (strcmp(word, "Dep3_Relation:") == 0)
+    grab_line_string( fline, fed_data->DepRelation[3] );
+   else
+
    if ((word[0] == 'A') && (strstr(word,"AMT")!=word) && (strstr(fline," = ")!=0))
     {
      if (strcmp(word,"A5a") == 0)
@@ -396,20 +508,118 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
    if ((strncmp( word, "S1_", 3 ) == 0) && (strstr(fline," = ")!=0))
     {
        next_word( &(word[3]), tword, " \t: =" );
-       if (sscanf( tword, "%d", &linenum ) != 1)
-        {
-	 printf("Error: Reading Fed line number 'S1_%s %s'\n", tword, fline);
-	 fprintf(outfile,"Error: Reading Fed line number 'S1_%s %s'\n", tword, fline);
+       if ((tword[0] == '8') && (tword[1] >= 'a') && (tword[1] <= 'z'))
+	{ int j;
+	  if ((tword[1] >= 'a') && (tword[1] <= 'z'))
+	   {
+	    j = tword[1] - 'a';
+	    next_word(fline, word, " \t=");
+	    if (sscanf( word, "%lf", &fed_data->s1_8[j] ) != 1)
+	     {
+	      printf("Error: Reading Fed s1_8%c '%s%s'\n", 'a' + j, word, fline);
+	      fprintf(outfile, "Error: Reading Fed s1_8%c '%s%s'\n", 'a' + j, word, fline);
+	     }
+	   }
+	  else
+	   printf("Error: Unexpected line '%s'\n", word );
+         if (verbose) printf("FedLin.S1_8%c] = %2.2f\n", 'a' + j, fed_data->s1_8[j] );
+	}
+       else
+       if ((strncmp( tword, "24", 2 ) == 0) && (tword[2] >= 'a') && (tword[2] <= 'z'))
+	{ int j;
+	  if ((tword[2] >= 'a') && (tword[2] <= 'z'))
+	   {
+	    j = tword[2] - 'a';
+	    next_word(fline, word, " \t=");
+	    if (sscanf( word, "%lf", &fed_data->s1_24[j] ) != 1)
+	     {
+	      printf("Error: Reading Fed s1_24%c '%s%s'\n", 'a' + j, word, fline);
+	      fprintf(outfile, "Error: Reading Fed s1_24%c '%s%s'\n", 'a' + j, word, fline);
+	     }
+	   }
+	  else
+	   printf("Error: Unexpected line '%s'\n", word );
+         if (verbose) printf("FedLin.S1_24%c = %2.2f\n", 'a' + j, fed_data->s1_24[j] );
+	}
+       else
+	{
+         if (sscanf( tword, "%d", &linenum ) != 1)
+          {
+  	   printf("Error: Reading Fed line number 'S1_%s %s'\n", tword, fline);
+	   fprintf(outfile,"Error: Reading Fed line number 'S1_%s %s'\n", tword, fline);
+           }
+         next_word(fline, word, " \t=");
+         if (sscanf(word,"%lf", &fed_data->sched1[linenum])!=1) 
+          {
+    	   printf("Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
+	   fprintf(outfile, "Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
+          }
+         if (verbose) printf("FedLin.S1[%d] = %2.2f\n", linenum, fed_data->sched1[linenum]);
         }
-       next_word(fline, word, " \t=");
-       if (sscanf(word,"%lf", &fed_data->sched1[linenum])!=1) 
-        {
- 	 printf("Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
-	 fprintf(outfile, "Error: Reading Fed sched1 %d '%s%s'\n", linenum, word, fline);
-        }
-
-       if (verbose) printf("FedLin.S1[%d] = %2.2f\n", linenum, fed_data->sched1[linenum]);
     }
+   else
+
+   if ((strncmp( word, "S2_", 3 ) == 0) && (strstr(fline," = ")!=0))
+    {
+       next_word( &(word[3]), tword, " \t: =" );
+       if ((strncmp( tword, "17", 2 ) == 0) && (tword[2] >= 'a') && (tword[2] <= 'z'))
+	{ int j;
+	  if ((tword[2] >= 'a') && (tword[2] <= 'z'))
+	   {
+	    j = tword[2] - 'a';
+	    next_word(fline, word, " \t=");
+	    if (sscanf( word, "%lf", &fed_data->s2_17[j] ) != 1)
+	     {
+	      printf("Error: Reading Fed s2_17%c '%s%s'\n", 'a' + j, word, fline);
+	      fprintf(outfile, "Error: Reading Fed s2_17%c '%s%s'\n", 'a' + j, word, fline);
+	     }
+	   }
+	  else
+	   printf("Error: Unexpected line '%s'\n", word );
+         if (verbose) printf("FedLin.S2_17%c = %2.2f\n", 'a' + j, fed_data->s2_17[j] );
+	}
+    }
+   else
+
+   if ((strncmp( word, "S3_", 3 ) == 0) && (strstr(fline," = ")!=0))
+    {
+       next_word( &(word[3]), tword, " \t: =" );
+       if ((strncmp( tword, "6", 1 ) == 0) && (tword[1] >= 'a') && (tword[1] <= 'z'))
+	{ int j;
+	  if ((tword[1] >= 'a') && (tword[1] <= 'z'))
+	   {
+	    j = tword[1] - 'a';
+	    next_word(fline, word, " \t=");
+	    if (sscanf( word, "%lf", &fed_data->s3_6[j] ) != 1)
+	     {
+	      printf("Error: Reading Fed s3_6%c '%s%s'\n", 'a' + j, word, fline);
+	      fprintf(outfile, "Error: Reading Fed s3_6%c '%s%s'\n", 'a' + j, word, fline);
+	     }
+	   }
+	  else
+	   printf("Error: Unexpected line '%s'\n", word );
+         if (verbose) printf("FedLin.S3_6%c = %2.2f\n", 'a' + j, fed_data->s3_6[j] );
+	}
+       else
+       if ((strncmp( tword, "13", 2 ) == 0) && (tword[2] >= 'a') && (tword[2] <= 'z'))
+	{ int j;
+	  if ((tword[2] >= 'a') && (tword[2] <= 'z'))
+	   {
+	    j = tword[2] - 'a';
+	    next_word(fline, word, " \t=");
+	    if (sscanf( word, "%lf", &fed_data->s3_13[j] ) != 1)
+	     {
+	      printf("Error: Reading Fed s3_13%c '%s%s'\n", 'a' + j, word, fline);
+	      fprintf(outfile, "Error: Reading Fed s3_13%c '%s%s'\n", 'a' + j, word, fline);
+	     }
+	   }
+	  else
+	   printf("Error: Unexpected line '%s'\n", word );
+         if (verbose) printf("FedLin.S3_13%c = %2.2f\n", 'a' + j, fed_data->s3_13[j] );
+	}
+    }
+
+
    else
    if (strcmp(word,"Status") == 0)
     {
@@ -476,12 +686,14 @@ void display_part2column( int j, int col )
   }
 }
 
+
 void display_part2( int j )
 {
  display_part2column( j, 'a' );
  display_part2column( j, 'b' );
  display_part2column( j, 'c' );
 }
+
 
 /*----------------------------------------------------------------------------*/
 /* ---				Main					  --- */
@@ -495,11 +707,15 @@ int main( int argc, char *argv[] )
 	sched540Cb[MAX_LINES], sched540Cc[MAX_LINES],
 	threshA=0, std_ded=0;
  char word[4000], *infname=0, outfname[4000], prelim_1040_outfilename[5000];
- char 	*Your1stName="", *YourLastName="", YourName[2048]="", YourNames[2048]="", 
-	*YourMidInitial="", *SpouseMidInitial="",
-	*Spouse1stName="", *SpouseLastName="", *socsec;
- double  sched540Bb8a=0.0, sched540Bb8b=0.0, sched540Bc8c=0.0, sched540Bb8d=0.0,
-	 sched540Bb8e=0.0, sched540Bb8f=0.0, sched540Bc8f=0.0, sched540Bb8g=0.0;
+ char	YourName[2048]="", YourNames[2048]="", 
+	*YourMidInitial="", *SpouseMidInitial="";
+ double  sched540Bc8a=0.0, sched540Bb8b=0.0, sched540Bc8c=0.0, sched540Bc8d=0.0,
+	 sched540Bb8e=0.0, sched540Bb8m=0.0, sched540Bb8n=0.0, sched540Bc8o=0.0, 
+	 sched540Bb8z=0.0, sched540Bc8z=0.0,
+	 sched540Cb24b=0.0, sched540Cc24b=0.0, sched540Cb24c=0.0, sched540Cb24d=0.0, 
+	 sched540Cb24f=0.0, sched540Cc24f=0.0, sched540Cb24g=0.0,  sched540Cc24g=0.0, 
+	 sched540Cb24i=0.0, sched540Cb24j=0.0, sched540Cb24k=0.0, sched540Cb24z=0.0,
+	 sched540Cc24z=0.0;
  time_t now;
 
  /* Decode any command-line arguments. */
@@ -560,22 +776,12 @@ int main( int argc, char *argv[] )
  printf("CA-540 2021 - v%3.2f\n", thisversion);
 
  // MarkupPDF( 1, 240, 40, 17, 1.0, 0, 0 ) NotReady "This program is NOT updated for 2021."
- add_pdf_markup( "NotReady", 1, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 2, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 3, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 4, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 5, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 6, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 7, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 8, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 9, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
- add_pdf_markup( "NotReady", 10, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
-
-#ifdef microsoft
- system( "start bin\\notify_popup \"Warning: This program is NOT ready for 2021.\"" );
-#else
- system( "bin/notify_popup \"Warning: This program is NOT ready for 2021.\" &" );
-#endif
+ // add_pdf_markup( "NotReady", 1, 240, 40, 17, 1, 1.0, 0, 0, "\"This program is NOT ready for 2021.\"" );
+ #ifdef microsoft
+  // system( "start bin\\notify_popup -delay 3 -expire 10 \"Warning: This program is NOT ready for 2021.\"" );
+ #else
+  // system( "bin/notify_popup -delay 3 -expire 10 \"Warning: This program is NOT ready for 2021.\" &" );
+ #endif
 
 
  /* Accept Form's "Title" line, and put out with date-stamp for your records. */
@@ -669,210 +875,206 @@ int main( int argc, char *argv[] )
   GetLine("CA540_Addit_B6", &(sched540Bc[6]) );
   GetLine("CA540_Subtr_B7", &(sched540Bb[7]) );
 
-  GetLine("CA540_Subtr_B8a", &sched540Bb8a );
+  GetLine("CA540_Addit_B8a", &sched540Bc8a );
   GetLine("CA540_Subtr_B8b", &sched540Bb8b );
   GetLine("CA540_Addit_B8c", &sched540Bc8c );
-  GetLine("CA540_Subtr_B8d", &sched540Bb8d );
+  GetLine("CA540_Addit_B8d", &sched540Bc8d );
   GetLine("CA540_Subtr_B8e", &sched540Bb8e );
-  GetLine("CA540_Subtr_B8f", &sched540Bb8f );
-  GetLine("CA540_Addit_B8f", &sched540Bc8f );
-  GetLine("CA540_Subtr_B8g", &sched540Bb8g );
+  GetLine("CA540_Subtr_B8m", &sched540Bb8m );
+  GetLine("CA540_Subtr_B8n", &sched540Bb8n );
+  GetLine("CA540_Addit_B8o", &sched540Bc8o );
+  GetLine("CA540_Subtr_B8z", &sched540Bb8z );
+  GetLine("CA540_Addit_B8z", &sched540Bc8z );
 
-  GetLine("CA540_Subtr_C10", &(sched540Cb[10]) );
   GetLine("CA540_Subtr_C11", &(sched540Cb[11]) );
-  GetLine("CA540_Addit_C11", &(sched540Cc[11]) );
   GetLine("CA540_Subtr_C12", &(sched540Cb[12]) );
-  GetLine("CA540_Addit_C13", &(sched540Cc[13]) );
-  GetLine("CA540_Subtr_C14", &(sched540Cb[14]) );
-  GetLine("CA540_Subtr_C16", &(sched540Cb[16]) );
-  GetLine("CA540_Addit_C18", &(sched540Cc[18]) );
+  GetLine("CA540_Addit_C12", &(sched540Cc[12]) );
+  GetLine("CA540_Subtr_C13", &(sched540Cb[13]) );
+  GetLine("CA540_Addit_C14", &(sched540Cc[14]) );
+  GetLine("CA540_Subtr_C15", &(sched540Cb[15]) );
+  GetLine("CA540_Subtr_C17", &(sched540Cb[17]) );
+  GetLine("CA540_Addit_C19", &(sched540Cc[19]) );
+  PrelimFedReturn.AlimRecipName = GetTextLine( "CA540_AlimonyRecipName:" );
+  GetLine("CA540_Subtr_C20", &(sched540Cb[20]) );
   GetLine("CA540_Addit_C20", &(sched540Cc[20]) );
-  GetLine("CA540_Subtr_C21", &(sched540Cb[21]) );
+  GetLine("CA540_Addit_C21", &(sched540Cc[21]) );
+
+  GetLine("CA540_Subtr_C24b", &sched540Cb24b );
+  GetLine("CA540_Addit_C24b", &sched540Cc24b );
+  GetLine("CA540_Subtr_C24c", &sched540Cb24c );
+  GetLine("CA540_Subtr_C24d", &sched540Cb24d );
+  GetLine("CA540_Subtr_C24f", &sched540Cb24f );
+  GetLine("CA540_Addit_C24f", &sched540Cc24f );
+  GetLine("CA540_Subtr_C24g", &sched540Cb24g );
+  GetLine("CA540_Addit_C24g", &sched540Cc24g );
+  GetLine("CA540_Subtr_C24i", &sched540Cb24i );
+  GetLine("CA540_Subtr_C24j", &sched540Cb24j );
+  GetLine("CA540_Subtr_C24k", &sched540Cb24k );
+  GetLine("CA540_Subtr_C24z", &sched540Cb24z );
+  GetLine("CA540_Addit_C24z", &sched540Cc24z );
+
 
   sched540A[1] = PrelimFedReturn.fedline[1];
-  sched540B[9] = sched540B[9] + sched540A[1];
-  if (sched540A[1] != 0.0)
-   fprintf(outfile," SchedCA540_A1 = %6.2f\n", sched540A[1] );
+  sched540B[10] = sched540B[10] + sched540A[1];
+  showline_wlabelnz( " SchedCA540_A1", sched540A[1] );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[1];
-  if (sched540Ab[1] != 0.0)
-   fprintf(outfile," SchedCA540_A1b = %6.2f\n", sched540Ab[1] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[1];
+  showline_wlabelnz( " SchedCA540_A1b", sched540Ab[1] );
 
   sched540Bc[9] = sched540Bc[9] + sched540Ac[1];
-  if (sched540Ac[1] != 0.0)
-   fprintf(outfile," SchedCA540_A1c = %6.2f\n", sched540Ac[1] );
+  showline_wlabelnz( " SchedCA540_A1c", sched540Ac[1] );
 
-
-  if (PrelimFedReturn.fed_L2a != 0.0)
-   fprintf(outfile," SchedCA540_A2a = %6.2f\n", PrelimFedReturn.fed_L2a );
+  showline_wlabelnz( " SchedCA540_A2a", PrelimFedReturn.fed_L2a );
 
   sched540A[2] = PrelimFedReturn.fedline[2];
-  sched540B[9] = sched540B[9] + sched540A[2];
-  if (sched540A[2] != 0.0)
-   fprintf(outfile," SchedCA540_A2 = %6.2f\n", sched540A[2] );
+  sched540B[10] = sched540B[10] + sched540A[2];
+  showline_wlabelnz( " SchedCA540_A2", sched540A[2] );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[2];
-  if (sched540Ab[2] != 0.0)
-   fprintf(outfile," SchedCA540_A2b = %6.2f\n", sched540Ab[2] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[2];
+  showline_wlabelnz( " SchedCA540_A2b", sched540Ab[2] );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[2];
-  if (sched540Ac[2] != 0.0)
-   fprintf(outfile," SchedCA540_A2c = %6.2f\n", sched540Ac[2] );
+  sched540Bc[10] = sched540Bc[10] + sched540Ac[2];
+  showline_wlabelnz( " SchedCA540_A2c", sched540Ac[2] );
 
-
-  if (PrelimFedReturn.fed_L3a != 0.0)
-   fprintf(outfile," SchedCA540_A3a = %6.2f\n", PrelimFedReturn.fed_L3a );
+  showline_wlabelnz( " SchedCA540_A3a", PrelimFedReturn.fed_L3a );
 
   sched540A[3] = PrelimFedReturn.fedline[3];
-  sched540B[9] = sched540B[9] + sched540A[3];
-  if (sched540A[3] != 0.0)
-   fprintf(outfile," SchedCA540_A3 = %6.2f\n", sched540A[3] );
+  sched540B[10] = sched540B[10] + sched540A[3];
+  showline_wlabelnz( " SchedCA540_A3", sched540A[3] );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[3];
-  if (sched540Ab[3] != 0.0)
-   fprintf(outfile," SchedCA540_A3b = %6.2f\n", sched540Ab[3] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[3];
+  showline_wlabelnz( " SchedCA540_A3b", sched540Ab[3] );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[3];
-  if (sched540Ac[3] != 0.0)
-   fprintf(outfile," SchedCA540_A3c = %6.2f\n", sched540Ac[3] );
+  sched540Bc[10] = sched540Bc[10] + sched540Ac[3];
+  showline_wlabelnz( " SchedCA540_A3c", sched540Ac[3] );
 
 
-  if (PrelimFedReturn.fed_L4a != 0.0)
-   fprintf(outfile," SchedCA540_A4a = %6.2f\n", PrelimFedReturn.fed_L4a );
+  showline_wlabelnz( " SchedCA540_A4a", PrelimFedReturn.fed_L4a );
 
   sched540A[4] = PrelimFedReturn.fed_L4b;
-  sched540B[9] = sched540B[9] + sched540A[4];
-  if (sched540A[4] != 0.0)
-   fprintf(outfile," SchedCA540_A4 = %6.2f\n", sched540A[4] );
+  sched540B[10] = sched540B[10] + sched540A[4];
+  showline_wlabelnz( " SchedCA540_A4",  sched540A[4] );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[4];
-  if (sched540Ab[4] != 0.0)
-   fprintf(outfile," SchedCA540_A4b = %6.2f\n", sched540Ab[4] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[4];
+  showline_wlabelnz( " SchedCA540_A4b", sched540Ab[4] );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[4];
-  if (sched540Ac[4] != 0.0)
-   fprintf(outfile," SchedCA540_A4c = %6.2f\n", sched540Ac[4] );
+  sched540Bc[10] = sched540Bc[10] + sched540Ac[4];
+  showline_wlabelnz( " SchedCA540_A4c", sched540Ac[4] );
 
 
-  if (PrelimFedReturn.fed_L5a != 0.0)
-   fprintf(outfile," SchedCA540_A5a = %6.2f\n", PrelimFedReturn.fed_L5a );
+  showline_wlabelnz( " SchedCA540_A5a", PrelimFedReturn.fed_L5a );
 
   sched540A[5] = PrelimFedReturn.fed_L5b;
-  sched540B[9] = sched540B[9] + sched540A[5];
-  if (sched540A[5] != 0.0)
-   fprintf(outfile," SchedCA540_A5 = %6.2f\n", sched540A[5] );
+  sched540B[10] = sched540B[10] + sched540A[5];
+  showline_wlabelnz( " SchedCA540_A5", sched540A[5] );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[5];
-  if (sched540Ab[5] != 0.0)
-   fprintf(outfile," SchedCA540_A5b = %6.2f\n", sched540Ab[5] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[5];
+  showline_wlabelnz( " SchedCA540_A5b", sched540Ab[5] );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[5];
-  if (sched540Ac[5] != 0.0)
-   fprintf(outfile," SchedCA540_A5c = %6.2f\n", sched540Ac[5] );
+  sched540Bc[10] = sched540Bc[10] + sched540Ac[5];
+  showline_wlabelnz( " SchedCA540_A5c", sched540Ac[5] );
 
-  if (PrelimFedReturn.fed_L6a != 0.0)
-   fprintf(outfile," SchedCA540_A6a = %6.2f\n", PrelimFedReturn.fed_L6a );
+  showline_wlabelnz( " SchedCA540_A6a", PrelimFedReturn.fed_L6a );
 
   sched540A[6] = PrelimFedReturn.fed_L6b;
-  sched540B[9] = sched540B[9] + sched540A[6];
-  if (sched540A[6] != 0.0)
-   fprintf(outfile," SchedCA540_A6 = %6.2f\n", sched540A[6] );
+  sched540B[10] = sched540B[10] + sched540A[6];
+  showline_wlabelnz( " SchedCA540_A6", sched540A[6] );
 
   sched540Ab[6] = sched540A[6];			/* Subtract SocSec payments from AGI in CA. */
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[6];
-  if (sched540Ab[6] != 0.0)
-   fprintf(outfile," SchedCA540_A6b = %6.2f\n", sched540Ab[6] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[6];
+  showline_wlabelnz( " SchedCA540_A6b", sched540Ab[6] );
 
   sched540A[7] = PrelimFedReturn.fedline[7];
-  sched540B[9] = sched540B[9] + sched540A[7];
-  if (sched540A[7] != 0.0)
-   fprintf(outfile," SchedCA540_A7 = %6.2f\n", sched540A[7] );
+  sched540B[10] = sched540B[10] + sched540A[7];
+  showline_wlabelnz( " SchedCA540_A7", sched540A[7] );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Ab[7];
-  if (sched540Ab[7] != 0.0)
-   fprintf(outfile," SchedCA540_A7b = %6.2f\n", sched540Ab[7] );
+  sched540Bb[10] = sched540Bb[10] + sched540Ab[7];
+  showline_wlabelnz( " SchedCA540_A7b", sched540Ab[7] );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Ac[7];
-  if (sched540Ac[7] != 0.0)
-   fprintf(outfile," SchedCA540_A7c = %6.2f\n", sched540Ac[7] );
+  sched540Bc[10] = sched540Bc[10] + sched540Ac[7];
+  showline_wlabelnz( " SchedCA540_A7c", sched540Ac[7] );
 
  for (j=1; j <= 7; j++)
   {
    sched540B[j] = PrelimFedReturn.sched1[j];
-   sched540B[9] = sched540B[9] + sched540B[j];
+   sched540B[10] = sched540B[10] + sched540B[j];
    if (sched540B[j] != 0.0)
     fprintf(outfile," SchedCA540_B%d = %6.2f\n", j, sched540B[j] );
 
-   sched540Bb[9] = sched540Bb[9] + sched540Bb[j];
+   sched540Bb[10] = sched540Bb[10] + sched540Bb[j];
    if (sched540Bb[j] != 0.0)
     fprintf(outfile," SchedCA540_B%db = %6.2f\n", j, sched540Bb[j] );
 
-   sched540Bc[9] = sched540Bc[9] + sched540Bc[j];
+   sched540Bc[10] = sched540Bc[10] + sched540Bc[j];
    if (sched540Bc[j] != 0.0)
     fprintf(outfile," SchedCA540_B%dc = %6.2f\n", j, sched540Bc[j] );
   }
 
-  sched540B[8] = PrelimFedReturn.sched1[8];
-  sched540B[9] = sched540B[9] + sched540B[8];
-  if (sched540B[8] != 0.0)
-   fprintf(outfile," SchedCA540_B8 = %6.2f\n", sched540B[8] );
+ for (j=0; j < 30; j++)
+  {
+   if (PrelimFedReturn.s1_8[j] != 0.0)
+    fprintf(outfile," SchedCA540_B8%c = %6.2f\n", 'A' + j, PrelimFedReturn.s1_8[j] );
+  }
 
+  if (PrelimFedReturn.OtherIncomeType[0] != '\0')
+   fprintf(outfile," SchedCA540_B8Za: %s\n", PrelimFedReturn.OtherIncomeType );
 
-  sched540Bb[9] = sched540Bb[9] + sched540Bb8a;
-  if (sched540Bb8a != 0.0)
-   fprintf(outfile," SchedCA540_B8ba = %6.2f\n", sched540Bb8a );
+  sched540Bc[9] = sched540Bc[9] + sched540Bc8a;
+  showline_wlabelnz( " SchedCA540_B8Ac",  sched540Bc8a );
 
   sched540Bb[9] = sched540Bb[9] + sched540Bb8b;
-  if (sched540Bb8b != 0.0)
-   fprintf(outfile," SchedCA540_B8bb = %6.2f\n", sched540Bb8b );
-
-  sched540Bb[9] = sched540Bb[9] + sched540Bb8d;
-  if (sched540Bb8d != 0.0)
-   fprintf(outfile," SchedCA540_B8bd = %6.2f\n", sched540Bb8d );
-
-  sched540Bb[9] = sched540Bb[9] + sched540Bb8e;
-  if (sched540Bb8e != 0.0)
-   fprintf(outfile," SchedCA540_B8be = %6.2f\n", sched540Bb8e );
-
-  sched540Bb[9] = sched540Bb[9] + sched540Bb8f;
-  if (sched540Bb8f != 0.0)
-   fprintf(outfile," SchedCA540_B8bf = %6.2f\n", sched540Bb8f );
-
-  sched540Bb[9] = sched540Bb[9] + sched540Bb8g;
-  if (sched540Bb8g != 0.0)
-   fprintf(outfile," SchedCA540_B8bg = %6.2f\n", sched540Bb8g );
+  showline_wlabelnz( " SchedCA540_B8Bb", sched540Bb8b );
 
   sched540Bc[9] = sched540Bc[9] + sched540Bc8c;
-  if (sched540Bc8c != 0.0)
-   fprintf(outfile," SchedCA540_B8cc = %6.2f\n", sched540Bc8c );
+  showline_wlabelnz( " SchedCA540_B8Cc",  sched540Bc8c );
 
-  sched540Bc[9] = sched540Bc[9] + sched540Bc8f;
-  if (sched540Bc8f != 0.0)
-   fprintf(outfile," SchedCA540_B8cf = %6.2f\n", sched540Bc8f );
+  sched540Bc[9] = sched540Bc[9] + sched540Bc8d;
+  showline_wlabelnz( " SchedCA540_B8Dc",  sched540Bc8d );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8e;
+  showline_wlabelnz( " SchedCA540_B8Eb", sched540Bb8e );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8m;
+  showline_wlabelnz( " SchedCA540_B8Mb", sched540Bb8m );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8n;
+  showline_wlabelnz( " SchedCA540_B8Nb", sched540Bb8n );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Bc8o;
+  showline_wlabelnz( " SchedCA540_B8Oc",  sched540Bc8o );
+
+  sched540Bb[9] = sched540Bb[9] + sched540Bb8z;
+  showline_wlabelnz( " SchedCA540_B8Zb", sched540Bb8z );
+
+  sched540Bc[9] = sched540Bc[9] + sched540Bc8z;
+  showline_wlabelnz( " SchedCA540_B8Zc",  sched540Bc8z );
+
+  sched540B[9] = PrelimFedReturn.sched1[9];
+  showline_wlabelnz( " SchedCA540_B9A", sched540B[9] );
+  showline_wlabelnz( " SchedCA540_B9Ab", sched540Bb[9] );
+  showline_wlabelnz( " SchedCA540_B9Ac", sched540Bc[9] );
+
+  sched540Bb[10] = sched540Bb[10] + sched540Bb[9];
+  sched540Bc[10] = sched540Bc[10] + sched540Bc[9];
+
+  sched540B[10] = sched540B[10] + sched540B[9];
+  showline_wlabelnz( " SchedCA540_B10", sched540B[10] );
+  showline_wlabelnz( " SchedCA540_B10b", sched540Bb[10] );
+  showline_wlabelnz( " SchedCA540_B10c", sched540Bc[10] );
 
 
-  if (sched540B[9] != 0.0)
-   fprintf(outfile," SchedCA540_B9 = %6.2f\n", sched540B[9] );
-
-  if (sched540Bb[9] != 0.0)
-   fprintf(outfile," SchedCA540_B9b = %6.2f\n", sched540Bb[9] );
-
-  if (sched540Bc[9] != 0.0)
-   fprintf(outfile," SchedCA540_B9c = %6.2f\n", sched540Bc[9] );
-
-
-  for (j=10; j <= 21; j++)
+  for (j=11; j <= 23; j++)
    {
     sched540C[j] = PrelimFedReturn.sched1[j];
-    sched540C[22] = sched540C[22] + sched540C[j];
+    sched540C[26] = sched540C[26] + sched540C[j];
     if (sched540C[j] != 0.0)
      fprintf(outfile," SchedCA540_C%d = %6.2f\n", j, sched540C[j] );
 
-    sched540Cb[22] = sched540Cb[22] + sched540Cb[j];
+    sched540Cb[26] = sched540Cb[26] + sched540Cb[j];
     if (sched540Cb[j] != 0.0)
      fprintf(outfile," SchedCA540_C%db = %6.2f\n", j, sched540Cb[j] );
 
-    sched540Cc[22] = sched540Cc[22] + sched540Cc[j];
+    sched540Cc[26] = sched540Cc[26] + sched540Cc[j];
     if (sched540Cc[j] != 0.0)
      fprintf(outfile," SchedCA540_C%dc = %6.2f\n", j, sched540Cc[j] );
    }
@@ -882,27 +1084,74 @@ int main( int argc, char *argv[] )
   if (PrelimFedReturn.AlimRecipName[0] != '\0')
    fprintf(outfile," AlimRecipName: %s\n", PrelimFedReturn.AlimRecipName );
 
-  if (sched540C[22] != 0.0)
-   fprintf(outfile," SchedCA540_C22 = %6.2f\n", sched540C[22] );
+ for (j=0; j < 30; j++)
+  {
+   if (PrelimFedReturn.s1_24[j] != 0.0)
+    fprintf(outfile," SchedCA540_C24%c = %6.2f\n", 'A' + j, PrelimFedReturn.s1_24[j] );
+  }
 
-  if (sched540Cb[22] != 0.0)
-   fprintf(outfile," SchedCA540_C22b = %6.2f\n", sched540Cb[22] );
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24b;
+  showline_wlabelnz( " SchedCA540_C24Bb", sched540Cb24b );
 
-  if (sched540Cc[22] != 0.0)
-   fprintf(outfile," SchedCA540_C22c = %6.2f\n", sched540Cc[22] );
+  sched540Cc[25] = sched540Cc[25] + sched540Cc24b;
+  showline_wlabelnz( " SchedCA540_C24Bc", sched540Cc24b );
 
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24c;
+  showline_wlabelnz( " SchedCA540_C24Cb", sched540Cb24c );
 
-  sched540C[23] = sched540B[9] - sched540C[22];
-  if (sched540C[23] != 0.0)
-   fprintf(outfile," SchedCA540_C23 = %6.2f\n", sched540C[23] );
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24d;
+  showline_wlabelnz( " SchedCA540_C24Db", sched540Cb24d );
 
-  sched540Cb[23] = sched540Bb[9] - sched540Cb[22];
-  if (sched540Cb[23] != 0.0)
-   fprintf(outfile," SchedCA540_C23b = %6.2f\n", sched540Cb[23] );
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24f;
+  showline_wlabelnz( " SchedCA540_C24Fb", sched540Cb24f );
 
-  sched540Cc[23] = sched540Bc[9] - sched540Cc[22];
-  if (sched540Cc[23] != 0.0)
-   fprintf(outfile," SchedCA540_C23c = %6.2f\n", sched540Cc[23] );
+  sched540Cc[25] = sched540Cc[25] + sched540Cc24f;
+  showline_wlabelnz( " SchedCA540_C24Fc", sched540Cc24f );
+
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24g;
+  showline_wlabelnz( " SchedCA540_C24Gb", sched540Cb24g );
+
+  sched540Cc[25] = sched540Cc[25] + sched540Cc24g;
+  showline_wlabelnz( " SchedCA540_C24Gc", sched540Cc24g );
+
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24i;
+  showline_wlabelnz( " SchedCA540_C24Ib", sched540Cb24i );
+
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24j;
+  showline_wlabelnz( " SchedCA540_C24Jb", sched540Cb24j );
+
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24k;
+  showline_wlabelnz( " SchedCA540_C24Kb", sched540Cb24k );
+
+  sched540Cb[25] = sched540Cb[25] + sched540Cb24z;
+  showline_wlabelnz( " SchedCA540_C24Zb", sched540Cb24z );
+
+  sched540Cc[25] = sched540Cc[25] + sched540Cc24z;
+  showline_wlabelnz( " SchedCA540_C24Zc", sched540Cc24z );
+
+  if (PrelimFedReturn.OtherAdjustmentsType[0] != '\0')
+   fprintf(outfile," SchedCA540_C24Ztype: %s\n", PrelimFedReturn.OtherAdjustmentsType );
+
+  sched540C[25] = PrelimFedReturn.sched1[25];
+  showline_wlabelnz( " SchedCA540_C25", sched540C[25] );
+  showline_wlabelnz( " SchedCA540_C25b", sched540Cb[25] );
+  showline_wlabelnz( "SchedCA540_C25c", sched540Cc[25] );
+
+  sched540C[26] = sched540C[26] + sched540C[25];
+  sched540Cb[26] = sched540Cb[26] + sched540Cb[25];
+  sched540Cc[26] = sched540Cc[26] + sched540Cc[25];
+
+  showline_wlabelnz( " SchedCA540_C26", sched540C[26] );
+  showline_wlabelnz( " SchedCA540_C26b", sched540Cb[26] );
+  showline_wlabelnz( "SchedCA540_C26c", sched540Cc[26] );
+
+  sched540C[27] = sched540B[10] - sched540C[26];
+  sched540Cb[27] = sched540Bb[10] - sched540Cb[26];
+  sched540Cc[27] = sched540Bc[10] - sched540Cc[26];
+
+  showline_wlabelnz( " SchedCA540_C27", sched540C[27] );
+  showline_wlabelnz( " SchedCA540_C27b", sched540Cb[27] );
+  showline_wlabelnz( "SchedCA540_C27c", sched540Cc[27] );
 
 
  /* -- Sched540 Part II -- */
@@ -912,6 +1161,8 @@ int main( int argc, char *argv[] )
  sched540part2[2] = PrelimFedReturn.fedline[11];
  sched540part2[3] = 0.075 * sched540part2[2];
  sched540part2[4] = NotLessThanZero( sched540part2[1] - sched540part2[3] );
+ GetLine("CA540_P2_Add_4", &(sched540part2_add[4]) );
+
  sched540part2_5a = PrelimFedReturn.schedA5a;
  sched540part2_5b = PrelimFedReturn.schedA5b;
  sched540part2_5c = PrelimFedReturn.schedA5c;
@@ -928,6 +1179,9 @@ int main( int argc, char *argv[] )
  sched540part2[6] = PrelimFedReturn.schedA[6];
  GetLine("CA540_P2_Sub_6", &(sched540part2_sub[6]) );
  GetLine("CA540_P2_Add_6", &(sched540part2_add[6]) );
+
+ if (PrelimFedReturn.OtherTaxesType[0] != '\0')
+   fprintf(outfile," SchedCA540_Part2_6type: %s\n", PrelimFedReturn.OtherTaxesType );
 
  sched540part2[7] = sched540part2[5] + sched540part2[6];
  sched540part2_sub[7] = sched540part2_sub[5] + sched540part2_sub[6];
@@ -993,8 +1247,8 @@ int main( int argc, char *argv[] )
    case SINGLE:
    case MARRIED_FILING_SEPARAT:  threshA = 212288.0;	std_ded = 4803.0;  break;	/* Updated for 2021. */
    case MARRIED_FILING_JOINTLY:
-   case WIDOW:                    threshA = 424581.0;	std_ded = 9606.0;  break;
-   case HEAD_OF_HOUSEHOLD:        threshA = 318437.0;	std_ded = 9606.0;  break;
+   case WIDOW:                   threshA = 424581.0;	std_ded = 9606.0;  break;
+   case HEAD_OF_HOUSEHOLD:       threshA = 318437.0;	std_ded = 9606.0;  break;
   }
  if (L[13] > threshA)
   { /*Itemized Deductions Worksheet*/	/* Page 47. */
@@ -1093,14 +1347,14 @@ int main( int argc, char *argv[] )
  /* -- End Sched540 Part II -- */
 
 
- L[14] = sched540Cb[23];	/* CA Adjustments, Schedule CA 540 line 23 column B. */
+ L[14] = sched540Cb[27];	/* CA Adjustments, Schedule CA 540 line 27 column B. */
  showline(14);
 
  L[15] = L[13] - L[14];
  if (L[15] < 0.0) fprintf(outfile,"L15 = (%f6.2)\n", -L[15] );
  else showline(15);
 
- L[16] = sched540Cc[23];	/* CA Adjustments, Schedule CA 540 line 37 column C. */
+ L[16] = sched540Cc[27];	/* CA Adjustments, Schedule CA 540 line 37 column C. */
  showline(16);
 
  L[17] = L[15] + L[16];		/* CA Adjusted Gross Income (AGI). */
@@ -1141,7 +1395,7 @@ int main( int argc, char *argv[] )
   fprintf(outfile,"You may not need to file CA Taxes, due to your California Adjusted Gross Income (%6.2f <= %6.2f).\n", 
 	L[17], min2file );
 
- showline(18);
+ showline(18);	/* Computed above. */
 
  L[19] = NotLessThanZero( L[17] - L[18] );
  showline_wmsg(19,"Taxable Income");		/* Taxable income. */
@@ -1277,7 +1531,7 @@ int main( int argc, char *argv[] )
    showline(96);    
   }
 
- 
+ GetLine( "L98", &L[98] );	/* Amount of refund to apply to next tear's estimated withholding. */
  GetLine( "L112", &L[112] );	/* Interest, late penalties. */
  GetLine( "L113", &L[113] );	/* Underpayment of estimated tax penalty. (FTB 5805) */
 
@@ -1286,7 +1540,7 @@ int main( int argc, char *argv[] )
   {
    L[97] = L[95] - L[65];
    fprintf(outfile,"L97 = %6.2f  REFUND!!!\n", L[97] );
-   showline(97);
+   showline(98);
    L[99] = L[97]  - L[98];
    showline(99);
    showline(112);
@@ -1299,7 +1553,7 @@ int main( int argc, char *argv[] )
    L[100] = L[65] - L[95];
    fprintf(outfile,"L100 = %6.2f  DUE !!!\n", L[100] );
    fprintf(outfile,"         (Which is %2.1f%% of your total tax.)\n", 100.0 * L[100] / (L[65] + 1e-9) );
-   L[111] = L[96] + L[100] + L[110];
+   L[111] = L[94] + L[96] + L[100] + L[110];
    showline(111);
    showline(112);
    showline(113);
@@ -1311,31 +1565,29 @@ int main( int argc, char *argv[] )
 
  fprintf(outfile,"\n{ --------- }\n");
  writeout_line = 0;
- Your1stName = GetTextLineF( "Your1stName:" );
+ // Your1stName = GetTextLineF( "Your1stName:" );
  YourMidInitial = pull_initial( Your1stName );
  Your1stName[11] = '\0';
  fprintf(outfile,"Your1stName: %s\n", Your1stName );
  fprintf(outfile,"YourMidInit: %s\n", YourMidInitial );
- YourLastName   = GetTextLineF( "YourLastName:" );
+ // YourLastName   = GetTextLineF( "YourLastName:" );
  YourLastName[15] = '\0';
  fprintf(outfile,"YourLastName: %s\n", YourLastName );
- socsec = GetTextLineF( "YourSocSec#:" );
- format_socsec( socsec, 1 );
- fprintf(outfile,"YourSocSec#: %s\n", socsec );
- free( socsec );
+ // your_socsec = GetTextLineF( "YourSocSec#:" );
+ format_socsec( your_socsec, 1 );
+ fprintf(outfile,"YourSocSec#: %s\n", your_socsec );
 
- Spouse1stName = GetTextLineF( "Spouse1stName:" );
+ // Spouse1stName = GetTextLineF( "Spouse1stName:" );
  SpouseMidInitial = pull_initial( Spouse1stName );
  Spouse1stName[11] = '\0';
  fprintf(outfile,"Spouse1stName: %s\n", Spouse1stName );
  fprintf(outfile,"SpouseMidInit: %s\n", SpouseMidInitial );
- SpouseLastName = GetTextLineF( "SpouseLastName:" );
+ // SpouseLastName = GetTextLineF( "SpouseLastName:" );
  SpouseLastName[15] = '\0';
  fprintf(outfile,"SpouseLastName: %s\n", SpouseLastName );
- socsec = GetTextLineF( "SpouseSocSec#:" );
- format_socsec( socsec, 1 );
- fprintf(outfile,"SpouseSocSec#: %s\n", socsec );
- free( socsec );
+ // spouse_socsec = GetTextLineF( "SpouseSocSec#:" );
+ format_socsec( spouse_socsec, 1 );
+ fprintf(outfile,"SpouseSocSec#: %s\n", spouse_socsec );
  writeout_line = 1;
 
  if (strlen( YourLastName ) > 0)
@@ -1356,28 +1608,26 @@ int main( int argc, char *argv[] )
    YourNames[33] = '\0';
    fprintf(outfile,"YourNames: %s\n", YourNames );
   }
- GetTextLineF( "Number&Street:" );
- GetTextLineF( "Apt#:" );
- GetTextLineF( "Town:" );
+ // GetTextLineF( "Number&Street:" );
+ Show_String_wLabel( "Number&Street:", street_address );
+ // GetTextLineF( "Apt#:" );
+ Show_String_wLabel( "Apt#:", apartment );
+ // GetTextLineF( "Town:" );
+ Show_String_wLabel( "Town:", town );
  fprintf(outfile,"State: CA\n");
- GetTextLineF( "Zipcode:" );
+ // GetTextLineF( "Zipcode:" );
+ Show_String_wLabel( "ZipCode:", zipcode );
  GetTextLineF( "YourDOB:" );
  GetTextLineF( "SpouseDOB:" );
 
- GetTextLineF( "L10Dep1FrstName:" );
- GetTextLineF( "L10Dep1LastName:" );
- GetTextLineF( "L10Dep1SSN:" );
- GetTextLineF( "L10Dep1Relation:" );
-
- GetTextLineF( "L10Dep2FrstName:" );
- GetTextLineF( "L10Dep2LastName:" );
- GetTextLineF( "L10Dep2SSN:" );
- GetTextLineF( "L10Dep2Relation:" );
-
- GetTextLineF( "L10Dep3FrstName:" );
- GetTextLineF( "L10Dep3LastName:" );
- GetTextLineF( "L10Dep3SSN:" );
- GetTextLineF( "L10Dep3Relation:" );
+ for (j=1; j <=3; j++)
+  if (strlen(PrelimFedReturn.Dep1stName[j]) > 0)
+   {
+    fprintf(outfile,"L10Dep%dFrstName: %s\n", j, PrelimFedReturn.Dep1stName[1] );
+    fprintf(outfile,"L10Dep%dLastName: %s\n", j, PrelimFedReturn.DepLastName[1] );
+    fprintf(outfile,"L10Dep%dSSN: %s\n", j, PrelimFedReturn.DepSocSec[1] );
+    fprintf(outfile,"L10Dep%dRelation: %s\n", j, PrelimFedReturn.DepRelation[1] );
+   }
 
  fclose(infile);
  grab_any_pdf_markups( infname, outfile );

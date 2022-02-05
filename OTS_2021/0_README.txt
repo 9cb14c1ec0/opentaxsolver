@@ -1,7 +1,7 @@
 Open Tax Solver - Package
 --------------------------
 
-Jan 29, 2022 v19.00 - For 2021 tax-year.
+Feb 4, 2022 v19.01 - For 2021 tax-year.
 
 See project homepage:	http://opentaxsolver.sourceforge.net/
 
@@ -33,6 +33,16 @@ Also contains an Automatic PDF Form-Fillout function:
   RPLCSTRNG_02
 
 History:
+    * v19.01 (2/04/2022) - Update to charitable donations limit in
+	and the age-65 comment in Federal-1040 form.
+	- Updated California state tax program (540) for 2021 tax-year.
+	- Updated California form 5805.
+	- Updated forms 2201, 8959, and 8960.
+	- Added a notify-popup utility that can be used by all 
+	  programs for alerting users of any detected issues.
+	- Now GUI will not offer to fill-out PDF forms if there
+	  are any errors detected in the compute step, and it
+	  will pop-up an alert window, so error is not missed.
     * v19.00 (1/29/2022) - Initial Release for Tax-Year 2021.
 		Please check back for updates.
 

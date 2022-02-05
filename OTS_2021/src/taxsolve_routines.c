@@ -702,6 +702,13 @@ void showline_wlabelnz( char *label, double value )
 void showline_wlabelmsg( char *label, double value, char *msg )
 { fprintf(outfile, "%s = %6.2f\t\t%s\n", label, value, msg ); }
 
+/* Show a character-string line with specified label, if string is not empty. */
+void Show_String_wLabel( char *label, char *msg )
+{ 
+ if ((msg != 0) && (msg[0] != '\0'))
+  fprintf(outfile, "%s %s\n", label, msg );
+}
+
 
 /* Get a line value, or sum.  Must be terminated by ";". */
 void GetLine( char *linename, double *value )

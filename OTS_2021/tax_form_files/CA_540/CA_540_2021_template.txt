@@ -41,27 +41,46 @@ CA540_Addit_B5		; { Additions for Rental real estate, royalties, partnerships }
 CA540_Subtr_B6		; { Subtractions for Farm income }
 CA540_Addit_B6		; { Additions for Farm income }
 CA540_Subtr_B7		; { Subtractions for Unemployment compensation }
-CA540_Subtr_B8a		; { Subtractions for California Lottery Winnings }
-CA540_Subtr_B8b		; { Subtractions for Disaster Loos deuctions from FTB 3895V }
-CA540_Addit_B8c		; { Additions for Federal NOL }
-CA540_Subtr_B8d		; { Subtractions for NOL deduction from FTB 3805V }
-CA540_Subtr_B8e		; { Subtractions for NOL deduction from FTB 3805Z, 3806, 3807, 3809 }
-CA540_Subtr_B8f		; { Subtractions for Other income }
-CA540_Addit_B8f		; { Additions for Other income }
-CA540_Subtr_B8g		; { Student Loan discharged due to closure of for-profit school }
+CA540_Addit_B8a		; { Additions for Federal net operating loss }
+CA540_Subtr_B8b		; { Subtractions for Gambling income }
+CA540_Addit_B8c		; { Additions for Cancellation of debt }
+CA540_Addit_B8d		; { Additions for Foreign earned income exclusion }
+CA540_Subtr_B8e		; { Subtractions Taxable Health Savings Account distribution }
+CA540_Subtr_B8m		; { Subtractions for IRC Section 951(a) inclusion }
+CA540_Subtr_B8n		; { Subtractions for IRC Section 951A(a) inclusion }
+CA540_Addit_B8o		; { Additions for RC Section 461(l) excess business loss adjustment }
+CA540_Subtr_B8z		; { Subtractions for Other income. }
+CA540_Addit_B8z		; { Additions for Other income. }
+
  { - Section C - }
-CA540_Subtr_C10		; { Subtractions for Educator expenses }
-CA540_Subtr_C11		; { Subtractions for Certain business expenses }
-CA540_Addit_C11		; { Additions for Certain business expenses }
-CA540_Subtr_C12		; { Subtractions for Health savings account }
-CA540_Addit_C13		; { Additions for Moving Expenses }
-CA540_Subtr_C14		; { Subtractions for Deductible part of self-employment tax. }
-CA540_Subtr_C16		; { Subtractions for Self-employed health insurance deduction.  }
-CA540_Addit_C18		; { Additions for Alimony paid }
-CA540_Addit_C20		; { Additions for Student loan interest }
-CA540_Subtr_C21		; { Subtractions for Tuition and fees }
+CA540_Subtr_C11		; { Subtractions for Educator expenses }
+CA540_Subtr_C12		; { Subtractions for Certain business expenses }
+CA540_Addit_C12		; { Additions for Certain business expenses }
+CA540_Subtr_C13		; { Subtractions for Health savings account }
+CA540_Addit_C14		; { Additions for Moving Expenses }
+CA540_Subtr_C15		; { Subtractions for Deductible part of self-employment tax. }
+CA540_Subtr_C17		; { Subtractions for Self-employed health insurance deduction.  }
+CA540_Addit_C19		; { Additions for Alimony paid }
+CA540_AlimonyRecipName:   { Alimony Receipient's Last name }
+CA540_Subtr_C20		; { Subtractions for IRA deduction }
+CA540_Addit_C20		; { Additions for IRA deduction }
+CA540_Addit_C21		; { Additions for Student loan interest }
+CA540_Subtr_C24b	; { Subtractions for Deductible expenses from rental personal property }
+CA540_Addit_C24b	; { Additions for Deductible expenses from the rental of personal property }
+CA540_Subtr_C24c	; { Subtractions for Nontaxable Olympic, Paralympic medals & USOC prize money }
+CA540_Subtr_C24d	; { Subtractions for Reforestation amortization and expenses }
+CA540_Subtr_C24f	; { Subtractions for Contributions to IRC 501(c)(18)(D) pension plans }
+CA540_Addit_C24f	; { Additions for Contributions to IRC 501(c)(18)(D) pension plans }
+CA540_Subtr_C24g	; { Subtractions for Contributions by certain chaplains to IRC 403(b) plans }
+CA540_Addit_C24g	; { Additions for Contributions by certain chaplains to IRC 403(b) plans }
+CA540_Subtr_C24i	; { Subtractions for fees paid for information to detect tax violations }
+CA540_Subtr_C24j	; { Subtractions for Housing deduction from federal Form 2555 }
+CA540_Subtr_C24k	; { Subtractions for Excess deductions IRC Section 67(e) expenses }
+CA540_Subtr_C24z	; { Subtractions for Other adjustments. }
+CA540_Addit_C24z	; { Additions for Other adjustments. }
 
 {--Part-II of California Adjustments--}
+CA540_P2_Add_4		; { Subtractions for Medical and Dental Expenses }
 CA540_P2_Sub_5a		; { Subtractions for State and local income tax or general sales taxes }
 CA540_P2_Sub_6		; { Subtractions for Other taxes }
 CA540_P2_Add_6  	; { Additions for Other taxes }
@@ -112,40 +131,15 @@ CA540_P2_21		; { Other expenses - investment, safe deposit box, etc. }
 
  L91		   ;	 { Use Tax. }
  L92		   ;	 { Individual Shared Responsibility (ISR) Penalty. }
+ L98               ;     { Amount of refund you want applied to 2022 estimated teaxes. }
 
  L112		   ;	 { Interest, late penalties. }
  L113		   ;	 { Underpayment of estimated tax penalty. (FTB 5805) }
 
 { -------------------------------------------- } 
 { --- Optional info for Auto-Fillout only. --- }
- Your1stName:			{ First name, Middle Initial }
- YourLastName:	
- YourSocSec#:	
- Spouse1stName:                 { First name, Middle Initial (Leave blank if Single, ....) }
- SpouseLastName: 	
- SpouseSocSec#:	
- Number&Street:	
- Apt#: 		
- Town:		
- Zipcode:   	
  YourDOB:	
  SpouseDOB:	
-
- { -- Optional Dependent Information -- }
- L10Dep1FrstName:		{ Dependent-1 first-name }
- L10Dep1LastName:		{ Dependent-1 last-name }
- L10Dep1SSN:			{ Dependent-1 SocSec# }
- L10Dep1Relation:		{ Dependent-1 relation to you }
-
- L10Dep2FrstName:		{ Dependent-1 first-name }
- L10Dep2LastName:		{ Dependent-1 last-name }
- L10Dep2SSN:			{ Dependent-1 SocSec# }
- L10Dep2Relation:		{ Dependent-1 relation to you }
-
- L10Dep3FrstName:		{ Dependent-1 first-name }
- L10Dep3LastName:		{ Dependent-1 last-name }
- L10Dep3SSN:			{ Dependent-1 SocSec# }
- L10Dep3Relation:		{ Dependent-1 relation to you }
 
 { 
  ---------------------------------------------

@@ -2278,7 +2278,7 @@ int main( int argc, char *argv[] )						/* Updated for 2021. */
    sprintf(word,"S2_17%c", 'a' + j - 1 );
    showline_wlabelnz( word, Sched2_17[j] );
   }
- printf("S2_17z_Type: %s\n", S2_17z_Type );
+ fprintf(outfile,"S2_17z_Type: %s\n", S2_17z_Type );
 
  Sched2[21] = Sched2[4] + Sched2[18] + Sched2[19];
  for (j=7; j <= 16; j++)

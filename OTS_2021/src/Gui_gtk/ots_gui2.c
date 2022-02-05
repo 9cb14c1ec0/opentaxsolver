@@ -246,7 +246,7 @@ void GeneralPopup( char *title, char *mesg, int to_text_win )       /* Used for 
     j++;
    k++;
   }
- winwdth = 40 + maxcols * 7;
+ winwdth = 50 + maxcols * 8;
  winhght = 70 + 18 * nlines + 5;
  orig_winhght = winhght;
  if (winhght < 500) 

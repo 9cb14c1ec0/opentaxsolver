@@ -17,6 +17,10 @@
    Example:
 	notify_popup "Please re-run the program." "Because of bad data." " -bye"
 
+   Options:
+	-delay n	- Delays popping for n-seconds.
+	-expire nn	- Automatically close after nn seconds.
+
    Planned future features:
     - Command-line options to specify:
 	- Message text color, size, & boldness.
@@ -54,15 +58,35 @@ void OK_Button( GtkWidget *win, void *data )
 int main( int argc, char *argv[] )
 {
  GtkWidget *winpanel;
- int winwidth, winhght, ypos=10, minht=80, minwd=250;
- int j, k=1, col=0, maxcols=0, nlines=0, num_in=0, cnt=0;
+ int winwidth, winhght, ypos=10, minht=80, minwd=250, nsecs=0;
+ int j, k=1, col=0, maxcols=0, nlines=0, num_in=0, cnt=0, expire=0;
  char *text_in[999], *mesg[999], line[4096];
+ double endtime=0.0;
 
  /* Accept command-line arguments. */
  k = 1;
  while (k < argc)
   {
-   text_in[num_in++] = strdup( argv[k] );
+   if (strcmp( argv[k], "-delay" ) == 0)
+    {
+     k++;
+     if (k == argc)
+      { printf("Missing value after option '%s'\n", argv[k-1] );  exit(1); }
+     if (sscanf(argv[k], "%d", &nsecs ) != 1)
+      { printf("Bad integer after option '%s'\n", argv[k-1] );  exit(1); }
+    }
+   else
+   if (strcmp( argv[k], "-expire" ) == 0)
+    {
+     k++;
+     if (k == argc)
+      { printf("Missing value after option '%s'\n", argv[k-1] );  exit(1); }
+     if (sscanf(argv[k], "%d", &expire ) != 1)
+      { printf("Bad integer after option '%s'\n", argv[k-1] );  exit(1); }
+     endtime = Report_Time() + (double)expire;
+    }
+   else
+    text_in[num_in++] = strdup( argv[k] );	/* Accept text to display. */
    k++;
   }
  if (num_in == 0)
@@ -111,6 +135,9 @@ int main( int argc, char *argv[] )
  if (winhght < minht)
   winhght = minht;
 
+ if (nsecs > 0)
+  Sleep_seconds( (float)nsecs );
+
  /* Initialize and generate top-outer window. */
  winpanel = init_top_outer_window( &argc, &argv, winwidth, winhght, "Notice", 0, 0 );
 
@@ -125,7 +152,16 @@ int main( int argc, char *argv[] )
  gtk_signal_connect( GTK_OBJECT(outer_window), "delete_event", GTK_SIGNAL_FUNC(exit), NULL );
 
  gtk_widget_show_all( outer_window );
- gtk_main();
+ while (1)       // gtk_main();
+  {
+   UpdateCheck();               /* Check for, and serve, any pending GTK window/interaction events. */
+   Sleep_seconds( 0.1 );       /* No need to spin faster than ~10 Hz update rate. */
+   if (expire > 0)
+    {
+     if (Report_Time() > endtime + (double)nsecs)
+      exit(0);
+    }
+  }
  return 0;
 }
 

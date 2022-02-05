@@ -26,7 +26,7 @@ L1      20267.70        { Wages, salaries, tips (W-2's Box-1). }
  { --- Interest --- }
  { -- Tax-Exempt Interest. (Only used for SocialSecurity calculations). --
       (Any private activity bond interest exempt from regular tax, is entered under Schedule 2 below.) }
-L2a      	;
+L2a        2	;
 
  { -- Taxable Interest -- 1099-INT(s) box 1 }
 L2b      37.71           { Bank Savings}
@@ -57,16 +57,16 @@ L4b	41.00	;       { Taxable IRA distributions. }
 L5a	43.43	;       { Pensions, Annuites. }
 L5b	43.00	;       { Taxable Pensions, Annuites. }
 
-L6a		;       { Social Security benefits.  Forms SSA-1099 box-5. }
+L6a	  6	;       { Social Security benefits.  Forms SSA-1099 box-5. }
 
-L13		;	{ Qualified business income deduction. }
-L19		; 	{ Child tax credit/credit for other dependents. }
+L13	 13	;	{ Qualified business income deduction. }
+L19	 19	; 	{ Child tax credit/credit for other dependents. }
 
 L25a	1765.50		{ Federal income tax withheld, from W-2's, box-2. }
 	1688.09
 		;
-L25b		;       { Federal income tax withheld, from 1099's. }
-L25c		;       { Federal income tax withheld, from other forms. }
+L25b	 23	;       { Federal income tax withheld, from 1099's. }
+L25c	 26	;       { Federal income tax withheld, from other forms. }
 L26			{ Estimated tax payments made for the year. }
         100     {Q1}
         110     {Q2}
@@ -78,8 +78,8 @@ L26			{ Estimated tax payments made for the year. }
 L27a	207	;	{ Earned Income Credit (EIC) }
 L27b	 27	;	{ Nontaxable combat pay election }
 L27c	127	;	{ Prior year (2019) earned income }
-L28		;	{ Child Tax Credit, Schedule 8812 }
-L29		;	{ American Opportunity Credit, Form 8863, line 8 }
+L28	 28	;	{ Child Tax Credit, Schedule 8812 }
+L29	 29	;	{ American Opportunity Credit, Form 8863, line 8 }
 L30		;	{ Recovery rebate credit. }
 
 { -- Penalties -- }
@@ -147,16 +147,16 @@ Collectibles 	;	{ Long Term Gain or Loss from Collectibles, Form 8949 Part II. (
 { --- Schedule 1: Additional Income --- }
 
 S1_1	20.11	;       { Taxable refunds. }
-S1_2a		;       { Alimony received. }
-S1_2b:			 { Date of divorce or separation. }
-S1_3		;       { Business income/loss. (Sched C) }
+S1_2a	22	;       { Alimony received. }
+S1_2b:	6/7/20		 { Date of divorce or separation. }
+S1_3	 3	;       { Business income/loss. (Sched C) }
 S1_4	17.18	;       { Other gains or losses. (form 4797) }
-S1_5		;       { Rent realestate/royalties/partnerships/S corp. Sched E }
-S1_6		;       { Farm income/loss. (Sched F) }
-S1_7		;       { Unemployment compensation }
+S1_5	 5	;       { Rent realestate/royalties/partnerships/S corp. Sched E }
+S1_6	 6	;       { Farm income/loss. (Sched F) }
+S1_7	 7	;       { Unemployment compensation }
 S1_8a	8.01	;       { Net operating loss }
-S1_8b	8.02	;       { Gambling income }
-S1_8c	8.03	;       { Cancellation of debt }
+S1_8b	7.02	;       { Gambling income }
+S1_8c	6.03	;       { Cancellation of debt }
 S1_8d	8.04	;       { Foreign earned income exclusion from Form 2555 }
 S1_8e	8.05	;       { Taxable Health Savings Account distribution }
 S1_8f	8.06	;       { Alaska Permanent Fund dividends }
@@ -175,37 +175,37 @@ S1_8z	8.17	;       { Other income. }
 
 { ---- Schedule 1, Part II: Adjustments to Gross Income ---- }
 S1_11   6.10    ;       { Educator expenses }
-S1_12           ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
-S1_13           ;       { Health savings account deduction. Attach Form 8889 }
-S1_14           ;       { Moving expenses. Attach Form 3903 }
-S1_15           ;       { Deductable part of self-employment tax. Attach Schedule SE}
-S1_16           ;       { Self-employed SEP, SIMPS1_E, and qualified plans }
-S1_17           ;       { Self-employed health insurance deduction }
-S1_18           ;       { Penalty on early withdrawal of savings }
-S1_19a          ;       { Alimony paid }
- AlimRecipSSN:             { Alimony recipient's SocSec Number. }
- DivorceDate:              { Divorce or Separation Date }
-S1_20           ;       { IRA deduction }
+S1_12   2       ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
+S1_13   3       ;       { Health savings account deduction. Attach Form 8889 }
+S1_14   4       ;       { Moving expenses. Attach Form 3903 }
+S1_15   5       ;       { Deductable part of self-employment tax. Attach Schedule SE}
+S1_16   6       ;       { Self-employed SEP, SIMPS1_E, and qualified plans }
+S1_17   7       ;       { Self-employed health insurance deduction }
+S1_18   8       ;       { Penalty on early withdrawal of savings }
+S1_19a  19      ;       { Alimony paid }
+ AlimRecipSSN:  123006778 { Alimony recipient's SocSec Number. }
+ DivorceDate:   11/3/15   { Divorce or Separation Date }
+S1_20   10      ;       { IRA deduction }
 S1_21   44.08   ;       { Student loan interest deduction }
-S1_23           ;       { Archer MSA deduction }
-S1_24a          ;       { Jury duty pay }
-S1_24b          ;       { Deductible expenses of rental of personal property }
-S1_24c          ;       { Nontaxable Olympic and Paralympic medals & prizes }
+S1_23    23     ;       { Archer MSA deduction }
+S1_24a   24     ;       { Jury duty pay }
+S1_24b   23     ;       { Deductible expenses of rental of personal property }
+S1_24c   22     ;       { Nontaxable Olympic and Paralympic medals & prizes }
 S1_24d   10.01  ;       { Reforestation amortization and expenses }
-S1_24e          ;       { Repayment of supplemental unemployment benefits }
-S1_24f          ;       { Contributions to section 501(c)(18)(D) pension plans  }
+S1_24e    4     ;       { Repayment of supplemental unemployment benefits }
+S1_24f    5     ;       { Contributions to section 501(c)(18)(D) pension plans  }
 S1_24g   10.02  ;       { Contributions by certain chaplains to section 403(b) plans }
-S1_24h          ;       { Attorney fees and court costs for unlawful discrimination claims }
-S1_24i          ;       { Attorney fees and court costs for award from the IRS }
-S1_24j          ;       { Housing deduction from Form 2555 }
-S1_24k          ;       { Excess deductions of section 67(e) expenses from Schedule K-1 }
+S1_24h    6     ;       { Attorney fees and court costs for unlawful discrimination claims }
+S1_24i    7     ;       { Attorney fees and court costs for award from the IRS }
+S1_24j    8     ;       { Housing deduction from Form 2555 }
+S1_24k    9     ;       { Excess deductions of section 67(e) expenses from Schedule K-1 }
 S1_24z   10.03  ;       { Other adjustments. }
 S1_24z_Type:  Materials   { Type of Other adjustments. }
 
 
 { ---- Tax and Credits ---- }
  { -- Schedule A: Itemized deductions -- }
- A1             ;       { Unreimbursed medical expenses. }
+ A1     5001    ;       { Unreimbursed medical expenses. }
  A5a                    { State and local income taxes. (W-2's boxes 17 + 19.)  Or sales taxes. }
 	  39.88          { State-UI (Unemployment Insurance) }
         1479.21          { State-tax withheld/owed }
@@ -214,18 +214,18 @@ S1_24z_Type:  Materials   { Type of Other adjustments. }
  CheckBoxA5a    N ;     { Check (Y) if using sales taxes instead of income taxes. (answer: Yes, No) }
  A5b    1,771.05        { Real estate taxes.}
 		;
- A5c            ;       { Personal property (eg. automobile) taxes. }
- A6             ;       { Other taxes.}
- A8a            ;       { Home mortgage interest and points reported to you on Form 1098.}
+ A5c     5      ;       { Personal property (eg. automobile) taxes. }
+ A6      6      ;       { Other taxes.}
+ A8a     7      ;       { Home mortgage interest and points reported to you on Form 1098.}
  A8b            ;       { Home mortgage interest not reported to you on Form 1098.}
  A8c            ;       { Points not reported to you on Form 1098.}
- A8d            ;       { Mortgage insurance premiums. }
- A9             ;       { Investment interest. Attach Form 4952}
- A11            ;       { Charity contributions by cash or check.}
- A12            ;       { Contributions other than cash or check.}
- A13            ;       { Carryover from prior year}
- A15            ;       { Casualty or theft loss(es).}
- A16            ;       { Other expenses}
+ A8d     1      ;       { Mortgage insurance premiums. }
+ A9      9      ;       { Investment interest. Attach Form 4952}
+ A11   111      ;       { Charity contributions by cash or check.}
+ A12    12      ;       { Contributions other than cash or check.}
+ A13    13      ;       { Carryover from prior year}
+ A15    15      ;       { Casualty or theft loss(es).}
+ A16    16      ;       { Other expenses}
  A18     N      ;       { Elect to itemize, even when less than standard deduction. (answer: Yes, No) }
 
 { -- Schedule B: Part III -- }
@@ -258,7 +258,7 @@ S2_16		;	{ Recapture of low-income housing credit. Attach Form 8611 }
 
 S2_17a	 17.01	;	{ Recapture of other credits. }
  S2_17a_Type:  Rural, 6723  { Type and form number }
-S2_17b		;	{ Recapture of federal mortgage subsidy. }
+S2_17b	 16	;	{ Recapture of federal mortgage subsidy. }
 S2_17c		;	{ Additional tax on HSA distributions. Attach Form 8889 }
 S2_17d		;	{ Additional tax on an HSA, Attach Form 8889 }
 S2_17e		;	{ Additional tax on Archer MSA distributions. Attach Form 8853 }
@@ -287,7 +287,7 @@ S3_3             ;       { Education credits. Form 8863, line 19. }
 S3_4    31.31    ;       { Retirement savings contributions credit. Form 8880. }
 S3_5             ;       { Residential energy credits. Form 5695. }
         { Other nonrefundable credits. }
-S3_6a            ;       { General business credit. Form 3800. }
+S3_6a    6       ;       { General business credit. Form 3800. }
 S3_6b            ;       { Credit for prior year minimum tax. Form 8801. }
 S3_6c   26.01    ;       { Adoption credit. Attach Form 8839 }
 S3_6d            ;       { Credit for the elderly or disabled. Attach Schedule R }
@@ -307,8 +307,8 @@ S3_9            ;       { Net premium tax credit. Form 8962. }
 S3_10    8.10   ;       { Amnt paid in filing extension req. }
 S3_11           ;       { Excess Soc. Sec. + tier 1 RRTA tax withheld. }
 S3_12           ;       { Credits for federal tax on fuels. Attach form 4136. }
-S3_13a          ;       { Credits from Form 2439. }
-S3_13b          ;       { Credits from Form 7202, qualified sick leave. }
+S3_13a  13      ;       { Credits from Form 2439. }
+S3_13b  13      ;       { Credits from Form 7202, qualified sick leave. }
 S3_13c          ;       { Health coverage tax credit from. Credits from Form 8885. }
 S3_13d          ;       { Credit for repayment of amounts included in income from prior years. }
 S3_13f          ;       { Deferred amount of net 965 tax liability }

@@ -1,0 +1,69 @@
+CA_5805_2021 - Development Rationale Notes + Testing Log
+
+scenario 1:  individual taxpayer, single, no waiver requested, annualized income installment method used, CA withholding in equal installments, uneven income with balloon in last period
+
+DONE in scenarios 8 and 9:	test: current year tax - withholding < 500 (250 if status = MFS)
+DONE in scenarios 5, 6, 7, 8, 9:	test: no itemized deductions
+
+FIXED:	line 6(d) appears incorrect but is not; amount reduced due to limits on itemized deductions for high-income taxpayers.  Include warning in initial caution bloc?
+
+DONE in scenario2:	test:  additional taxes entered on lines 10(a), 10(b), 10(c) and/or 10(d)
+
+DONE in scenario 2:	test:  taxpayer owing alternative minimum tax and/or mental health services tax and/or excess SDI
+
+FIXED:	Some values are being written into grayed cells.  Cells 3,4,5,7 of column (a) and cells 7,9 of column (d) are grayed, but have values shown.
+
+FIXED:	line 2 of penalty worksheet:  withholding not included.  How should this be implemented?  If withheld in equal amounts, how to allocate to periods?  If withheld in unequal amounts?
+
+FIXED:	warning at beginning of results that penalty worksheet is automatically filled in for simple case---more complex situations (e.g., more than four payments) need to be done manually.
+
+DONE:  All calculations verified manually from values shown on the output PDF?
+
+Need to verify that input values = output values for filled fields.
+
+--------------------------------------------------------------------------------------------------------------------    
+
+scenario 2:  individual taxpayer, married filing jointly, waiver requested, annualized installment method used, CA withholding in unequal amounts, itemized deductions, uneven high income, most fields filled in,
+
+FIXED:	Need warning in template that bloc under heading "Short Method" is to be skipped if using annualized income installment method.
+
+FIXED:	Template instructions for SchedAI, line 6, re: high income taxpayers implies that values for high-income taxpayers are not automatically calculated; improve language.  Eliminated entries.  No need since high-income limitation worksheet is being filled out.
+
+FIXED:	Note that SchedAI, line 7a, needs to be completed even if deductions are itemized.
+
+FIXED:	Need warning about zero value for penalty not being dispositive.
+
+FIXED:	When uneven withholding amounts are entered, should sum be transferred to line 3?  Calculation would then depend upon whether or not Quest3 is answered "Yes".
+
+FIXED:	Line 6 limitations on itemized deductions for high income taxpayers are confusing when simply reading PDF.
+	Line 6 WS is only output to results file when there is a limitation.  Perhaps there should be a statement about
+	this in the beginning caution statement.
+
+FIXED:	Need improved coordinates on Federal Itemized Income Worksheet for large numbers (move to left) and on Line 6 worksheet (move some up a bit).
+
+FIXED:	Calculate exemption phase-out for high-income taxpayers or warn that it has not been done?  Adds considerable
+complexity to do calculations, which are not likely to make a significant difference in estimated tax calculations.
+Fixed with warning message in initial caution bloc.
+
+FIXED:	Line 4 of the line 6 worksheets needs to display float, not int. There does not appear to be an option in universal_pdf_file_modifier for turning off rounding for a single line.  CA forces rounding on page 2 of form by including ".00" at ends of lines, but does not do so elsewhere?
+
+No obvious simple fix with existing PDF system.  Deal with this by including warning on results page?  Could also pre-fill those lines on the image with the likely common annualization factors and include a warning there about possible other values for estates/trusts.
+----------------------------------------------------------------------------------------------------------------------
+scenario 3:  individual, married filing separately, short method used, equal withholding, withholding adequate so no estimated tax due
+---------------------------------------------------------------------------------------------------------------------
+scenario 4:  individual, married filing separately, short method used, equal withholding, underpayment, CA AGI at $500,000 threshold to transfer amount on line 2 to line 6 rather than smaller value on line 5;  penalty calculated because of insufficient withholding
+---------------------------------------------------------------------------------------------------------------------
+scenario 5:  individual, head of household, AI used because of unequal withholding insufficient to cover tax due.  No estimated tax payments.  Deductions not itemized.  
+
+FIXED:  Values on Federal Annualized Income Worksheet exceed thresholds for limitations on itemized deductions and placed values in results files and on last page of PDF even though no itemization was done.
+----------------------------------------------------------------------------------------------------------------------
+scenario 6:  same as scenario 5 except status=QW and amounts of unequal witholding exceed taxes due in all periods.  Also add exemption amount in each period.
+----------------------------------------------------------------------------------------------------------------------
+scenario 7:  same as scenario 6 except unequal withholding had overpayment in only the second period with total withholding below tax due for the year.
+----------------------------------------------------------------------------------------------------------------------
+scenarios 8:  individual, short method, single, equal withholding, entry on line 3 varied to test $500 threshold on line 4 for filing/not filing form 5805.  When line 3 = 3000.00, statement re: not having to file is not displayed as line 4 = 500.00.  When line 3 is 3000.01, statement appears as expected and program exits after printing line 4 to results file.  Ran scenario again changing status to MFJ, MFS, HOH, QW.  All worked as expected.
+----------------------------------------------------------------------------------------------------------------------
+scenario 9:  individual, short method, MFS, equal withholding entry on line 3 varied to test $250 threshold on line 4 for filing/not filing form 5805.  When line 3 = 3250, statement re: not filing from line 10 criterion appears.
+
+FIXED:  not working for MFS and 250 threshold.  500 threshold applying for both single and MFS?  Added more descriptive messages to inform users why filing form 5805 was not necessary. 
+
